@@ -1,6 +1,5 @@
-#summary One-sentence summary of this page.
+#summary Introduction to project Siyapath
 
 = Introduction =
 
 Siyapath is a volunteer computing framework
-
