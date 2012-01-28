@@ -6,6 +6,7 @@
 
     <groupId>org.siyapath</groupId>
     <artifactId>siyapath</artifactId>
+    <packaging>pom</packaging>
     <version>0.1.0</version>
 
     <name>Siyapath</name>
@@ -23,5 +24,8 @@
         <url>http://code.google.com/p/siyapath/source/browse/</url>
     </scm>
 
-    
+    <modules>
+        <module>modules/siyapath-core</module>
+    </modules>
+
 </project>
