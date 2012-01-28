@@ -10,7 +10,7 @@
     <version>0.1.0</version>
 
     <name>Siyapath</name>
-    <description>Volunteer Computing Framework</description>
+    <description>Siyapath - Scalable Volunteer Computing Framework</description>
 
     <issueManagement>
         <url>http://code.google.com/p/siyapath/issues/list</url>
@@ -23,6 +23,48 @@
         <developerConnection>scm:svn:https://siyapath.googlecode.com/svn/trunk</developerConnection>
         <url>http://code.google.com/p/siyapath/source/browse/</url>
     </scm>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>dtrotts</id>
+            <name>Repository for maven thrift plugin</name>
+            <url>http://maven.davidtrott.com/repository</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.thrift</groupId>
+            <artifactId>libthrift</artifactId>
+            <version>0.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+    </dependencies>
 
     <modules>
         <module>modules/siyapath-core</module>
