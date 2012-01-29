@@ -67,7 +67,7 @@
     </dependencies>
 
     <modules>
-        <module>modules/siyapath-core</module>
+        <module>modules/core</module>
     </modules>
 
 </project>
