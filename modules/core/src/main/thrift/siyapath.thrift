@@ -24,3 +24,10 @@ service GossipService {
   GossipData Gossip(1:GossipData gData)
 
 }
+
+/**
+ * Service for getting current set of known members
+ */
+service MemberService{
+  set<string> getMembers()
+}
