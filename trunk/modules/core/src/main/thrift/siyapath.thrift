@@ -1,5 +1,5 @@
 
-namespace java siyapath
+namespace java org.siyapath
 
 /**
  * Contains information about a particular node
@@ -17,22 +17,16 @@ struct GossipData {
 }
 
 /**
- * Service for communication based on gossip protocols
+ * Service for communication related to gossip protocols
  */
 service GossipService {
-    GossipData Gossip(1:GossipData gData)
-}
 
-/**
- * Service to get members of the node
- */
-service MemberDiscoveryService {
-    list<string> members(1:String nodeID)
-}
+    //Gossiping node resource data
+    GossipData gossip(1:GossipData gData),
 
-/**
- * Service for getting current set of known members
- */
-service MemberService{
+    //Gossiping known member list
+    set<string> memberDiscovery(1:set<string> knownNodes),
+
+    //Retrieving current set of known members
     set<string> getMembers()
 }
