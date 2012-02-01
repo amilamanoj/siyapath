@@ -10,6 +10,13 @@ struct NodeData {
 }
 
 /**
+ * Contains information about a Task
+ */
+struct Task {
+    1: i32 taskID
+}
+
+/**
  * Data exchanged during gossip communication between two nodes
  */
 struct GossipData {
@@ -28,11 +35,20 @@ service GossipService {
     set<string> memberDiscovery(1:set<string> knownNodes),
 
     //Retrieving current set of known members
-    set<string> getMembers(),
+    set<string> getMembers()
+}
 
-    //Check if node is alive
-    void isAlive(),
+/**
+ * Service for computation related operations
+ */
+ service JobHandlerService {
 
-    //Requesting to be the backup for the invoking node
-    bool backupRequest(),
+    //Submitting a job
+    string submitJob(1:map<i32,Task> tasks, 2:i32 jobID),
+
+    //Getting current status of a job
+    string getJobStatus(1:i32 jobID),
+
+    //Getting the computation result of a job
+    map<i32,Task> getJobResult (1:i32 jobID)
 }
