@@ -28,5 +28,11 @@ service GossipService {
     set<string> memberDiscovery(1:set<string> knownNodes),
 
     //Retrieving current set of known members
-    set<string> getMembers()
+    set<string> getMembers(),
+
+    //Check if node is alive
+    void isAlive(),
+
+    //Requesting to be the backup for the invoking node
+    bool backupRequest(),
 }
