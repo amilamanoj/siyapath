@@ -22,12 +22,12 @@ public class GossipServiceHandler  implements GossipService.Iface{
     }
 
     @Override
-    public void isAlive() throws TException {
-
+    public boolean isAlive(int nodeID) throws TException {
+        return false;
     }
 
     @Override
-    public boolean backupRequest() throws TException {
+    public boolean requestBecomeBackup(int nodeID, int taskID) throws TException {
         return false;
     }
 }

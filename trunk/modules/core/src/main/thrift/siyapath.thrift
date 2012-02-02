@@ -35,7 +35,13 @@ service GossipService {
     set<string> memberDiscovery(1:set<string> knownNodes),
 
     //Retrieving current set of known members
-    set<string> getMembers()
+    set<string> getMembers(),
+
+    //ping to see if member has left network while job being processed
+    bool isAlive(1:i32 nodeID),
+
+    //request a member to become a backup node for given task
+    bool requestBecomeBackup(1:i32 nodeID, 2:i32 taskID )
 }
 
 /**
