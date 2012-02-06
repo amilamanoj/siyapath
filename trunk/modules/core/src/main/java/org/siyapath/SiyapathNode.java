@@ -17,10 +17,12 @@ public class SiyapathNode {
     private GossipServiceHandler handler;
     private GossipService.Processor processor;
     private PeerListener peerListener;
+    private NodeContext nodeContext;
     private int nodePort;
 
 
     public SiyapathNode() {
+        nodeContext = new NodeContext();
         handler = new GossipServiceHandler();
         processor = new GossipService.Processor(handler);
         nodePort = -1;
@@ -42,6 +44,7 @@ public class SiyapathNode {
                 this.nodePort = FrameworkInformation.BOOTSTRAP_PORT;
             } else {
                 System.out.println("Bootstrapper is up and running");
+
                 this.nodePort = new Random().nextInt(1000) + 9021;
             }
 
