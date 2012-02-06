@@ -1,7 +1,9 @@
 package org.siyapath;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,9 +15,11 @@ import java.util.Random;
 public class NodeContext {
 
     private ArrayList<Integer> members;
+    private boolean isBootstrapper;
 
     public NodeContext() {
         this.members = new ArrayList<Integer>();
+        this.isBootstrapper = false;
     }
 
     public Integer getMember(int index) {
@@ -39,5 +43,21 @@ public class NodeContext {
 
     public boolean membersExist() {
         return (members.size() > 0) ? true : false;
+    }
+
+    public Set<String> getMemberSet() {
+        Set<String> nodeSet = new HashSet<String>();
+        for (Integer node : members){
+             nodeSet.add(node.toString());
+        }
+        return nodeSet;
+    }
+
+    public boolean isBootstrapper() {
+        return isBootstrapper;
+    }
+
+    public void setBootstrapper(boolean bootstrapper) {
+        isBootstrapper = bootstrapper;
     }
 }

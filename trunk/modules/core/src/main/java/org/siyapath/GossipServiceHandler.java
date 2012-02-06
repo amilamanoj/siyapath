@@ -4,31 +4,43 @@ import org.apache.thrift.TException;
 
 import java.util.Set;
 
-public class GossipServiceHandler  implements GossipService.Iface{
+public class GossipServiceHandler implements GossipService.Iface {
+
+    private NodeContext nodeContext;
+
+    public GossipServiceHandler(NodeContext nodeContext) {
+        this.nodeContext = nodeContext;
+    }
 
     @Override
     public GossipData gossip(GossipData gData) throws TException {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean notifyPresence(int nodeID) throws TException {
+        nodeContext.addMember(nodeID);
+        return true;
     }
 
     @Override
     public Set<String> memberDiscovery(Set<String> knownNodes) throws TException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Set<String> getMembers() throws TException {
-        return null;
+        return nodeContext.getMemberSet();
     }
 
     @Override
     public boolean isAlive(int nodeID) throws TException {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean requestBecomeBackup(int nodeID, int taskID) throws TException {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException();
     }
 
 

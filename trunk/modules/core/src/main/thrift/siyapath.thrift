@@ -31,10 +31,13 @@ service GossipService {
     //Gossiping node resource data
     GossipData gossip(1:GossipData gData),
 
+    //Called by a node upon joining the network
+    bool notifyPresence(1:i32 nodeID),
+
     //Gossiping known member list
     set<string> memberDiscovery(1:set<string> knownNodes),
 
-    //Retrieving current set of known members
+    //Retrieving current set of known members. TODO: review the return type 'set'
     set<string> getMembers(),
 
     //ping to see if member has left network while job being processed
