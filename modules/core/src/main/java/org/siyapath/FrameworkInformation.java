@@ -9,16 +9,16 @@ import java.util.ArrayList;
  */
 public class FrameworkInformation {
 
-    public static final String BOOTSTRAPPER1 = "10.1.0.1";
-    public static final String BOOTSTRAPPER2 = "10.1.0.2";
-    public static final String BOOTSTRAPPER3 = "10.1.0.3";
-    public static final int PORT = 9090;
+//    public static final String BOOTSTRAPPER1 = "10.1.0.1";
+//    public static final String BOOTSTRAPPER2 = "10.1.0.2";
+//    public static final String BOOTSTRAPPER3 = "10.1.0.3";
+    public static final int BOOTSTRAP_PORT=9020;
 
     public static ArrayList<InetSocketAddress> getKnownBootstrappers(){
         ArrayList<InetSocketAddress> knownBootstrappers = new ArrayList<InetSocketAddress>();
-        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER1, PORT));
-        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER2, PORT));
-        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER3, PORT));
+//        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER1, PORT));
+//        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER2, PORT));
+//        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER3, PORT));
         return knownBootstrappers;
     }
 }
