@@ -23,11 +23,13 @@ public class GossipServiceHandler  implements GossipService.Iface{
 
     @Override
     public boolean isAlive(int nodeID) throws TException {
-        return false;
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean requestBecomeBackup(int nodeID, int taskID) throws TException {
-        return false;
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+
 }
