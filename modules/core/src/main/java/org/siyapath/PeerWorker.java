@@ -1,6 +1,5 @@
 package org.siyapath;
 
-import sun.font.TrueTypeFont;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,21 +10,34 @@ import sun.font.TrueTypeFont;
  */
 public class PeerWorker {
 
-    public void work(){
-          new WorkerThread().start();
+    private NodeContext nodeContext;
+
+    public PeerWorker(NodeContext nodeContext) {
+        this.nodeContext = nodeContext;
     }
-    
+
+    public void work() {
+        if (!nodeContext.membersExist()) {
+            initiateMembers();
+        }
+        new WorkerThread().start();
+    }
+
+    private void initiateMembers() {
+
+    }
+
     private class WorkerThread extends Thread {
 
         public boolean isRunning = false;
-        
+
         @Override
         public void run() {
-            
+
             isRunning = true;
 
-            while (isRunning){
-                
+            while (isRunning) {
+
             }
         }
     }
