@@ -40,8 +40,8 @@ service GossipService {
     //Retrieving current set of known members. TODO: review the return type 'set'
     set<i32> getMembers(),
 
-    //ping to see if member has left network while job being processed
-    bool isAlive(1:i32 nodeID),
+    //ping to see if member is alive
+    bool isAlive(),
 
     //request a member to become a backup node for given task
     bool requestBecomeBackup(1:i32 nodeID, 2:i32 taskID )
