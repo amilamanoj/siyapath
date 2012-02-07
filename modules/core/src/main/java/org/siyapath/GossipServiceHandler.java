@@ -34,8 +34,8 @@ public class GossipServiceHandler implements GossipService.Iface {
     }
 
     @Override
-    public boolean isAlive(int nodeID) throws TException {
-        throw new UnsupportedOperationException();
+    public boolean isAlive() throws TException {
+        return true;
     }
 
     @Override
