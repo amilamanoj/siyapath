@@ -3,10 +3,7 @@ package org.siyapath;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
-/**
- * Date: 2/1/12
- * Time: 5:21 PM
- */
+
 public class FrameworkInformation {
 
 //    public static final String BOOTSTRAPPER1 = "10.1.0.1";

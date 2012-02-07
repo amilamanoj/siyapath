@@ -1,9 +1,5 @@
 package org.siyapath;
 
-/**
- * Date: 2/1/12
- * Time: 4:44 PM
- */
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;

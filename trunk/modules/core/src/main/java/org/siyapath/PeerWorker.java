@@ -9,15 +9,10 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 
 import java.net.ConnectException;
+import java.util.Iterator;
 import java.util.Set;
 
-/**
- * Created by IntelliJ IDEA.
- * User: amila
- * Date: 2/6/12
- * Time: 9:34 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class PeerWorker {
 
     private NodeContext nodeContext;
@@ -37,9 +32,10 @@ public class PeerWorker {
             TProtocol protocol = new TBinaryProtocol(transport);
             GossipService.Client client = new GossipService.Client(protocol);
             Set newNodes = client.getMembers();
-            for (Object n: newNodes){
-                String node = (String) n;
-                nodeContext.addMember(Integer.parseInt(node));
+            Iterator nodeID = newNodes.iterator();
+
+            while(nodeID.hasNext()){
+               nodeContext.addMember((Integer) nodeID.next());
             }
 
         } catch (TTransportException e) {

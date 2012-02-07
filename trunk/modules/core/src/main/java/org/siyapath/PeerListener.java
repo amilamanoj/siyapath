@@ -9,13 +9,6 @@ import org.apache.thrift.transport.TTransportException;
 import java.util.concurrent.CountDownLatch;
 
 
-/**
- * Created by IntelliJ IDEA.
- * User: amila
- * Date: 2/6/12
- * Time: 8:29 PM
- * To change this template use File | Settings | File Templates.
- */
 public class PeerListener {
     TServerTransport serverTransport;
     TServer server;
