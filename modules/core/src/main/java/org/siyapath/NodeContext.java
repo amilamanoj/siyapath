@@ -5,13 +5,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-/**
- * Created by IntelliJ IDEA.
- * User: amila
- * Date: 2/6/12
- * Time: 11:39 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class NodeContext {
 
     private ArrayList<Integer> members;
@@ -45,10 +39,10 @@ public class NodeContext {
         return (members.size() > 0) ? true : false;
     }
 
-    public Set<String> getMemberSet() {
-        Set<String> nodeSet = new HashSet<String>();
-        for (Integer node : members){
-             nodeSet.add(node.toString());
+    public Set<Integer> getMemberSet() {
+        Set<Integer> nodeSet = new HashSet<Integer>();
+        for (Integer nodeID : members){
+             nodeSet.add(nodeID);
         }
         return nodeSet;
     }

@@ -29,7 +29,7 @@ public class GossipServiceHandler implements GossipService.Iface {
     }
 
     @Override
-    public Set<String> getMembers() throws TException {
+    public Set<Integer> getMembers() throws TException {
         return nodeContext.getMemberSet();
     }
 

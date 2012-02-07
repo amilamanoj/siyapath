@@ -38,7 +38,7 @@ service GossipService {
     set<string> memberDiscovery(1:set<string> knownNodes),
 
     //Retrieving current set of known members. TODO: review the return type 'set'
-    set<string> getMembers(),
+    set<i32> getMembers(),
 
     //ping to see if member has left network while job being processed
     bool isAlive(1:i32 nodeID),
