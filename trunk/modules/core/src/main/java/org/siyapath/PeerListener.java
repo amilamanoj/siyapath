@@ -1,5 +1,7 @@
 package org.siyapath;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.transport.TServerSocket;
@@ -10,8 +12,11 @@ import java.util.concurrent.CountDownLatch;
 
 
 public class PeerListener {
-    TServerTransport serverTransport;
-    TServer server;
+
+    private static final Log log = LogFactory.getLog(PeerListener.class);
+
+    private TServerTransport serverTransport;
+    private TServer server;
     private int port;
     private CountDownLatch cdLatch;
 
@@ -33,13 +38,13 @@ public class PeerListener {
     }
 
     public void start() {
-        System.out.println("Starting to listen for incoming connections");
+        log.info("Starting to listen for incoming connections");
         new ListenerThread().start();
         while (!isRunning()){
-                //wait until server starts
+            log.debug("Waiting until the listener is started...");
+
         }
-        System.out.println("Now listening for incoming connections on port " + port);
-//        System.out.println(isRunning());
+        log.info("Now listening for incoming connections on port " + port);
 
     }
 
@@ -48,7 +53,7 @@ public class PeerListener {
     }
 
     public void stop() {
-        System.out.println("Stopping listening for incoming connections");
+        log.info("Stopping listening for incoming connections");
         server.stop();
     }
 
@@ -56,7 +61,6 @@ public class PeerListener {
 
         @Override
         public void run() {
-
 
             server.serve();
 //            server.stop();

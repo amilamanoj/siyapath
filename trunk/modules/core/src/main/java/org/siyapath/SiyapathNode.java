@@ -1,6 +1,8 @@
 package org.siyapath;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -12,6 +14,8 @@ import java.net.ConnectException;
 import java.util.Random;
 
 public class SiyapathNode {
+
+    private static final Log log = LogFactory.getLog(SiyapathNode.class);
 
     private GossipServiceHandler handler;
     private GossipService.Processor processor;
@@ -37,14 +41,14 @@ public class SiyapathNode {
 
     private void startSiyapathNode() {
         try {
-            System.out.println("Initializing Siyapath Node...");
+            log.info("Initializing Siyapath Node...");
 
             if (!connectToBootStrapper()) {
-                System.out.println("OK, I'm gonna be the bootstrapper");
+                log.info("OK, I'm gonna be the bootstrapper");
                 nodeContext.setBootstrapper(true);
                 this.nodePort = FrameworkInformation.BOOTSTRAP_PORT;
             } else {
-                System.out.println("Bootstrapper is up and running");
+                log.info("Bootstrapper is up and running");
             }
 
             peerListener = new PeerListener(processor, this.nodePort);
@@ -60,7 +64,7 @@ public class SiyapathNode {
 
     private boolean connectToBootStrapper() {
         boolean isBootStrapperAlive = false;
-        System.out.println("Trying to connect to a bootstrapper node");
+        log.info("Trying to connect to a bootstrapper node");
         TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
         try {
             transport.open();
@@ -71,7 +75,7 @@ public class SiyapathNode {
         } catch (TTransportException e) {
 //            e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {
-                System.out.println("Could not connect to the bootstrapper :(");
+                log.warn("Could not connect to the bootstrapper :(");
             }
         } catch (TException e) {
             e.printStackTrace();
