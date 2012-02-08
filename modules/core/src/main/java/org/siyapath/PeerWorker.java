@@ -1,6 +1,8 @@
 package org.siyapath;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -14,6 +16,8 @@ import java.util.Set;
 
 
 public class PeerWorker {
+
+    private static final Log log = LogFactory.getLog(PeerWorker.class);
 
     private NodeContext nodeContext;
 
@@ -62,11 +66,11 @@ public class PeerWorker {
             while (isRunning) {
                 if (!nodeContext.isBootstrapper()){
                 if (!nodeContext.membersExist()) {
-                    System.out.println("No known members. Contacting the bootstrapper to get some nodes");
+                    log.info("No known members. Contacting the bootstrapper to get some nodes");
                     initiateMembers();
                 }
                 }
-                System.out.println("Number of members: " + nodeContext.getMemeberCount());
+                log.info("Number of members: " + nodeContext.getMemeberCount());
                 try {
                     sleep(5000);
                 } catch (InterruptedException e) {
