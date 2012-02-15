@@ -17,7 +17,7 @@ public class SiyapathNode {
 
     private static final Log log = LogFactory.getLog(SiyapathNode.class);
 
-    private GossipServiceHandler handler;
+    private SiyapathService handler;
     private GossipService.Processor processor;
     private PeerListener peerListener;
     private PeerWorker peerWorker;
@@ -27,7 +27,7 @@ public class SiyapathNode {
 
     public SiyapathNode() {
         nodeContext = new NodeContext();
-        handler = new GossipServiceHandler(nodeContext);
+        handler = new SiyapathService(nodeContext);
         processor = new GossipService.Processor(handler);
         nodePort = new Random().nextInt(1000) + 9021;
 

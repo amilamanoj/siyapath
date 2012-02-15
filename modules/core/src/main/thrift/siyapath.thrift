@@ -26,7 +26,7 @@ struct GossipData {
 /**
  * Service for communication related to gossip protocols
  */
-service GossipService {
+service Siyapath {
 
     //Gossiping node resource data
     GossipData gossip(1:GossipData gData),
@@ -44,13 +44,7 @@ service GossipService {
     bool isAlive(),
 
     //request a member to become a backup node for given task
-    bool requestBecomeBackup(1:i32 nodeID, 2:i32 taskID )
-}
-
-/**
- * Service for computation related operations
- */
- service JobHandlerService {
+    bool requestBecomeBackup(1:i32 nodeID, 2:i32 taskID ),
 
     //Submitting a job
     string submitJob(1:map<i32,Task> tasks, 2:i32 jobID),
