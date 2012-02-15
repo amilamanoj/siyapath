@@ -18,7 +18,7 @@ public class SiyapathNode {
     private static final Log log = LogFactory.getLog(SiyapathNode.class);
 
     private SiyapathService handler;
-    private GossipService.Processor processor;
+    private Siyapath.Processor processor;
     private PeerListener peerListener;
     private PeerWorker peerWorker;
     private NodeContext nodeContext;
@@ -28,7 +28,7 @@ public class SiyapathNode {
     public SiyapathNode() {
         nodeContext = new NodeContext();
         handler = new SiyapathService(nodeContext);
-        processor = new GossipService.Processor(handler);
+        processor = new Siyapath.Processor(handler);
         nodePort = new Random().nextInt(1000) + 9021;
 
     }
@@ -69,7 +69,7 @@ public class SiyapathNode {
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
-            GossipService.Client client = new GossipService.Client(protocol);
+            Siyapath.Client client = new Siyapath.Client(protocol);
             client.notifyPresence(nodePort);
             isBootStrapperAlive = true;
         } catch (TTransportException e) {
