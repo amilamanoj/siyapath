@@ -22,7 +22,7 @@ public class PeerListener {
 
 
     public PeerListener(GossipService.Processor processor, int port) {
-        this.port= port;
+        this.port = port;
         initializeThriftServer(processor);
     }
 

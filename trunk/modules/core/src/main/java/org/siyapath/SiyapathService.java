@@ -2,13 +2,14 @@ package org.siyapath;
 
 import org.apache.thrift.TException;
 
+import java.util.Map;
 import java.util.Set;
 
-public class GossipServiceHandler implements GossipService.Iface {
+public class SiyapathService implements GossipService.Iface {
 
     private NodeContext nodeContext;
 
-    public GossipServiceHandler(NodeContext nodeContext) {
+    public SiyapathService(NodeContext nodeContext) {
         this.nodeContext = nodeContext;
     }
 
@@ -40,6 +41,20 @@ public class GossipServiceHandler implements GossipService.Iface {
 
     @Override
     public boolean requestBecomeBackup(int nodeID, int taskID) throws TException {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public String submitJob(Map<Integer, Task> tasks, int jobID) throws TException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getJobStatus(int jobID) throws org.apache.thrift.TException{
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Map<Integer, org.siyapath.Task> getJobResult(int jobID) throws TException {
         throw new UnsupportedOperationException();
     }
 
