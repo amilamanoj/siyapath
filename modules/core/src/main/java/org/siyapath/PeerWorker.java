@@ -34,7 +34,7 @@ public class PeerWorker {
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
-            GossipService.Client client = new GossipService.Client(protocol);
+            Siyapath.Client client = new Siyapath.Client(protocol);
             Set newNodes = client.getMembers();
             Iterator nodeID = newNodes.iterator();
 
