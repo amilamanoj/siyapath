@@ -21,12 +21,12 @@ public class PeerListener {
     private CountDownLatch cdLatch;
 
 
-    public PeerListener(GossipService.Processor processor, int port) {
+    public PeerListener(Siyapath.Processor processor, int port) {
         this.port = port;
         initializeThriftServer(processor);
     }
 
-    private void initializeThriftServer(GossipService.Processor processor) {
+    private void initializeThriftServer(Siyapath.Processor processor) {
         try {
             serverTransport = new TServerSocket(port);
             server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
