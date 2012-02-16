@@ -26,8 +26,8 @@ public class SiyapathNode {
 
 
     public SiyapathNode() {
-        nodeContext = new NodeContext();
-        handler = new SiyapathService(nodeContext);
+        nodeContext = NodeContext.getInstance();
+        handler = new SiyapathService();
         processor = new Siyapath.Processor(handler);
         nodePort = new Random().nextInt(1000) + 9021;
 
