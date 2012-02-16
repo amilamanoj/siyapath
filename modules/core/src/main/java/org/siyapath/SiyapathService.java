@@ -31,7 +31,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public Set<Integer> getMembers() throws TException {
-        throw new UnsupportedOperationException();
+        return nodeContext.getMemberSet();
     }
 
     @Override
