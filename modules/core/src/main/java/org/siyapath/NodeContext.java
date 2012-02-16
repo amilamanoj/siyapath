@@ -11,10 +11,18 @@ public class NodeContext {
     private ArrayList<Integer> members;
     private boolean isBootstrapper;
     private boolean isBackup;
+    private static NodeContext instance = null;
 
-    public NodeContext() {
+    private NodeContext() {
         this.members = new ArrayList<Integer>();
         this.isBootstrapper = false;
+    }
+
+    public static NodeContext getInstance() {
+        if (instance == null) {
+            instance = new NodeContext();
+        }
+        return instance;
     }
 
     public Integer getMember(int index) {
@@ -42,8 +50,8 @@ public class NodeContext {
 
     public Set<Integer> getMemberSet() {
         Set<Integer> nodeSet = new HashSet<Integer>();
-        for (Integer nodeID : members){
-             nodeSet.add(nodeID);
+        for (Integer nodeID : members) {
+            nodeSet.add(nodeID);
         }
         return nodeSet;
     }

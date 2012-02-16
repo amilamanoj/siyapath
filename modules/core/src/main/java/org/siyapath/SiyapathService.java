@@ -9,8 +9,8 @@ public class SiyapathService implements Siyapath.Iface {
 
     private NodeContext nodeContext;
 
-    public SiyapathService(NodeContext nodeContext) {
-        this.nodeContext = nodeContext;
+    public SiyapathService() {
+        this.nodeContext = NodeContext.getInstance();
     }
 
     @Override
