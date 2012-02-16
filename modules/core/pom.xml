@@ -29,7 +29,7 @@
                 <artifactId>maven-thrift-plugin</artifactId>
                 <version>0.1.10</version>
                 <configuration>
-                    <thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
+                    <thriftExecutable>${env.THRIFT_HOME}</thriftExecutable>
                 </configuration>
                 <executions>
                     <execution>
