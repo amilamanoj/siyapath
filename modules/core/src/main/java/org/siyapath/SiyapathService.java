@@ -1,6 +1,7 @@
 package org.siyapath;
 
 import org.apache.thrift.TException;
+import org.siyapath.gossip.GossipImpl;
 
 import java.util.Map;
 import java.util.Set;
@@ -8,9 +9,11 @@ import java.util.Set;
 public class SiyapathService implements Siyapath.Iface {
 
     private NodeContext nodeContext;
+    private GossipImpl gossipImpl;
 
     public SiyapathService() {
         this.nodeContext = NodeContext.getInstance();
+        this.gossipImpl = new GossipImpl();
     }
 
     @Override
@@ -31,7 +34,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public Set<Integer> getMembers() throws TException {
-        return nodeContext.getMemberSet();
+        return gossipImpl.getMembers();
     }
 
     @Override
