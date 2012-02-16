@@ -10,6 +10,7 @@ public class NodeContext {
 
     private ArrayList<Integer> members;
     private boolean isBootstrapper;
+    private boolean isBackup;
 
     public NodeContext() {
         this.members = new ArrayList<Integer>();
