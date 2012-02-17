@@ -53,6 +53,12 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     @Override
+    public boolean submitTask(Task task) throws TException {
+        throw new UnsupportedOperationException();
+//        processTask(task);
+    }
+
+    @Override
     public String getJobStatus(int jobID) throws TException {
         throw new UnsupportedOperationException();
     }

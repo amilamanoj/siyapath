@@ -13,7 +13,10 @@ struct NodeData {
  * Contains information about a Task
  */
 struct Task {
-    1: i32 taskID
+    1: string taskID,
+    2: string jobID,
+    3: string taskProgram,
+    4: string taskData
 }
 
 /**
@@ -48,6 +51,9 @@ service Siyapath {
 
     //Submitting a job
     string submitJob(1:map<i32,Task> tasks, 2:i32 jobID),
+
+    //Submitting a task
+    bool submitTask(1:Task task),
 
     //Getting current status of a job
     string getJobStatus(1:i32 jobID),
