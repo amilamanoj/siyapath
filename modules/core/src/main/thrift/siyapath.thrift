@@ -15,7 +15,7 @@ struct NodeData {
 struct Task {
     1: string taskID,
     2: string jobID,
-    3: string taskProgram,
+    3: binary taskProgram,
     4: string taskData
 }
 
