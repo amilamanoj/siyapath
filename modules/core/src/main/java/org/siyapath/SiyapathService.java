@@ -28,8 +28,8 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     @Override
-    public Set<String> memberDiscovery(Set<String> knownNodes) throws TException {
-        throw new UnsupportedOperationException();
+    public Set<Integer> memberDiscovery(Set<Integer> knownNodes) throws TException {
+        return gossipImpl.memberDiscovery(knownNodes);
     }
 
     @Override

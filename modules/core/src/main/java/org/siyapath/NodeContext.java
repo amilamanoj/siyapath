@@ -14,18 +14,19 @@ public class NodeContext {
     /**
      * List of known member nodes
      */
-    private ArrayList<Integer> members;
+    private HashSet<Integer> members;
     private boolean isBootstrapper;
     private boolean isBackup;
     private static NodeContext instance = null;
 
     private NodeContext() {
-        this.members = new ArrayList<Integer>();
+        this.members = new HashSet<Integer>();
         this.isBootstrapper = false;
     }
 
     /**
      * Returns the instance of this class
+     *
      * @return NodeContext instance
      */
     public static NodeContext getInstance() {
@@ -36,35 +37,29 @@ public class NodeContext {
     }
 
     /**
-     * Returns a particular member from the member list
-     * @param id member id
-     * @return a member node
-     */
-    public Integer getMember(int id) {
-        return members.get(id);
-    }
-
-    /**
      * Returns a random member from list of know members
+     *
      * @return a random member node
      */
     public Integer getRandomMember() {
         if (members.isEmpty()) {
             return null;
         }
-        return members.get(new Random().nextInt(members.size()));
+        return members.iterator().next();
     }
 
     /**
      * Adds a new member
+     *
      * @param id member id
      */
     public void addMember(int id) {
-        members.add(new Integer(id));
+        members.add(Integer.valueOf(id));
     }
 
     /**
      * Returns the size of member list
+     *
      * @return number of members
      */
     public int getMemeberCount() {
@@ -73,26 +68,33 @@ public class NodeContext {
 
     /**
      * Returns whether members exist or not
+     *
      * @return true or false
      */
     public boolean membersExist() {
-        return (members.size() > 0) ? true : false;
+        return (members.size() > 0);
     }
 
     /**
      * Returns the the set of member
+     *
      * @return member set
      */
     public Set<Integer> getMemberSet() {
-        Set<Integer> nodeSet = new HashSet<Integer>();
-        for (Integer nodeID : members) {
-            nodeSet.add(nodeID);
-        }
-        return nodeSet;
+        return members;
+    }
+
+    /**
+     * Replace the members set with a new set
+     * @param newSet the set to be replaced by
+     */
+    public void updateMemberSet(Set<Integer> newSet){
+        members = (HashSet<Integer>) newSet;
     }
 
     /**
      * checks whether this node is the bootstrapper
+     *
      * @return true or false
      */
     public boolean isBootstrapper() {
@@ -101,6 +103,7 @@ public class NodeContext {
 
     /**
      * Declare this node as the bootstrapper
+     *
      * @param bootstrapper true or false
      */
     public void setBootstrapper(boolean bootstrapper) {

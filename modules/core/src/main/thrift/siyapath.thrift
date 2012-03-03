@@ -38,7 +38,7 @@ service Siyapath {
     bool notifyPresence(1:i32 nodeID),
 
     //Gossiping known member list
-    set<string> memberDiscovery(1:set<string> knownNodes),
+    set<i32> memberDiscovery(1:set<i32> knownNodes),
 
     //Retrieving current set of known members. TODO: review the return type 'set'
     set<i32> getMembers(),
