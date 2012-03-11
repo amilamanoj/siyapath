@@ -16,7 +16,8 @@ struct Task {
     1: string taskID,
     2: string jobID,
     3: binary taskProgram,
-    4: string taskData
+    4: string taskData,
+    5: string className
 }
 
 /**

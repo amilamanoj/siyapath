@@ -2,6 +2,7 @@ package org.siyapath;
 
 import org.apache.thrift.TException;
 import org.siyapath.gossip.GossipImpl;
+import org.siyapath.job.TaskProcessor;
 
 import java.util.Map;
 import java.util.Set;
@@ -54,8 +55,9 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public boolean submitTask(Task task) throws TException {
-        throw new UnsupportedOperationException();
-//        processTask(task);
+        TaskProcessor taskProcessor = new TaskProcessor(task, task.getClassName());
+        taskProcessor.processTask();
+        return true;
     }
 
     @Override
