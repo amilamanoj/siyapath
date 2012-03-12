@@ -72,7 +72,11 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public String userLogin(String username, String password) throws TException {
-        throw new UnsupportedOperationException();
+        if (username.equals("admin") && password.equals("admin")) {
+            return "sucess";
+        } else {
+            return "failure";
+        }
     }
 
 
