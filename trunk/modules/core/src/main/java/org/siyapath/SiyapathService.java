@@ -1,5 +1,7 @@
 package org.siyapath;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.siyapath.gossip.GossipImpl;
 import org.siyapath.job.TaskProcessor;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SiyapathService implements Siyapath.Iface {
+    private static final Log log = LogFactory.getLog(PeerListener.class);
 
     private NodeContext nodeContext;
     private GossipImpl gossipImpl;
@@ -50,7 +53,11 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public String submitJob(Map<Integer, Task> tasks, int jobID) throws TException {
-        throw new UnsupportedOperationException();
+        log.info("Received the job: " + jobID);
+        Task firstTask = tasks.get(new Integer(1));
+        TaskProcessor taskProcessor = new TaskProcessor(firstTask, firstTask.getClassName());
+        taskProcessor.processTask();
+        return "sucess";
     }
 
     @Override
