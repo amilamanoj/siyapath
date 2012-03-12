@@ -1,10 +1,8 @@
 package org.siyapath.client;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.transport.TTransportException;
-
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 
 /*
  * The graphical user interface of siyapath client
@@ -31,6 +29,7 @@ public class UserGUI extends JFrame {
         nameLabel = new JLabel();
         exitButton = new JButton();
         aboutButton = new JButton();
+        browseButton = new JButton();
         controlPane = new JLayeredPane();
         userPanel = new JPanel();
         userWelcomeLabel = new JLabel();
@@ -51,7 +50,7 @@ public class UserGUI extends JFrame {
         busyPanel = new JPanel();
         busyLabel = new JLabel();
         jLabel4 = new JLabel();
-        userWelcomeLabel2 = new JLabel();
+        aboutlabel = new JLabel();
         mainMenuBar = new JMenuBar();
         systemMenu = new JMenu();
         logoutMenu = new JMenuItem();
@@ -119,37 +118,51 @@ public class UserGUI extends JFrame {
         userWelcomeLabel1.setFont(new java.awt.Font("Bodoni MT", 0, 16));
         userWelcomeLabel1.setText("Algorithm Location:");
 
-        GroupLayout userPanelLayout = new GroupLayout(userPanel);
+
+        browseButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        browseButton.setText("Browse");
+        browseButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        browseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout userPanelLayout = new javax.swing.GroupLayout(userPanel);
         userPanel.setLayout(userPanelLayout);
         userPanelLayout.setHorizontalGroup(
-                userPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(userPanelLayout.createSequentialGroup()
-                                .addGroup(userPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(userWelcomeLabel)
-                                        .addGroup(GroupLayout.Alignment.TRAILING, userPanelLayout.createSequentialGroup()
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, userPanelLayout.createSequentialGroup()
                                                 .addGap(25, 25, 25)
-                                                .addComponent(userWelcomeLabel1)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
-                                                .addGroup(userPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(algorithmText)
-                                                        .addGroup(GroupLayout.Alignment.TRAILING, userPanelLayout.createSequentialGroup()
-                                                                .addComponent(jobSubmitButton)
-                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(userLogoutButton, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))))
+                                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(userPanelLayout.createSequentialGroup()
+                                                                .addComponent(userWelcomeLabel1)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                                                                .addComponent(jobSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(algorithmText, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(browseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addContainerGap())
         );
         userPanelLayout.setVerticalGroup(
-                userPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(userPanelLayout.createSequentialGroup()
                                 .addComponent(userWelcomeLabel)
                                 .addGap(35, 35, 35)
-                                .addGroup(userPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(algorithmText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(userWelcomeLabel1))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-                                .addGroup(userPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jobSubmitButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(userLogoutButton, GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
+                                .addComponent(userWelcomeLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(browseButton)
+                                        .addComponent(algorithmText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(154, 154, 154)
+                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jobSubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                                        .addComponent(userLogoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
                                 .addContainerGap())
         );
 
@@ -298,9 +311,9 @@ public class UserGUI extends JFrame {
         busyPanel.setBounds(10, 10, 590, 310);
         controlPane.add(busyPanel, JLayeredPane.DEFAULT_LAYER);
 
-        userWelcomeLabel2.setFont(new java.awt.Font("Bodoni MT", 0, 16));
-        userWelcomeLabel2.setHorizontalAlignment(SwingConstants.CENTER);
-        userWelcomeLabel2.setText("<html><center>Department of Computer Science & Engineering<br />University of Moratuwa<center><html>");
+        aboutlabel.setFont(new java.awt.Font("Bodoni MT", 0, 16));
+        aboutlabel.setHorizontalAlignment(SwingConstants.CENTER);
+        aboutlabel.setText("<html><center>Department of Computer Science & Engineering<br />University of Moratuwa<center><html>");
 
         systemMenu.setText("System");
         systemMenu.addActionListener(new ActionListener() {
@@ -466,6 +479,16 @@ public class UserGUI extends JFrame {
     }
 
     private void jobSubmitButtonActionPerformed(ActionEvent evt) {
+        handler.submitJob(algorithmText.getText());
+    }
+
+    private void browseButtonActionPerformed(ActionEvent evt) {
+        final JFileChooser fc = new JFileChooser(".");
+        fc.showOpenDialog(this);
+        File sFile = fc.getSelectedFile();
+        if (sFile != null) {
+            algorithmText.setText(sFile.getAbsolutePath());
+        }
     }
 
     private void about() {
@@ -542,6 +565,7 @@ public class UserGUI extends JFrame {
     }
 
     private JButton aboutButton;
+    private JButton browseButton;
     private JMenuItem aboutMenu;
     //    private JButton aboutOkButton;
     //    private JPanel aboutPanel;
@@ -573,6 +597,6 @@ public class UserGUI extends JFrame {
     private JMenuItem userProfileMenu;
     private JLabel userWelcomeLabel;
     private JLabel userWelcomeLabel1;
-    private JLabel userWelcomeLabel2;
+    private JLabel aboutlabel;
     private JTextField usernameText;
 }
