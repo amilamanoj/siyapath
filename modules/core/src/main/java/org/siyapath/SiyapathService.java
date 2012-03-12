@@ -70,5 +70,10 @@ public class SiyapathService implements Siyapath.Iface {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public String userLogin(String username, String password) throws TException {
+        throw new UnsupportedOperationException();
+    }
+
 
 }
