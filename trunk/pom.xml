@@ -68,6 +68,7 @@
 
     <modules>
         <module>modules/core</module>
+        <module>modules/user</module>
     </modules>
 
 </project>
