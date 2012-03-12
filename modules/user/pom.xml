@@ -13,5 +13,12 @@
     <artifactId>siyapath-user</artifactId>
     <name>Siyapath - User</name>
     <description>Siyapath - User</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.siyapath</groupId>
+            <artifactId>siyapath-core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>
