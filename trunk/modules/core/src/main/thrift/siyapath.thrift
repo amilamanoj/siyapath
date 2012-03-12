@@ -60,5 +60,8 @@ service Siyapath {
     string getJobStatus(1:i32 jobID),
 
     //Getting the computation result of a job
-    map<i32,Task> getJobResult (1:i32 jobID)
+    map<i32,Task> getJobResult (1:i32 jobID),
+
+    //User authentication
+    string userLogin(1:string username, 2:string password)
 }
