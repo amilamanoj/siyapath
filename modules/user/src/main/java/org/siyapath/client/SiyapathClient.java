@@ -7,10 +7,8 @@ import java.io.File;
 public class SiyapathClient {
 private UserGUI gui;
 
-
     public SiyapathClient() {
-        this.gui = new UserGUI();
-
+        this.gui = new UserGUI(new UserHandler());
     }
 
     public static void main(String[] args) {

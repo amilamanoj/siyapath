@@ -11,17 +11,12 @@ import java.awt.event.*;
  */
 public class UserGUI extends JFrame {
 
-    Timer busyTimer;
+    private UserHandler handler;
     private String loggedPerson;
 
-    public UserGUI() {
+    public UserGUI(UserHandler handler) {
         initComponents();
-        busyTimer = new Timer(1000, new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                busyTimerActionPerformed(e);
-            }
-        });
+        this.handler = handler;
         loginPanel.setVisible(true);
         userPanel.setVisible(false);
         busyPanel.setVisible(false);
@@ -473,16 +468,6 @@ public class UserGUI extends JFrame {
     private void jobSubmitButtonActionPerformed(ActionEvent evt) {
     }
 
-    private void aboutOkButtonActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void busyTimerActionPerformed(ActionEvent e) {
-        busyPanel.setVisible(false);
-        controlPane.setVisible(true);
-        busyTimer.stop();
-    }
-
     private void about() {
         JOptionPane.showMessageDialog(this, "<html><a href=http://siyapath.org>(c) Siyapath Team 2012</a></html>", "About", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -496,47 +481,55 @@ public class UserGUI extends JFrame {
     }
 
     private void login() {
+        busy();
         String userName = usernameText.getText();
         String password = String.valueOf(passwordText.getPassword());
-        try {
-        String res="failed";
-            if (res.equals("failed")) {
-                JOptionPane.showMessageDialog(this, "Invalid username or password, access denied!", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                usernameText.requestFocus();
-                usernameText.selectAll();
-            } else {
-                loggedPerson = userName;
-                logged(loggedPerson);
-            }
-        } catch (Exception e) {
+        String res = handler.authenticate(userName, password);
+        if (res.equals("connecEx")) {
             JOptionPane.showMessageDialog(this, "Could not connect to bootstrapper", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        } else if (res.equals("sucess")) {
+            loggedPerson = userName;
+            logged();
+        } else {
+            loggedOut();
+            JOptionPane.showMessageDialog(this, "Invalid username or password, access denied!", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            usernameText.requestFocus();
+            usernameText.selectAll();
         }
     }
 
     private void logOut() {
-
         if (JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logging out", 0) == 0) {
-            showLogoutBusy();
             loggedPerson = null;
-            usernameText.setText(null);
-            passwordText.setText(null);
-            userPanel.setVisible(false);
-            loginPanel.setVisible(true);
-            userMenu.setVisible(false);
-            logoutMenu.setVisible(false);
-
+            loggedOut();
         }
     }
 
-    public void logged(String user) {
-        loggedPerson = user;
-        //student
-        showLoginBusy();
+    public void logged() {
         loginPanel.setVisible(false);
+        busyPanel.setVisible(false);
         userPanel.setVisible(true);
         userMenu.setVisible(true);
         logoutMenu.setVisible(true);
         userWelcomeLabel.setText("Welcome " + loggedPerson);
+    }
+
+    public void busy(){
+        busyPanel.setVisible(true);
+        loginPanel.setVisible(false);
+        userPanel.setVisible(false);
+        userMenu.setVisible(false);
+        logoutMenu.setVisible(false);
+    }
+
+    public void loggedOut(){
+        usernameText.setText(null);
+        passwordText.setText(null);
+        busyPanel.setVisible(false);
+        loginPanel.setVisible(true);
+        userPanel.setVisible(false);
+        userMenu.setVisible(false);
+        logoutMenu.setVisible(false);
     }
 
     private void showUserProfile() {
@@ -548,26 +541,10 @@ public class UserGUI extends JFrame {
 //        ss.setVisible(true);
     }
 
-    private void showLoginBusy() {
-        busyLabel.setText("Logging in...");
-        controlPane.setVisible(false);
-        busyPanel.setVisible(true);
-        busyTimer.setDelay(1000);
-        busyTimer.start();
-    }
-
-    private void showLogoutBusy() {
-        busyLabel.setText("Logging out...");
-        controlPane.setVisible(false);
-        busyPanel.setVisible(true);
-        busyTimer.setDelay(1000);
-        busyTimer.start();
-    }
-
     private JButton aboutButton;
     private JMenuItem aboutMenu;
     //    private JButton aboutOkButton;
-//    private JPanel aboutPanel;
+    //    private JPanel aboutPanel;
     private JTextField algorithmText;
     private JLabel busyLabel;
     private JPanel busyPanel;
