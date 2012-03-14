@@ -1,5 +1,8 @@
 package org.siyapath;
 
+import com.sun.org.apache.regexp.internal.RE;
+
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -18,10 +21,12 @@ public class NodeContext {
     private boolean isBootstrapper;
     private boolean isBackup;
     private static NodeContext instance = null;
+    private NodeData nodeData;
 
     private NodeContext() {
         this.members = new HashSet<Integer>();
         this.isBootstrapper = false;
+        nodeData = new NodeData();
     }
 
     /**
@@ -37,15 +42,25 @@ public class NodeContext {
     }
 
     /**
-     * Returns a random member from list of know members
+     * Returns a random member from list of known members
      *
      * @return a random member node
      */
     public Integer getRandomMember() {
-        if (members.isEmpty()) {
-            return null;
+        Integer randomMember = null;
+        if (!getMemberSet().isEmpty()) {
+            int memberCount = getMemeberCount();
+            int randomMemberID = new Random().nextInt(memberCount);
+            int i = 0;
+            for (Integer newRandomMember : this.getMemberSet()) {
+                if (i == randomMemberID) {
+                    randomMember = newRandomMember;
+                    break;
+                }
+                i = i + 1;
+            }
         }
-        return members.iterator().next();
+        return randomMember;
     }
 
     /**
@@ -86,10 +101,15 @@ public class NodeContext {
 
     /**
      * Replace the members set with a new set
+     *
      * @param newSet the set to be replaced by
      */
-    public void updateMemberSet(Set<Integer> newSet){
-        members = (HashSet<Integer>) newSet;
+    public void updateMemberSet(Set<Integer> newSet) {
+        for (Integer newNode : newSet) {
+            if (newNode != this.getNodeID()) {
+                addMember(newNode);
+            }
+        }
     }
 
     /**
@@ -108,5 +128,23 @@ public class NodeContext {
      */
     public void setBootstrapper(boolean bootstrapper) {
         isBootstrapper = bootstrapper;
+    }
+
+    /**
+     * Assign the ID for the node
+     *
+     * @param nodeID the assigned ID for the node
+     */
+    public void setNodeID(int nodeID) {
+        this.nodeData.setNodeID(nodeID);
+    }
+
+    /**
+     * Getter for NodeID
+     *
+     * @return nodeID
+     */
+    public int getNodeID() {
+        return this.nodeData.getNodeID();
     }
 }

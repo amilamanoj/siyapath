@@ -30,6 +30,7 @@ public class SiyapathNode {
         handler = new SiyapathService();
         processor = new Siyapath.Processor(handler);
         nodePort = new Random().nextInt(1000) + 9021;
+        nodeContext.setNodeID(nodePort);
 
     }
 
@@ -53,7 +54,7 @@ public class SiyapathNode {
 
             peerListener = new PeerListener(processor, this.nodePort);
             peerListener.start();
-            
+
             peerWorker = new PeerWorker(nodeContext);
             peerWorker.start();
 
