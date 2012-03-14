@@ -51,7 +51,7 @@ public class SiyapathNode {
                 log.info("Bootstrapper is up and running");
             }
 
-            peerListener = new PeerListener(processor);
+            peerListener = new PeerListener(processor, nodeContext.getNodeInfo().getPort());
             peerListener.start();
 
             peerWorker = new PeerWorker();

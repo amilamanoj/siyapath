@@ -21,8 +21,9 @@ public class PeerListener {
     private CountDownLatch cdLatch;
 
 
-    public PeerListener(Siyapath.Processor processor) {
+    public PeerListener(Siyapath.Processor processor, int port) {
         initializeThriftServer(processor);
+        this.port = port;
     }
 
     private void initializeThriftServer(Siyapath.Processor processor) {
@@ -39,7 +40,7 @@ public class PeerListener {
     public void start() {
         log.info("Starting to listen for incoming connections");
         new ListenerThread().start();
-        while (!isRunning()){
+        while (!isRunning()) {
             log.debug("Waiting until the listener is started...");
 
         }

@@ -40,7 +40,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public Set<NodeData> getMembers() throws TException {
-        return CommonUtils.serialize(gossipImpl.getMembers());
+        return CommonUtils.serialize(nodeContext.getMemberSet());
     }
 
     @Override
