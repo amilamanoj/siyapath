@@ -15,6 +15,11 @@ public class Backup {
 
     }
 
+    /**
+     *
+     * @param processingNodeID
+     * @param jobID
+     */
     public void endBackup(int processingNodeID, int jobID){
 
     }

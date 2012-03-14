@@ -12,6 +12,10 @@ public class UserGUI extends JFrame {
     private UserHandler handler;
     private String loggedPerson;
 
+    /**
+     *
+     * @param handler
+     */
     public UserGUI(UserHandler handler) {
         initComponents();
         this.handler = handler;
@@ -22,7 +26,6 @@ public class UserGUI extends JFrame {
         logoutMenu.setVisible(false);
         this.setLocationRelativeTo(null);
     }
-
 
     private void initComponents() {
 

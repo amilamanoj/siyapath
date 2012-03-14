@@ -12,7 +12,6 @@ import org.apache.thrift.transport.TTransportException;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
-import java.util.Random;
 
 public class SiyapathNode {
 
@@ -30,9 +29,12 @@ public class SiyapathNode {
         handler = new SiyapathService();
         processor = new Siyapath.Processor(handler);
         nodeContext.setNodeID(CommonUtils.getRandomNumber(100000));
-
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
         SiyapathNode node = new SiyapathNode();
@@ -62,6 +64,10 @@ public class SiyapathNode {
         }
     }
 
+    /**
+     *
+     * @return true if a bootstrapper node exists, false otherwise
+     */
     private boolean connectToBootStrapper() {
         boolean isBootStrapperAlive = false;
         log.info("Trying to connect to a bootstrapper node");
@@ -82,9 +88,7 @@ public class SiyapathNode {
         } finally {
             transport.close();
         }
-
         return isBootStrapperAlive;
-
     }
 
 

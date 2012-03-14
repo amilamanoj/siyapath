@@ -79,6 +79,12 @@ public class GossipImpl {
         }
     }
 
+    /**
+     *
+     * @param initialSet
+     * @param discoveredSet
+     * @return Set of node info
+     */
     private Set<NodeInfo> mergeSets(Set initialSet, Set discoveredSet){
         Set<NodeInfo> newSet = initialSet;
         Set<NodeInfo> tempSet = new HashSet<NodeInfo>();

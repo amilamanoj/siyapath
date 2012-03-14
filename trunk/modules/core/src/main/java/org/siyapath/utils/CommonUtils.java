@@ -2,25 +2,22 @@ package org.siyapath.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.siyapath.NodeContext;
 import org.siyapath.NodeData;
 import org.siyapath.NodeInfo;
 
 import java.net.*;
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: amila
- * Date: 2/1/12
- * Time: 11:38 PM
- * To change this template use File | Settings | File Templates.
- */
 public class CommonUtils {
     
     private static Log log = LogFactory.getLog(CommonUtils.class);
 
     //temporary testing purposes
+
+    /**
+     *
+     * @return InetSocketAddress for given host and port
+     */
     public static InetSocketAddress getRandomAddress(){
         int port = 9090;
         String host="10.1.";
@@ -30,10 +27,18 @@ public class CommonUtils {
         return address;
     }
 
+    /**
+     *
+     * @return a random port
+     */
     public static int getRandomPort(){
         return new Random().nextInt(1000) + 9021;
     }
 
+    /**
+     *
+     * @return ip address
+     */
     public static String getIPAddress()  {
         List<InetAddress> ipAddresses = new ArrayList<InetAddress>();
         String ipAddress = null;
@@ -72,17 +77,33 @@ public class CommonUtils {
         return ipAddress;
     }
 
+    /**
+     *
+     * @param i
+     * @return a random number
+     */
     public static int getRandomNumber(int i) {
         return new Random().nextInt(i);
     }
-    
+
+    /**
+     *
+     * @param nodeInfo
+     * @return NodeData for specified node info
+     */
     public static NodeData serialize(NodeInfo nodeInfo) {
         NodeData node = new NodeData();
         node.setNodeID(nodeInfo.getNodeId());
         node.setIp(nodeInfo.getIp());
         node.setPort(nodeInfo.getPort());
         return node;
-    } 
+    }
+
+    /**
+     *
+     * @param nodeInfos
+     * @return Set of NodeData for given Set of node info
+     */
     public static Set<NodeData> serialize(Set<NodeInfo> nodeInfos) {
         Set<NodeData> nodeDatas = new HashSet<NodeData>();
         for (NodeInfo ni: nodeInfos) {
@@ -91,6 +112,11 @@ public class CommonUtils {
         return nodeDatas;
     }
 
+    /**
+     *
+     * @param nodeData
+     * @return NodeInfo for given nodeData
+     */
     public static NodeInfo deSerialize(NodeData nodeData) {
         NodeInfo node = new NodeInfo();
         node.setNodeId(nodeData.getNodeID());
@@ -99,6 +125,11 @@ public class CommonUtils {
         return node;
     }
 
+    /**
+     *
+     * @param nodeDatas
+     * @return set of NodeInfo for given set of nodeData
+     */
     public static Set<NodeInfo> deSerialize(Set<NodeData> nodeDatas) {
         Set<NodeInfo> nodeInfos = new HashSet<NodeInfo>();
         for (NodeData nd: nodeDatas) {

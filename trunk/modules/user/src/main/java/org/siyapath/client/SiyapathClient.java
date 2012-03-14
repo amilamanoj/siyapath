@@ -11,6 +11,10 @@ private UserGUI gui;
         this.gui = new UserGUI(new UserHandler());
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
