@@ -1,7 +1,8 @@
 package org.siyapath;
 
+import org.siyapath.utils.CommonUtils;
+
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -13,16 +14,19 @@ public class NodeContext {
     /**
      * List of known member nodes
      */
-    private HashSet<Integer> members;
-    private boolean isBootstrapper;
+    private HashSet<NodeInfo> members;
     private boolean isBackup;
     private static NodeContext instance = null;
-    private NodeData nodeData;
+
+    public NodeInfo getNodeInfo() {
+        return nodeInfo;
+    }
+
+    private NodeInfo nodeInfo;
 
     private NodeContext() {
-        this.members = new HashSet<Integer>();
-        this.isBootstrapper = false;
-        nodeData = new NodeData();
+        this.members = new HashSet<NodeInfo>();
+        nodeInfo = new NodeInfo();
     }
 
     /**
@@ -42,19 +46,13 @@ public class NodeContext {
      *
      * @return a random member node
      */
-    public Integer getRandomMember() {
-        Integer randomMember = null;
+    public NodeInfo getRandomMember() {
+        NodeInfo randomMember = null;
         if (!getMemberSet().isEmpty()) {
             int memberCount = getMemberCount();
-            int randomMemberID = new Random().nextInt(memberCount);
-            int i = 0;
-            for (Integer newRandomMember : this.getMemberSet()) {
-                if (i == randomMemberID) {
-                    randomMember = newRandomMember;
-                    break;
-                }
-                i = i + 1;
-            }
+            int randomIndex = CommonUtils.getRandomNumber(memberCount);
+            NodeInfo[] memberArray = members.toArray(new NodeInfo[0]);
+            randomMember = memberArray[randomIndex];
         }
         return randomMember;
     }
@@ -62,10 +60,10 @@ public class NodeContext {
     /**
      * Adds a new member
      *
-     * @param id member id
+     * @param member member information
      */
-    public void addMember(int id) {
-        members.add(Integer.valueOf(id));
+    public void addMember(NodeInfo member) {
+        members.add(member);
     }
 
     /**
@@ -91,7 +89,7 @@ public class NodeContext {
      *
      * @return member set
      */
-    public Set<Integer> getMemberSet() {
+    public Set<NodeInfo> getMemberSet() {
         return members;
     }
 
@@ -100,13 +98,12 @@ public class NodeContext {
      *
      * @param newSet the set to be replaced by
      */
-    public void updateMemberSet(Set<Integer> newSet) {
-        for (Integer newNode : newSet) {
-            if (newNode == this.getNodeID()) {
-                newSet.remove(newNode);
+    public void updateMemberSet(Set<NodeInfo> newSet) {
+        for (NodeInfo newNode : newSet) {
+            if (newNode.getNodeId() != nodeInfo.getNodeId()) {
+                addMember(newNode);
             }
         }
-        members = (HashSet<Integer>) newSet;
     }
 
     /**
@@ -115,7 +112,7 @@ public class NodeContext {
      * @return true or false
      */
     public boolean isBootstrapper() {
-        return isBootstrapper;
+        return nodeInfo.isBootStrapper();
     }
 
     /**
@@ -124,7 +121,7 @@ public class NodeContext {
      * @param bootstrapper true or false
      */
     public void setBootstrapper(boolean bootstrapper) {
-        isBootstrapper = bootstrapper;
+        nodeInfo.setBootStrapper(bootstrapper);
     }
 
     /**
@@ -133,7 +130,7 @@ public class NodeContext {
      * @param nodeID the assigned ID for the node
      */
     public void setNodeID(int nodeID) {
-        this.nodeData.setNodeID(nodeID);
+        nodeInfo.setNodeId(nodeID);
     }
 
     /**
@@ -142,6 +139,6 @@ public class NodeContext {
      * @return nodeID
      */
     public int getNodeID() {
-        return this.nodeData.getNodeID();
+        return nodeInfo.getNodeId();
     }
 }

@@ -2,15 +2,12 @@ package org.siyapath.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.siyapath.NodeContext;
+import org.siyapath.NodeData;
+import org.siyapath.NodeInfo;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Random;
+import java.net.*;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,11 +30,20 @@ public class CommonUtils {
         return address;
     }
 
-    public static String getIPAddress() throws Exception {
+    public static int getRandomPort(){
+        return new Random().nextInt(1000) + 9021;
+    }
+
+    public static String getIPAddress()  {
         List<InetAddress> ipAddresses = new ArrayList<InetAddress>();
         String ipAddress = null;
 
-        Enumeration e = NetworkInterface.getNetworkInterfaces();
+        Enumeration e = null;
+        try {
+            e = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException e1) {
+            e1.printStackTrace();
+        }
         while (e.hasMoreElements()) {
             NetworkInterface ni = (NetworkInterface) e.nextElement();
             // if (ni.isLoopback() || !ni.isUp()) continue;
@@ -65,5 +71,39 @@ public class CommonUtils {
 
         return ipAddress;
     }
+
+    public static int getRandomNumber(int i) {
+        return new Random(i).nextInt();
+    }
     
+    public static NodeData serialize(NodeInfo nodeInfo) {
+        NodeData node = new NodeData();
+        node.setNodeID(nodeInfo.getNodeId());
+        node.setIp(nodeInfo.getIp());
+        node.setPort(nodeInfo.getPort());
+        return node;
+    } 
+    public static Set<NodeData> serialize(Set<NodeInfo> nodeInfos) {
+        Set<NodeData> nodeDatas = new HashSet<NodeData>();
+        for (NodeInfo ni: nodeInfos) {
+            nodeDatas.add(serialize(ni));
+        }
+        return nodeDatas;
+    }
+
+    public static NodeInfo deSerialize(NodeData nodeData) {
+        NodeInfo node = new NodeInfo();
+        node.setNodeId(nodeData.getNodeID());
+        node.setIp(nodeData.getIp());
+        node.setPort(nodeData.getPort());
+        return node;
+    }
+
+    public static Set<NodeInfo> deSerialize(Set<NodeData> nodeDatas) {
+        Set<NodeInfo> nodeInfos = new HashSet<NodeInfo>();
+        for (NodeData nd: nodeDatas) {
+            nodeInfos.add(deSerialize(nd));
+        }
+        return nodeInfos;
+    }
 }

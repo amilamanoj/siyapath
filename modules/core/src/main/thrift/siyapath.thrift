@@ -6,8 +6,17 @@ namespace java org.siyapath
  */
 struct NodeData {
     1: i32 nodeID,
-    2: string timestamp,
-    3: map<string,string> nodeData
+    2: string ip,
+    3: i32 port
+}
+
+/**
+ * Contains information about a particular node
+ */
+struct NodeResourceData {
+    1: i32 nodeID,
+    2: NodeData nodeData,
+    3: map<string,string> nodeProperties
 }
 
 /**
@@ -44,13 +53,13 @@ service Siyapath {
     GossipData gossip(1:GossipData gData),
 
     //Called by a node upon joining the network
-    bool notifyPresence(1:i32 nodeID),
+    bool notifyPresence(1:NodeData nodeData),
 
     //Gossiping known member list
-    set<i32> memberDiscovery(1:set<i32> knownNodes),
+    set<NodeData> memberDiscovery(1:set<NodeData> knownNodes),
 
     //Retrieving current set of known members. TODO: review the return type 'set'
-    set<i32> getMembers(),
+    set<NodeData> getMembers(),
 
     //ping to see if member is alive
     bool isAlive(),

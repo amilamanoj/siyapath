@@ -9,6 +9,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class PeerWorker {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            Set<Integer> newNodes = client.getMembers();
+            Set<NodeInfo> newNodes = CommonUtils.deSerialize(client.getMembers());
             nodeContext.updateMemberSet(newNodes);
 
 
@@ -57,18 +58,18 @@ public class PeerWorker {
      */
     private void memberGossiper() {
 
-        Integer randomMember = nodeContext.getRandomMember();
+        NodeInfo randomMember = nodeContext.getRandomMember();
         log.info("Getting a random member to gossip:" + randomMember);
         if (randomMember != null) {
-            TTransport transport = new TSocket("localhost", randomMember);
+            TTransport transport = new TSocket("localhost", randomMember.getPort());
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
-                Set<Integer> discoveredNodes = client.memberDiscovery(nodeContext.getMemberSet());
+                Set<NodeInfo> discoveredNodes = CommonUtils.deSerialize(client.memberDiscovery(CommonUtils.serialize(nodeContext.getMemberSet())));
                 nodeContext.updateMemberSet(discoveredNodes);
                 log.info("members Fetched:");
-                for (Integer i : discoveredNodes) {
+                for (NodeInfo i : discoveredNodes) {
                     log.info(i);
                 }
 
