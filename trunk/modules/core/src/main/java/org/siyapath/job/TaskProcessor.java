@@ -62,7 +62,7 @@ public class TaskProcessor {
 
     public void sendResultToDistributingNode(){
 
-        TTransport transport = new TSocket("localhost",task.getSender());
+        TTransport transport = new TSocket("localhost",task.getSender().getPort());
 
         try {
             transport.open();

@@ -79,7 +79,7 @@ public class TaskDistributor {
         
         int temporaryRecipientPort = 9020;  //bootstrap port itself on a so-thought node
 //        task.setSender()
-        task.setRecipient(temporaryRecipientPort);
+//        task.setRecipient(temporaryRecipientPort);
         log.info("Attempting to connect to selected task-processing-node on port " + temporaryRecipientPort );
         TTransport transport = new TSocket("localhost",temporaryRecipientPort);
 
@@ -104,7 +104,7 @@ public class TaskDistributor {
 
     public void sendResultToUserNode(){
 
-        TTransport transport = new TSocket("localhost",task.getSender());
+        TTransport transport = new TSocket("localhost",task.getSender().getPort());
 
         try {
             transport.open();

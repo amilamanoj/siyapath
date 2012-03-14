@@ -54,7 +54,7 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     @Override
-    public String submitJob(Map<Integer, Task> tasks, int jobID) throws TException {
+    public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks ) throws TException {
         log.info("Received the job: " + jobID);
         Task firstTask = tasks.get(new Integer(1));
         TaskDistributor taskDistributor = new TaskDistributor(firstTask);
