@@ -69,6 +69,7 @@
     <modules>
         <module>modules/core</module>
         <module>modules/user</module>
+        <module>modules/samples</module>
     </modules>
 
 </project>
