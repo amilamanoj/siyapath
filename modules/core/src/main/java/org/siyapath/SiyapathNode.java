@@ -55,7 +55,7 @@ public class SiyapathNode {
             peerListener = new PeerListener(processor, this.nodePort);
             peerListener.start();
 
-            peerWorker = new PeerWorker(nodeContext);
+            peerWorker = new PeerWorker();
             peerWorker.start();
 
         } catch (Exception x) {
