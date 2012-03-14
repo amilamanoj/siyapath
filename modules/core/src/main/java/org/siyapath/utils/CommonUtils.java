@@ -73,7 +73,7 @@ public class CommonUtils {
     }
 
     public static int getRandomNumber(int i) {
-        return new Random(i).nextInt();
+        return new Random().nextInt(i);
     }
     
     public static NodeData serialize(NodeInfo nodeInfo) {

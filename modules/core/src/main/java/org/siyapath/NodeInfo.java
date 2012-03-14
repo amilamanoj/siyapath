@@ -6,12 +6,12 @@ public class NodeInfo {
     private int nodeId;
     private String ip;
     private int port;
-    private boolean bootStrapper;
+    private boolean bootstrapper;
 
     public NodeInfo() {
         ip = CommonUtils.getIPAddress();
         port = CommonUtils.getRandomPort();
-        this.bootStrapper = false;
+        this.bootstrapper = false;
 
     }
 
@@ -39,11 +39,11 @@ public class NodeInfo {
         this.ip = ip;
     }
 
-    public boolean isBootStrapper() {
-        return bootStrapper;
+    public boolean isBootstrapper() {
+        return bootstrapper;
     }
 
-    public void setBootStrapper(boolean bootStrapper) {
-        this.bootStrapper = bootStrapper;
+    public void setBootstrapper(boolean bootstrapper) {
+        this.bootstrapper = bootstrapper;
     }
 }

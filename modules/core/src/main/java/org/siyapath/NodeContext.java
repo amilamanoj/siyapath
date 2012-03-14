@@ -51,7 +51,7 @@ public class NodeContext {
         if (!getMemberSet().isEmpty()) {
             int memberCount = getMemberCount();
             int randomIndex = CommonUtils.getRandomNumber(memberCount);
-            NodeInfo[] memberArray = members.toArray(new NodeInfo[0]);
+            NodeInfo[] memberArray = members.toArray(new NodeInfo[memberCount]);
             randomMember = memberArray[randomIndex];
         }
         return randomMember;
@@ -100,10 +100,11 @@ public class NodeContext {
      */
     public void updateMemberSet(Set<NodeInfo> newSet) {
         for (NodeInfo newNode : newSet) {
-            if (newNode.getNodeId() != nodeInfo.getNodeId()) {
-                addMember(newNode);
+            if (newNode.getNodeId() == nodeInfo.getNodeId()) {
+                newSet.remove(newNode);
             }
         }
+        members = (HashSet<NodeInfo>) newSet;
     }
 
     /**
@@ -112,7 +113,7 @@ public class NodeContext {
      * @return true or false
      */
     public boolean isBootstrapper() {
-        return nodeInfo.isBootStrapper();
+        return nodeInfo.isBootstrapper();
     }
 
     /**
@@ -121,7 +122,7 @@ public class NodeContext {
      * @param bootstrapper true or false
      */
     public void setBootstrapper(boolean bootstrapper) {
-        nodeInfo.setBootStrapper(bootstrapper);
+        nodeInfo.setBootstrapper(bootstrapper);
     }
 
     /**
