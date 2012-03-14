@@ -3,6 +3,7 @@ package org.siyapath;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -99,11 +100,6 @@ public class NodeContext {
      * @param newSet the set to be replaced by
      */
     public void updateMemberSet(Set<NodeInfo> newSet) {
-        for (NodeInfo newNode : newSet) {
-            if (newNode.getNodeId() == nodeInfo.getNodeId()) {
-                newSet.remove(newNode);
-            }
-        }
         members = (HashSet<NodeInfo>) newSet;
     }
 

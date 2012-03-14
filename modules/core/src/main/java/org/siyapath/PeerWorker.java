@@ -9,6 +9,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.siyapath.gossip.GossipImpl;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
@@ -37,7 +38,6 @@ public class PeerWorker {
             Set<NodeInfo> newNodes = CommonUtils.deSerialize(client.getMembers());
             nodeContext.updateMemberSet(newNodes);
 
-
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 System.out.println("Could not connect to the bootstrapper :(");
@@ -48,42 +48,6 @@ public class PeerWorker {
 
         } finally {
             transport.close();
-        }
-    }
-
-    /**
-     * Select a random member form the known list and gossip current member list
-     * by calling memberDiscovery service &
-     * update the current list with the response
-     */
-    private void memberGossiper() {
-
-        NodeInfo randomMember = nodeContext.getRandomMember();
-        log.info("Getting a random member to gossip:" + randomMember);
-        if (randomMember != null) {
-            TTransport transport = new TSocket("localhost", randomMember.getPort());
-            try {
-                transport.open();
-                TProtocol protocol = new TBinaryProtocol(transport);
-                Siyapath.Client client = new Siyapath.Client(protocol);
-                Set<NodeInfo> discoveredNodes = CommonUtils.deSerialize(client.memberDiscovery(CommonUtils.serialize(nodeContext.getMemberSet())));
-                nodeContext.updateMemberSet(discoveredNodes);
-                log.info("members Fetched:");
-                for (NodeInfo i : discoveredNodes) {
-                    log.info(i);
-                }
-
-            } catch (TTransportException e) {
-                if (e.getCause() instanceof ConnectException) {
-                    System.out.println("Could not connect to the bootstrapper :(");
-                }
-
-            } catch (TException e) {
-                e.printStackTrace();
-
-            } finally {
-                transport.close();
-            }
         }
     }
 
@@ -102,7 +66,7 @@ public class PeerWorker {
                         initiateMembers();
                     } else {
                         log.info("Number of known members: " + nodeContext.getMemberCount());
-                        memberGossiper();
+                        new GossipImpl().memberGossiper();
                     }
                 }
                 try {
