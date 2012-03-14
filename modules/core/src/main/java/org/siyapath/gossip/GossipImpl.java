@@ -23,6 +23,7 @@ public class GossipImpl {
 
     private static final Log log = LogFactory.getLog(GossipImpl.class);
     private NodeContext nodeContext = NodeContext.getInstance();
+    private static final int MEMBER_SET_LIMIT = 10;
 
     public GossipImpl() {
     }
@@ -37,7 +38,7 @@ public class GossipImpl {
     public Set<NodeInfo> memberDiscovery(Set<NodeInfo> receivedMemberSet) {
         log.info("Remote node invoked member gossip with this node");
         Set<NodeInfo> initialSet = nodeContext.getMemberSet();
-        Set<NodeInfo> newSet = mergeSets(initialSet,receivedMemberSet);
+        Set<NodeInfo> newSet = mergeSets(initialSet, receivedMemberSet);
         nodeContext.updateMemberSet(newSet);
         return initialSet;
     }
@@ -58,7 +59,7 @@ public class GossipImpl {
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 Set<NodeInfo> discoveredNodes = CommonUtils.deSerialize(client.memberDiscovery(CommonUtils.serialize(nodeContext.getMemberSet())));
-                Set<NodeInfo> newSet = mergeSets(nodeContext.getMemberSet(),discoveredNodes);
+                Set<NodeInfo> newSet = mergeSets(nodeContext.getMemberSet(), discoveredNodes);
                 nodeContext.updateMemberSet(newSet);
                 log.info("members Fetched:");
                 for (NodeInfo i : discoveredNodes) {
@@ -80,21 +81,21 @@ public class GossipImpl {
     }
 
     /**
-     *
+     * Merges two Sets keeping the resulting set size under a defined limit
      * @param initialSet
      * @param discoveredSet
-     * @return Set of node info
+     * @return new merged Set of node info
      */
     private Set<NodeInfo> mergeSets(Set initialSet, Set discoveredSet){
         Set<NodeInfo> newSet = initialSet;
         Set<NodeInfo> tempSet = new HashSet<NodeInfo>();
-        for (Iterator iterator = discoveredSet.iterator(); tempSet.size() < 0.5 * initialSet.size() && iterator.hasNext(); ) {
+        for (Iterator iterator = discoveredSet.iterator(); tempSet.size() < 0.5 * MEMBER_SET_LIMIT && iterator.hasNext(); ) {
             NodeInfo member = (NodeInfo) iterator.next();
             if (!initialSet.contains(member) && !member.equals(nodeContext.getNodeInfo())) {
                 tempSet.add(member);
             }
         }
-        for (int i = 0; i < tempSet.size(); i++) {
+        while (newSet.size() > 0.5 * MEMBER_SET_LIMIT) {
             newSet.remove(newSet.iterator().next());
         }
         newSet.addAll(tempSet);
