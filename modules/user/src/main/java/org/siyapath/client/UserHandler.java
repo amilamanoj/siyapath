@@ -46,6 +46,8 @@ public class UserHandler {
 
     public void submitJob(String fileName) {
         String res = null;
+        int sender = 9020;
+        int recipient = 9021;
         TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
         try {
             transport.open();
@@ -55,7 +57,7 @@ public class UserHandler {
             Object memberArray[] =client.getMembers().toArray();
             log.info("Number of members: "+memberArray.length);
             Integer selectedMember = (Integer) memberArray[new Random().nextInt(memberArray.length)];
-            Task task = new Task(123, 234, ByteBuffer.wrap(new byte[10]),"Sending a Temp task data in a String.","org.test.siyapath.CalcDemo");
+            Task task = new Task(123, 234, ByteBuffer.wrap(new byte[10]),"Sending a Temp task data in a String.","org.test.siyapath.CalcDemo", sender,recipient, null);
             Map job = new HashMap<Integer, Task>();
             job.put(1,task);
             log.info("Sending new job to node: "+selectedMember);
