@@ -22,8 +22,8 @@ public class PeerListener {
 
 
     public PeerListener(Siyapath.Processor processor, int port) {
-        initializeThriftServer(processor);
         this.port = port;
+        initializeThriftServer(processor);
     }
 
     private void initializeThriftServer(Siyapath.Processor processor) {
