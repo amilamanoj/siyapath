@@ -18,9 +18,16 @@ struct Task {
     2: i32 jobID,
     3: binary taskProgram,
     4: string taskData,
-    5: string className
+    5: string className,
+    6: i32 sender,
+    7: i32 recipient,
+    8: string taskResult
 }
 
+struct Job {
+    1: i32 sender,
+    2: i32 recipient
+}
 /**
  * Data exchanged during gossip communication between two nodes
  */
@@ -62,6 +69,9 @@ service Siyapath {
 
     //Getting the computation result of a job
     map<i32,Task> getJobResult (1:i32 jobID),
+
+    //Sending task result to job-distributing node
+    bool sendTaskResult (1:Task task),
 
     //User authentication
     string userLogin(1:string username, 2:string password)

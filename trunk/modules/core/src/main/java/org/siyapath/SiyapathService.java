@@ -66,7 +66,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public boolean submitTask(Task task) throws TException {
-        TaskProcessor taskProcessor = new TaskProcessor(task, task.getClassName());
+        TaskProcessor taskProcessor = new TaskProcessor(task);
         taskProcessor.processTask();
         return true;
     }
@@ -79,6 +79,13 @@ public class SiyapathService implements Siyapath.Iface {
     @Override
     public Map<Integer, Task> getJobResult(int jobID) throws TException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean sendTaskResult(Task task){
+        TaskDistributor taskDistributor = new TaskDistributor(task);
+        taskDistributor.sendResultToUserNode();
+        return true;
     }
 
     @Override

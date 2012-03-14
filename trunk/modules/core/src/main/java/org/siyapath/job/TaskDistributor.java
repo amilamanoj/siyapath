@@ -76,7 +76,10 @@ public class TaskDistributor {
     public void send(){
 
         pickOneProcessingNode();
+        
         int temporaryRecipientPort = 9020;  //bootstrap port itself on a so-thought node
+//        task.setSender()
+        task.setRecipient(temporaryRecipientPort);
         log.info("Attempting to connect to selected task-processing-node on port " + temporaryRecipientPort );
         TTransport transport = new TSocket("localhost",temporaryRecipientPort);
 
@@ -97,5 +100,26 @@ public class TaskDistributor {
             e.printStackTrace();
         }
 
+    }
+
+    public void sendResultToUserNode(){
+
+        TTransport transport = new TSocket("localhost",task.getSender());
+
+        try {
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            log.info("Sending computed result back to User node." + task.getSender());
+            client.sendTaskResult(task);
+
+        } catch (TTransportException e) {
+            e.printStackTrace();
+            if(e.getCause() instanceof ConnectException){
+                log.warn("User is no longer available on port: " + task.getSender());
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        }
     }
 }
