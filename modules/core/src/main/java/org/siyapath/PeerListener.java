@@ -21,11 +21,20 @@ public class PeerListener {
     private CountDownLatch cdLatch;
 
 
+    /**
+     *
+     * @param processor
+     * @param port
+     */
     public PeerListener(Siyapath.Processor processor, int port) {
         this.port = port;
         initializeThriftServer(processor);
     }
 
+    /**
+     *
+     * @param processor
+     */
     private void initializeThriftServer(Siyapath.Processor processor) {
         try {
             log.info("Initializing thrift server with the port:" + port);
@@ -49,6 +58,10 @@ public class PeerListener {
 
     }
 
+    /**
+     *
+     * @return true if thrift server thread is serving, false otherwise
+     */
     public boolean isRunning() {
         return server.isServing();
     }

@@ -19,12 +19,19 @@ public class NodeContext {
     private boolean isBackup;
     private static NodeContext instance = null;
 
+    /**
+     *
+     * @return
+     */
     public NodeInfo getNodeInfo() {
         return nodeInfo;
     }
 
     private NodeInfo nodeInfo;
 
+    /**
+     *
+     */
     private NodeContext() {
         this.members = new HashSet<NodeInfo>();
         nodeInfo = new NodeInfo();

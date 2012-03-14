@@ -31,6 +31,10 @@ public class TaskDistributor {
 
     private Map<Integer,Task> tasks = null;   //taskID and task
 
+    /**
+     *
+     * @param task
+     */
     public TaskDistributor(Task task){
         //Current implementation assumes only one task is on one node.
         this.task = task;
@@ -44,7 +48,11 @@ public class TaskDistributor {
 //        TaskDistributor taskDistributor = new TaskDistributor();
 //        taskDistributor.send();
     }
-    
+
+    /**
+     *
+     * @return the processing node randomly picked to process a task out of the node's members
+     */
     public int pickOneProcessingNode(){
 
         TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
@@ -70,7 +78,6 @@ public class TaskDistributor {
         }
 
     return pickedProcessingNode;
-
     }
 
     public void send(){

@@ -7,6 +7,13 @@ public class TaskClassLoader extends ClassLoader{
 
     private final Log log = LogFactory.getLog(TaskClassLoader.class);
 
+    /**
+     *
+     * @param byteArray
+     * @param name
+     * @return Class instance specified by byteArray and binary name of the class sent
+     * @throws ClassNotFoundException
+     */
     public Class loadClassToProcess(byte[] byteArray, String name) throws ClassNotFoundException {
 
         Class loadingClass = defineClass(name, byteArray, 0, byteArray.length);

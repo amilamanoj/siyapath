@@ -16,7 +16,6 @@ import java.net.ConnectException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
@@ -27,6 +26,12 @@ public class UserHandler {
         this.context = NodeContext.getInstance();
     }
 
+    /**
+     *
+     * @param username
+     * @param password
+     * @return String success if user can be authenticated, failure otherwise, or exception string
+     */
     public String authenticate(String username, String password) {
         String res = null;
         TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
@@ -49,6 +54,10 @@ public class UserHandler {
         return res;
     }
 
+    /**
+     *
+     * @param fileName
+     */
     public void submitJob(String fileName) {
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
@@ -86,6 +95,10 @@ public class UserHandler {
         return selectedMember;
     }
 
+    /**
+     *
+     * @param node
+     */
     private void sendJob(NodeInfo node) {
         TTransport transport = new TSocket("localhost", node.getPort());
         Task task = new Task(123, 234, ByteBuffer.wrap(new byte[10]), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
@@ -108,6 +121,11 @@ public class UserHandler {
         }
     }
 
+    /**
+     *
+     * @return ByteBuffer for byte array from given byte-code
+     * @throws IOException
+     */
     public ByteBuffer convertFileToByteBuffer() throws IOException {
 
         /*temporary location has been set*/
@@ -149,8 +167,5 @@ public class UserHandler {
             }
         }
         return ByteBuffer.wrap(bytes);
-
     }
-
-
 }

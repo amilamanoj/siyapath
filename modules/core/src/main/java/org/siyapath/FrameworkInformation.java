@@ -11,6 +11,10 @@ public class FrameworkInformation {
 //    public static final String BOOTSTRAPPER3 = "10.1.0.3";
     public static final int BOOTSTRAP_PORT=9020;
 
+    /**
+     *
+     * @return ArrayList of socket addresses when multiple bootstrappers are present
+     */
     public static ArrayList<InetSocketAddress> getKnownBootstrappers(){
         ArrayList<InetSocketAddress> knownBootstrappers = new ArrayList<InetSocketAddress>();
 //        knownBootstrappers.add(new InetSocketAddress(BOOTSTRAPPER1, PORT));
