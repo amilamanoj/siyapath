@@ -8,10 +8,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.FrameworkInformation;
-import org.siyapath.NodeInfo;
-import org.siyapath.Siyapath;
-import org.siyapath.Task;
+import org.siyapath.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.io.*;
@@ -24,11 +21,10 @@ import java.util.Random;
 public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
 
-    private NodeInfo nodeInfo;
+    private NodeContext context;
 
     public UserHandler() {
-        this.nodeInfo = new NodeInfo();
-        nodeInfo.setPort(CommonUtils.getRandomPort());
+        this.context = NodeContext.getInstance();
     }
 
     public String authenticate(String username, String password) {
@@ -71,9 +67,9 @@ public class UserHandler {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            Object memberArray[] = client.getMembers().toArray();
-            log.info("Number of members from bootstrapper: " + memberArray.length);
-            selectedMember = (NodeInfo) memberArray[new Random(memberArray.length).nextInt()];
+            context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
+            log.info("Number of members from bootstrapper: " +context.getMemberCount());
+            selectedMember = context.getRandomMember();
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
 //                res = "connecEx";
@@ -92,7 +88,7 @@ public class UserHandler {
 
     private void sendJob(NodeInfo node) {
         TTransport transport = new TSocket("localhost", node.getPort());
-        Task task = new Task(123, 234, ByteBuffer.wrap(new byte[10]), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(nodeInfo), null);
+        Task task = new Task(123, 234, ByteBuffer.wrap(new byte[10]), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
         Map taskList = new HashMap<Integer, Task>();
         taskList.put(1, task);
         try {
@@ -100,7 +96,7 @@ public class UserHandler {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.submitJob(00001, CommonUtils.serialize(nodeInfo), taskList);
+            client.submitJob(00001, CommonUtils.serialize(node), taskList);
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 e.printStackTrace();
