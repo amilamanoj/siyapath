@@ -9,6 +9,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.Random;
@@ -22,15 +23,13 @@ public class SiyapathNode {
     private PeerListener peerListener;
     private PeerWorker peerWorker;
     private NodeContext nodeContext;
-    private int nodePort;
 
 
     public SiyapathNode() {
         nodeContext = NodeContext.getInstance();
         handler = new SiyapathService();
         processor = new Siyapath.Processor(handler);
-        nodePort = new Random().nextInt(1000) + 9021;
-        nodeContext.setNodeID(nodePort);
+        nodeContext.setNodeID(CommonUtils.getRandomNumber(100000));
 
     }
 
@@ -47,12 +46,12 @@ public class SiyapathNode {
             if (!connectToBootStrapper()) {
                 log.info("OK, I'm gonna be the bootstrapper");
                 nodeContext.setBootstrapper(true);
-                this.nodePort = FrameworkInformation.BOOTSTRAP_PORT;
+                nodeContext.getNodeInfo().setPort(FrameworkInformation.BOOTSTRAP_PORT);
             } else {
                 log.info("Bootstrapper is up and running");
             }
 
-            peerListener = new PeerListener(processor, this.nodePort);
+            peerListener = new PeerListener(processor);
             peerListener.start();
 
             peerWorker = new PeerWorker();
@@ -71,7 +70,7 @@ public class SiyapathNode {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.notifyPresence(nodePort);
+            client.notifyPresence(CommonUtils.serialize(nodeContext.getNodeInfo()));
             isBootStrapperAlive = true;
         } catch (TTransportException e) {
 //            e.printStackTrace();

@@ -21,8 +21,7 @@ public class PeerListener {
     private CountDownLatch cdLatch;
 
 
-    public PeerListener(Siyapath.Processor processor, int port) {
-        this.port = port;
+    public PeerListener(Siyapath.Processor processor) {
         initializeThriftServer(processor);
     }
 

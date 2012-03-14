@@ -6,6 +6,7 @@ import org.apache.thrift.TException;
 import org.siyapath.gossip.GossipImpl;
 import org.siyapath.job.TaskDistributor;
 import org.siyapath.job.TaskProcessor;
+import org.siyapath.utils.CommonUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,19 +28,19 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     @Override
-    public boolean notifyPresence(int nodeID) throws TException {
-        nodeContext.addMember((nodeID));
+    public boolean notifyPresence(NodeData nodeData) throws TException {
+        nodeContext.addMember((CommonUtils.deSerialize(nodeData)));
         return true;
     }
 
     @Override
-    public Set<Integer> memberDiscovery(Set<Integer> knownNodes) throws TException {
-        return gossipImpl.memberDiscovery(knownNodes);
+    public Set<NodeData> memberDiscovery(Set<NodeData> knownNodes) throws TException {
+        return CommonUtils.serialize(gossipImpl.memberDiscovery(CommonUtils.deSerialize(knownNodes)));
     }
 
     @Override
-    public Set<Integer> getMembers() throws TException {
-        return nodeContext.getMemberSet();
+    public Set<NodeData> getMembers() throws TException {
+        return CommonUtils.serialize(gossipImpl.getMembers());
     }
 
     @Override
