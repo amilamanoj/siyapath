@@ -78,4 +78,21 @@ public class NodeInfo {
     public void setBootstrapper(boolean bootstrapper) {
         this.bootstrapper = bootstrapper;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        NodeInfo other = (NodeInfo) obj;
+        return nodeId == other.nodeId;
+    }
+
+    @Override
+    public int hashCode() {
+        return nodeId;
+    }
 }
