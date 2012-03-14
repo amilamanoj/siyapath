@@ -28,9 +28,8 @@ struct Task {
     3: binary taskProgram,
     4: string taskData,
     5: string className,
-    6: i32 sender,
-    7: i32 recipient,
-    8: string taskResult
+    6: NodeData sender,
+    7: string taskResult
 }
 
 struct Job {
@@ -68,7 +67,7 @@ service Siyapath {
     bool requestBecomeBackup(1:i32 nodeID, 2:i32 taskID ),
 
     //Submitting a job
-    string submitJob(1:map<i32,Task> tasks, 2:i32 jobID),
+    string submitJob(1:i32 jobID 2:NodeData user, 3:map<i32,Task> tasks ),
 
     //Submitting a task
     bool submitTask(1:Task task),
