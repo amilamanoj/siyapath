@@ -100,11 +100,11 @@ public class PeerWorker {
                     if (!nodeContext.membersExist()) {
                         log.info("No known members. Contacting the bootstrapper to get some nodes");
                         initiateMembers();
+                    } else {
+                        log.info("Number of known members: " + nodeContext.getMemberCount());
+                        memberGossiper();
                     }
-
-                    memberGossiper();
                 }
-                log.info("Number of members: " + nodeContext.getMemberCount());
                 try {
                     sleep(5000);
                 } catch (InterruptedException e) {

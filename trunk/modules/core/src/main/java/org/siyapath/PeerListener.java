@@ -28,6 +28,7 @@ public class PeerListener {
 
     private void initializeThriftServer(Siyapath.Processor processor) {
         try {
+            log.info("Initializing thrift server with the port:" + port);
             serverTransport = new TServerSocket(port);
             server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
             // Use this for a multithreaded server
