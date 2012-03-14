@@ -39,7 +39,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public Set<Integer> getMembers() throws TException {
-        return gossipImpl.getMembers();
+        return nodeContext.getMemberSet();
     }
 
     @Override
