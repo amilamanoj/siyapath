@@ -3,12 +3,10 @@ package org.siyapath.utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -66,39 +64,6 @@ public class CommonUtils {
         }
 
         return ipAddress;
-    }
-
-    public ByteBuffer convertFileToByteBuffer(String fileLocation) throws IOException {
-        File file = new File(fileLocation);
-        InputStream inputStream = null;
-
-        byte[] bytes = new byte[(int)file.length()];
-        if (file.length() > Integer.MAX_VALUE) {
-            log.error("File is too large.");
-        }
-        try{
-            inputStream = new BufferedInputStream(new FileInputStream(file));
-            int offset=0, numRead;
-
-            while (offset < bytes.length
-                    && (numRead=inputStream.read(bytes, offset, bytes.length-offset)) >= 0) {
-                offset += numRead;
-            }
-            // Ensure all the bytes have been read
-            if (offset < bytes.length) {
-                log.warn("Could not completely read file " + file.getName());
-                throw new IOException("Could not completely read file " + file.getName());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return ByteBuffer.wrap(bytes);
     }
     
 }

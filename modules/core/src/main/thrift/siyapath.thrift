@@ -14,8 +14,8 @@ struct NodeData {
  * Contains information about a Task
  */
 struct Task {
-    1: string taskID,
-    2: string jobID,
+    1: i32 taskID,
+    2: i32 jobID,
     3: binary taskProgram,
     4: string taskData,
     5: string className
