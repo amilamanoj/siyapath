@@ -5,8 +5,9 @@ namespace java org.siyapath
  * Contains information about a particular node
  */
 struct NodeData {
-    1: string timestamp,
-    2: map<string,string> nodeData
+    1: i32 nodeID,
+    2: string timestamp,
+    3: map<string,string> nodeData
 }
 
 /**

@@ -35,12 +35,9 @@ public class PeerWorker {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            Set newNodes = client.getMembers();
-            Iterator nodeID = newNodes.iterator();
+            Set<Integer> newNodes = client.getMembers();
+            nodeContext.updateMemberSet(newNodes);
 
-            while(nodeID.hasNext()){
-               nodeContext.addMember((Integer) nodeID.next());
-            }
 
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
@@ -64,7 +61,7 @@ public class PeerWorker {
 
             isRunning = true;
             while (isRunning) {
-                if (!nodeContext.isBootstrapper()){
+                if (!nodeContext.isBootstrapper()) {
                     if (!nodeContext.membersExist()) {
                         log.info("No known members. Contacting the bootstrapper to get some nodes");
                         initiateMembers();
