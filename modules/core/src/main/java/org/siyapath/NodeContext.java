@@ -1,9 +1,5 @@
 package org.siyapath;
 
-import com.sun.org.apache.regexp.internal.RE;
-
-import java.text.BreakIterator;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -49,7 +45,7 @@ public class NodeContext {
     public Integer getRandomMember() {
         Integer randomMember = null;
         if (!getMemberSet().isEmpty()) {
-            int memberCount = getMemeberCount();
+            int memberCount = getMemberCount();
             int randomMemberID = new Random().nextInt(memberCount);
             int i = 0;
             for (Integer newRandomMember : this.getMemberSet()) {
@@ -77,7 +73,7 @@ public class NodeContext {
      *
      * @return number of members
      */
-    public int getMemeberCount() {
+    public int getMemberCount() {
         return members.size();
     }
 
@@ -106,10 +102,11 @@ public class NodeContext {
      */
     public void updateMemberSet(Set<Integer> newSet) {
         for (Integer newNode : newSet) {
-            if (newNode != this.getNodeID()) {
-                addMember(newNode);
+            if (newNode == this.getNodeID()) {
+                newSet.remove(newNode);
             }
         }
+        members = (HashSet<Integer>) newSet;
     }
 
     /**

@@ -11,7 +11,6 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 
 import java.net.ConnectException;
-import java.util.Iterator;
 import java.util.Set;
 
 
@@ -104,7 +103,7 @@ public class PeerWorker {
 
                     memberGossiper();
                 }
-                log.info("Number of members: " + nodeContext.getMemeberCount());
+                log.info("Number of members: " + nodeContext.getMemberCount());
                 try {
                     sleep(5000);
                 } catch (InterruptedException e) {
