@@ -8,8 +8,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.Siyapath;
-import org.siyapath.Task;
+import org.siyapath.*;
+import org.siyapath.utils.CommonUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,6 +27,7 @@ public class TaskProcessor {
     private Class theLoadedClass;
     TaskClassLoader taskClassLoader;
     private String finalResult;
+    int computedResultToBeHandedOverTo;
 
     /**
      *
@@ -34,6 +35,7 @@ public class TaskProcessor {
      */
     public TaskProcessor(Task task){
         this.task = task;
+        computedResultToBeHandedOverTo = task.getSender().getPort();
         
 //        to be used for jar
 //        for(String name : names){}
@@ -66,19 +68,25 @@ public class TaskProcessor {
 
     public void sendResultToDistributingNode(){
 
-        TTransport transport = new TSocket("localhost",task.getSender().getPort());
+
+        NodeInfo nodeInfo = NodeContext.getInstance().getNodeInfo();
+        NodeData thisNode = CommonUtils.serialize(nodeInfo);
+        //setting the new sender as the processing node
+        task.setSender(thisNode);
+
+        TTransport transport = new TSocket("localhost",computedResultToBeHandedOverTo);
 
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            log.info("Sending computed result back to Distributing node." + task.getSender());
+            log.info("Sending computed result back to Distributing node." + computedResultToBeHandedOverTo);
             client.sendTaskResult(task);
 
         } catch (TTransportException e) {
             e.printStackTrace();
             if(e.getCause() instanceof ConnectException){
-                log.warn("Task Distributor is no longer available on port: " + task.getSender());
+                log.warn("Task Distributor is no longer available on port: " + computedResultToBeHandedOverTo);
             }
         } catch (TException e) {
             e.printStackTrace();

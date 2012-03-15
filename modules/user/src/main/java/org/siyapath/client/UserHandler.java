@@ -101,7 +101,13 @@ public class UserHandler {
      */
     private void sendJob(NodeInfo node) {
         TTransport transport = new TSocket("localhost", node.getPort());
-        Task task = new Task(123, 234, ByteBuffer.wrap(new byte[10]), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
+        Task task = null;
+
+        try {
+            task = new Task(123, 234, convertFileToByteBuffer(), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Map taskList = new HashMap<Integer, Task>();
         taskList.put(1, task);
         try {
