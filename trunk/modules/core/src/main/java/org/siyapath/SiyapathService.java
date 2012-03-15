@@ -100,7 +100,7 @@ public class SiyapathService implements Siyapath.Iface {
         log.info("Received the job: " + jobID);
         Task firstTask = tasks.get(new Integer(1));
         TaskDistributor taskDistributor = new TaskDistributor(firstTask);
-        taskDistributor.send();
+        taskDistributor.sendTaskToProcessingNode();
 //        Task firstTask = tasks.get(new Integer(1));
 //        TaskProcessor taskProcessor = new TaskProcessor(firstTask, firstTask.getClassName());
 //        taskProcessor.processTask();

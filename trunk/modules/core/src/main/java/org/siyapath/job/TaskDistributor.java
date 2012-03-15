@@ -8,14 +8,11 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.FrameworkInformation;
-import org.siyapath.Siyapath;
-import org.siyapath.SiyapathNode;
-import org.siyapath.Task;
+import org.siyapath.*;
+import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.Map;
-import java.util.Random;
 
 
 /*
@@ -26,18 +23,21 @@ public class TaskDistributor {
     
     private static final Log log = LogFactory.getLog(TaskDistributor.class);
     Task task = null;
+    int computedResultToBeHandedOverTo;
+    int myTaskProcessingNodePort;
 
     private Map<SiyapathNode, Task> taskProcessingNodes = null;
-
+    private NodeContext context;
     private Map<Integer,Task> tasks = null;   //taskID and task
 
     /**
      *
      * @param task
      */
-    public TaskDistributor(Task task){
+    public TaskDistributor(Task task ){
         //Current implementation assumes only one task is on one node.
         this.task = task;
+        this.computedResultToBeHandedOverTo = task.getSender().getPort();
         //when one node handles multiple tasks, TBD
         tasks.put(task.taskID,task);
     }
@@ -49,64 +49,72 @@ public class TaskDistributor {
 //        taskDistributor.send();
     }
 
-    /**
-     *
-     * @return the processing node randomly picked to process a task out of the node's members
-     */
-    public int pickOneProcessingNode(){
 
-        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
-        int pickedProcessingNode = 0;
-        Object[]  memberArray = null;
-        try{
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            /*
-            * This is for the moment only, actually the task distributing node will maintain a set of member nodes as
-            * every node does, and pick one out of them who has matching resources
-            * */
-            memberArray = client.getMembers().toArray();
-            pickedProcessingNode = (Integer)memberArray[new Random().nextInt(memberArray.length)];
-
-            log.info("Targeting processing node with node ID :" + pickedProcessingNode);
-
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-
-    return pickedProcessingNode;
+    
+    public void sendTaskToProcessingNode(){
+        NodeInfo selectedProcessingNode = getProcessingNode();
+        myTaskProcessingNodePort = selectedProcessingNode.getPort();
+        send(selectedProcessingNode);
     }
 
-    public void send(){
+    public void send(NodeInfo processingNode){            //changed
 
-        pickOneProcessingNode();
+//          int temporaryRecipientPort = 9020;  //bootstrap port itself on a so-thought node
+////        task.setSender()
+////        task.setRecipient(temporaryRecipientPort);
+
+        NodeInfo nodeInfo = NodeContext.getInstance().getNodeInfo();
+        NodeData thisNode = CommonUtils.serialize(nodeInfo);
+        task.setSender(thisNode);
         
-        int temporaryRecipientPort = 9020;  //bootstrap port itself on a so-thought node
-//        task.setSender()
-//        task.setRecipient(temporaryRecipientPort);
-        log.info("Attempting to connect to selected task-processing-node on port " + temporaryRecipientPort );
-        TTransport transport = new TSocket("localhost",temporaryRecipientPort);
+        log.info("Attempting to connect to selected task-processing-node on port " + myTaskProcessingNodePort );
+        TTransport transport = new TSocket("localhost",myTaskProcessingNodePort);
 
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            log.info("Submitting task to task-processing-node on port " + temporaryRecipientPort);
+            log.info("Submitting task to task-processing-node on port " + myTaskProcessingNodePort);
             client.submitTask(task);
             log.info("Successfully submitted task to processing node!");
         } catch (TTransportException e) {
             e.printStackTrace();
             if(e.getCause() instanceof ConnectException){
-                log.warn("No node is listening on port " + temporaryRecipientPort + ",assign task to another.");
+                log.warn("No node is listening on port " + myTaskProcessingNodePort + ",assign task to another.");
             }
             //TODO: handle exception to pick other node
         } catch (TException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private NodeInfo getProcessingNode() {
+//        String res = null;
+        NodeInfo selectedMember = null;
+        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
+        try {
+            log.info("Getting list of members from bootstrap");
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
+            log.info("Number of members from bootstrapper: " + context.getMemberCount());
+            selectedMember = context.getRandomMember();
+        } catch (TTransportException e) {
+            if (e.getCause() instanceof ConnectException) {
+//                res = "connecEx";
+                e.printStackTrace();
+            }
+        } catch (TException e) {
+//            res = "tEx";
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
+        log.info("Selected node: " + selectedMember);
+
+        return selectedMember;
     }
 
     public void sendResultToUserNode(){
