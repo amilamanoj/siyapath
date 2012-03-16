@@ -35,11 +35,12 @@ public class TaskDistributor {
      * @param task
      */
     public TaskDistributor(Task task ){
+        context=NodeContext.getInstance();
         //Current implementation assumes only one task is on one node.
         this.task = task;
         this.computedResultToBeHandedOverTo = task.getSender().getPort();
         //when one node handles multiple tasks, TBD
-        tasks.put(task.taskID,task);
+        //tasks.put(task.taskID,task);
     }
     /*
     * main method is for demo purpose only, until user job submission is implemented.
