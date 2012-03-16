@@ -61,7 +61,7 @@ public class UserHandler {
     public void submitJob(String fileName) {
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
-            sendJob(selectedNode);
+            sendJob(selectedNode, fileName);
         } else {
             log.warn("Could not get a distributor node");
         }
@@ -99,12 +99,12 @@ public class UserHandler {
      *
      * @param node
      */
-    private void sendJob(NodeInfo node) {
+    private void sendJob(NodeInfo node, String fileName) {
         TTransport transport = new TSocket("localhost", node.getPort());
         Task task = null;
 
         try {
-            task = new Task(123, 234, convertFileToByteBuffer(), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
+            task = new Task(123, 234, convertFileToByteBuffer(fileName), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,10 +132,10 @@ public class UserHandler {
      * @return ByteBuffer for byte array from given byte-code
      * @throws IOException
      */
-    public ByteBuffer convertFileToByteBuffer() throws IOException {
+    public ByteBuffer convertFileToByteBuffer(String fileName) throws IOException {
 
         /*temporary location has been set*/
-        final String BINARY_FILE_NAME = "C:\\Development\\CalcDemo.class";
+        final String BINARY_FILE_NAME = fileName;
         File file = new File(BINARY_FILE_NAME);
         InputStream inputStream = null;
 
