@@ -9,6 +9,8 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.*;
+import org.siyapath.gossip.GossipImpl;
+import org.siyapath.monitor.LimitedCpuUsageMonitor;
 import org.siyapath.utils.CommonUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,26 +32,28 @@ public class TaskProcessor {
     int computedResultToBeHandedOverTo;
 
     /**
-     *
      * @param task
      */
-    public TaskProcessor(Task task){
+    public TaskProcessor(Task task) {
         this.task = task;
         computedResultToBeHandedOverTo = task.getSender().getPort();
-        
+
 //        to be used for jar
 //        for(String name : names){}
     }
 
-    public void processTask(){
+    public void processTask() {
         taskClassLoader = new TaskClassLoader();
         try {
             theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), task.getClassName());
             Object instanceForTesting = theLoadedClass.newInstance();
             log.info("Task processing begins.");
             //currently uses the org.siyapath.sample.CalcDemo.processSampleJob() method
-            Method method = theLoadedClass.getMethod("processSampleJob",null);
-            finalResult = (String)method.invoke(instanceForTesting);
+            Method method = theLoadedClass.getMethod("processSampleJob", null);
+            MonitorThread monitor = new MonitorThread();
+            monitor.start();
+            finalResult = (String) method.invoke(instanceForTesting);
+            monitor.stopMonitor();
             log.info("Task processing is completed.");
             task.setTaskResult(finalResult);
             sendResultToDistributingNode();
@@ -66,7 +70,7 @@ public class TaskProcessor {
         }
     }
 
-    public void sendResultToDistributingNode(){
+    public void sendResultToDistributingNode() {
 
 
         NodeInfo nodeInfo = NodeContext.getInstance().getNodeInfo();
@@ -74,7 +78,7 @@ public class TaskProcessor {
         //setting the new sender as the processing node
         task.setSender(thisNode);
 
-        TTransport transport = new TSocket("localhost",computedResultToBeHandedOverTo);
+        TTransport transport = new TSocket("localhost", computedResultToBeHandedOverTo);
 
         try {
             transport.open();
@@ -85,11 +89,35 @@ public class TaskProcessor {
 
         } catch (TTransportException e) {
             e.printStackTrace();
-            if(e.getCause() instanceof ConnectException){
+            if (e.getCause() instanceof ConnectException) {
                 log.warn("Task Distributor is no longer available on port: " + computedResultToBeHandedOverTo);
             }
         } catch (TException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class MonitorThread extends Thread {
+
+        public boolean isRunning = false;
+        LimitedCpuUsageMonitor monitor = new LimitedCpuUsageMonitor();
+
+        @Override
+        public void run() {
+
+            isRunning = true;
+            while (isRunning) {
+                System.out.println("Cpu usage: " +monitor.getCpuUsage());
+                try {
+                    sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        public void stopMonitor() {
+            isRunning = false;
         }
     }
 }
