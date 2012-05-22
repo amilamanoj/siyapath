@@ -1,5 +1,5 @@
 
-namespace java org.siyapath
+namespace java org.siyapath.service
 
 /**
  * Contains information about a particular node

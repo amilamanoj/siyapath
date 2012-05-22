@@ -11,6 +11,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.gossip.GossipImpl;
 import org.siyapath.utils.CommonUtils;
+import org.siyapath.service.*;
 
 import java.net.ConnectException;
 import java.util.Set;
