@@ -16,6 +16,7 @@ import org.siyapath.utils.CommonUtils;
 import java.net.ConnectException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -23,7 +24,7 @@ public class GossipImpl {
 
     private static final Log log = LogFactory.getLog(GossipImpl.class);
     private NodeContext nodeContext;
-    private static final int MEMBER_SET_LIMIT = 10;
+
 
     public GossipImpl(NodeContext nodeContext) {
         this.nodeContext = nodeContext;
@@ -42,6 +43,22 @@ public class GossipImpl {
         Set<NodeInfo> newSet = mergeSets(initialSet, receivedMemberSet);
         nodeContext.updateMemberSet(newSet);
         return initialSet;
+    }
+
+
+    /**
+     * Is invoked when a remote node selects this node and gossips its resource.
+     * Updates this node's node resource set
+     *
+     * @param receivedNodeResource received from remote node
+     * @return the node resource of this node
+     */
+    public NodeResource resourceGossip(NodeResource receivedNodeResource) {
+        log.info("Remote node invoked member gossip resource with this node");
+        HashSet<NodeResource> initialSet = nodeContext.getMemberResourceSet();
+        HashSet<NodeResource> newSet = mergeNewNodeResource(initialSet, receivedNodeResource);
+        nodeContext.updateMemberResourceSet(newSet);
+        return nodeContext.getNodeResource();
     }
 
     /**
@@ -82,24 +99,82 @@ public class GossipImpl {
     }
 
     /**
+     * Initiates gossiping of node resource. Select a random member form the known member
+     * list and gossip current statistics of node resource list by calling resourcesGossip service &
+     * update the current list of node with resource with the response
+     */
+    public void resourceGossiper() {
+
+        NodeInfo randomMember = nodeContext.getRandomMember();
+        log.info("Getting a random member to gossip resources:" + randomMember);
+        if (randomMember != null) {
+            TTransport transport = new TSocket("localhost", randomMember.getPort());
+            try {
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                NodeResource discoveredNodeResource = CommonUtils.deSerialize(client.resourceGossip(CommonUtils.serialize(nodeContext.getNodeResource())));
+                HashSet<NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodeResource);
+                nodeContext.updateMemberResourceSet(newSet);
+                log.info("Node Resource Fetched:" + discoveredNodeResource.getNodeInfo());
+
+            } catch (TTransportException e) {
+                if (e.getCause() instanceof ConnectException) {
+                    System.out.println("Could not connect to the bootstrapper :(");
+                }
+
+            } catch (TException e) {
+                e.printStackTrace();
+
+            } finally {
+                transport.close();
+            }
+        }
+    }
+
+
+    /**
      * Merges two Sets keeping the resulting set size under a defined limit
+     *
      * @param initialSet
      * @param discoveredSet
      * @return new merged Set of node info
      */
-    private Set<NodeInfo> mergeSets(Set initialSet, Set discoveredSet){
+    private Set<NodeInfo> mergeSets(Set initialSet, Set discoveredSet) {
         Set<NodeInfo> newSet = initialSet;
         Set<NodeInfo> tempSet = new HashSet<NodeInfo>();
-        for (Iterator iterator = discoveredSet.iterator(); tempSet.size() < 0.5 * MEMBER_SET_LIMIT && iterator.hasNext(); ) {
+        for (Iterator iterator = discoveredSet.iterator(); tempSet.size() < 0.5 * SiyapathConstants.MEMBER_SET_LIMIT && iterator.hasNext(); ) {
             NodeInfo member = (NodeInfo) iterator.next();
             if (!initialSet.contains(member) && !member.equals(nodeContext.getNodeInfo())) {
                 tempSet.add(member);
             }
         }
-        while (newSet.size() > 0.5 * MEMBER_SET_LIMIT) {
+        while (newSet.size() > 0.5 * SiyapathConstants.MEMBER_SET_LIMIT) {
             newSet.remove(newSet.iterator().next());
         }
         newSet.addAll(tempSet);
+        return newSet;
+    }
+
+    /**
+     * @param initialSet
+     * @param discoveredNodeResource
+     * @return new merged Set of node resource
+     */
+    private HashSet<NodeResource> mergeNewNodeResource(HashSet initialSet, NodeResource discoveredNodeResource) {
+        HashSet<NodeResource> newSet = initialSet;
+        if (newSet.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
+            if (!newSet.contains(discoveredNodeResource) && !discoveredNodeResource.equals(nodeContext.getNodeResource())) {
+                newSet.add(discoveredNodeResource);
+            }
+        } else {
+            if (!newSet.contains(discoveredNodeResource) && !discoveredNodeResource.equals(nodeContext.getNodeResource())) {
+                newSet.remove(newSet.iterator().next());
+                newSet.add(discoveredNodeResource);
+            }
+
+        }
+
         return newSet;
     }
 }

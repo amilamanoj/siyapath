@@ -39,8 +39,6 @@ public class SigarSystemInformation {
             se.printStackTrace();
         }
 
-        Map map = memoryInfo.toMap();
-
         memoryStat = "Memory Information";
         memoryStat += "\n" + "Actual total free system memory: " + memoryInfo.getActualFree() / (1024 * 1024) + " MB";
         memoryStat += "\n" + "Actual total used system memory: " + memoryInfo.getActualUsed() / (1024 * 1024) + " MB";

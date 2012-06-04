@@ -3,43 +3,41 @@ package org.siyapath.utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
+import org.siyapath.NodeResource;
 import org.siyapath.service.*;
 
 import java.net.*;
 import java.util.*;
 
 public class CommonUtils {
-    
+
     private static Log log = LogFactory.getLog(CommonUtils.class);
 
     //temporary testing purposes
 
     /**
-     *
      * @return InetSocketAddress for given host and port
      */
-    public static InetSocketAddress getRandomAddress(){
+    public static InetSocketAddress getRandomAddress() {
         int port = 9090;
-        String host="10.1.";
+        String host = "10.1.";
         host = host + new Random().nextInt(255) + ".";
-        host = host + new Random().nextInt(255) ;
+        host = host + new Random().nextInt(255);
         InetSocketAddress address = new InetSocketAddress(host, port);
         return address;
     }
 
     /**
-     *
      * @return a random port
      */
-    public static int getRandomPort(){
+    public static int getRandomPort() {
         return new Random().nextInt(1000) + 9021;
     }
 
     /**
-     *
      * @return ip address
      */
-    public static String getIPAddress()  {
+    public static String getIPAddress() {
         List<InetAddress> ipAddresses = new ArrayList<InetAddress>();
         String ipAddress = null;
 
@@ -78,7 +76,6 @@ public class CommonUtils {
     }
 
     /**
-     *
      * @param i
      * @return a random number
      */
@@ -87,7 +84,6 @@ public class CommonUtils {
     }
 
     /**
-     *
      * @param nodeInfo
      * @return NodeData for specified node info
      */
@@ -100,20 +96,29 @@ public class CommonUtils {
     }
 
     /**
-     *
+     * @param nodeResource
+     * @return NodeResourceData for retrieved node resource
+     */
+    public static NodeResourceData serialize(NodeResource nodeResource) {
+        NodeResourceData resourceData = new NodeResourceData();
+        resourceData.setNodeProperties(nodeResource.getNodeProperties());
+        resourceData.setNodeData(serialize(nodeResource.getNodeInfo()));
+        return resourceData;
+    }
+
+    /**
      * @param nodeInfos
      * @return Set of NodeData for given Set of node info
      */
     public static Set<NodeData> serialize(Set<NodeInfo> nodeInfos) {
         Set<NodeData> nodeDatas = new HashSet<NodeData>();
-        for (NodeInfo ni: nodeInfos) {
+        for (NodeInfo ni : nodeInfos) {
             nodeDatas.add(serialize(ni));
         }
         return nodeDatas;
     }
 
     /**
-     *
      * @param nodeData
      * @return NodeInfo for given nodeData
      */
@@ -126,13 +131,23 @@ public class CommonUtils {
     }
 
     /**
-     *
+     * @param nodeResourceData
+     * @return nodeResource for given nodeResourceData
+     */
+    public static NodeResource deSerialize(NodeResourceData nodeResourceData) {
+        NodeResource nodeResource = new NodeResource();
+        nodeResource.setNodeProperties((HashMap<String, String>) nodeResourceData.getNodeProperties());
+        nodeResource.setNodeInfo(deSerialize(nodeResourceData.getNodeData()));
+        return nodeResource;
+    }
+
+    /**
      * @param nodeDatas
      * @return set of NodeInfo for given set of nodeData
      */
     public static Set<NodeInfo> deSerialize(Set<NodeData> nodeDatas) {
         Set<NodeInfo> nodeInfos = new HashSet<NodeInfo>();
-        for (NodeData nd: nodeDatas) {
+        for (NodeData nd : nodeDatas) {
             nodeInfos.add(deSerialize(nd));
         }
         return nodeInfos;

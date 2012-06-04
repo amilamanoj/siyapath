@@ -69,6 +69,7 @@ public class PeerWorker {
                     } else {
                         log.info("Number of known members: " + nodeContext.getMemberCount());
                         new GossipImpl(nodeContext).memberGossiper();
+                        new GossipImpl(nodeContext).resourceGossiper();
                     }
                 }
                 try {
