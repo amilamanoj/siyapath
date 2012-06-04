@@ -21,7 +21,7 @@ import java.util.Map;
 * TODO: select a member from member list to assign the task to.
 * */
 public class TaskDistributor {
-    
+
     private static final Log log = LogFactory.getLog(TaskDistributor.class);
     Task task = null;
     int computedResultToBeHandedOverTo;
@@ -35,8 +35,8 @@ public class TaskDistributor {
      *
      * @param task
      */
-    public TaskDistributor(Task task ){
-        context=NodeContext.getInstance();
+    public TaskDistributor(Task task, NodeContext nodeContext) {
+        context = nodeContext;
         //Current implementation assumes only one task is on one node.
         this.task = task;
         this.computedResultToBeHandedOverTo = task.getSender().getPort();
@@ -52,7 +52,7 @@ public class TaskDistributor {
     }
 
 
-    
+
     public void sendTaskToProcessingNode(){
         NodeInfo selectedProcessingNode = getProcessingNode();
         myTaskProcessingNodePort = selectedProcessingNode.getPort();
@@ -65,10 +65,10 @@ public class TaskDistributor {
 ////        task.setSender()
 ////        task.setRecipient(temporaryRecipientPort);
 
-        NodeInfo nodeInfo = NodeContext.getInstance().getNodeInfo();
+        NodeInfo nodeInfo = context.getNodeInfo();
         NodeData thisNode = CommonUtils.serialize(nodeInfo);
         task.setSender(thisNode);
-        
+
         log.info("Attempting to connect to selected task-processing-node on port " + myTaskProcessingNodePort );
         TTransport transport = new TSocket("localhost",myTaskProcessingNodePort);
 

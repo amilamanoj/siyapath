@@ -31,13 +31,15 @@ public class TaskProcessor {
     TaskClassLoader taskClassLoader;
     private String finalResult;
     int computedResultToBeHandedOverTo;
+    private NodeContext context;
 
     /**
      * @param task
      */
-    public TaskProcessor(Task task) {
+    public TaskProcessor(Task task, NodeContext nodeContext) {
         this.task = task;
         computedResultToBeHandedOverTo = task.getSender().getPort();
+        context = nodeContext;
 
 //        to be used for jar
 //        for(String name : names){}
@@ -74,7 +76,7 @@ public class TaskProcessor {
     public void sendResultToDistributingNode() {
 
 
-        NodeInfo nodeInfo = NodeContext.getInstance().getNodeInfo();
+        NodeInfo nodeInfo = context.getNodeInfo();
         NodeData thisNode = CommonUtils.serialize(nodeInfo);
         //setting the new sender as the processing node
         task.setSender(thisNode);

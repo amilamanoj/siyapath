@@ -24,7 +24,7 @@ public class UserHandler {
     private NodeContext context;
 
     public UserHandler() {
-        this.context = NodeContext.getInstance();
+        this.context = new NodeContext();
     }
 
     /**
