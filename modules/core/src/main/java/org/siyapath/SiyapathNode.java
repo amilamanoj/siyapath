@@ -25,11 +25,11 @@ public class SiyapathNode {
     private NodeContext nodeContext;
 
 
-    public SiyapathNode() {
+    public SiyapathNode(NodeInfo nodeInfo){
         nodeContext = new NodeContext();
         handler = new SiyapathService(nodeContext);
         processor = new Siyapath.Processor(handler);
-       // nodeContext.setNodeID(CommonUtils.getRandomNumber(100000));
+        nodeContext.setNodeInfo(nodeInfo);
     }
 
     /**
@@ -37,12 +37,13 @@ public class SiyapathNode {
      * @param args
      */
     public static void main(String[] args) {
-
-        SiyapathNode node = new SiyapathNode();
+        NodeInfo thisInfo = new NodeInfo();
+        thisInfo.setIp(String.valueOf(CommonUtils.getRandomPort()));
+        SiyapathNode node = new SiyapathNode(thisInfo);
         node.startSiyapathNode();
     }
 
-    private void startSiyapathNode() {
+    public void startSiyapathNode() {
         try {
             log.info("Initializing Siyapath Node...");
 
@@ -90,6 +91,10 @@ public class SiyapathNode {
             transport.close();
         }
         return isBootStrapperAlive;
+    }
+
+    public int getNodeId(){
+        return nodeContext.getNodeID();
     }
 
 
