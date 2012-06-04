@@ -1,10 +1,8 @@
 package org.siyapath.monitor;
 
-import java.lang.reflect.Array;
 import java.util.Map;
 
 import org.hyperic.sigar.*;
-import sun.plugin2.gluegen.runtime.CPU;
 
 public class SigarSystemInformation {
 

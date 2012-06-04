@@ -13,6 +13,10 @@ import java.util.Set;
 public class NodeContext {
 
     /**
+     * This node's information
+     */
+    private NodeInfo nodeInfo;
+    /**
      * List of known member nodes
      */
     private HashSet<NodeInfo> members;
@@ -20,13 +24,19 @@ public class NodeContext {
 
     /**
      *
-     * @return
+     * @return information of this node
      */
     public NodeInfo getNodeInfo() {
         return nodeInfo;
     }
 
-    private NodeInfo nodeInfo;
+    /**
+     * Sets this node's information
+     * @param nodeInfo node information
+     */
+    public void setNodeInfo(NodeInfo nodeInfo) {
+        this.nodeInfo = nodeInfo;
+    }
 
     /**
      *
