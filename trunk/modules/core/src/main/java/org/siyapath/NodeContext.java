@@ -3,7 +3,6 @@ package org.siyapath;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -21,9 +20,9 @@ public class NodeContext {
      */
     private HashSet<NodeInfo> members;
     private boolean isBackup;
+    private HashSet<NodeResource> memberResource;
 
     /**
-     *
      * @return information of this node
      */
     public NodeInfo getNodeInfo() {
@@ -37,13 +36,17 @@ public class NodeContext {
     public void setNodeInfo(NodeInfo nodeInfo) {
         this.nodeInfo = nodeInfo;
     }
+    private NodeResource nodeResource;
 
     /**
      *
      */
     public NodeContext() {
         this.members = new HashSet<NodeInfo>();
+        this.memberResource = new HashSet<NodeResource>();
         nodeInfo = new NodeInfo();
+        nodeResource = new NodeResource(nodeInfo);
+
     }
 
     /**
@@ -116,6 +119,14 @@ public class NodeContext {
         return nodeInfo.isBootstrapper();
     }
 
+    public NodeResource getNodeResource() {
+        return nodeResource;
+    }
+
+    public void setNodeResource(NodeResource nodeResource) {
+        this.nodeResource = nodeResource;
+    }
+
     /**
      * Declare this node as the bootstrapper
      *
@@ -123,6 +134,17 @@ public class NodeContext {
      */
     public void setBootstrapper(boolean bootstrapper) {
         nodeInfo.setBootstrapper(bootstrapper);
+    }
+
+    public HashSet<NodeResource> getMemberResourceSet() {
+        return memberResource;
+    }
+
+    /**
+     * @param memberResource
+     */
+    public void updateMemberResourceSet(HashSet<NodeResource> memberResource) {
+        this.memberResource = memberResource;
     }
 
     /**

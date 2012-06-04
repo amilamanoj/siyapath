@@ -5,25 +5,26 @@ import java.util.HashMap;
 import org.siyapath.monitor.SigarSystemInformation;
 
 /**
- * NodeResources retrieves Node's SystemInformation
+ * NodeResource retrieves Node's SystemInformation
  */
-public class NodeResources {
+public class NodeResource {
     private NodeInfo nodeInfo;
     private HashMap<String, String> nodeProperties;
 
-    public static void main(String[] args) {
-        NodeResources r = new NodeResources();
-        System.out.print(r.getNodeProperties().get(SiyapathConstants.MEMORY_INFO));
-    }
+    /* public static void main(String[] args) {
+      NodeResource r = new NodeResource();
+      System.out.print(r.getNodeProperties().get(SiyapathConstants.MEMORY_INFO));
+  }  */
 
-    public NodeResources() {
+    public NodeResource() {
         nodeProperties = new HashMap<String, String>();
         initNodeProperties();
     }
 
-    public NodeResources(NodeInfo nodeInfo) {
-        this.nodeInfo = nodeInfo;
+    public NodeResource(NodeInfo nodeInfo) {
+        nodeProperties = new HashMap<String, String>();
         initNodeProperties();
+        this.nodeInfo = nodeInfo;
 
     }
 

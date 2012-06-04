@@ -24,18 +24,16 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param resourceData
      * @return
      * @throws TException
      */
     @Override
     public NodeResourceData resourceGossip(NodeResourceData resourceData) throws TException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return CommonUtils.serialize(gossipImpl.resourceGossip(CommonUtils.deSerialize(resourceData)));
     }
 
     /**
-     *
      * @param nodeData
      * @return
      * @throws TException
@@ -47,7 +45,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param knownNodes
      * @return
      * @throws TException
@@ -58,7 +55,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @return
      * @throws TException
      */
@@ -68,7 +64,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @return true if node is alive, false otherwise
      * @throws TException
      */
@@ -78,7 +73,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param nodeID
      * @param taskID
      * @return true if node becomes backup node for processing job, false otherwise
@@ -90,14 +84,13 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param tasks
      * @param jobID
      * @return String success if job successfully submitted
      * @throws TException
      */
     @Override
-    public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks ) throws TException {
+    public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks) throws TException {
         log.info("Received the job: " + jobID);
         Task firstTask = tasks.get(new Integer(1));
         TaskDistributor taskDistributor = new TaskDistributor(firstTask, nodeContext);
@@ -109,7 +102,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param task
      * @return true if task successfully submitted, false otherwise
      * @throws TException
@@ -122,7 +114,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param jobID
      * @return
      * @throws TException
@@ -133,7 +124,6 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param jobID
      * @return
      * @throws TException
@@ -144,19 +134,17 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     *
      * @param task
      * @return true if computed result sent successfully, false otherwise
      */
     @Override
-    public boolean sendTaskResult(Task task){
+    public boolean sendTaskResult(Task task) {
         TaskDistributor taskDistributor = new TaskDistributor(task, nodeContext);
         taskDistributor.sendResultToUserNode();
         return true;
     }
 
     /**
-     *
      * @param username
      * @param password
      * @return String success if user can be authenticated, failure otherwise
@@ -165,7 +153,7 @@ public class SiyapathService implements Siyapath.Iface {
     @Override
     public String userLogin(String username, String password) throws TException {
         if (username.equals("admin") && password.equals("admin")) {
-            return "sucess";
+            return "success";
         } else {
             return "failure";
         }
