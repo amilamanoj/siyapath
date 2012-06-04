@@ -25,13 +25,13 @@ public class SiyapathService implements Siyapath.Iface {
 
     /**
      *
-     * @param gData
+     * @param resourceData
      * @return
      * @throws TException
      */
     @Override
-    public GossipData gossip(GossipData gData) throws TException {
-        throw new UnsupportedOperationException();
+    public NodeResourceData resourceGossip(NodeResourceData resourceData) throws TException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -105,7 +105,7 @@ public class SiyapathService implements Siyapath.Iface {
 //        Task firstTask = tasks.get(new Integer(1));
 //        TaskProcessor taskProcessor = new TaskProcessor(firstTask, firstTask.getClassName());
 //        taskProcessor.processTask();
-        return "sucess";
+        return "success";
     }
 
     /**

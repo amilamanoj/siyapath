@@ -33,9 +33,8 @@ import org.slf4j.LoggerFactory;
 public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceData, NodeResourceData._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("NodeResourceData");
 
-  private static final org.apache.thrift.protocol.TField NODE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeID", org.apache.thrift.protocol.TType.I32, (short)1);
-  private static final org.apache.thrift.protocol.TField NODE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeData", org.apache.thrift.protocol.TType.STRUCT, (short)2);
-  private static final org.apache.thrift.protocol.TField NODE_PROPERTIES_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeProperties", org.apache.thrift.protocol.TType.MAP, (short)3);
+  private static final org.apache.thrift.protocol.TField NODE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeData", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+  private static final org.apache.thrift.protocol.TField NODE_PROPERTIES_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeProperties", org.apache.thrift.protocol.TType.MAP, (short)2);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -43,15 +42,13 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     schemes.put(TupleScheme.class, new NodeResourceDataTupleSchemeFactory());
   }
 
-  public int nodeID; // required
   public NodeData nodeData; // required
   public Map<String,String> nodeProperties; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    NODE_ID((short)1, "nodeID"),
-    NODE_DATA((short)2, "nodeData"),
-    NODE_PROPERTIES((short)3, "nodeProperties");
+    NODE_DATA((short)1, "nodeData"),
+    NODE_PROPERTIES((short)2, "nodeProperties");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -66,11 +63,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // NODE_ID
-          return NODE_ID;
-        case 2: // NODE_DATA
+        case 1: // NODE_DATA
           return NODE_DATA;
-        case 3: // NODE_PROPERTIES
+        case 2: // NODE_PROPERTIES
           return NODE_PROPERTIES;
         default:
           return null;
@@ -112,13 +107,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   }
 
   // isset id assignments
-  private static final int __NODEID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.NODE_ID, new org.apache.thrift.meta_data.FieldMetaData("nodeID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     tmpMap.put(_Fields.NODE_DATA, new org.apache.thrift.meta_data.FieldMetaData("nodeData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     tmpMap.put(_Fields.NODE_PROPERTIES, new org.apache.thrift.meta_data.FieldMetaData("nodeProperties", org.apache.thrift.TFieldRequirementType.DEFAULT, 
@@ -133,13 +124,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   }
 
   public NodeResourceData(
-    int nodeID,
     NodeData nodeData,
     Map<String,String> nodeProperties)
   {
     this();
-    this.nodeID = nodeID;
-    setNodeIDIsSet(true);
     this.nodeData = nodeData;
     this.nodeProperties = nodeProperties;
   }
@@ -148,9 +136,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
    * Performs a deep copy on <i>other</i>.
    */
   public NodeResourceData(NodeResourceData other) {
-    __isset_bit_vector.clear();
-    __isset_bit_vector.or(other.__isset_bit_vector);
-    this.nodeID = other.nodeID;
     if (other.isSetNodeData()) {
       this.nodeData = new NodeData(other.nodeData);
     }
@@ -177,33 +162,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   @Override
   public void clear() {
-    setNodeIDIsSet(false);
-    this.nodeID = 0;
     this.nodeData = null;
     this.nodeProperties = null;
-  }
-
-  public int getNodeID() {
-    return this.nodeID;
-  }
-
-  public NodeResourceData setNodeID(int nodeID) {
-    this.nodeID = nodeID;
-    setNodeIDIsSet(true);
-    return this;
-  }
-
-  public void unsetNodeID() {
-    __isset_bit_vector.clear(__NODEID_ISSET_ID);
-  }
-
-  /** Returns true if field nodeID is set (has been assigned a value) and false otherwise */
-  public boolean isSetNodeID() {
-    return __isset_bit_vector.get(__NODEID_ISSET_ID);
-  }
-
-  public void setNodeIDIsSet(boolean value) {
-    __isset_bit_vector.set(__NODEID_ISSET_ID, value);
   }
 
   public NodeData getNodeData() {
@@ -267,14 +227,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case NODE_ID:
-      if (value == null) {
-        unsetNodeID();
-      } else {
-        setNodeID((Integer)value);
-      }
-      break;
-
     case NODE_DATA:
       if (value == null) {
         unsetNodeData();
@@ -296,9 +248,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case NODE_ID:
-      return Integer.valueOf(getNodeID());
-
     case NODE_DATA:
       return getNodeData();
 
@@ -316,8 +265,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     }
 
     switch (field) {
-    case NODE_ID:
-      return isSetNodeID();
     case NODE_DATA:
       return isSetNodeData();
     case NODE_PROPERTIES:
@@ -338,15 +285,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   public boolean equals(NodeResourceData that) {
     if (that == null)
       return false;
-
-    boolean this_present_nodeID = true;
-    boolean that_present_nodeID = true;
-    if (this_present_nodeID || that_present_nodeID) {
-      if (!(this_present_nodeID && that_present_nodeID))
-        return false;
-      if (this.nodeID != that.nodeID)
-        return false;
-    }
 
     boolean this_present_nodeData = true && this.isSetNodeData();
     boolean that_present_nodeData = true && that.isSetNodeData();
@@ -382,16 +320,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     int lastComparison = 0;
     NodeResourceData typedOther = (NodeResourceData)other;
 
-    lastComparison = Boolean.valueOf(isSetNodeID()).compareTo(typedOther.isSetNodeID());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetNodeID()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.nodeID, typedOther.nodeID);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     lastComparison = Boolean.valueOf(isSetNodeData()).compareTo(typedOther.isSetNodeData());
     if (lastComparison != 0) {
       return lastComparison;
@@ -432,10 +360,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     StringBuilder sb = new StringBuilder("NodeResourceData(");
     boolean first = true;
 
-    sb.append("nodeID:");
-    sb.append(this.nodeID);
-    first = false;
-    if (!first) sb.append(", ");
     sb.append("nodeData:");
     if (this.nodeData == null) {
       sb.append("null");
@@ -469,8 +393,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
-      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-      __isset_bit_vector = new BitSet(1);
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te);
@@ -495,15 +417,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
           break;
         }
         switch (schemeField.id) {
-          case 1: // NODE_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.nodeID = iprot.readI32();
-              struct.setNodeIDIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 2: // NODE_DATA
+          case 1: // NODE_DATA
             if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
               struct.nodeData = new NodeData();
               struct.nodeData.read(iprot);
@@ -512,7 +426,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 3: // NODE_PROPERTIES
+          case 2: // NODE_PROPERTIES
             if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
               {
                 org.apache.thrift.protocol.TMap _map0 = iprot.readMapBegin();
@@ -547,9 +461,6 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      oprot.writeFieldBegin(NODE_ID_FIELD_DESC);
-      oprot.writeI32(struct.nodeID);
-      oprot.writeFieldEnd();
       if (struct.nodeData != null) {
         oprot.writeFieldBegin(NODE_DATA_FIELD_DESC);
         struct.nodeData.write(oprot);
@@ -586,19 +497,13 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     public void write(org.apache.thrift.protocol.TProtocol prot, NodeResourceData struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       BitSet optionals = new BitSet();
-      if (struct.isSetNodeID()) {
+      if (struct.isSetNodeData()) {
         optionals.set(0);
       }
-      if (struct.isSetNodeData()) {
+      if (struct.isSetNodeProperties()) {
         optionals.set(1);
       }
-      if (struct.isSetNodeProperties()) {
-        optionals.set(2);
-      }
-      oprot.writeBitSet(optionals, 3);
-      if (struct.isSetNodeID()) {
-        oprot.writeI32(struct.nodeID);
-      }
+      oprot.writeBitSet(optionals, 2);
       if (struct.isSetNodeData()) {
         struct.nodeData.write(oprot);
       }
@@ -617,17 +522,13 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, NodeResourceData struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(3);
+      BitSet incoming = iprot.readBitSet(2);
       if (incoming.get(0)) {
-        struct.nodeID = iprot.readI32();
-        struct.setNodeIDIsSet(true);
-      }
-      if (incoming.get(1)) {
         struct.nodeData = new NodeData();
         struct.nodeData.read(iprot);
         struct.setNodeDataIsSet(true);
       }
-      if (incoming.get(2)) {
+      if (incoming.get(1)) {
         {
           org.apache.thrift.protocol.TMap _map6 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, iprot.readI32());
           struct.nodeProperties = new HashMap<String,String>(2*_map6.size);
