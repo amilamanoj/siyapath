@@ -21,9 +21,10 @@ public class PeerWorker {
 
     private static final Log log = LogFactory.getLog(PeerWorker.class);
 
-    private NodeContext nodeContext = NodeContext.getInstance();
+    private NodeContext nodeContext;
 
-    public PeerWorker() {
+    public PeerWorker(NodeContext nodeContext) {
+        this.nodeContext = nodeContext;
     }
 
     public void start() {
@@ -67,7 +68,7 @@ public class PeerWorker {
                         initiateMembers();
                     } else {
                         log.info("Number of known members: " + nodeContext.getMemberCount());
-                        new GossipImpl().memberGossiper();
+                        new GossipImpl(nodeContext).memberGossiper();
                     }
                 }
                 try {

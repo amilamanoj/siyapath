@@ -22,10 +22,11 @@ import java.util.Set;
 public class GossipImpl {
 
     private static final Log log = LogFactory.getLog(GossipImpl.class);
-    private NodeContext nodeContext = NodeContext.getInstance();
+    private NodeContext nodeContext;
     private static final int MEMBER_SET_LIMIT = 10;
 
-    public GossipImpl() {
+    public GossipImpl(NodeContext nodeContext) {
+        this.nodeContext = nodeContext;
     }
 
     /**

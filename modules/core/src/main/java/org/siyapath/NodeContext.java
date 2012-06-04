@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * The NodeContext holds runtime information
- * for a Siyapath node instance. This is a singleton
+ * for a Siyapath node instance.
  */
 public class NodeContext {
 
@@ -17,7 +17,6 @@ public class NodeContext {
      */
     private HashSet<NodeInfo> members;
     private boolean isBackup;
-    private static NodeContext instance = null;
 
     /**
      *
@@ -32,21 +31,9 @@ public class NodeContext {
     /**
      *
      */
-    private NodeContext() {
+    public NodeContext() {
         this.members = new HashSet<NodeInfo>();
         nodeInfo = new NodeInfo();
-    }
-
-    /**
-     * Returns the instance of this class
-     *
-     * @return NodeContext instance
-     */
-    public static NodeContext getInstance() {
-        if (instance == null) {
-            instance = new NodeContext();
-        }
-        return instance;
     }
 
     /**

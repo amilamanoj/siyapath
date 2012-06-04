@@ -18,9 +18,9 @@ public class SiyapathService implements Siyapath.Iface {
     private NodeContext nodeContext;
     private GossipImpl gossipImpl;
 
-    public SiyapathService() {
-        this.nodeContext = NodeContext.getInstance();
-        this.gossipImpl = new GossipImpl();
+    public SiyapathService(NodeContext nodeContext) {
+        this.nodeContext = nodeContext;
+        this.gossipImpl = new GossipImpl(nodeContext);
     }
 
     /**
@@ -100,7 +100,7 @@ public class SiyapathService implements Siyapath.Iface {
     public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks ) throws TException {
         log.info("Received the job: " + jobID);
         Task firstTask = tasks.get(new Integer(1));
-        TaskDistributor taskDistributor = new TaskDistributor(firstTask);
+        TaskDistributor taskDistributor = new TaskDistributor(firstTask, nodeContext);
         taskDistributor.sendTaskToProcessingNode();
 //        Task firstTask = tasks.get(new Integer(1));
 //        TaskProcessor taskProcessor = new TaskProcessor(firstTask, firstTask.getClassName());
@@ -116,7 +116,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean submitTask(Task task) throws TException {
-        TaskProcessor taskProcessor = new TaskProcessor(task);
+        TaskProcessor taskProcessor = new TaskProcessor(task, nodeContext);
         taskProcessor.processTask();
         return true;
     }
@@ -150,7 +150,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean sendTaskResult(Task task){
-        TaskDistributor taskDistributor = new TaskDistributor(task);
+        TaskDistributor taskDistributor = new TaskDistributor(task, nodeContext);
         taskDistributor.sendResultToUserNode();
         return true;
     }

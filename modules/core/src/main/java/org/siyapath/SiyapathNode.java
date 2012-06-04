@@ -26,8 +26,8 @@ public class SiyapathNode {
 
 
     public SiyapathNode() {
-        nodeContext = NodeContext.getInstance();
-        handler = new SiyapathService();
+        nodeContext = new NodeContext();
+        handler = new SiyapathService(nodeContext);
         processor = new Siyapath.Processor(handler);
        // nodeContext.setNodeID(CommonUtils.getRandomNumber(100000));
     }
@@ -57,7 +57,7 @@ public class SiyapathNode {
             peerListener = new PeerListener(processor, nodeContext.getNodeInfo().getPort());
             peerListener.start();
 
-            peerWorker = new PeerWorker();
+            peerWorker = new PeerWorker(nodeContext);
             peerWorker.start();
 
         } catch (Exception x) {
