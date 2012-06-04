@@ -29,7 +29,7 @@ public class SiyapathNode {
         nodeContext = NodeContext.getInstance();
         handler = new SiyapathService();
         processor = new Siyapath.Processor(handler);
-        nodeContext.setNodeID(CommonUtils.getRandomNumber(100000));
+       // nodeContext.setNodeID(CommonUtils.getRandomNumber(100000));
     }
 
     /**

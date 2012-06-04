@@ -14,9 +14,8 @@ struct NodeData {
  * Contains information about a particular node
  */
 struct NodeResourceData {
-    1: i32 nodeID,
-    2: NodeData nodeData,
-    3: map<string,string> nodeProperties
+    1: NodeData nodeData,
+    2: map<string,string> nodeProperties
 }
 
 /**
@@ -36,12 +35,6 @@ struct Job {
     1: i32 sender,
     2: i32 recipient
 }
-/**
- * Data exchanged during gossip communication between two nodes
- */
-struct GossipData {
-    1: map<string, NodeData> gossipData
-}
 
 /**
  * Service for communication related to gossip protocols
@@ -49,7 +42,7 @@ struct GossipData {
 service Siyapath {
 
     //Gossiping node resource data
-    GossipData gossip(1:GossipData gData),
+    NodeResourceData resourceGossip(1:NodeResourceData resourceData),
 
     //Called by a node upon joining the network
     bool notifyPresence(1:NodeData nodeData),
