@@ -56,8 +56,8 @@ public class UserHandler {
     }
 
     /**
-     *
-     * @param fileName
+     * selects a distributor nodes and sends the job
+     * @param fileName path to file containing the job
      */
     public void submitJob(String fileName) {
         NodeInfo selectedNode = getDistributorNode();
@@ -68,6 +68,10 @@ public class UserHandler {
         }
     }
 
+    /**
+     * Selects a volunteer node that will act as the job distributor
+     * @return Node information of the selected node
+     */
     private NodeInfo getDistributorNode() {
 //        String res = null;
         NodeInfo selectedMember = null;
