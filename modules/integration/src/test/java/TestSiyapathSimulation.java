@@ -84,7 +84,7 @@ public class TestSiyapathSimulation extends TestCase {
 
         log.info("Starting nodes...");
         for (SiyapathNode sNode : nodeList) {
-            log.info("Starting node: " + sNode.getNodeId());
+            log.info("Starting node: " + sNode.getNodeContext().getNodeInfo().getNodeId());
             sNode.startSiyapathNode();
         }
     }

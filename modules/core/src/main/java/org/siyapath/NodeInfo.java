@@ -11,6 +11,7 @@ public class NodeInfo {
     public NodeInfo() {
         ip = CommonUtils.getIPAddress();
         port = CommonUtils.getRandomPort();
+        nodeId = CommonUtils.getRandomNumber(10000); //TODO: make the Id unique
         this.bootstrapper = false;
 
     }
