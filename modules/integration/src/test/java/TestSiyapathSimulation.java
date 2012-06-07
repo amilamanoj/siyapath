@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathNode;
+import org.siyapath.client.UserHandler;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class TestSiyapathSimulation extends TestCase {
     private int nodeCount;
     private SiyapathNode bootStrapperNode;
     private ArrayList<SiyapathNode> nodeList;
-
+    private UserHandler userHandler;
 
     public TestSiyapathSimulation() {
         nodeList = new ArrayList<SiyapathNode>();
@@ -27,26 +28,28 @@ public class TestSiyapathSimulation extends TestCase {
 
     @Override
     public void tearDown() throws Exception {
-        log.info("Finishing Siyapath simulation");
+        log.info("Finishing simulation");
     }
 
     public void testSimulation() throws Exception {
-        log.info("Running Siyapath simulation");
+        log.info("Running simulation");
         String nodes = System.getProperty("nodes");
         try {
             nodeCount = Integer.parseInt(nodes);
+
+            startBootStrapper();
+            startNodes();
+            submitJobs();
+
+            Thread.sleep(10000);
+
+            log.info("Total nodes: " + nodeCount);
+            Assert.assertEquals("a", "a");
+
         } catch (NumberFormatException e) {
-            nodeCount = 100;
-            log.info("Starting default number of nodes: " + nodeCount);
+            log.info("Skipping simulation");
         }
-        startBootStrapper();
-        startNodes();
-        submitJobs();
 
-        Thread.sleep(10000);
-
-        log.info("Total nodes: " + nodeCount);
-        Assert.assertEquals("a", "a");
     }
 
     private void startBootStrapper() {
@@ -87,7 +90,8 @@ public class TestSiyapathSimulation extends TestCase {
     }
 
     private void submitJobs() {
-
+        userHandler = new UserHandler();
+//        userHandler.submitJob();
     }
 
 //    class NodeThread extends Thread {

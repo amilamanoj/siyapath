@@ -513,7 +513,7 @@ public class UserGUI extends JFrame {
         String res = handler.authenticate(userName, password);
         if (res.equals("connecEx")) {
             JOptionPane.showMessageDialog(this, "Could not connect to bootstrapper", "Login Failed", JOptionPane.ERROR_MESSAGE);
-        } else if (res.equals("sucess")) {
+        } else if (res.equals("success")) {
             loggedPerson = userName;
             logged();
         } else {
