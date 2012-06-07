@@ -38,7 +38,6 @@ public class SiyapathNode {
      */
     public static void main(String[] args) {
         NodeInfo thisInfo = new NodeInfo();
-        thisInfo.setIp(String.valueOf(CommonUtils.getRandomPort()));
         SiyapathNode node = new SiyapathNode(thisInfo);
         node.startSiyapathNode();
     }
@@ -93,9 +92,8 @@ public class SiyapathNode {
         return isBootStrapperAlive;
     }
 
-    public int getNodeId(){
-        return nodeContext.getNodeID();
+    public NodeContext getNodeContext() {
+        return nodeContext;
     }
-
 
 }

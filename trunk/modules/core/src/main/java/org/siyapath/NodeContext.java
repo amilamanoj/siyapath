@@ -147,21 +147,4 @@ public class NodeContext {
         this.memberResource = memberResource;
     }
 
-    /**
-     * Assign the ID for the node
-     *
-     * @param nodeID the assigned ID for the node
-     */
-    public void setNodeID(int nodeID) {
-        nodeInfo.setNodeId(nodeID);
-    }
-
-    /**
-     * Getter for NodeID
-     *
-     * @return nodeID
-     */
-    public int getNodeID() {
-        return nodeInfo.getNodeId();
-    }
 }
