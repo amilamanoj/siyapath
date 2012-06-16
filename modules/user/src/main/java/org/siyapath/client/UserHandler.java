@@ -116,11 +116,11 @@ public class UserHandler {
         Map taskList = new HashMap<Integer, Task>();
         taskList.put(1, task);
         try {
-            log.info("Sending new job to node: " + node.getPort());
+            log.info("Sending new job to node: " + node);
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.submitJob(00001, CommonUtils.serialize(node), taskList);
+            client.submitJob(00001, CommonUtils.serialize(context.getNodeInfo()), taskList);
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 e.printStackTrace();
