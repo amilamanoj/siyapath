@@ -77,7 +77,7 @@ public class TestSiyapathSimulation extends TestCase {
             NodeInfo nodeInfo = new NodeInfo();
             nodeInfo.setNodeId(CommonUtils.getRandomPort());
             nodeInfo.setPort(nodeInfo.getNodeId());
-            log.info("Creating node with port: " + nodeInfo.getPort());
+            log.info("Creating node with port: " + nodeInfo);
             SiyapathNode node = new SiyapathNode(nodeInfo);
             nodeList.add(node);
         }

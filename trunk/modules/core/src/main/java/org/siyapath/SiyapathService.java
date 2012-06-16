@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.siyapath.gossip.GossipImpl;
-import org.siyapath.job.TaskDistributor;
+import org.siyapath.job.JobHandler;
 import org.siyapath.job.TaskProcessor;
 import org.siyapath.utils.CommonUtils;
 import org.siyapath.service.*;
@@ -91,14 +91,11 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks) throws TException {
-        log.info("Received the job: " + jobID);
-        Task firstTask = tasks.get(new Integer(1));
-        TaskDistributor taskDistributor = new TaskDistributor(firstTask, nodeContext);
-        taskDistributor.sendTaskToProcessingNode();
-//        Task firstTask = tasks.get(new Integer(1));
-//        TaskProcessor taskProcessor = new TaskProcessor(firstTask, firstTask.getClassName());
-//        taskProcessor.processTask();
-        return "success";
+        log.info("Received a new job. JobID:" + jobID + " from: "+ CommonUtils.deSerialize(sender));
+        JobHandler jobHandler = new JobHandler(nodeContext, jobID, tasks);
+        nodeContext.addJob(jobHandler);
+        jobHandler.startJob();
+        return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + jobID + ":" +  "Accepted";
     }
 
     /**
@@ -139,8 +136,8 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean sendTaskResult(Task task) {
-        TaskDistributor taskDistributor = new TaskDistributor(task, nodeContext);
-        taskDistributor.sendResultToUserNode();
+//        JobHandler taskDistributor = new JobHandler(task, nodeContext);
+//        taskDistributor.sendResultToUserNode();
         return true;
     }
 

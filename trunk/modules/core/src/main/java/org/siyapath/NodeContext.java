@@ -1,7 +1,9 @@
 package org.siyapath;
 
+import org.siyapath.job.JobHandler;
 import org.siyapath.utils.CommonUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class NodeContext {
      * This node's information
      */
     private NodeInfo nodeInfo;
+    private ArrayList<JobHandler> jobHandlerList;
     /**
      * List of known member nodes
      */
@@ -44,6 +47,7 @@ public class NodeContext {
     public NodeContext() {
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashSet<NodeResource>();
+        this.jobHandlerList =  new ArrayList<JobHandler>();
         nodeInfo = new NodeInfo();
         nodeResource = new NodeResource(nodeInfo);
 
@@ -147,4 +151,7 @@ public class NodeContext {
         this.memberResource = memberResource;
     }
 
+    public void addJob(JobHandler jobHandler) {
+        jobHandlerList.add(jobHandler);
+    }
 }

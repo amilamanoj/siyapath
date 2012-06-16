@@ -20,7 +20,7 @@ import java.net.ConnectException;
 
 /*
 * Required implementation for the submit task operation on IDL, at the recipient's end.
-* Assumes that a single .class is sent by the TaskDistributor node ftm.
+* Assumes that a single .class is sent by the JobHandler node ftm.
 * TODO: extend to use a .zip/jar with multiple .class files
 * */
 public class TaskProcessor {
@@ -59,7 +59,7 @@ public class TaskProcessor {
             monitor.stopMonitor();
             log.info("Task processing is completed.");
             task.setTaskResult(finalResult);
-            sendResultToDistributingNode();
+//            sendResultToDistributingNode();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

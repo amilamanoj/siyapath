@@ -96,4 +96,9 @@ public class NodeInfo {
     public int hashCode() {
         return nodeId;
     }
+
+    @Override
+    public String toString() {
+        return "Node-id:" + nodeId + "-port:" + port;
+    }
 }
