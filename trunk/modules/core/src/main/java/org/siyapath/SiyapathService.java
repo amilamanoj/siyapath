@@ -116,8 +116,23 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public String getJobStatus(int jobID) throws TException {
+    public boolean getJobStatusFromJobHandler (int jobID) throws TException {
         throw new UnsupportedOperationException();
+
+
+
+
+
+    }
+
+    @Override
+    public boolean getTaskStatusFromTaskProcessor (int taskID) throws TException {
+        throw new UnsupportedOperationException();
+
+
+
+
+
     }
 
     /**

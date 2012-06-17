@@ -50,7 +50,9 @@ public class Siyapath {
 
     public boolean submitTask(Task task) throws org.apache.thrift.TException;
 
-    public String getJobStatus(int jobID) throws org.apache.thrift.TException;
+    public boolean getJobStatusFromJobHandler(int jobID) throws org.apache.thrift.TException;
+
+    public boolean getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException;
 
     public Map<Integer,Task> getJobResult(int jobID) throws org.apache.thrift.TException;
 
@@ -78,7 +80,9 @@ public class Siyapath {
 
     public void submitTask(Task task, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitTask_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getJobStatus(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobStatus_call> resultHandler) throws org.apache.thrift.TException;
+    public void getJobStatusFromJobHandler(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void getTaskStatusFromTaskProcessor(int taskID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getJobResult(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobResult_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -293,27 +297,50 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "submitTask failed: unknown result");
     }
 
-    public String getJobStatus(int jobID) throws org.apache.thrift.TException
+    public boolean getJobStatusFromJobHandler(int jobID) throws org.apache.thrift.TException
     {
-      send_getJobStatus(jobID);
-      return recv_getJobStatus();
+      send_getJobStatusFromJobHandler(jobID);
+      return recv_getJobStatusFromJobHandler();
     }
 
-    public void send_getJobStatus(int jobID) throws org.apache.thrift.TException
+    public void send_getJobStatusFromJobHandler(int jobID) throws org.apache.thrift.TException
     {
-      getJobStatus_args args = new getJobStatus_args();
+      getJobStatusFromJobHandler_args args = new getJobStatusFromJobHandler_args();
       args.setJobID(jobID);
-      sendBase("getJobStatus", args);
+      sendBase("getJobStatusFromJobHandler", args);
     }
 
-    public String recv_getJobStatus() throws org.apache.thrift.TException
+    public boolean recv_getJobStatusFromJobHandler() throws org.apache.thrift.TException
     {
-      getJobStatus_result result = new getJobStatus_result();
-      receiveBase(result, "getJobStatus");
+      getJobStatusFromJobHandler_result result = new getJobStatusFromJobHandler_result();
+      receiveBase(result, "getJobStatusFromJobHandler");
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getJobStatus failed: unknown result");
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getJobStatusFromJobHandler failed: unknown result");
+    }
+
+    public boolean getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException
+    {
+      send_getTaskStatusFromTaskProcessor(taskID);
+      return recv_getTaskStatusFromTaskProcessor();
+    }
+
+    public void send_getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException
+    {
+      getTaskStatusFromTaskProcessor_args args = new getTaskStatusFromTaskProcessor_args();
+      args.setTaskID(taskID);
+      sendBase("getTaskStatusFromTaskProcessor", args);
+    }
+
+    public boolean recv_getTaskStatusFromTaskProcessor() throws org.apache.thrift.TException
+    {
+      getTaskStatusFromTaskProcessor_result result = new getTaskStatusFromTaskProcessor_result();
+      receiveBase(result, "getTaskStatusFromTaskProcessor");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getTaskStatusFromTaskProcessor failed: unknown result");
     }
 
     public Map<Integer,Task> getJobResult(int jobID) throws org.apache.thrift.TException
@@ -663,35 +690,67 @@ public class Siyapath {
       }
     }
 
-    public void getJobStatus(int jobID, org.apache.thrift.async.AsyncMethodCallback<getJobStatus_call> resultHandler) throws org.apache.thrift.TException {
+    public void getJobStatusFromJobHandler(int jobID, org.apache.thrift.async.AsyncMethodCallback<getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getJobStatus_call method_call = new getJobStatus_call(jobID, resultHandler, this, ___protocolFactory, ___transport);
+      getJobStatusFromJobHandler_call method_call = new getJobStatusFromJobHandler_call(jobID, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class getJobStatus_call extends org.apache.thrift.async.TAsyncMethodCall {
+    public static class getJobStatusFromJobHandler_call extends org.apache.thrift.async.TAsyncMethodCall {
       private int jobID;
-      public getJobStatus_call(int jobID, org.apache.thrift.async.AsyncMethodCallback<getJobStatus_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public getJobStatusFromJobHandler_call(int jobID, org.apache.thrift.async.AsyncMethodCallback<getJobStatusFromJobHandler_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.jobID = jobID;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getJobStatus", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        getJobStatus_args args = new getJobStatus_args();
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getJobStatusFromJobHandler", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getJobStatusFromJobHandler_args args = new getJobStatusFromJobHandler_args();
         args.setJobID(jobID);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public String getResult() throws org.apache.thrift.TException {
+      public boolean getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_getJobStatus();
+        return (new Client(prot)).recv_getJobStatusFromJobHandler();
+      }
+    }
+
+    public void getTaskStatusFromTaskProcessor(int taskID, org.apache.thrift.async.AsyncMethodCallback<getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      getTaskStatusFromTaskProcessor_call method_call = new getTaskStatusFromTaskProcessor_call(taskID, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getTaskStatusFromTaskProcessor_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private int taskID;
+      public getTaskStatusFromTaskProcessor_call(int taskID, org.apache.thrift.async.AsyncMethodCallback<getTaskStatusFromTaskProcessor_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.taskID = taskID;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getTaskStatusFromTaskProcessor", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getTaskStatusFromTaskProcessor_args args = new getTaskStatusFromTaskProcessor_args();
+        args.setTaskID(taskID);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public boolean getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getTaskStatusFromTaskProcessor();
       }
     }
 
@@ -815,7 +874,8 @@ public class Siyapath {
       processMap.put("requestBecomeBackup", new requestBecomeBackup());
       processMap.put("submitJob", new submitJob());
       processMap.put("submitTask", new submitTask());
-      processMap.put("getJobStatus", new getJobStatus());
+      processMap.put("getJobStatusFromJobHandler", new getJobStatusFromJobHandler());
+      processMap.put("getTaskStatusFromTaskProcessor", new getTaskStatusFromTaskProcessor());
       processMap.put("getJobResult", new getJobResult());
       processMap.put("sendTaskResult", new sendTaskResult());
       processMap.put("userLogin", new userLogin());
@@ -954,18 +1014,36 @@ public class Siyapath {
       }
     }
 
-    private static class getJobStatus<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getJobStatus_args> {
-      public getJobStatus() {
-        super("getJobStatus");
+    private static class getJobStatusFromJobHandler<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getJobStatusFromJobHandler_args> {
+      public getJobStatusFromJobHandler() {
+        super("getJobStatusFromJobHandler");
       }
 
-      protected getJobStatus_args getEmptyArgsInstance() {
-        return new getJobStatus_args();
+      protected getJobStatusFromJobHandler_args getEmptyArgsInstance() {
+        return new getJobStatusFromJobHandler_args();
       }
 
-      protected getJobStatus_result getResult(I iface, getJobStatus_args args) throws org.apache.thrift.TException {
-        getJobStatus_result result = new getJobStatus_result();
-        result.success = iface.getJobStatus(args.jobID);
+      protected getJobStatusFromJobHandler_result getResult(I iface, getJobStatusFromJobHandler_args args) throws org.apache.thrift.TException {
+        getJobStatusFromJobHandler_result result = new getJobStatusFromJobHandler_result();
+        result.success = iface.getJobStatusFromJobHandler(args.jobID);
+        result.setSuccessIsSet(true);
+        return result;
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getTaskStatusFromTaskProcessor_args> {
+      public getTaskStatusFromTaskProcessor() {
+        super("getTaskStatusFromTaskProcessor");
+      }
+
+      protected getTaskStatusFromTaskProcessor_args getEmptyArgsInstance() {
+        return new getTaskStatusFromTaskProcessor_args();
+      }
+
+      protected getTaskStatusFromTaskProcessor_result getResult(I iface, getTaskStatusFromTaskProcessor_args args) throws org.apache.thrift.TException {
+        getTaskStatusFromTaskProcessor_result result = new getTaskStatusFromTaskProcessor_result();
+        result.success = iface.getTaskStatusFromTaskProcessor(args.taskID);
+        result.setSuccessIsSet(true);
         return result;
       }
     }
@@ -6970,15 +7048,15 @@ public class Siyapath {
 
   }
 
-  public static class getJobStatus_args implements org.apache.thrift.TBase<getJobStatus_args, getJobStatus_args._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getJobStatus_args");
+  public static class getJobStatusFromJobHandler_args implements org.apache.thrift.TBase<getJobStatusFromJobHandler_args, getJobStatusFromJobHandler_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getJobStatusFromJobHandler_args");
 
     private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new getJobStatus_argsStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new getJobStatus_argsTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new getJobStatusFromJobHandler_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getJobStatusFromJobHandler_argsTupleSchemeFactory());
     }
 
     public int jobID; // required
@@ -7050,13 +7128,13 @@ public class Siyapath {
       tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobStatus_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobStatusFromJobHandler_args.class, metaDataMap);
     }
 
-    public getJobStatus_args() {
+    public getJobStatusFromJobHandler_args() {
     }
 
-    public getJobStatus_args(
+    public getJobStatusFromJobHandler_args(
       int jobID)
     {
       this();
@@ -7067,14 +7145,14 @@ public class Siyapath {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getJobStatus_args(getJobStatus_args other) {
+    public getJobStatusFromJobHandler_args(getJobStatusFromJobHandler_args other) {
       __isset_bit_vector.clear();
       __isset_bit_vector.or(other.__isset_bit_vector);
       this.jobID = other.jobID;
     }
 
-    public getJobStatus_args deepCopy() {
-      return new getJobStatus_args(this);
+    public getJobStatusFromJobHandler_args deepCopy() {
+      return new getJobStatusFromJobHandler_args(this);
     }
 
     @Override
@@ -7087,7 +7165,7 @@ public class Siyapath {
       return this.jobID;
     }
 
-    public getJobStatus_args setJobID(int jobID) {
+    public getJobStatusFromJobHandler_args setJobID(int jobID) {
       this.jobID = jobID;
       setJobIDIsSet(true);
       return this;
@@ -7145,12 +7223,12 @@ public class Siyapath {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof getJobStatus_args)
-        return this.equals((getJobStatus_args)that);
+      if (that instanceof getJobStatusFromJobHandler_args)
+        return this.equals((getJobStatusFromJobHandler_args)that);
       return false;
     }
 
-    public boolean equals(getJobStatus_args that) {
+    public boolean equals(getJobStatusFromJobHandler_args that) {
       if (that == null)
         return false;
 
@@ -7171,13 +7249,13 @@ public class Siyapath {
       return 0;
     }
 
-    public int compareTo(getJobStatus_args other) {
+    public int compareTo(getJobStatusFromJobHandler_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getJobStatus_args typedOther = (getJobStatus_args)other;
+      getJobStatusFromJobHandler_args typedOther = (getJobStatusFromJobHandler_args)other;
 
       lastComparison = Boolean.valueOf(isSetJobID()).compareTo(typedOther.isSetJobID());
       if (lastComparison != 0) {
@@ -7206,7 +7284,7 @@ public class Siyapath {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("getJobStatus_args(");
+      StringBuilder sb = new StringBuilder("getJobStatusFromJobHandler_args(");
       boolean first = true;
 
       sb.append("jobID:");
@@ -7238,15 +7316,15 @@ public class Siyapath {
       }
     }
 
-    private static class getJobStatus_argsStandardSchemeFactory implements SchemeFactory {
-      public getJobStatus_argsStandardScheme getScheme() {
-        return new getJobStatus_argsStandardScheme();
+    private static class getJobStatusFromJobHandler_argsStandardSchemeFactory implements SchemeFactory {
+      public getJobStatusFromJobHandler_argsStandardScheme getScheme() {
+        return new getJobStatusFromJobHandler_argsStandardScheme();
       }
     }
 
-    private static class getJobStatus_argsStandardScheme extends StandardScheme<getJobStatus_args> {
+    private static class getJobStatusFromJobHandler_argsStandardScheme extends StandardScheme<getJobStatusFromJobHandler_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getJobStatus_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getJobStatusFromJobHandler_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -7275,7 +7353,7 @@ public class Siyapath {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getJobStatus_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getJobStatusFromJobHandler_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -7288,16 +7366,16 @@ public class Siyapath {
 
     }
 
-    private static class getJobStatus_argsTupleSchemeFactory implements SchemeFactory {
-      public getJobStatus_argsTupleScheme getScheme() {
-        return new getJobStatus_argsTupleScheme();
+    private static class getJobStatusFromJobHandler_argsTupleSchemeFactory implements SchemeFactory {
+      public getJobStatusFromJobHandler_argsTupleScheme getScheme() {
+        return new getJobStatusFromJobHandler_argsTupleScheme();
       }
     }
 
-    private static class getJobStatus_argsTupleScheme extends TupleScheme<getJobStatus_args> {
+    private static class getJobStatusFromJobHandler_argsTupleScheme extends TupleScheme<getJobStatusFromJobHandler_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getJobStatus_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getJobStatusFromJobHandler_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
         if (struct.isSetJobID()) {
@@ -7310,7 +7388,7 @@ public class Siyapath {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getJobStatus_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getJobStatusFromJobHandler_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
@@ -7322,18 +7400,18 @@ public class Siyapath {
 
   }
 
-  public static class getJobStatus_result implements org.apache.thrift.TBase<getJobStatus_result, getJobStatus_result._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getJobStatus_result");
+  public static class getJobStatusFromJobHandler_result implements org.apache.thrift.TBase<getJobStatusFromJobHandler_result, getJobStatusFromJobHandler_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getJobStatusFromJobHandler_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new getJobStatus_resultStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new getJobStatus_resultTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new getJobStatusFromJobHandler_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getJobStatusFromJobHandler_resultTupleSchemeFactory());
     }
 
-    public String success; // required
+    public boolean success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -7394,65 +7472,68 @@ public class Siyapath {
     }
 
     // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobStatus_result.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobStatusFromJobHandler_result.class, metaDataMap);
     }
 
-    public getJobStatus_result() {
+    public getJobStatusFromJobHandler_result() {
     }
 
-    public getJobStatus_result(
-      String success)
+    public getJobStatusFromJobHandler_result(
+      boolean success)
     {
       this();
       this.success = success;
+      setSuccessIsSet(true);
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getJobStatus_result(getJobStatus_result other) {
-      if (other.isSetSuccess()) {
-        this.success = other.success;
-      }
+    public getJobStatusFromJobHandler_result(getJobStatusFromJobHandler_result other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.success = other.success;
     }
 
-    public getJobStatus_result deepCopy() {
-      return new getJobStatus_result(this);
+    public getJobStatusFromJobHandler_result deepCopy() {
+      return new getJobStatusFromJobHandler_result(this);
     }
 
     @Override
     public void clear() {
-      this.success = null;
+      setSuccessIsSet(false);
+      this.success = false;
     }
 
-    public String getSuccess() {
+    public boolean isSuccess() {
       return this.success;
     }
 
-    public getJobStatus_result setSuccess(String success) {
+    public getJobStatusFromJobHandler_result setSuccess(boolean success) {
       this.success = success;
+      setSuccessIsSet(true);
       return this;
     }
 
     public void unsetSuccess() {
-      this.success = null;
+      __isset_bit_vector.clear(__SUCCESS_ISSET_ID);
     }
 
     /** Returns true if field success is set (has been assigned a value) and false otherwise */
     public boolean isSetSuccess() {
-      return this.success != null;
+      return __isset_bit_vector.get(__SUCCESS_ISSET_ID);
     }
 
     public void setSuccessIsSet(boolean value) {
-      if (!value) {
-        this.success = null;
-      }
+      __isset_bit_vector.set(__SUCCESS_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
@@ -7461,7 +7542,7 @@ public class Siyapath {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((String)value);
+          setSuccess((Boolean)value);
         }
         break;
 
@@ -7471,7 +7552,7 @@ public class Siyapath {
     public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
-        return getSuccess();
+        return Boolean.valueOf(isSuccess());
 
       }
       throw new IllegalStateException();
@@ -7494,21 +7575,21 @@ public class Siyapath {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof getJobStatus_result)
-        return this.equals((getJobStatus_result)that);
+      if (that instanceof getJobStatusFromJobHandler_result)
+        return this.equals((getJobStatusFromJobHandler_result)that);
       return false;
     }
 
-    public boolean equals(getJobStatus_result that) {
+    public boolean equals(getJobStatusFromJobHandler_result that) {
       if (that == null)
         return false;
 
-      boolean this_present_success = true && this.isSetSuccess();
-      boolean that_present_success = true && that.isSetSuccess();
+      boolean this_present_success = true;
+      boolean that_present_success = true;
       if (this_present_success || that_present_success) {
         if (!(this_present_success && that_present_success))
           return false;
-        if (!this.success.equals(that.success))
+        if (this.success != that.success)
           return false;
       }
 
@@ -7520,13 +7601,13 @@ public class Siyapath {
       return 0;
     }
 
-    public int compareTo(getJobStatus_result other) {
+    public int compareTo(getJobStatusFromJobHandler_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getJobStatus_result typedOther = (getJobStatus_result)other;
+      getJobStatusFromJobHandler_result typedOther = (getJobStatusFromJobHandler_result)other;
 
       lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
       if (lastComparison != 0) {
@@ -7555,15 +7636,11 @@ public class Siyapath {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("getJobStatus_result(");
+      StringBuilder sb = new StringBuilder("getJobStatusFromJobHandler_result(");
       boolean first = true;
 
       sb.append("success:");
-      if (this.success == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.success);
-      }
+      sb.append(this.success);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -7589,15 +7666,15 @@ public class Siyapath {
       }
     }
 
-    private static class getJobStatus_resultStandardSchemeFactory implements SchemeFactory {
-      public getJobStatus_resultStandardScheme getScheme() {
-        return new getJobStatus_resultStandardScheme();
+    private static class getJobStatusFromJobHandler_resultStandardSchemeFactory implements SchemeFactory {
+      public getJobStatusFromJobHandler_resultStandardScheme getScheme() {
+        return new getJobStatusFromJobHandler_resultStandardScheme();
       }
     }
 
-    private static class getJobStatus_resultStandardScheme extends StandardScheme<getJobStatus_result> {
+    private static class getJobStatusFromJobHandler_resultStandardScheme extends StandardScheme<getJobStatusFromJobHandler_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getJobStatus_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getJobStatusFromJobHandler_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -7608,8 +7685,8 @@ public class Siyapath {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.success = iprot.readString();
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -7626,31 +7703,29 @@ public class Siyapath {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getJobStatus_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getJobStatusFromJobHandler_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.success != null) {
-          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeString(struct.success);
-          oprot.writeFieldEnd();
-        }
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        oprot.writeBool(struct.success);
+        oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
 
     }
 
-    private static class getJobStatus_resultTupleSchemeFactory implements SchemeFactory {
-      public getJobStatus_resultTupleScheme getScheme() {
-        return new getJobStatus_resultTupleScheme();
+    private static class getJobStatusFromJobHandler_resultTupleSchemeFactory implements SchemeFactory {
+      public getJobStatusFromJobHandler_resultTupleScheme getScheme() {
+        return new getJobStatusFromJobHandler_resultTupleScheme();
       }
     }
 
-    private static class getJobStatus_resultTupleScheme extends TupleScheme<getJobStatus_result> {
+    private static class getJobStatusFromJobHandler_resultTupleScheme extends TupleScheme<getJobStatusFromJobHandler_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getJobStatus_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getJobStatusFromJobHandler_result struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
         if (struct.isSetSuccess()) {
@@ -7658,16 +7733,718 @@ public class Siyapath {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          oprot.writeString(struct.success);
+          oprot.writeBool(struct.success);
         }
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getJobStatus_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getJobStatusFromJobHandler_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = iprot.readString();
+          struct.success = iprot.readBool();
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getTaskStatusFromTaskProcessor_args implements org.apache.thrift.TBase<getTaskStatusFromTaskProcessor_args, getTaskStatusFromTaskProcessor_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getTaskStatusFromTaskProcessor_args");
+
+    private static final org.apache.thrift.protocol.TField TASK_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("taskID", org.apache.thrift.protocol.TType.I32, (short)1);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getTaskStatusFromTaskProcessor_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getTaskStatusFromTaskProcessor_argsTupleSchemeFactory());
+    }
+
+    public int taskID; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      TASK_ID((short)1, "taskID");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // TASK_ID
+            return TASK_ID;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __TASKID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.TASK_ID, new org.apache.thrift.meta_data.FieldMetaData("taskID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getTaskStatusFromTaskProcessor_args.class, metaDataMap);
+    }
+
+    public getTaskStatusFromTaskProcessor_args() {
+    }
+
+    public getTaskStatusFromTaskProcessor_args(
+      int taskID)
+    {
+      this();
+      this.taskID = taskID;
+      setTaskIDIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getTaskStatusFromTaskProcessor_args(getTaskStatusFromTaskProcessor_args other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.taskID = other.taskID;
+    }
+
+    public getTaskStatusFromTaskProcessor_args deepCopy() {
+      return new getTaskStatusFromTaskProcessor_args(this);
+    }
+
+    @Override
+    public void clear() {
+      setTaskIDIsSet(false);
+      this.taskID = 0;
+    }
+
+    public int getTaskID() {
+      return this.taskID;
+    }
+
+    public getTaskStatusFromTaskProcessor_args setTaskID(int taskID) {
+      this.taskID = taskID;
+      setTaskIDIsSet(true);
+      return this;
+    }
+
+    public void unsetTaskID() {
+      __isset_bit_vector.clear(__TASKID_ISSET_ID);
+    }
+
+    /** Returns true if field taskID is set (has been assigned a value) and false otherwise */
+    public boolean isSetTaskID() {
+      return __isset_bit_vector.get(__TASKID_ISSET_ID);
+    }
+
+    public void setTaskIDIsSet(boolean value) {
+      __isset_bit_vector.set(__TASKID_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case TASK_ID:
+        if (value == null) {
+          unsetTaskID();
+        } else {
+          setTaskID((Integer)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case TASK_ID:
+        return Integer.valueOf(getTaskID());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case TASK_ID:
+        return isSetTaskID();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getTaskStatusFromTaskProcessor_args)
+        return this.equals((getTaskStatusFromTaskProcessor_args)that);
+      return false;
+    }
+
+    public boolean equals(getTaskStatusFromTaskProcessor_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_taskID = true;
+      boolean that_present_taskID = true;
+      if (this_present_taskID || that_present_taskID) {
+        if (!(this_present_taskID && that_present_taskID))
+          return false;
+        if (this.taskID != that.taskID)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(getTaskStatusFromTaskProcessor_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      getTaskStatusFromTaskProcessor_args typedOther = (getTaskStatusFromTaskProcessor_args)other;
+
+      lastComparison = Boolean.valueOf(isSetTaskID()).compareTo(typedOther.isSetTaskID());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTaskID()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskID, typedOther.taskID);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getTaskStatusFromTaskProcessor_args(");
+      boolean first = true;
+
+      sb.append("taskID:");
+      sb.append(this.taskID);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor_argsStandardSchemeFactory implements SchemeFactory {
+      public getTaskStatusFromTaskProcessor_argsStandardScheme getScheme() {
+        return new getTaskStatusFromTaskProcessor_argsStandardScheme();
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor_argsStandardScheme extends StandardScheme<getTaskStatusFromTaskProcessor_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getTaskStatusFromTaskProcessor_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // TASK_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+                struct.taskID = iprot.readI32();
+                struct.setTaskIDIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getTaskStatusFromTaskProcessor_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(TASK_ID_FIELD_DESC);
+        oprot.writeI32(struct.taskID);
+        oprot.writeFieldEnd();
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getTaskStatusFromTaskProcessor_argsTupleSchemeFactory implements SchemeFactory {
+      public getTaskStatusFromTaskProcessor_argsTupleScheme getScheme() {
+        return new getTaskStatusFromTaskProcessor_argsTupleScheme();
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor_argsTupleScheme extends TupleScheme<getTaskStatusFromTaskProcessor_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getTaskStatusFromTaskProcessor_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetTaskID()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetTaskID()) {
+          oprot.writeI32(struct.taskID);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getTaskStatusFromTaskProcessor_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.taskID = iprot.readI32();
+          struct.setTaskIDIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getTaskStatusFromTaskProcessor_result implements org.apache.thrift.TBase<getTaskStatusFromTaskProcessor_result, getTaskStatusFromTaskProcessor_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getTaskStatusFromTaskProcessor_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getTaskStatusFromTaskProcessor_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getTaskStatusFromTaskProcessor_resultTupleSchemeFactory());
+    }
+
+    public boolean success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getTaskStatusFromTaskProcessor_result.class, metaDataMap);
+    }
+
+    public getTaskStatusFromTaskProcessor_result() {
+    }
+
+    public getTaskStatusFromTaskProcessor_result(
+      boolean success)
+    {
+      this();
+      this.success = success;
+      setSuccessIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getTaskStatusFromTaskProcessor_result(getTaskStatusFromTaskProcessor_result other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.success = other.success;
+    }
+
+    public getTaskStatusFromTaskProcessor_result deepCopy() {
+      return new getTaskStatusFromTaskProcessor_result(this);
+    }
+
+    @Override
+    public void clear() {
+      setSuccessIsSet(false);
+      this.success = false;
+    }
+
+    public boolean isSuccess() {
+      return this.success;
+    }
+
+    public getTaskStatusFromTaskProcessor_result setSuccess(boolean success) {
+      this.success = success;
+      setSuccessIsSet(true);
+      return this;
+    }
+
+    public void unsetSuccess() {
+      __isset_bit_vector.clear(__SUCCESS_ISSET_ID);
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return __isset_bit_vector.get(__SUCCESS_ISSET_ID);
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      __isset_bit_vector.set(__SUCCESS_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((Boolean)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return Boolean.valueOf(isSuccess());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getTaskStatusFromTaskProcessor_result)
+        return this.equals((getTaskStatusFromTaskProcessor_result)that);
+      return false;
+    }
+
+    public boolean equals(getTaskStatusFromTaskProcessor_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true;
+      boolean that_present_success = true;
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (this.success != that.success)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(getTaskStatusFromTaskProcessor_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      getTaskStatusFromTaskProcessor_result typedOther = (getTaskStatusFromTaskProcessor_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getTaskStatusFromTaskProcessor_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      sb.append(this.success);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor_resultStandardSchemeFactory implements SchemeFactory {
+      public getTaskStatusFromTaskProcessor_resultStandardScheme getScheme() {
+        return new getTaskStatusFromTaskProcessor_resultStandardScheme();
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor_resultStandardScheme extends StandardScheme<getTaskStatusFromTaskProcessor_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getTaskStatusFromTaskProcessor_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getTaskStatusFromTaskProcessor_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        oprot.writeBool(struct.success);
+        oprot.writeFieldEnd();
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getTaskStatusFromTaskProcessor_resultTupleSchemeFactory implements SchemeFactory {
+      public getTaskStatusFromTaskProcessor_resultTupleScheme getScheme() {
+        return new getTaskStatusFromTaskProcessor_resultTupleScheme();
+      }
+    }
+
+    private static class getTaskStatusFromTaskProcessor_resultTupleScheme extends TupleScheme<getTaskStatusFromTaskProcessor_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getTaskStatusFromTaskProcessor_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          oprot.writeBool(struct.success);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getTaskStatusFromTaskProcessor_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
         }
       }
