@@ -6,7 +6,9 @@ import org.siyapath.NodeInfo;
 import org.siyapath.NodeResource;
 import org.siyapath.service.*;
 
+import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 public class CommonUtils {
@@ -151,5 +153,53 @@ public class CommonUtils {
             nodeInfos.add(deSerialize(nd));
         }
         return nodeInfos;
+    }
+
+    /**
+     *
+     * @return ByteBuffer for byte array from given byte-code
+     * @throws java.io.IOException
+     */
+    public static ByteBuffer convertFileToByteBuffer(String fileName) throws IOException {
+
+        /*temporary location has been set*/
+        final String BINARY_FILE_NAME = fileName;
+        File file = new File(BINARY_FILE_NAME);
+        InputStream inputStream = null;
+
+        byte[] bytes = new byte[(int) file.length()];
+        if (file.length() > Integer.MAX_VALUE) {
+            log.error("File is too large.");
+        }
+
+        try {
+//            bytes = new byte[(int)file.length()];  TODO: max file size?
+//            if (file.length() > Integer.MAX_VALUE) {
+//                log.error("File is too large.");
+//            }
+            inputStream = new BufferedInputStream(new FileInputStream(file));
+            int offset = 0, numRead;
+
+            while (offset < bytes.length
+                    && (numRead = inputStream.read(bytes, offset, bytes.length - offset)) >= 0) {
+                offset += numRead;
+            }
+            // Ensure all the bytes have been read
+            if (offset < bytes.length) {
+                log.warn("Could not completely read file " + file.getName());
+                throw new IOException("Could not completely read file " + file.getName());
+            } else {
+                log.info("Successfully located and read binary.");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return ByteBuffer.wrap(bytes);
     }
 }

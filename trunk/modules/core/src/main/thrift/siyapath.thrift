@@ -32,8 +32,9 @@ struct Task {
 }
 
 struct Job {
-    1: i32 sender,
-    2: i32 recipient
+    1: i32 jobID,
+    2: i32 sender,
+    3: map<i32,Task> tasks
 }
 
 /**
