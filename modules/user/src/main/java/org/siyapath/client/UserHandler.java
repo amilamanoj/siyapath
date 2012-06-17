@@ -22,6 +22,7 @@ public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
 
     private NodeContext context;
+    private NodeInfo jobHandlerNode;
 
     public UserHandler() {
         this.context = new NodeContext();
@@ -84,6 +85,7 @@ public class UserHandler {
             context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
             log.info("Number of members from bootstrapper: " +context.getMemberCount());
             selectedMember = context.getRandomMember();
+            setJobHandlerNode(selectedMember);
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
 //                res = "connecEx";
@@ -109,7 +111,9 @@ public class UserHandler {
         Task task = null;
 
         try {
-            task = new Task(123, 234, convertFileToByteBuffer(fileName), "Sending a Temp task data in a String.", "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
+            //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
+            task = new Task(123, 00001, convertFileToByteBuffer(fileName), "Sending a Temp task data in a String.",
+                    "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -178,5 +182,73 @@ public class UserHandler {
             }
         }
         return ByteBuffer.wrap(bytes);
+    }
+
+    /**
+     *
+     * @return the selected job handling node for the user
+     */
+    public NodeInfo getJobHandlerNode() {
+        return jobHandlerNode;
+    }
+
+    /**
+     *
+     * @param jobHandlerNode
+     */
+    public void setJobHandlerNode(NodeInfo jobHandlerNode) {
+        this.jobHandlerNode = jobHandlerNode;
+    }
+
+
+    /**
+     * Contacts back the selected JobHandler to get job status
+     * @param jobID
+     */
+    public void pollStatusOfJob(int jobID){
+        //
+        TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
+        boolean jobStatus = false;
+        try {
+            log.debug("Polling status of job: " + jobID);
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            jobStatus = client.getJobStatusFromJobHandler(jobID);
+            log.debug("Status of " + jobID + " is " + jobStatus);
+            //TODO: convey client, repeat at task level & content tbd after scheduler/handler has job id assignment
+        } catch (TTransportException e) {
+            if (e.getCause() instanceof ConnectException) {
+                e.printStackTrace();
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
+
+    }
+
+    private class StatusPollThread extends Thread {
+
+        public boolean isRunning = false;
+
+        @Override
+        public void run() {
+
+            isRunning = true;
+            while (isRunning) {
+                pollStatusOfJob(00001);
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        public void stopPolling() {
+            isRunning = false;
+        }
     }
 }
