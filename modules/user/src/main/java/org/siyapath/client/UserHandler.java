@@ -23,9 +23,17 @@ public class UserHandler {
 
     private NodeContext context;
     private NodeInfo jobHandlerNode;
+    private Map taskList = new HashMap<Integer, Task>();
+    private int jobId;
+    private int taskCounter;
 
     public UserHandler() {
         this.context = new NodeContext();
+        jobId = CommonUtils.getRandomNumber(1000);
+    }
+
+    public int getJobId() {
+        return jobId;
     }
 
     /**
@@ -57,13 +65,16 @@ public class UserHandler {
     }
 
     /**
-     * selects a distributor nodes and sends the job
-     * @param fileName path to file containing the job
+     * Prepares the new job, selects a distributor nodes and sends the job
+     * @param taskFileList list of tasks
      */
-    public void submitJob(String fileName) {
+    public void submitJob(Map<String, File> taskFileList) {
+        for (File taskFile: taskFileList.values()){
+             addTask(taskFile);
+        }
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
-            sendJob(selectedNode, fileName);
+            sendJob(selectedNode);
         } else {
             log.warn("Could not get a distributor node");
         }
@@ -103,28 +114,17 @@ public class UserHandler {
     }
 
     /**
-     *
-     * @param node
+     * Sends the job to specified node
+     * @param node destination node
      */
-    private void sendJob(NodeInfo node, String fileName) {
+    private void sendJob(NodeInfo node) {
         TTransport transport = new TSocket("localhost", node.getPort());
-        Task task = null;
-
-        try {
-            //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
-            task = new Task(123, 00001, convertFileToByteBuffer(fileName), "Sending a Temp task data in a String.",
-                    "org.test.siyapath.CalcDemo",  CommonUtils.serialize(node), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Map taskList = new HashMap<Integer, Task>();
-        taskList.put(1, task);
         try {
             log.info("Sending new job to node: " + node);
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.submitJob(00001, CommonUtils.serialize(context.getNodeInfo()), taskList);
+            client.submitJob(jobId, CommonUtils.serialize(context.getNodeInfo()), taskList);
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 e.printStackTrace();
@@ -137,52 +137,24 @@ public class UserHandler {
     }
 
     /**
-     *
-     * @return ByteBuffer for byte array from given byte-code
-     * @throws IOException
+     * Creates and adds a new task to the job given a task class
+     * @param sFile class for the task to be created
      */
-    public ByteBuffer convertFileToByteBuffer(String fileName) throws IOException {
-
-        /*temporary location has been set*/
-        final String BINARY_FILE_NAME = fileName;
-        File file = new File(BINARY_FILE_NAME);
-        InputStream inputStream = null;
-
-        byte[] bytes = new byte[(int) file.length()];
-        if (file.length() > Integer.MAX_VALUE) {
-            log.error("File is too large.");
-        }
-
+    private void addTask(File sFile) {
         try {
-//            bytes = new byte[(int)file.length()];  TODO: max file size?
-//            if (file.length() > Integer.MAX_VALUE) {
-//                log.error("File is too large.");
-//            }
-            inputStream = new BufferedInputStream(new FileInputStream(file));
-            int offset = 0, numRead;
+            int taskId = taskCounter++;
+            //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
+            Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer(sFile.getAbsolutePath()),
+                    "Sending a Temp task data in a String.","org.test.siyapath.CalcDemo",
+                    CommonUtils.serialize(context.getNodeInfo()), null);
 
-            while (offset < bytes.length
-                    && (numRead = inputStream.read(bytes, offset, bytes.length - offset)) >= 0) {
-                offset += numRead;
-            }
-            // Ensure all the bytes have been read
-            if (offset < bytes.length) {
-                log.warn("Could not completely read file " + file.getName());
-                throw new IOException("Could not completely read file " + file.getName());
-            } else {
-                log.info("Successfully located and read binary.");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            taskList.put(taskId, task);
+
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
         }
-        return ByteBuffer.wrap(bytes);
     }
+
 
     /**
      *
@@ -238,7 +210,7 @@ public class UserHandler {
 
             isRunning = true;
             while (isRunning) {
-                pollStatusOfJob(00001);
+                pollStatusOfJob(jobId);
                 try {
                     sleep(10000);
                 } catch (InterruptedException e) {
