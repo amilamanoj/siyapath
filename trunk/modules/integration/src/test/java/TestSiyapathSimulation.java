@@ -2,6 +2,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathNode;
 import org.siyapath.client.UserHandler;
@@ -61,11 +62,13 @@ public class TestSiyapathSimulation extends TestCase {
 
         log.info("Waiting until bootstrapper is started...");
 
+        while (bootStrapperNode.getNodeContext().getNodeStatus() != NodeContext.NodeStatus.LISTENING) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
 
         log.info("Bootstrapper is up. continuing simulation");
     }
@@ -87,6 +90,8 @@ public class TestSiyapathSimulation extends TestCase {
             log.info("Starting node: " + sNode.getNodeContext().getNodeInfo().getNodeId());
             sNode.startSiyapathNode();
         }
+
+        //TODO: wait until all nodes started to proceed
     }
 
     private void submitJobs() {

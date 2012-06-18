@@ -13,6 +13,13 @@ import java.util.Set;
  */
 public class NodeContext {
 
+    public enum NodeStatus {
+        CREATED,
+        STARTING,
+        LISTENING,
+        PROCESSING
+    }
+
     /**
      * This node's information
      */
@@ -25,20 +32,8 @@ public class NodeContext {
     private boolean isBackup;
     private HashSet<NodeResource> memberResource;
 
-    /**
-     * @return information of this node
-     */
-    public NodeInfo getNodeInfo() {
-        return nodeInfo;
-    }
+    private NodeStatus nodeStatus;
 
-    /**
-     * Sets this node's information
-     * @param nodeInfo node information
-     */
-    public void setNodeInfo(NodeInfo nodeInfo) {
-        this.nodeInfo = nodeInfo;
-    }
     private NodeResource nodeResource;
 
     /**
@@ -50,7 +45,15 @@ public class NodeContext {
         this.jobHandlerList =  new ArrayList<JobHandler>();
         nodeInfo = new NodeInfo();
         nodeResource = new NodeResource(nodeInfo);
+        nodeStatus = NodeStatus.CREATED;
+    }
 
+    public NodeStatus getNodeStatus(){
+        return nodeStatus;
+    }
+
+    public void setNodeStatus(NodeStatus status) {
+        nodeStatus = status;
     }
 
     /**
@@ -129,6 +132,21 @@ public class NodeContext {
 
     public void setNodeResource(NodeResource nodeResource) {
         this.nodeResource = nodeResource;
+    }
+
+    /**
+     * @return information of this node
+     */
+    public NodeInfo getNodeInfo() {
+        return nodeInfo;
+    }
+
+    /**
+     * Sets this node's information
+     * @param nodeInfo node information
+     */
+    public void setNodeInfo(NodeInfo nodeInfo) {
+        this.nodeInfo = nodeInfo;
     }
 
     /**
