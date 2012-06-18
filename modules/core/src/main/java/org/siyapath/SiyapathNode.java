@@ -25,7 +25,7 @@ public class SiyapathNode {
     private NodeContext nodeContext;
 
 
-    public SiyapathNode(NodeInfo nodeInfo){
+    public SiyapathNode(NodeInfo nodeInfo) {
         nodeContext = new NodeContext();
         handler = new SiyapathService(nodeContext);
         processor = new Siyapath.Processor(handler);
@@ -33,7 +33,6 @@ public class SiyapathNode {
     }
 
     /**
-     *
      * @param args
      */
     public static void main(String[] args) {
@@ -43,30 +42,27 @@ public class SiyapathNode {
     }
 
     public void startSiyapathNode() {
-        try {
-            log.info("Initializing Siyapath Node...");
+        log.info("Initializing Siyapath Node...");
+        nodeContext.setNodeStatus(NodeContext.NodeStatus.STARTING);
 
-            if (!connectToBootStrapper()) {
-                log.info("OK, I'm gonna be the bootstrapper");
-                nodeContext.setBootstrapper(true);
-                nodeContext.getNodeInfo().setPort(FrameworkInformation.BOOTSTRAP_PORT);
-            } else {
-                log.info("Bootstrapper is up and running");
-            }
-
-            peerListener = new PeerListener(processor, nodeContext.getNodeInfo().getPort());
-            peerListener.start();
-
-            peerWorker = new PeerWorker(nodeContext);
-            peerWorker.start();
-
-        } catch (Exception x) {
-            x.printStackTrace();
+        if (!connectToBootStrapper()) {
+            log.info("OK, I'm gonna be the bootstrapper");
+            nodeContext.setBootstrapper(true);
+            nodeContext.getNodeInfo().setPort(FrameworkInformation.BOOTSTRAP_PORT);
+        } else {
+            log.info("Bootstrapper is up and running");
         }
+
+        peerListener = new PeerListener(processor, nodeContext.getNodeInfo().getPort());
+        peerListener.start();
+
+        peerWorker = new PeerWorker(nodeContext);
+        peerWorker.start();
+
+        nodeContext.setNodeStatus(NodeContext.NodeStatus.LISTENING);
     }
 
     /**
-     *
      * @return true if a bootstrapper node exists, false otherwise
      */
     private boolean connectToBootStrapper() {
