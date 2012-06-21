@@ -28,7 +28,7 @@ public class PeerWorker {
     }
 
     public void start() {
-        new WorkerThread().start();
+        new WorkerThread("ListenerThread-" + nodeContext.getNodeInfo().toString()).start();
     }
 
     private void initiateMembers() {
@@ -42,7 +42,7 @@ public class PeerWorker {
 
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
-                System.out.println("Could not connect to the bootstrapper :(");
+                log.error("Could not connect to the bootstrapper :(");
             }
 
         } catch (TException e) {
@@ -56,6 +56,10 @@ public class PeerWorker {
     private class WorkerThread extends Thread {
 
         public boolean isRunning = false;
+
+        private WorkerThread(String name) {
+            super(name);
+        }
 
         @Override
         public void run() {
