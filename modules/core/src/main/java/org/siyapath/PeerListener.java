@@ -18,17 +18,17 @@ public class PeerListener {
 
     private TServerTransport serverTransport;
     private TServer server;
-    private int port;
     private CountDownLatch cdLatch;
+    private NodeContext nodeContext;
 
 
     /**
      *
      * @param processor
-     * @param port
+     * @param nodeContext
      */
-    public PeerListener(Siyapath.Processor processor, int port) {
-        this.port = port;
+    public PeerListener(Siyapath.Processor processor, NodeContext nodeContext) {
+        this.nodeContext = nodeContext;
         initializeThriftServer(processor);
     }
 
@@ -38,8 +38,8 @@ public class PeerListener {
      */
     private void initializeThriftServer(Siyapath.Processor processor) {
         try {
-            log.info("Initializing thrift server with the port:" + port);
-            serverTransport = new TServerSocket(port);
+            log.info("Initializing thrift server with the port:" + nodeContext.getNodeInfo().getPort());
+            serverTransport = new TServerSocket(nodeContext.getNodeInfo().getPort());
             server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
             // Use this for a multithreaded server
             // TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
@@ -50,12 +50,12 @@ public class PeerListener {
 
     public void start() {
         log.info("Starting to listen for incoming connections");
-        new ListenerThread().start();
+        new ListenerThread("ListenerThread-" + nodeContext.getNodeInfo().toString()).start();
         while (!isRunning()) {
             log.debug("Waiting until the listener is started...");
 
         }
-        log.info("Now listening for incoming connections on port " + port);
+        log.info("Now listening for incoming connections on port " + nodeContext.getNodeInfo().getPort());
 
     }
 
@@ -73,6 +73,10 @@ public class PeerListener {
     }
 
     private class ListenerThread extends Thread {
+
+        private ListenerThread(String name) {
+            super(name);
+        }
 
         @Override
         public void run() {

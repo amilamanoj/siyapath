@@ -9,17 +9,17 @@ import org.siyapath.client.UserHandler;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class TestSiyapathSimulation extends TestCase {
 
     private static final Log log = LogFactory.getLog(TestSiyapathSimulation.class);
     private int nodeCount;
-    private SiyapathNode bootStrapperNode;
-    private ArrayList<SiyapathNode> nodeList;
+    private ArrayList<SiyapathNodeController> controllerList;
     private UserHandler userHandler;
 
     public TestSiyapathSimulation() {
-        nodeList = new ArrayList<SiyapathNode>();
+        controllerList = new ArrayList<SiyapathNodeController>();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TestSiyapathSimulation extends TestCase {
             startNodes();
             submitJobs();
 
-            Thread.sleep(10000);
+//            Thread.sleep(10000);
 
             log.info("Total nodes: " + nodeCount);
             Assert.assertEquals("a", "a");
@@ -50,68 +50,54 @@ public class TestSiyapathSimulation extends TestCase {
         } catch (NumberFormatException e) {
             log.info("Skipping simulation");
         }
-
     }
 
     private void startBootStrapper() {
         log.info("Starting Bootstrapper Node");
         NodeInfo bootStrapperInfo = new NodeInfo();
-        bootStrapperNode = new SiyapathNode(bootStrapperInfo);
+        SiyapathNode bootStrapperNode = new SiyapathNode(bootStrapperInfo);
 
-        bootStrapperNode.startSiyapathNode();
+        SiyapathNodeController bootStrapperController = new SiyapathNodeController(bootStrapperNode, null);
 
-        log.info("Waiting until bootstrapper is started...");
+        bootStrapperController.start();
 
-        while (bootStrapperNode.getNodeContext().getNodeStatus() != NodeContext.NodeStatus.LISTENING) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        log.info("Waiting until bootstrapper is started...");
 
         log.info("Bootstrapper is up. continuing simulation");
     }
 
     private void startNodes() {
+        CountDownLatch cdLatch = new CountDownLatch(nodeCount);
         log.info("Preparing to start Nodes. Total Nodes: " + nodeCount);
         log.info("Creating nodes...");
         for (int i = 0; i < nodeCount; i++) {
             NodeInfo nodeInfo = new NodeInfo();
             nodeInfo.setNodeId(CommonUtils.getRandomPort());
             nodeInfo.setPort(nodeInfo.getNodeId());
-            log.info("Creating node with port: " + nodeInfo);
+            log.info("Creating node: " + nodeInfo);
             SiyapathNode node = new SiyapathNode(nodeInfo);
-            nodeList.add(node);
+            SiyapathNodeController nodeController = new SiyapathNodeController(node, cdLatch);
+            controllerList.add(nodeController);
         }
 
         log.info("Starting nodes...");
-        for (SiyapathNode sNode : nodeList) {
-            log.info("Starting node: " + sNode.getNodeContext().getNodeInfo().getNodeId());
-            sNode.startSiyapathNode();
+        for (SiyapathNodeController nController : controllerList) {
+            nController.startNonBlocking();
         }
 
-        //TODO: wait until all nodes started to proceed
+        log.info("Waiting until all nodes are started...");
+        try {
+            cdLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("All nodes are started.");
+
     }
 
     private void submitJobs() {
         userHandler = new UserHandler();
 //        userHandler.submitJob();
     }
-
-//    class NodeThread extends Thread {
-//
-//        public boolean isRunning = false;
-//
-//        public void run() {
-//            bootStrapperNode.startSiyapathNode();
-//            try {
-//                wait(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            isRunning = true;
-//        }
-//    }
 
 }
