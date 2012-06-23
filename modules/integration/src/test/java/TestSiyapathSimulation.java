@@ -2,7 +2,6 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathNode;
 import org.siyapath.client.UserHandler;
@@ -40,9 +39,9 @@ public class TestSiyapathSimulation extends TestCase {
 
             startBootStrapper();
             startNodes();
-            submitJobs();
-
-//            Thread.sleep(10000);
+//            waitForGossip();
+            prepareJob();
+//            submitJobs();
 
             log.info("Total nodes: " + nodeCount);
             Assert.assertEquals("a", "a");
@@ -50,6 +49,17 @@ public class TestSiyapathSimulation extends TestCase {
         } catch (NumberFormatException e) {
             log.info("Skipping simulation");
         }
+    }
+
+    private void waitForGossip() {
+        log.info("Waiting for nodes to gossip");
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("Continuing simulation...");
+
     }
 
     private void startBootStrapper() {
@@ -85,7 +95,7 @@ public class TestSiyapathSimulation extends TestCase {
             nController.startNonBlocking();
         }
 
-        log.info("Waiting until all nodes are started...");
+        log.info("Waiting until all nodes are started");
         try {
             cdLatch.await();
         } catch (InterruptedException e) {
@@ -96,8 +106,18 @@ public class TestSiyapathSimulation extends TestCase {
     }
 
     private void submitJobs() {
+        log.info("Preparing to submit sample jobs");
         userHandler = new UserHandler();
-//        userHandler.submitJob();
+//        Map<String,File> taskFileList = new HashMap<String, File>();
+//        userHandler.submitJob(taskFileList);
+    }
+
+
+    private boolean prepareJob() {
+//        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+//        int result = compiler.run(null, null, null, )
+//        System.out.println(new File("./modules/integration/target/test-classes").getAbsolutePath());
+        return true;
     }
 
 }
