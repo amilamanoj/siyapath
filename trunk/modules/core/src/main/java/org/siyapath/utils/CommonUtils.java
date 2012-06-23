@@ -162,9 +162,7 @@ public class CommonUtils {
      */
     public static ByteBuffer convertFileToByteBuffer(String fileName) throws IOException {
 
-        /*temporary location has been set*/
-        final String BINARY_FILE_NAME = fileName;
-        File file = new File(BINARY_FILE_NAME);
+        File file = new File(fileName);
         InputStream inputStream = null;
 
         byte[] bytes = new byte[(int) file.length()];
