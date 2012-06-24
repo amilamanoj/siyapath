@@ -127,7 +127,7 @@ public class NodeContext {
     }
 
     public NodeResource getNodeResource() {
-        return nodeResource;
+        return nodeResource.refreshProperties();
     }
 
     public void setNodeResource(NodeResource nodeResource) {
