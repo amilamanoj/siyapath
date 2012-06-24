@@ -35,6 +35,14 @@ public class NodeResource {
     }
 
     /**
+     * @return NodeResource
+     */
+    public NodeResource refreshProperties(){
+          this.initNodeProperties();
+        return this;
+    }
+
+    /**
      * @return CPUInfo
      */
     private String getCPUInfo() {

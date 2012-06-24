@@ -38,7 +38,7 @@ public class PeerWorker {
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             Set<NodeInfo> newNodes = CommonUtils.deSerialize(client.getMembers());
-            nodeContext.updateMemberSet(newNodes);  //TODO: remove self
+            nodeContext.updateMemberSet(removeSelf(newNodes));
 
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
@@ -51,6 +51,13 @@ public class PeerWorker {
         } finally {
             transport.close();
         }
+    }
+
+    private Set<NodeInfo> removeSelf(Set<NodeInfo> nodes){
+            if(nodes.contains(nodeContext.getNodeInfo())){
+                nodes.remove(nodeContext.getNodeInfo());
+            }
+          return nodes;
     }
 
     private class WorkerThread extends Thread {
