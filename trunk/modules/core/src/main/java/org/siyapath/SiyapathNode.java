@@ -26,10 +26,9 @@ public class SiyapathNode {
 
 
     public SiyapathNode(NodeInfo nodeInfo) {
-        nodeContext = new NodeContext();
+        nodeContext = new NodeContext(nodeInfo);
         handler = new SiyapathService(nodeContext);
         processor = new Siyapath.Processor(handler);
-        nodeContext.setNodeInfo(nodeInfo);
     }
 
     /**

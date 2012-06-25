@@ -50,8 +50,8 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public Set<NodeData> memberDiscovery(Set<NodeData> knownNodes) throws TException {
-        return CommonUtils.serialize(gossipImpl.memberDiscovery(CommonUtils.deSerialize(knownNodes)));
+    public Set<NodeData> memberDiscovery(NodeData nodeData,Set<NodeData> knownNodes) throws TException {
+        return CommonUtils.serialize(gossipImpl.memberDiscovery(CommonUtils.deSerialize(nodeData),CommonUtils.deSerialize(knownNodes)));
     }
 
     /**
