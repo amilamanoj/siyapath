@@ -94,7 +94,7 @@ public class NodeInfo {
 
     @Override
     public int hashCode() {
-        return nodeId;
+        return this.nodeId;
     }
 
     @Override

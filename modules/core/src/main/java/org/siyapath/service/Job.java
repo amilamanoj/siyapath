@@ -30,8 +30,9 @@ import org.slf4j.LoggerFactory;
 public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Job");
 
-  private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.I32, (short)1);
-  private static final org.apache.thrift.protocol.TField RECIPIENT_FIELD_DESC = new org.apache.thrift.protocol.TField("recipient", org.apache.thrift.protocol.TType.I32, (short)2);
+  private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.I32, (short)2);
+  private static final org.apache.thrift.protocol.TField TASKS_FIELD_DESC = new org.apache.thrift.protocol.TField("tasks", org.apache.thrift.protocol.TType.MAP, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -39,13 +40,15 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     schemes.put(TupleScheme.class, new JobTupleSchemeFactory());
   }
 
+  public int jobID; // required
   public int sender; // required
-  public int recipient; // required
+  public Map<Integer,Task> tasks; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    SENDER((short)1, "sender"),
-    RECIPIENT((short)2, "recipient");
+    JOB_ID((short)1, "jobID"),
+    SENDER((short)2, "sender"),
+    TASKS((short)3, "tasks");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -60,10 +63,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // SENDER
+        case 1: // JOB_ID
+          return JOB_ID;
+        case 2: // SENDER
           return SENDER;
-        case 2: // RECIPIENT
-          return RECIPIENT;
+        case 3: // TASKS
+          return TASKS;
         default:
           return null;
       }
@@ -104,16 +109,20 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   }
 
   // isset id assignments
-  private static final int __SENDER_ISSET_ID = 0;
-  private static final int __RECIPIENT_ISSET_ID = 1;
+  private static final int __JOBID_ISSET_ID = 0;
+  private static final int __SENDER_ISSET_ID = 1;
   private BitSet __isset_bit_vector = new BitSet(2);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+    tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     tmpMap.put(_Fields.SENDER, new org.apache.thrift.meta_data.FieldMetaData("sender", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.RECIPIENT, new org.apache.thrift.meta_data.FieldMetaData("recipient", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.TASKS, new org.apache.thrift.meta_data.FieldMetaData("tasks", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+            new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
+            new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Task.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Job.class, metaDataMap);
   }
@@ -122,14 +131,16 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   }
 
   public Job(
+    int jobID,
     int sender,
-    int recipient)
+    Map<Integer,Task> tasks)
   {
     this();
+    this.jobID = jobID;
+    setJobIDIsSet(true);
     this.sender = sender;
     setSenderIsSet(true);
-    this.recipient = recipient;
-    setRecipientIsSet(true);
+    this.tasks = tasks;
   }
 
   /**
@@ -138,8 +149,23 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   public Job(Job other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
+    this.jobID = other.jobID;
     this.sender = other.sender;
-    this.recipient = other.recipient;
+    if (other.isSetTasks()) {
+      Map<Integer,Task> __this__tasks = new HashMap<Integer,Task>();
+      for (Map.Entry<Integer, Task> other_element : other.tasks.entrySet()) {
+
+        Integer other_element_key = other_element.getKey();
+        Task other_element_value = other_element.getValue();
+
+        Integer __this__tasks_copy_key = other_element_key;
+
+        Task __this__tasks_copy_value = new Task(other_element_value);
+
+        __this__tasks.put(__this__tasks_copy_key, __this__tasks_copy_value);
+      }
+      this.tasks = __this__tasks;
+    }
   }
 
   public Job deepCopy() {
@@ -148,10 +174,34 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   @Override
   public void clear() {
+    setJobIDIsSet(false);
+    this.jobID = 0;
     setSenderIsSet(false);
     this.sender = 0;
-    setRecipientIsSet(false);
-    this.recipient = 0;
+    this.tasks = null;
+  }
+
+  public int getJobID() {
+    return this.jobID;
+  }
+
+  public Job setJobID(int jobID) {
+    this.jobID = jobID;
+    setJobIDIsSet(true);
+    return this;
+  }
+
+  public void unsetJobID() {
+    __isset_bit_vector.clear(__JOBID_ISSET_ID);
+  }
+
+  /** Returns true if field jobID is set (has been assigned a value) and false otherwise */
+  public boolean isSetJobID() {
+    return __isset_bit_vector.get(__JOBID_ISSET_ID);
+  }
+
+  public void setJobIDIsSet(boolean value) {
+    __isset_bit_vector.set(__JOBID_ISSET_ID, value);
   }
 
   public int getSender() {
@@ -177,31 +227,51 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     __isset_bit_vector.set(__SENDER_ISSET_ID, value);
   }
 
-  public int getRecipient() {
-    return this.recipient;
+  public int getTasksSize() {
+    return (this.tasks == null) ? 0 : this.tasks.size();
   }
 
-  public Job setRecipient(int recipient) {
-    this.recipient = recipient;
-    setRecipientIsSet(true);
+  public void putToTasks(int key, Task val) {
+    if (this.tasks == null) {
+      this.tasks = new HashMap<Integer,Task>();
+    }
+    this.tasks.put(key, val);
+  }
+
+  public Map<Integer,Task> getTasks() {
+    return this.tasks;
+  }
+
+  public Job setTasks(Map<Integer,Task> tasks) {
+    this.tasks = tasks;
     return this;
   }
 
-  public void unsetRecipient() {
-    __isset_bit_vector.clear(__RECIPIENT_ISSET_ID);
+  public void unsetTasks() {
+    this.tasks = null;
   }
 
-  /** Returns true if field recipient is set (has been assigned a value) and false otherwise */
-  public boolean isSetRecipient() {
-    return __isset_bit_vector.get(__RECIPIENT_ISSET_ID);
+  /** Returns true if field tasks is set (has been assigned a value) and false otherwise */
+  public boolean isSetTasks() {
+    return this.tasks != null;
   }
 
-  public void setRecipientIsSet(boolean value) {
-    __isset_bit_vector.set(__RECIPIENT_ISSET_ID, value);
+  public void setTasksIsSet(boolean value) {
+    if (!value) {
+      this.tasks = null;
+    }
   }
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
+    case JOB_ID:
+      if (value == null) {
+        unsetJobID();
+      } else {
+        setJobID((Integer)value);
+      }
+      break;
+
     case SENDER:
       if (value == null) {
         unsetSender();
@@ -210,11 +280,11 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       }
       break;
 
-    case RECIPIENT:
+    case TASKS:
       if (value == null) {
-        unsetRecipient();
+        unsetTasks();
       } else {
-        setRecipient((Integer)value);
+        setTasks((Map<Integer,Task>)value);
       }
       break;
 
@@ -223,11 +293,14 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
+    case JOB_ID:
+      return Integer.valueOf(getJobID());
+
     case SENDER:
       return Integer.valueOf(getSender());
 
-    case RECIPIENT:
-      return Integer.valueOf(getRecipient());
+    case TASKS:
+      return getTasks();
 
     }
     throw new IllegalStateException();
@@ -240,10 +313,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     }
 
     switch (field) {
+    case JOB_ID:
+      return isSetJobID();
     case SENDER:
       return isSetSender();
-    case RECIPIENT:
-      return isSetRecipient();
+    case TASKS:
+      return isSetTasks();
     }
     throw new IllegalStateException();
   }
@@ -261,6 +336,15 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     if (that == null)
       return false;
 
+    boolean this_present_jobID = true;
+    boolean that_present_jobID = true;
+    if (this_present_jobID || that_present_jobID) {
+      if (!(this_present_jobID && that_present_jobID))
+        return false;
+      if (this.jobID != that.jobID)
+        return false;
+    }
+
     boolean this_present_sender = true;
     boolean that_present_sender = true;
     if (this_present_sender || that_present_sender) {
@@ -270,12 +354,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return false;
     }
 
-    boolean this_present_recipient = true;
-    boolean that_present_recipient = true;
-    if (this_present_recipient || that_present_recipient) {
-      if (!(this_present_recipient && that_present_recipient))
+    boolean this_present_tasks = true && this.isSetTasks();
+    boolean that_present_tasks = true && that.isSetTasks();
+    if (this_present_tasks || that_present_tasks) {
+      if (!(this_present_tasks && that_present_tasks))
         return false;
-      if (this.recipient != that.recipient)
+      if (!this.tasks.equals(that.tasks))
         return false;
     }
 
@@ -295,6 +379,16 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     int lastComparison = 0;
     Job typedOther = (Job)other;
 
+    lastComparison = Boolean.valueOf(isSetJobID()).compareTo(typedOther.isSetJobID());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetJobID()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.jobID, typedOther.jobID);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     lastComparison = Boolean.valueOf(isSetSender()).compareTo(typedOther.isSetSender());
     if (lastComparison != 0) {
       return lastComparison;
@@ -305,12 +399,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetRecipient()).compareTo(typedOther.isSetRecipient());
+    lastComparison = Boolean.valueOf(isSetTasks()).compareTo(typedOther.isSetTasks());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetRecipient()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.recipient, typedOther.recipient);
+    if (isSetTasks()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tasks, typedOther.tasks);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -335,12 +429,20 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     StringBuilder sb = new StringBuilder("Job(");
     boolean first = true;
 
+    sb.append("jobID:");
+    sb.append(this.jobID);
+    first = false;
+    if (!first) sb.append(", ");
     sb.append("sender:");
     sb.append(this.sender);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("recipient:");
-    sb.append(this.recipient);
+    sb.append("tasks:");
+    if (this.tasks == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.tasks);
+    }
     first = false;
     sb.append(")");
     return sb.toString();
@@ -386,7 +488,15 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
           break;
         }
         switch (schemeField.id) {
-          case 1: // SENDER
+          case 1: // JOB_ID
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.jobID = iprot.readI32();
+              struct.setJobIDIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 2: // SENDER
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
               struct.sender = iprot.readI32();
               struct.setSenderIsSet(true);
@@ -394,10 +504,23 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // RECIPIENT
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.recipient = iprot.readI32();
-              struct.setRecipientIsSet(true);
+          case 3: // TASKS
+            if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
+              {
+                org.apache.thrift.protocol.TMap _map10 = iprot.readMapBegin();
+                struct.tasks = new HashMap<Integer,Task>(2*_map10.size);
+                for (int _i11 = 0; _i11 < _map10.size; ++_i11)
+                {
+                  int _key12; // required
+                  Task _val13; // required
+                  _key12 = iprot.readI32();
+                  _val13 = new Task();
+                  _val13.read(iprot);
+                  struct.tasks.put(_key12, _val13);
+                }
+                iprot.readMapEnd();
+              }
+              struct.setTasksIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -417,12 +540,25 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
+      oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
+      oprot.writeI32(struct.jobID);
+      oprot.writeFieldEnd();
       oprot.writeFieldBegin(SENDER_FIELD_DESC);
       oprot.writeI32(struct.sender);
       oprot.writeFieldEnd();
-      oprot.writeFieldBegin(RECIPIENT_FIELD_DESC);
-      oprot.writeI32(struct.recipient);
-      oprot.writeFieldEnd();
+      if (struct.tasks != null) {
+        oprot.writeFieldBegin(TASKS_FIELD_DESC);
+        {
+          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.tasks.size()));
+          for (Map.Entry<Integer, Task> _iter14 : struct.tasks.entrySet())
+          {
+            oprot.writeI32(_iter14.getKey());
+            _iter14.getValue().write(oprot);
+          }
+          oprot.writeMapEnd();
+        }
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -441,32 +577,61 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     public void write(org.apache.thrift.protocol.TProtocol prot, Job struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       BitSet optionals = new BitSet();
-      if (struct.isSetSender()) {
+      if (struct.isSetJobID()) {
         optionals.set(0);
       }
-      if (struct.isSetRecipient()) {
+      if (struct.isSetSender()) {
         optionals.set(1);
       }
-      oprot.writeBitSet(optionals, 2);
+      if (struct.isSetTasks()) {
+        optionals.set(2);
+      }
+      oprot.writeBitSet(optionals, 3);
+      if (struct.isSetJobID()) {
+        oprot.writeI32(struct.jobID);
+      }
       if (struct.isSetSender()) {
         oprot.writeI32(struct.sender);
       }
-      if (struct.isSetRecipient()) {
-        oprot.writeI32(struct.recipient);
+      if (struct.isSetTasks()) {
+        {
+          oprot.writeI32(struct.tasks.size());
+          for (Map.Entry<Integer, Task> _iter15 : struct.tasks.entrySet())
+          {
+            oprot.writeI32(_iter15.getKey());
+            _iter15.getValue().write(oprot);
+          }
+        }
       }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Job struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(2);
+      BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
+        struct.jobID = iprot.readI32();
+        struct.setJobIDIsSet(true);
+      }
+      if (incoming.get(1)) {
         struct.sender = iprot.readI32();
         struct.setSenderIsSet(true);
       }
-      if (incoming.get(1)) {
-        struct.recipient = iprot.readI32();
-        struct.setRecipientIsSet(true);
+      if (incoming.get(2)) {
+        {
+          org.apache.thrift.protocol.TMap _map16 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+          struct.tasks = new HashMap<Integer,Task>(2*_map16.size);
+          for (int _i17 = 0; _i17 < _map16.size; ++_i17)
+          {
+            int _key18; // required
+            Task _val19; // required
+            _key18 = iprot.readI32();
+            _val19 = new Task();
+            _val19.read(iprot);
+            struct.tasks.put(_key18, _val19);
+          }
+        }
+        struct.setTasksIsSet(true);
       }
     }
   }

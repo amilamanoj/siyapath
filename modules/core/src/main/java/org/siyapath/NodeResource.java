@@ -75,14 +75,14 @@ public class NodeResource {
      */
     public NodeInfo getNodeInfo() {
 
-        return nodeInfo;
+        return this.nodeInfo;
     }
 
     /**
      * @return nodeProperties
      */
     public HashMap<String, String> getNodeProperties() {
-        return nodeProperties;
+        return this.nodeProperties;
     }
 
 }

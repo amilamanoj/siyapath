@@ -13,6 +13,7 @@ import org.siyapath.service.*;
 
 import org.siyapath.utils.CommonUtils;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.net.ConnectException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,11 +38,13 @@ public class GossipImpl {
      * @param receivedMemberSet member set received from remote node
      * @return the initial member set of this node
      */
-    public Set<NodeInfo> memberDiscovery(Set<NodeInfo> receivedMemberSet) {
+    public Set<NodeInfo> memberDiscovery(NodeInfo nodeInfo, Set<NodeInfo> receivedMemberSet) {
         log.info("Remote node invoked member gossip with this node");
         Set<NodeInfo> initialSet = nodeContext.getMemberSet();
         Set<NodeInfo> newSet = mergeSets(initialSet, receivedMemberSet);
         nodeContext.updateMemberSet(newSet);
+        nodeContext.addMemNodeSet(nodeInfo, receivedMemberSet);
+
         return initialSet;
     }
 
@@ -54,7 +57,7 @@ public class GossipImpl {
      * @return the node resource of this node
      */
     public NodeResource resourceGossip(NodeResource receivedNodeResource) {
-        log.info("Remote node invoked member gossip resource with this node");
+        log.info("Remote node invoked member gossip resource with this node :" + nodeContext.getNodeInfo().getPort());
         HashSet<NodeResource> initialSet = nodeContext.getMemberResourceSet();
         HashSet<NodeResource> newSet = mergeNewNodeResource(initialSet, receivedNodeResource);
         nodeContext.updateMemberResourceSet(newSet);
@@ -76,9 +79,11 @@ public class GossipImpl {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
-                Set<NodeInfo> discoveredNodes = CommonUtils.deSerialize(client.memberDiscovery(CommonUtils.serialize(nodeContext.getMemberSet())));
+                HashSet<NodeInfo> nodesToGossip = getDiff(randomMember);
+                Set<NodeInfo> discoveredNodes = CommonUtils.deSerialize(client.memberDiscovery(CommonUtils.serialize(nodeContext.getNodeInfo()), CommonUtils.serialize(nodesToGossip)));
                 Set<NodeInfo> newSet = mergeSets(nodeContext.getMemberSet(), discoveredNodes);
                 nodeContext.updateMemberSet(newSet);
+                nodeContext.addMemNodeSet(randomMember, discoveredNodes);
                 log.info("members Fetched:");
                 for (NodeInfo i : discoveredNodes) {
                     log.info(i);
@@ -116,7 +121,7 @@ public class GossipImpl {
                 NodeResource discoveredNodeResource = CommonUtils.deSerialize(client.resourceGossip(CommonUtils.serialize(nodeContext.getNodeResource())));
                 HashSet<NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodeResource);
                 nodeContext.updateMemberResourceSet(newSet);
-                log.info("Node Resource Fetched:" + discoveredNodeResource.getNodeInfo());
+                log.info("Node Resource Fetched:" + discoveredNodeResource.getNodeInfo().getPort());
 
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
@@ -164,11 +169,11 @@ public class GossipImpl {
     private HashSet<NodeResource> mergeNewNodeResource(HashSet initialSet, NodeResource discoveredNodeResource) {
         HashSet<NodeResource> newSet = initialSet;
         if (newSet.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
-            if (!newSet.contains(discoveredNodeResource) && !discoveredNodeResource.equals(nodeContext.getNodeResource())) {
+            if (!discoveredNodeResource.equals(nodeContext.getNodeResource())) {
                 newSet.add(discoveredNodeResource);
             }
         } else {
-            if (!newSet.contains(discoveredNodeResource) && !discoveredNodeResource.equals(nodeContext.getNodeResource())) {
+            if (!discoveredNodeResource.equals(nodeContext.getNodeResource())) {
                 newSet.remove(newSet.iterator().next());
                 newSet.add(discoveredNodeResource);
             }
@@ -176,5 +181,22 @@ public class GossipImpl {
         }
 
         return newSet;
+    }
+
+    private HashSet<NodeInfo> getDiff(NodeInfo gossipMember) {
+        HashSet<NodeInfo> tempSet = new HashSet<NodeInfo>();
+        HashSet<NodeInfo> initialSet = (HashSet<NodeInfo>) nodeContext.getMemberSet();
+        HashSet<NodeInfo> memberSet = (HashSet<NodeInfo>) nodeContext.getMemNodeSet(gossipMember);
+        if (memberSet != null) {
+            Iterator members = memberSet.iterator();
+            while (members.hasNext()) {
+                NodeInfo newNode = (NodeInfo) members.next();
+                if (!initialSet.contains(newNode)) {
+                    tempSet.add(newNode);
+                }
+            }
+            return tempSet;
+        }
+        return initialSet;
     }
 }

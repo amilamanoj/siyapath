@@ -49,7 +49,7 @@ service Siyapath {
     bool notifyPresence(1:NodeData nodeData),
 
     //Gossiping known member list
-    set<NodeData> memberDiscovery(1:set<NodeData> knownNodes),
+    set<NodeData> memberDiscovery(1:NodeData nodeData, 2:set<NodeData> knownNodes),
 
     //Retrieving current set of known members. TODO: review the return type 'set'
     set<NodeData> getMembers(),

@@ -3,9 +3,10 @@ package org.siyapath;
 import org.siyapath.job.JobHandler;
 import org.siyapath.utils.CommonUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import javax.xml.bind.SchemaOutputResolver;
+import javax.xml.stream.events.NotationDeclaration;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The NodeContext holds runtime information
@@ -29,6 +30,7 @@ public class NodeContext {
      * List of known member nodes
      */
     private HashSet<NodeInfo> members;
+    private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;  //TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
     private boolean isBackup;
     private HashSet<NodeResource> memberResource;
 
@@ -36,19 +38,21 @@ public class NodeContext {
 
     private NodeResource nodeResource;
 
+
     /**
      *
      */
-    public NodeContext() {
+    public NodeContext(NodeInfo nodeInfo) {
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashSet<NodeResource>();
-        this.jobHandlerList =  new ArrayList<JobHandler>();
-        nodeInfo = new NodeInfo();
+        this.jobHandlerList = new ArrayList<JobHandler>();
+        this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
+        this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
         nodeStatus = NodeStatus.CREATED;
     }
 
-    public NodeStatus getNodeStatus(){
+    public NodeStatus getNodeStatus() {
         return nodeStatus;
     }
 
@@ -79,6 +83,27 @@ public class NodeContext {
      */
     public void addMember(NodeInfo member) {
         members.add(member);
+    }
+
+    public void addMemNodeSet(NodeInfo member, Set<NodeInfo> nodeSet) {
+        if (members.contains(member)) {
+            this.memWithNodeSet.put(member, (HashSet<NodeInfo>) nodeSet);
+        }
+    }
+
+    public void updateMemNodeSet() {  //TODO:uses concurrent Hashmap, Synchronized block?
+        Iterator nodes = memWithNodeSet.keySet().iterator();
+        while (nodes.hasNext()) {
+            NodeInfo newNode = (NodeInfo) nodes.next();
+            if (!members.contains(newNode)) {
+                memWithNodeSet.remove(newNode);
+            }
+        }
+
+    }
+
+    public Set<NodeInfo> getMemNodeSet(NodeInfo member) {
+        return this.memWithNodeSet.get(member);
     }
 
     /**
@@ -115,6 +140,7 @@ public class NodeContext {
      */
     public void updateMemberSet(Set<NodeInfo> newSet) {
         members = (HashSet<NodeInfo>) newSet;
+        updateMemNodeSet();  //TODO:Concurrency Control
     }
 
     /**
@@ -143,6 +169,7 @@ public class NodeContext {
 
     /**
      * Sets this node's information
+     *
      * @param nodeInfo node information
      */
     public void setNodeInfo(NodeInfo nodeInfo) {
@@ -171,5 +198,13 @@ public class NodeContext {
 
     public void addJob(JobHandler jobHandler) {
         jobHandlerList.add(jobHandler);
+    }
+
+    public ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> getMemWithNodeSet() {
+        return memWithNodeSet;
+    }
+
+    public void setMemWithNodeSet(ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet) {
+        this.memWithNodeSet = memWithNodeSet;
     }
 }
