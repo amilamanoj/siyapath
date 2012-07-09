@@ -48,6 +48,26 @@ public class GossipImpl {
         return initialSet;
     }
 
+    /**
+     * Is invoked when a remote node requests for
+     * a member set from bootstrapper
+     *
+     * @return the known member set
+     */
+    public Set<NodeInfo> getMembers() {
+        Set<NodeInfo> members = nodeContext.getMemberSet();
+        Set<NodeInfo> newSet = new HashSet<NodeInfo>();
+        if (members.size() < SiyapathConstants.BOOSTRAPPER_MEMBER_SET_LIMIT) {
+            return members;
+        } else {
+            Iterator memIter = members.iterator();
+            while (memIter.hasNext() && newSet.size() < SiyapathConstants.BOOSTRAPPER_MEMBER_SET_LIMIT) {
+                NodeInfo member = (NodeInfo) memIter.next();
+                newSet.add(member);
+            }
+            return newSet;
+        }
+    }
 
     /**
      * Is invoked when a remote node selects this node and gossips its resource.
