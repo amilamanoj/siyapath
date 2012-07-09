@@ -10,7 +10,6 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.*;
 import org.siyapath.service.*;
-import org.siyapath.gossip.GossipImpl;
 import org.siyapath.monitor.LimitedCpuUsageMonitor;
 import org.siyapath.utils.CommonUtils;
 
@@ -48,16 +47,17 @@ public class TaskProcessor {
     public void processTask() {
         taskClassLoader = new TaskClassLoader();
         try {
-            theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), task.getClassName());
-            Object instanceForTesting = theLoadedClass.newInstance();
-            log.info("Task processing begins.");
-            //currently uses the org.siyapath.sample.CalcDemo.processSampleJob() method
-            Method method = theLoadedClass.getMethod("processSampleJob", null);
-            MonitorThread monitor = new MonitorThread();
-            monitor.start();
-            finalResult = (String) method.invoke(instanceForTesting);
-            monitor.stopMonitor();
+            // TODO: verify if expected name is necessary
+            theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
+            SiyapathTask taskInstance = (SiyapathTask) theLoadedClass.newInstance();
+            log.info("Starting task processing. TaskID: " + task.getTaskID());
+//            MonitorThread monitor = new MonitorThread();
+            taskInstance.process();
+//            monitor.start();
+            finalResult =  (String) taskInstance.getResults();
+//            monitor.stopMonitor();
             log.info("Task processing is completed.");
+            log.info("Results: " + finalResult);
             task.setTaskResult(finalResult);
 //            sendResultToDistributingNode();
         } catch (ClassNotFoundException e) {
@@ -65,10 +65,6 @@ public class TaskProcessor {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
     }

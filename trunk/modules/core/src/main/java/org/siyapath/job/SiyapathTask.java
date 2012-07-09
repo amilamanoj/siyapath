@@ -7,7 +7,7 @@ package org.siyapath.job;
  * Time: 1:54 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface SiyapathJob {
+public interface SiyapathTask {
 
     public void process();
     
