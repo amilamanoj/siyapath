@@ -28,7 +28,8 @@ struct Task {
     4: string taskData,
     5: string className,
     6: NodeData sender,
-    7: string taskResult
+    7: string requiredResources,
+    8: string taskResult
 }
 
 struct Job {

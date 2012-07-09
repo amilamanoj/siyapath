@@ -8,8 +8,19 @@ public class SigarSystemInformation {
 
     private static Sigar sigar = new Sigar();
 
-
     public static String getCPUInformation() {
+        CpuInfo[] cpuInfo = null;
+        try {
+            cpuInfo = sigar.getCpuInfoList();
+
+        } catch (SigarException se) {
+            se.printStackTrace();
+        }
+        return "Cores:" + cpuInfo.length + "-Speed:" + cpuInfo[0].getMhz() + "Mhz";
+    }
+
+
+    public static String getCPUInformationD() {
         CpuInfo[] cpuInfo = null;
         String cpuStat = "";
         try {
