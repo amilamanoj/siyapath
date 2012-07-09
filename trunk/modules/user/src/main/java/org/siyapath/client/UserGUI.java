@@ -1,8 +1,10 @@
 package org.siyapath.client;
 
 import javax.swing.*;
-import java.awt.event.*;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.util.Map;
 
 /*
@@ -13,7 +15,7 @@ public class UserGUI extends JFrame {
     private UserHandler handler;
     private JobEditorGUI jobEditor;
     private String loggedPerson;
-    private Map<String, TaskData> taskFileList;
+    private Map taskFileList;
 
     /**
      * @param handler
