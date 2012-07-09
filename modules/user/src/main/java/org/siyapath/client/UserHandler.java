@@ -11,6 +11,7 @@ import org.apache.thrift.transport.TTransportException;
 import org.siyapath.FrameworkInformation;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
+import org.siyapath.job.SiyapathTask;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
@@ -150,7 +151,7 @@ public class UserHandler {
             int taskId = taskCounter++;
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
             Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer(sFile.getAbsolutePath()),
-                    "Sending a Temp task data in a String.","org.test.siyapath.CalcDemo",
+                    "Sending a Temp task data in a String.", getJobInterfaceName() ,
                     CommonUtils.serialize(context.getNodeInfo()), null);
 
             taskList.put(taskId, task);
@@ -158,6 +159,10 @@ public class UserHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getJobInterfaceName() {
+        return SiyapathTask.class.getName();
     }
 
 

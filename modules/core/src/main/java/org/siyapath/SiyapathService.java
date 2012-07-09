@@ -94,7 +94,7 @@ public class SiyapathService implements Siyapath.Iface {
         log.info("Received a new job. JobID:" + jobID + " from: "+ CommonUtils.deSerialize(sender));
         JobHandler jobHandler = new JobHandler(nodeContext, jobID, tasks);
         nodeContext.addJob(jobHandler);
-        jobHandler.startJob();
+        jobHandler.startScheduling();
         return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + jobID + ":" +  "Accepted";
     }
 
@@ -105,6 +105,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean submitTask(Task task) throws TException {
+        log.info("Received a new task. TaskID:" + task.getTaskID() + " from: "+ CommonUtils.deSerialize(task.getSender()));
         TaskProcessor taskProcessor = new TaskProcessor(task, nodeContext);
         taskProcessor.processTask();
         return true;

@@ -40,7 +40,7 @@ public class JobHandler {
         this.tasks = tasks;
     }
 
-    public void startJob() {
+    public void startScheduling() {
         log.info("Starting job:" + jobId);
         JobThread jobThread = new JobThread();
         jobThread.start();
@@ -51,7 +51,7 @@ public class JobHandler {
         @Override
         public void run() {
 
-            JobScheduler scheduler = new DefaultJobScheduler(context);
+            JobScheduler scheduler = getJobScheduler();
 
             for (Task t : tasks.values()) {
                 NodeInfo selectedNode = scheduler.selectTaskProcessorNode(t);
@@ -60,6 +60,10 @@ public class JobHandler {
                 sendTask(t, selectedNode);
             }
         }
+    }
+
+    private DefaultJobScheduler getJobScheduler() {
+        return new DefaultJobScheduler(context);
     }
 
     /**

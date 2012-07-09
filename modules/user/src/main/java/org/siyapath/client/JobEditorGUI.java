@@ -17,8 +17,8 @@ import java.util.Map;
  *
  * Created on Jun 17, 2012, 4:05:29 PM
  */
+
 /**
- *
  * @author Amila Manoj
  */
 public class JobEditorGUI extends javax.swing.JDialog {
@@ -26,13 +26,16 @@ public class JobEditorGUI extends javax.swing.JDialog {
     private DefaultListModel listModel;
     private Map taskFileList = new HashMap<String, File>();
     private UserGUI userGUI;
+    private int counter;
 
 
-    /** Creates new form JobEditor */
+    /**
+     * Creates new form JobEditor
+     */
     public JobEditorGUI(java.awt.Frame parent, boolean modal, UserGUI userGUI) {
         super(parent, modal);
         this.listModel = new DefaultListModel();
-        this.userGUI=userGUI;
+        this.userGUI = userGUI;
         initComponents();
         okButton.setEnabled(false);
         this.setLocationRelativeTo(null);
@@ -143,11 +146,11 @@ public class JobEditorGUI extends javax.swing.JDialog {
         fc.showOpenDialog(this);
         File sFile = fc.getSelectedFile();
         if (sFile != null) {
-            String taskName = sFile.getName();
+            String taskName = "Task-" + counter++ + ": " + sFile.getName();
             listModel.addElement(taskName);
             taskFileList.put(taskName, sFile);
         }
-        if (!listModel.isEmpty()){
+        if (!listModel.isEmpty()) {
             okButton.setEnabled(true);
         }
     }

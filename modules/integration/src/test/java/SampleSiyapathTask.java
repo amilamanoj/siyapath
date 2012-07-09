@@ -1,16 +1,18 @@
-import org.siyapath.job.SiyapathJob;
+import org.siyapath.job.SiyapathTask;
 
 import java.util.StringTokenizer;
 
 // A sample Job that gets a range of numbers as input and outputs the list of prime numbers in that range
 
-public class SampleSiyapathJob implements SiyapathJob {
+public class SampleSiyapathTask implements SiyapathTask {
 
     Object inputData, results;
     long startNumber, endNumber;
 
     @Override
     public void process() {
+        testInit();
+
         if (preProcessData()) {
             results = "";
             for (long num = startNumber; num <= endNumber; num++) {
@@ -61,13 +63,17 @@ public class SampleSiyapathJob implements SiyapathJob {
         return true;
     }
 
-//    /**
-//     *  For testing
-//     */
+
+    private void testInit(){
+        this.setData("20,500000");
+    }
+
+    /**
+     *  For testing
+     */
 //    public static void main(String[] args) {
-//        SampleSiyapathJob job = new SampleSiyapathJob();
-//        job.setData("20,100");
+//        SampleSiyapathTask job = new SampleSiyapathTask();
+//        job.setData("20,100000");
 //        job.process();
-//        System.out.println(job.getResults());
 //    }
 }
