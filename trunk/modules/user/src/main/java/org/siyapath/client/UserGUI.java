@@ -13,7 +13,7 @@ public class UserGUI extends JFrame {
     private UserHandler handler;
     private JobEditorGUI jobEditor;
     private String loggedPerson;
-    private Map taskFileList;
+    private Map<String, TaskData> taskFileList;
 
     /**
      * @param handler

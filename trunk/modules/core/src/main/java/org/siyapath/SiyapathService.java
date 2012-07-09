@@ -114,7 +114,7 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean submitTask(Task task) throws TException {
         log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
         TaskProcessor taskProcessor = new TaskProcessor(task, nodeContext);
-        taskProcessor.processTask();
+        taskProcessor.startProcessing();
         return true;
     }
 

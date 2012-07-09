@@ -24,7 +24,7 @@ import java.util.Map;
 public class JobEditorGUI extends javax.swing.JDialog {
 
     private DefaultListModel listModel;
-    private Map taskFileList = new HashMap<String, File>();
+    private Map<String, TaskData> taskFileList = new HashMap<String, TaskData>();
     private UserGUI userGUI;
     private int counter;
 
@@ -148,7 +148,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         if (sFile != null) {
             String taskName = "Task-" + counter++ + ": " + sFile.getName();
             listModel.addElement(taskName);
-            taskFileList.put(taskName, sFile);
+            taskFileList.put(taskName, new TaskData(taskName, sFile, "0,200000"));  //TODO: update GUI
         }
         if (!listModel.isEmpty()) {
             okButton.setEnabled(true);

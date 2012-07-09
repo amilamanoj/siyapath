@@ -43,7 +43,6 @@ public class UserHandler {
     }
 
     /**
-     *
      * @param username
      * @param password
      * @return String success if user can be authenticated, failure otherwise, or exception string
@@ -72,11 +71,12 @@ public class UserHandler {
 
     /**
      * Prepares the new job, selects a distributor nodes and sends the job
-     * @param taskFileList list of tasks
+     *
+     * @param taskList list of tasks
      */
-    public void submitJob(Map<String, File> taskFileList) {
-        for (File taskFile: taskFileList.values()){
-             addTask(taskFile);
+    public void submitJob(Map<String, TaskData> taskList) {
+        for (TaskData task : taskList.values()) {
+            addTask(task.getClassFile(), task.getInputData());
         }
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
@@ -88,6 +88,7 @@ public class UserHandler {
 
     /**
      * Selects a volunteer node that will act as the job distributor
+     *
      * @return Node information of the selected node
      */
     private NodeInfo getDistributorNode() {
@@ -100,7 +101,7 @@ public class UserHandler {
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
-            log.info("Number of members from bootstrapper: " +context.getMemberCount());
+            log.info("Number of members from bootstrapper: " + context.getMemberCount());
             selectedMember = context.getRandomMember();
             setJobHandlerNode(selectedMember);
         } catch (TTransportException e) {
@@ -121,6 +122,7 @@ public class UserHandler {
 
     /**
      * Sends the job to specified node
+     *
      * @param node destination node
      */
     private void sendJob(NodeInfo node) {
@@ -144,14 +146,16 @@ public class UserHandler {
 
     /**
      * Creates and adds a new task to the job given a task class
-     * @param sFile class for the task to be created
+     *
+     * @param taskProgramFile class for the task to be created
+     * @param inputData input data
      */
-    private void addTask(File sFile) {
+    private void addTask(File taskProgramFile, String inputData) {
         try {
             int taskId = taskCounter++;
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
-            Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer(sFile.getAbsolutePath()),
-                    "Sending a Temp task data in a String.", getJobInterfaceName() ,
+            Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer(taskProgramFile.getAbsolutePath()),
+                    inputData, getJobInterfaceName(),
                     CommonUtils.serialize(context.getNodeInfo()), null);
 
             taskList.put(taskId, task);
@@ -167,7 +171,6 @@ public class UserHandler {
 
 
     /**
-     *
      * @return the selected job handling node for the user
      */
     public NodeInfo getJobHandlerNode() {
@@ -175,7 +178,6 @@ public class UserHandler {
     }
 
     /**
-     *
      * @param jobHandlerNode
      */
     public void setJobHandlerNode(NodeInfo jobHandlerNode) {
@@ -185,9 +187,10 @@ public class UserHandler {
 
     /**
      * Contacts back the selected JobHandler to get job status
+     *
      * @param jobID
      */
-    public void pollStatusOfJob(int jobID){
+    public void pollStatusOfJob(int jobID) {
         //
         TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
         boolean jobStatus = false;
@@ -233,4 +236,5 @@ public class UserHandler {
             isRunning = false;
         }
     }
+
 }
