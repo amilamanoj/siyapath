@@ -76,7 +76,7 @@ public class UserHandler {
      */
     public void submitJob(Map<String, TaskData> taskList) {
         for (TaskData task : taskList.values()) {
-            addTask(task.getClassFile(), task.getInputData());
+            addTask(task.getClassFile(), task.getInputData() , task.getRequiredResources());
         }
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
@@ -150,13 +150,13 @@ public class UserHandler {
      * @param taskProgramFile class for the task to be created
      * @param inputData input data
      */
-    private void addTask(File taskProgramFile, String inputData) {
+    private void addTask(File taskProgramFile, String inputData , String requiredResources) {
         try {
             int taskId = taskCounter++;
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
             Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer(taskProgramFile.getAbsolutePath()),
                     inputData, getJobInterfaceName(),
-                    CommonUtils.serialize(context.getNodeInfo()), null);
+                    CommonUtils.serialize(context.getNodeInfo()), requiredResources , null);
 
             taskList.put(taskId, task);
 

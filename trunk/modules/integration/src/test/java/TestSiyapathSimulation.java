@@ -133,10 +133,10 @@ public class TestSiyapathSimulation extends TestCase {
         log.info("Preparing to submit sample jobs");
         taskFileList = new HashMap<String, TaskData>();
         File taskFile = new File("target/test-classes/SampleSiyapathTask.class");
-        taskFileList.put("Task1" , new TaskData("Task1", taskFile, "0,100000"));
-        taskFileList.put("Task2" , new TaskData("Task1", taskFile, "100000,200000"));
-        taskFileList.put("Task3" , new TaskData("Task1", taskFile, "200000,300000"));
-        taskFileList.put("Task4" , new TaskData("Task1", taskFile, "300000,400000"));
+        taskFileList.put("Task1" , new TaskData("Task1", taskFile, "0,100000" , "Cores:4-Speed:2267Mhz"));
+        taskFileList.put("Task2" , new TaskData("Task1", taskFile, "100000,200000" , "Cores:4-Speed:2267Mhz"));
+        taskFileList.put("Task3" , new TaskData("Task1", taskFile, "200000,300000" , "Cores:4-Speed:2267Mhz"));
+        taskFileList.put("Task4" , new TaskData("Task1", taskFile, "300000,400000", "Cores:4-Speed:2267Mhz"));
         return true;
     }
 

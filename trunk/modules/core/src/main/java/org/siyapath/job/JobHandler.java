@@ -10,6 +10,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
+import org.siyapath.job.scheduling.PushJobScheduler;
 import org.siyapath.service.Job;
 import org.siyapath.service.NodeData;
 import org.siyapath.service.Siyapath;
@@ -75,8 +76,8 @@ public class JobHandler {
         }
     }
 
-    private DefaultJobScheduler getJobScheduler() {
-        return new DefaultJobScheduler(context);
+    private PushJobScheduler getJobScheduler() {
+        return new PushJobScheduler(context);
     }
 
     /**
