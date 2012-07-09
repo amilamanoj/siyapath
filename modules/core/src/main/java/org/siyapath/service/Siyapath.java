@@ -50,7 +50,7 @@ public class Siyapath {
 
     public boolean submitTask(Task task) throws org.apache.thrift.TException;
 
-    public boolean getJobStatusFromJobHandler(int jobID) throws org.apache.thrift.TException;
+    public boolean getJobStatusFromJobHandler(int jobID, int port) throws org.apache.thrift.TException;
 
     public boolean getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException;
 
@@ -80,7 +80,7 @@ public class Siyapath {
 
     public void submitTask(Task task, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitTask_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getJobStatusFromJobHandler(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException;
+    public void getJobStatusFromJobHandler(int jobID, int port, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getTaskStatusFromTaskProcessor(int taskID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -298,16 +298,17 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "submitTask failed: unknown result");
     }
 
-    public boolean getJobStatusFromJobHandler(int jobID) throws org.apache.thrift.TException
+    public boolean getJobStatusFromJobHandler(int jobID, int port) throws org.apache.thrift.TException
     {
-      send_getJobStatusFromJobHandler(jobID);
+      send_getJobStatusFromJobHandler(jobID, port);
       return recv_getJobStatusFromJobHandler();
     }
 
-    public void send_getJobStatusFromJobHandler(int jobID) throws org.apache.thrift.TException
+    public void send_getJobStatusFromJobHandler(int jobID, int port) throws org.apache.thrift.TException
     {
       getJobStatusFromJobHandler_args args = new getJobStatusFromJobHandler_args();
       args.setJobID(jobID);
+      args.setPort(port);
       sendBase("getJobStatusFromJobHandler", args);
     }
 
@@ -694,24 +695,27 @@ public class Siyapath {
       }
     }
 
-    public void getJobStatusFromJobHandler(int jobID, org.apache.thrift.async.AsyncMethodCallback<getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException {
+    public void getJobStatusFromJobHandler(int jobID, int port, org.apache.thrift.async.AsyncMethodCallback<getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getJobStatusFromJobHandler_call method_call = new getJobStatusFromJobHandler_call(jobID, resultHandler, this, ___protocolFactory, ___transport);
+      getJobStatusFromJobHandler_call method_call = new getJobStatusFromJobHandler_call(jobID, port, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getJobStatusFromJobHandler_call extends org.apache.thrift.async.TAsyncMethodCall {
       private int jobID;
-      public getJobStatusFromJobHandler_call(int jobID, org.apache.thrift.async.AsyncMethodCallback<getJobStatusFromJobHandler_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private int port;
+      public getJobStatusFromJobHandler_call(int jobID, int port, org.apache.thrift.async.AsyncMethodCallback<getJobStatusFromJobHandler_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.jobID = jobID;
+        this.port = port;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getJobStatusFromJobHandler", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getJobStatusFromJobHandler_args args = new getJobStatusFromJobHandler_args();
         args.setJobID(jobID);
+        args.setPort(port);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1029,7 +1033,7 @@ public class Siyapath {
 
       protected getJobStatusFromJobHandler_result getResult(I iface, getJobStatusFromJobHandler_args args) throws org.apache.thrift.TException {
         getJobStatusFromJobHandler_result result = new getJobStatusFromJobHandler_result();
-        result.success = iface.getJobStatusFromJobHandler(args.jobID);
+        result.success = iface.getJobStatusFromJobHandler(args.jobID, args.port);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -7166,6 +7170,7 @@ public class Siyapath {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getJobStatusFromJobHandler_args");
 
     private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
+    private static final org.apache.thrift.protocol.TField PORT_FIELD_DESC = new org.apache.thrift.protocol.TField("port", org.apache.thrift.protocol.TType.I32, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -7174,10 +7179,12 @@ public class Siyapath {
     }
 
     public int jobID; // required
+    public int port; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      JOB_ID((short)1, "jobID");
+      JOB_ID((short)1, "jobID"),
+      PORT((short)2, "port");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -7194,6 +7201,8 @@ public class Siyapath {
         switch(fieldId) {
           case 1: // JOB_ID
             return JOB_ID;
+          case 2: // PORT
+            return PORT;
           default:
             return null;
         }
@@ -7235,11 +7244,14 @@ public class Siyapath {
 
     // isset id assignments
     private static final int __JOBID_ISSET_ID = 0;
-    private BitSet __isset_bit_vector = new BitSet(1);
+    private static final int __PORT_ISSET_ID = 1;
+    private BitSet __isset_bit_vector = new BitSet(2);
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+      tmpMap.put(_Fields.PORT, new org.apache.thrift.meta_data.FieldMetaData("port", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobStatusFromJobHandler_args.class, metaDataMap);
@@ -7249,11 +7261,14 @@ public class Siyapath {
     }
 
     public getJobStatusFromJobHandler_args(
-      int jobID)
+      int jobID,
+      int port)
     {
       this();
       this.jobID = jobID;
       setJobIDIsSet(true);
+      this.port = port;
+      setPortIsSet(true);
     }
 
     /**
@@ -7263,6 +7278,7 @@ public class Siyapath {
       __isset_bit_vector.clear();
       __isset_bit_vector.or(other.__isset_bit_vector);
       this.jobID = other.jobID;
+      this.port = other.port;
     }
 
     public getJobStatusFromJobHandler_args deepCopy() {
@@ -7273,6 +7289,8 @@ public class Siyapath {
     public void clear() {
       setJobIDIsSet(false);
       this.jobID = 0;
+      setPortIsSet(false);
+      this.port = 0;
     }
 
     public int getJobID() {
@@ -7298,6 +7316,29 @@ public class Siyapath {
       __isset_bit_vector.set(__JOBID_ISSET_ID, value);
     }
 
+    public int getPort() {
+      return this.port;
+    }
+
+    public getJobStatusFromJobHandler_args setPort(int port) {
+      this.port = port;
+      setPortIsSet(true);
+      return this;
+    }
+
+    public void unsetPort() {
+      __isset_bit_vector.clear(__PORT_ISSET_ID);
+    }
+
+    /** Returns true if field port is set (has been assigned a value) and false otherwise */
+    public boolean isSetPort() {
+      return __isset_bit_vector.get(__PORT_ISSET_ID);
+    }
+
+    public void setPortIsSet(boolean value) {
+      __isset_bit_vector.set(__PORT_ISSET_ID, value);
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case JOB_ID:
@@ -7308,6 +7349,14 @@ public class Siyapath {
         }
         break;
 
+      case PORT:
+        if (value == null) {
+          unsetPort();
+        } else {
+          setPort((Integer)value);
+        }
+        break;
+
       }
     }
 
@@ -7315,6 +7364,9 @@ public class Siyapath {
       switch (field) {
       case JOB_ID:
         return Integer.valueOf(getJobID());
+
+      case PORT:
+        return Integer.valueOf(getPort());
 
       }
       throw new IllegalStateException();
@@ -7329,6 +7381,8 @@ public class Siyapath {
       switch (field) {
       case JOB_ID:
         return isSetJobID();
+      case PORT:
+        return isSetPort();
       }
       throw new IllegalStateException();
     }
@@ -7352,6 +7406,15 @@ public class Siyapath {
         if (!(this_present_jobID && that_present_jobID))
           return false;
         if (this.jobID != that.jobID)
+          return false;
+      }
+
+      boolean this_present_port = true;
+      boolean that_present_port = true;
+      if (this_present_port || that_present_port) {
+        if (!(this_present_port && that_present_port))
+          return false;
+        if (this.port != that.port)
           return false;
       }
 
@@ -7381,6 +7444,16 @@ public class Siyapath {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetPort()).compareTo(typedOther.isSetPort());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetPort()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.port, typedOther.port);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -7403,6 +7476,10 @@ public class Siyapath {
 
       sb.append("jobID:");
       sb.append(this.jobID);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("port:");
+      sb.append(this.port);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -7456,6 +7533,14 @@ public class Siyapath {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 2: // PORT
+              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+                struct.port = iprot.readI32();
+                struct.setPortIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -7473,6 +7558,9 @@ public class Siyapath {
         oprot.writeStructBegin(STRUCT_DESC);
         oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
         oprot.writeI32(struct.jobID);
+        oprot.writeFieldEnd();
+        oprot.writeFieldBegin(PORT_FIELD_DESC);
+        oprot.writeI32(struct.port);
         oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
@@ -7495,19 +7583,29 @@ public class Siyapath {
         if (struct.isSetJobID()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetPort()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetJobID()) {
           oprot.writeI32(struct.jobID);
+        }
+        if (struct.isSetPort()) {
+          oprot.writeI32(struct.port);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getJobStatusFromJobHandler_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.jobID = iprot.readI32();
           struct.setJobIDIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.port = iprot.readI32();
+          struct.setPortIsSet(true);
         }
       }
     }
