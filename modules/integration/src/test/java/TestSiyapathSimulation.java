@@ -4,10 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathNode;
+import org.siyapath.client.TaskData;
 import org.siyapath.client.UserHandler;
 import org.siyapath.utils.CommonUtils;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class TestSiyapathSimulation extends TestCase {
@@ -16,6 +20,7 @@ public class TestSiyapathSimulation extends TestCase {
     private int nodeCount;
     private ArrayList<SiyapathNodeController> controllerList;
     private UserHandler userHandler;
+    private Map<String,TaskData> taskFileList;
 
     public TestSiyapathSimulation() {
         controllerList = new ArrayList<SiyapathNodeController>();
@@ -39,9 +44,10 @@ public class TestSiyapathSimulation extends TestCase {
 
             startBootStrapper();
             startNodes();
-//            waitForGossip();
+            waitForGossip();
             prepareJob();
-//            submitJobs();
+            submitJobs();
+            waitForProcessing();
 
             log.info("Total nodes: " + nodeCount);
             Assert.assertEquals("a", "a");
@@ -54,7 +60,17 @@ public class TestSiyapathSimulation extends TestCase {
     private void waitForGossip() {
         log.info("Waiting for nodes to gossip");
         try {
-            Thread.sleep(20000);
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("Continuing simulation...");
+
+    }
+    private void waitForProcessing() {
+        log.info("Waiting for nodes to gossip");
+        try {
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -106,17 +122,21 @@ public class TestSiyapathSimulation extends TestCase {
     }
 
     private void submitJobs() {
-        log.info("Preparing to submit sample jobs");
         userHandler = new UserHandler();
-//        Map<String,File> taskFileList = new HashMap<String, File>();
-//        userHandler.submitJob(taskFileList);
+        userHandler.submitJob(taskFileList);
     }
 
 
     private boolean prepareJob() {
 //        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 //        int result = compiler.run(null, null, null, )
-//        System.out.println(new File("./modules/integration/target/test-classes").getAbsolutePath());
+        log.info("Preparing to submit sample jobs");
+        taskFileList = new HashMap<String, TaskData>();
+        File taskFile = new File("target/test-classes/SampleSiyapathTask.class");
+        taskFileList.put("Task1" , new TaskData("Task1", taskFile, "0,100000"));
+        taskFileList.put("Task2" , new TaskData("Task1", taskFile, "100000,200000"));
+        taskFileList.put("Task3" , new TaskData("Task1", taskFile, "200000,300000"));
+        taskFileList.put("Task4" , new TaskData("Task1", taskFile, "300000,400000"));
         return true;
     }
 
