@@ -13,6 +13,7 @@ import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -124,9 +125,19 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public boolean getJobStatusFromJobHandler(int jobID) throws TException {
-        throw new UnsupportedOperationException();
-
+    public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
+        //send the ip, port n stuff as params, codegen idl and replace
+        NodeInfo handlerNodeInfo = new NodeInfo();
+//        handlerNodeInfo.setIp();
+        handlerNodeInfo.setPort(port);
+//        handlerNodeInfo.setNodeId();
+        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
+        JobHandler jobHandler = new JobHandler(handlerNodeContext,jobID, new HashMap<Integer,Task>());
+//        jobHandler.acquireProcessingJobStatus(jobID);
+        jobHandler.thriftCall(jobID);
+        //get the status and send it to the client end
+        /////set return
+        return true;
 
     }
 

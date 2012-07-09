@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -347,24 +346,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
 
   @Override
   public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-
-    boolean present_nodeID = true;
-    builder.append(present_nodeID);
-    if (present_nodeID)
-      builder.append(nodeID);
-
-    boolean present_ip = true && (isSetIp());
-    builder.append(present_ip);
-    if (present_ip)
-      builder.append(ip);
-
-    boolean present_port = true;
-    builder.append(present_port);
-    if (present_port)
-      builder.append(port);
-
-    return builder.toHashCode();
+    return 0;
   }
 
   public int compareTo(NodeData other) {

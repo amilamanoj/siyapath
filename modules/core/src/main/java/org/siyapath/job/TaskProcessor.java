@@ -8,13 +8,14 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.*;
-import org.siyapath.service.*;
+import org.siyapath.NodeContext;
+import org.siyapath.NodeInfo;
 import org.siyapath.monitor.LimitedCpuUsageMonitor;
+import org.siyapath.service.NodeData;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.ConnectException;
 
 /*
@@ -28,6 +29,7 @@ public class TaskProcessor {
     private Task task;
     int computedResultToBeHandedOverTo;
     private NodeContext context;
+    private boolean taskStatus;
 
     /**
      * @param task
@@ -54,6 +56,7 @@ public class TaskProcessor {
         }
 
         private void processTask() {
+            setTaskStatus(false);
             taskClassLoader = new TaskClassLoader();
             try {
                 // TODO: verify if expected name is necessary
@@ -69,6 +72,7 @@ public class TaskProcessor {
                 log.info("Task processing is completed.");
                 log.info("Results: " + finalResult);
                 task.setTaskResult(finalResult);
+                setTaskStatus(true);
 //            sendResultToDistributingNode();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -106,6 +110,14 @@ public class TaskProcessor {
         } catch (TException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(boolean taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
     private class MonitorThread extends Thread {

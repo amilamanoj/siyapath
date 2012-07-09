@@ -190,7 +190,7 @@ public class UserHandler {
      *
      * @param jobID
      */
-    public void pollStatusOfJob(int jobID) {
+    public void pollStatusOfJob(int jobID){
         //
         TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
         boolean jobStatus = false;
@@ -199,7 +199,7 @@ public class UserHandler {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            jobStatus = client.getJobStatusFromJobHandler(jobID);
+            jobStatus = client.getJobStatusFromJobHandler(jobID,getJobHandlerNode().getPort());
             log.debug("Status of " + jobID + " is " + jobStatus);
             //TODO: convey client, repeat at task level & content tbd after scheduler/handler has job id assignment
         } catch (TTransportException e) {
@@ -214,7 +214,7 @@ public class UserHandler {
 
     }
 
-    private class StatusPollThread extends Thread {
+    private class JobStatusPollThread extends Thread {
 
         public boolean isRunning = false;
 

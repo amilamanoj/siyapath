@@ -10,7 +10,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
-import org.siyapath.SiyapathNode;
+import org.siyapath.service.Job;
 import org.siyapath.service.NodeData;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
@@ -18,6 +18,7 @@ import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.Map;
+import java.util.Set;
 
 
 /*
@@ -28,26 +29,31 @@ public class JobHandler {
 
     private static final Log log = LogFactory.getLog(JobHandler.class);
 
-    private Map<SiyapathNode, Task> taskProcessingNodes = null;
+    private Map<NodeInfo, Task> taskProcessingNodes = null;
     private NodeContext context;
-    private Map<Integer, Task> tasks = null;   //taskID and task
+//    private Map<Integer, Task> tasks = null;   //taskID and task
     private NodeInfo backupNode;
+    private Job currentJob;
 
-    public int getJobId() {
-        return jobId;
-    }
-
-    private int jobId;
+//    public int getJobId() {
+//        return jobId;
+//    }
+//
+//    private int jobId;
 
     public JobHandler(NodeContext nodeContext, int jobId, Map<Integer, Task> tasks) {
-        this.jobId = jobId;
+        //uses the default constructor at the sender non-requisition
+        currentJob = new Job();
+        currentJob.setJobID(jobId);
+        currentJob.setTasks(tasks);
+//        this.jobId = jobId;
         context = nodeContext;
-        this.tasks = tasks;
+//        this.tasks = tasks;
     }
 
     public void startScheduling() {
         createBackup();
-        log.info("Starting job:" + jobId);
+        log.info("Starting job:" + currentJob.getJobID());
         JobThread jobThread = new JobThread();
         jobThread.start();
     }
@@ -57,13 +63,14 @@ public class JobHandler {
         @Override
         public void run() {
 
+            Map<Integer, Task> tasks = currentJob.getTasks();
             JobScheduler scheduler = getJobScheduler();
 
             for (Task t : tasks.values()) {
                 NodeInfo selectedNode = scheduler.selectTaskProcessorNode(t);
-                log.info("JobID:" + jobId + "-TaskID:" + t.getTaskID() + "-Sending to: " + selectedNode);
-
+                log.info("JobID:" + currentJob.getJobID() + "-TaskID:" + t.getTaskID() + "-Sending to: " + selectedNode);
                 sendTask(t, selectedNode);
+                taskProcessingNodes.put(selectedNode, t);
             }
         }
     }
@@ -83,6 +90,7 @@ public class JobHandler {
         NodeInfo nodeInfo = context.getNodeInfo();
         NodeData thisNode = CommonUtils.serialize(nodeInfo);
         task.setSender(thisNode);
+        int jobId = currentJob.getJobID();
 
         log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect to selected task-processor: " + destinationNode);
         TTransport transport = new TSocket("localhost", destinationNode.getPort());
@@ -110,6 +118,7 @@ public class JobHandler {
         NodeData thisNode = CommonUtils.serialize(context.getNodeInfo());
 
         boolean isBackupAccepted = false;
+        int jobId = currentJob.getJobID();
         do {
             NodeInfo selectedNode = context.getRandomMember(); //TODO: improve selection
             TTransport transport = new TSocket("localhost", selectedNode.getPort());
@@ -132,6 +141,90 @@ public class JobHandler {
                 e.printStackTrace();
             }
         } while (!isBackupAccepted);    //TODO: improve handling denials
+    }
+
+    //The arg jobID is to be used once multiple jobs are handled by same JobHandler node
+    public void acquireJobProcessingStatus(int jobID){
+
+        boolean jobStatus = false;
+        int port;
+        int taskID;
+
+        Set<Map.Entry<NodeInfo,Task>> entrySet = taskProcessingNodes.entrySet();
+
+        for(Map.Entry<NodeInfo,Task> entry : entrySet){
+            port = entry.getKey().getPort();
+            taskID = entry.getValue().getTaskID();
+            acquireTaskProcessingStatus(port,taskID);
+        }
+//
+//        Set<NodeInfo> nodes = taskProcessingNodes.keySet();
+//        for (NodeInfo nodeInfo : nodes){
+//
+//        }
+
+    }
+
+    public boolean acquireTaskProcessingStatus(int port, int taskID){
+
+        TTransport transport = new TSocket("localhost", port);
+        boolean taskStatus = false;
+        try {
+            log.info("Polling status of task through JobHandler node " + context.getNodeInfo().getNodeId() +
+                    " for processing node on port: " + port + ". TaskID is " + taskID);
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            taskStatus = client.getTaskStatusFromTaskProcessor(taskID);
+//            log.info?
+        } catch (TTransportException e) {
+            if (e.getCause() instanceof ConnectException) {
+                e.printStackTrace();
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
+        return taskStatus;
+    }
+
+    private class TaskStatusPollThread extends Thread {
+
+        public boolean isRunning = false;
+        private int jobID;
+
+        @Override
+        public void run() {
+
+            isRunning = true;
+            while (isRunning) {
+                acquireJobProcessingStatus(this.getJobID());
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        public void stopPolling() {
+            isRunning = false;
+        }
+
+        public int getJobID() {
+            return jobID;
+        }
+
+        public void setJobID(int jobID) {
+            this.jobID = jobID;
+        }
+    }
+
+    public void thriftCall(int jobID){
+        TaskStatusPollThread taskStatusPollThread = new TaskStatusPollThread();
+        taskStatusPollThread.setJobID(jobID);
+        taskStatusPollThread.start();
     }
 
 //    private NodeInfo getProcessingNode() {

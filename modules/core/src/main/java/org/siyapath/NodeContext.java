@@ -3,9 +3,10 @@ package org.siyapath;
 import org.siyapath.job.JobHandler;
 import org.siyapath.utils.CommonUtils;
 
-import javax.xml.bind.SchemaOutputResolver;
-import javax.xml.stream.events.NotationDeclaration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,7 +31,8 @@ public class NodeContext {
      * List of known member nodes
      */
     private HashSet<NodeInfo> members;
-    private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;  //TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
+//    TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
+    private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;
     private boolean isBackup;
     private HashSet<NodeResource> memberResource;
 

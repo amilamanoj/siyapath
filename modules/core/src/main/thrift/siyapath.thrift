@@ -67,7 +67,7 @@ service Siyapath {
     bool submitTask(1:Task task),
 
     //Getting current status of a job
-    bool getJobStatusFromJobHandler(1:i32 jobID),
+    bool getJobStatusFromJobHandler(1:i32 jobID, 2:i32 port),
 
     //Getting current status of a job
     bool getTaskStatusFromTaskProcessor(1:i32 taskID),

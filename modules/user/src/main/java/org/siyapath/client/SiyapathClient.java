@@ -8,6 +8,7 @@ public class SiyapathClient {
 private UserGUI gui;
 
     public SiyapathClient() {
+
         this.gui = new UserGUI(new UserHandler());
     }
 
