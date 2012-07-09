@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -44,9 +45,9 @@ public class Siyapath {
 
     public boolean isAlive() throws org.apache.thrift.TException;
 
-    public boolean requestBecomeBackup(int nodeID, int taskID) throws org.apache.thrift.TException;
+    public boolean requestBecomeBackup(int jobID, NodeData node) throws org.apache.thrift.TException;
 
-    public String submitJob(int jobID, NodeData user, Map<Integer,Task> tasks) throws org.apache.thrift.TException;
+    public String submitJob(int jobID, NodeData user, Map<Integer, Task> tasks) throws org.apache.thrift.TException;
 
     public boolean submitTask(Task task) throws org.apache.thrift.TException;
 
@@ -74,9 +75,9 @@ public class Siyapath {
 
     public void isAlive(org.apache.thrift.async.AsyncMethodCallback<AsyncClient.isAlive_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void requestBecomeBackup(int nodeID, int taskID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requestBecomeBackup_call> resultHandler) throws org.apache.thrift.TException;
+    public void requestBecomeBackup(int jobID, NodeData node, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requestBecomeBackup_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void submitJob(int jobID, NodeData user, Map<Integer,Task> tasks, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitJob_call> resultHandler) throws org.apache.thrift.TException;
+    public void submitJob(int jobID, NodeData user, Map<Integer, Task> tasks, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitJob_call> resultHandler) throws org.apache.thrift.TException;
 
     public void submitTask(Task task, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitTask_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -226,17 +227,17 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "isAlive failed: unknown result");
     }
 
-    public boolean requestBecomeBackup(int nodeID, int taskID) throws org.apache.thrift.TException
+    public boolean requestBecomeBackup(int jobID, NodeData node) throws org.apache.thrift.TException
     {
-      send_requestBecomeBackup(nodeID, taskID);
+      send_requestBecomeBackup(jobID, node);
       return recv_requestBecomeBackup();
     }
 
-    public void send_requestBecomeBackup(int nodeID, int taskID) throws org.apache.thrift.TException
+    public void send_requestBecomeBackup(int jobID, NodeData node) throws org.apache.thrift.TException
     {
       requestBecomeBackup_args args = new requestBecomeBackup_args();
-      args.setNodeID(nodeID);
-      args.setTaskID(taskID);
+      args.setJobID(jobID);
+      args.setNode(node);
       sendBase("requestBecomeBackup", args);
     }
 
@@ -455,7 +456,7 @@ public class Siyapath {
       }
 
       public NodeResourceData getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -487,7 +488,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -522,7 +523,7 @@ public class Siyapath {
       }
 
       public Set<NodeData> getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -551,7 +552,7 @@ public class Siyapath {
       }
 
       public Set<NodeData> getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -580,7 +581,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -589,33 +590,33 @@ public class Siyapath {
       }
     }
 
-    public void requestBecomeBackup(int nodeID, int taskID, org.apache.thrift.async.AsyncMethodCallback<requestBecomeBackup_call> resultHandler) throws org.apache.thrift.TException {
+    public void requestBecomeBackup(int jobID, NodeData node, org.apache.thrift.async.AsyncMethodCallback<requestBecomeBackup_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      requestBecomeBackup_call method_call = new requestBecomeBackup_call(nodeID, taskID, resultHandler, this, ___protocolFactory, ___transport);
+      requestBecomeBackup_call method_call = new requestBecomeBackup_call(jobID, node, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class requestBecomeBackup_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private int nodeID;
-      private int taskID;
-      public requestBecomeBackup_call(int nodeID, int taskID, org.apache.thrift.async.AsyncMethodCallback<requestBecomeBackup_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private int jobID;
+      private NodeData node;
+      public requestBecomeBackup_call(int jobID, NodeData node, org.apache.thrift.async.AsyncMethodCallback<requestBecomeBackup_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.nodeID = nodeID;
-        this.taskID = taskID;
+        this.jobID = jobID;
+        this.node = node;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("requestBecomeBackup", org.apache.thrift.protocol.TMessageType.CALL, 0));
         requestBecomeBackup_args args = new requestBecomeBackup_args();
-        args.setNodeID(nodeID);
-        args.setTaskID(taskID);
+        args.setJobID(jobID);
+        args.setNode(node);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -653,7 +654,7 @@ public class Siyapath {
       }
 
       public String getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -685,7 +686,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -717,7 +718,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -749,7 +750,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -781,7 +782,7 @@ public class Siyapath {
       }
 
       public Map<Integer,Task> getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -813,7 +814,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -848,7 +849,7 @@ public class Siyapath {
       }
 
       public String getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+        if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -979,7 +980,7 @@ public class Siyapath {
 
       protected requestBecomeBackup_result getResult(I iface, requestBecomeBackup_args args) throws org.apache.thrift.TException {
         requestBecomeBackup_result result = new requestBecomeBackup_result();
-        result.success = iface.requestBecomeBackup(args.nodeID, args.taskID);
+        result.success = iface.requestBecomeBackup(args.jobID, args.node);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -1298,7 +1299,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_resourceData = true && (isSetResourceData());
+      builder.append(present_resourceData);
+      if (present_resourceData)
+        builder.append(resourceData);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(resourceGossip_args other) {
@@ -1653,7 +1661,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(resourceGossip_result other) {
@@ -2008,7 +2023,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_nodeData = true && (isSetNodeData());
+      builder.append(present_nodeData);
+      if (present_nodeData)
+        builder.append(nodeData);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(notifyPresence_args other) {
@@ -2366,7 +2388,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(notifyPresence_result other) {
@@ -2792,7 +2821,19 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_nodeData = true && (isSetNodeData());
+      builder.append(present_nodeData);
+      if (present_nodeData)
+        builder.append(nodeData);
+
+      boolean present_knownNodes = true && (isSetKnownNodes());
+      builder.append(present_knownNodes);
+      if (present_knownNodes)
+        builder.append(knownNodes);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(memberDiscovery_args other) {
@@ -3242,7 +3283,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(memberDiscovery_result other) {
@@ -3564,7 +3612,9 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getMembers_args other) {
@@ -3894,7 +3944,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getMembers_result other) {
@@ -4216,7 +4273,9 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      return builder.toHashCode();
     }
 
     public int compareTo(isAlive_args other) {
@@ -4529,7 +4588,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(isAlive_result other) {
@@ -4684,8 +4750,8 @@ public class Siyapath {
   public static class requestBecomeBackup_args implements org.apache.thrift.TBase<requestBecomeBackup_args, requestBecomeBackup_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("requestBecomeBackup_args");
 
-    private static final org.apache.thrift.protocol.TField NODE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeID", org.apache.thrift.protocol.TType.I32, (short)1);
-    private static final org.apache.thrift.protocol.TField TASK_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("taskID", org.apache.thrift.protocol.TType.I32, (short)2);
+    private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
+    private static final org.apache.thrift.protocol.TField NODE_FIELD_DESC = new org.apache.thrift.protocol.TField("node", org.apache.thrift.protocol.TType.STRUCT, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -4693,13 +4759,13 @@ public class Siyapath {
       schemes.put(TupleScheme.class, new requestBecomeBackup_argsTupleSchemeFactory());
     }
 
-    public int nodeID; // required
-    public int taskID; // required
+    public int jobID; // required
+    public NodeData node; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      NODE_ID((short)1, "nodeID"),
-      TASK_ID((short)2, "taskID");
+      JOB_ID((short)1, "jobID"),
+      NODE((short)2, "node");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -4714,10 +4780,10 @@ public class Siyapath {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // NODE_ID
-            return NODE_ID;
-          case 2: // TASK_ID
-            return TASK_ID;
+          case 1: // JOB_ID
+            return JOB_ID;
+          case 2: // NODE
+            return NODE;
           default:
             return null;
         }
@@ -4758,16 +4824,15 @@ public class Siyapath {
     }
 
     // isset id assignments
-    private static final int __NODEID_ISSET_ID = 0;
-    private static final int __TASKID_ISSET_ID = 1;
-    private BitSet __isset_bit_vector = new BitSet(2);
+    private static final int __JOBID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.NODE_ID, new org.apache.thrift.meta_data.FieldMetaData("nodeID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-      tmpMap.put(_Fields.TASK_ID, new org.apache.thrift.meta_data.FieldMetaData("taskID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+      tmpMap.put(_Fields.NODE, new org.apache.thrift.meta_data.FieldMetaData("node", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(requestBecomeBackup_args.class, metaDataMap);
     }
@@ -4776,14 +4841,13 @@ public class Siyapath {
     }
 
     public requestBecomeBackup_args(
-      int nodeID,
-      int taskID)
+      int jobID,
+      NodeData node)
     {
       this();
-      this.nodeID = nodeID;
-      setNodeIDIsSet(true);
-      this.taskID = taskID;
-      setTaskIDIsSet(true);
+      this.jobID = jobID;
+      setJobIDIsSet(true);
+      this.node = node;
     }
 
     /**
@@ -4792,8 +4856,10 @@ public class Siyapath {
     public requestBecomeBackup_args(requestBecomeBackup_args other) {
       __isset_bit_vector.clear();
       __isset_bit_vector.or(other.__isset_bit_vector);
-      this.nodeID = other.nodeID;
-      this.taskID = other.taskID;
+      this.jobID = other.jobID;
+      if (other.isSetNode()) {
+        this.node = new NodeData(other.node);
+      }
     }
 
     public requestBecomeBackup_args deepCopy() {
@@ -4802,73 +4868,73 @@ public class Siyapath {
 
     @Override
     public void clear() {
-      setNodeIDIsSet(false);
-      this.nodeID = 0;
-      setTaskIDIsSet(false);
-      this.taskID = 0;
+      setJobIDIsSet(false);
+      this.jobID = 0;
+      this.node = null;
     }
 
-    public int getNodeID() {
-      return this.nodeID;
+    public int getJobID() {
+      return this.jobID;
     }
 
-    public requestBecomeBackup_args setNodeID(int nodeID) {
-      this.nodeID = nodeID;
-      setNodeIDIsSet(true);
+    public requestBecomeBackup_args setJobID(int jobID) {
+      this.jobID = jobID;
+      setJobIDIsSet(true);
       return this;
     }
 
-    public void unsetNodeID() {
-      __isset_bit_vector.clear(__NODEID_ISSET_ID);
+    public void unsetJobID() {
+      __isset_bit_vector.clear(__JOBID_ISSET_ID);
     }
 
-    /** Returns true if field nodeID is set (has been assigned a value) and false otherwise */
-    public boolean isSetNodeID() {
-      return __isset_bit_vector.get(__NODEID_ISSET_ID);
+    /** Returns true if field jobID is set (has been assigned a value) and false otherwise */
+    public boolean isSetJobID() {
+      return __isset_bit_vector.get(__JOBID_ISSET_ID);
     }
 
-    public void setNodeIDIsSet(boolean value) {
-      __isset_bit_vector.set(__NODEID_ISSET_ID, value);
+    public void setJobIDIsSet(boolean value) {
+      __isset_bit_vector.set(__JOBID_ISSET_ID, value);
     }
 
-    public int getTaskID() {
-      return this.taskID;
+    public NodeData getNode() {
+      return this.node;
     }
 
-    public requestBecomeBackup_args setTaskID(int taskID) {
-      this.taskID = taskID;
-      setTaskIDIsSet(true);
+    public requestBecomeBackup_args setNode(NodeData node) {
+      this.node = node;
       return this;
     }
 
-    public void unsetTaskID() {
-      __isset_bit_vector.clear(__TASKID_ISSET_ID);
+    public void unsetNode() {
+      this.node = null;
     }
 
-    /** Returns true if field taskID is set (has been assigned a value) and false otherwise */
-    public boolean isSetTaskID() {
-      return __isset_bit_vector.get(__TASKID_ISSET_ID);
+    /** Returns true if field node is set (has been assigned a value) and false otherwise */
+    public boolean isSetNode() {
+      return this.node != null;
     }
 
-    public void setTaskIDIsSet(boolean value) {
-      __isset_bit_vector.set(__TASKID_ISSET_ID, value);
+    public void setNodeIsSet(boolean value) {
+      if (!value) {
+        this.node = null;
+      }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case NODE_ID:
+      case JOB_ID:
         if (value == null) {
-          unsetNodeID();
+          unsetJobID();
         } else {
-          setNodeID((Integer)value);
+          setJobID((Integer)value);
         }
         break;
 
-      case TASK_ID:
+      case NODE:
         if (value == null) {
-          unsetTaskID();
+          unsetNode();
         } else {
-          setTaskID((Integer)value);
+          setNode((NodeData)value);
         }
         break;
 
@@ -4877,11 +4943,11 @@ public class Siyapath {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case NODE_ID:
-        return Integer.valueOf(getNodeID());
+      case JOB_ID:
+        return Integer.valueOf(getJobID());
 
-      case TASK_ID:
-        return Integer.valueOf(getTaskID());
+      case NODE:
+        return getNode();
 
       }
       throw new IllegalStateException();
@@ -4894,10 +4960,10 @@ public class Siyapath {
       }
 
       switch (field) {
-      case NODE_ID:
-        return isSetNodeID();
-      case TASK_ID:
-        return isSetTaskID();
+      case JOB_ID:
+        return isSetJobID();
+      case NODE:
+        return isSetNode();
       }
       throw new IllegalStateException();
     }
@@ -4915,21 +4981,21 @@ public class Siyapath {
       if (that == null)
         return false;
 
-      boolean this_present_nodeID = true;
-      boolean that_present_nodeID = true;
-      if (this_present_nodeID || that_present_nodeID) {
-        if (!(this_present_nodeID && that_present_nodeID))
+      boolean this_present_jobID = true;
+      boolean that_present_jobID = true;
+      if (this_present_jobID || that_present_jobID) {
+        if (!(this_present_jobID && that_present_jobID))
           return false;
-        if (this.nodeID != that.nodeID)
+        if (this.jobID != that.jobID)
           return false;
       }
 
-      boolean this_present_taskID = true;
-      boolean that_present_taskID = true;
-      if (this_present_taskID || that_present_taskID) {
-        if (!(this_present_taskID && that_present_taskID))
+      boolean this_present_node = true && this.isSetNode();
+      boolean that_present_node = true && that.isSetNode();
+      if (this_present_node || that_present_node) {
+        if (!(this_present_node && that_present_node))
           return false;
-        if (this.taskID != that.taskID)
+        if (!this.node.equals(that.node))
           return false;
       }
 
@@ -4938,7 +5004,19 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_jobID = true;
+      builder.append(present_jobID);
+      if (present_jobID)
+        builder.append(jobID);
+
+      boolean present_node = true && (isSetNode());
+      builder.append(present_node);
+      if (present_node)
+        builder.append(node);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(requestBecomeBackup_args other) {
@@ -4949,22 +5027,22 @@ public class Siyapath {
       int lastComparison = 0;
       requestBecomeBackup_args typedOther = (requestBecomeBackup_args)other;
 
-      lastComparison = Boolean.valueOf(isSetNodeID()).compareTo(typedOther.isSetNodeID());
+      lastComparison = Boolean.valueOf(isSetJobID()).compareTo(typedOther.isSetJobID());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetNodeID()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.nodeID, typedOther.nodeID);
+      if (isSetJobID()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.jobID, typedOther.jobID);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = Boolean.valueOf(isSetTaskID()).compareTo(typedOther.isSetTaskID());
+      lastComparison = Boolean.valueOf(isSetNode()).compareTo(typedOther.isSetNode());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetTaskID()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskID, typedOther.taskID);
+      if (isSetNode()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.node, typedOther.node);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -4989,12 +5067,16 @@ public class Siyapath {
       StringBuilder sb = new StringBuilder("requestBecomeBackup_args(");
       boolean first = true;
 
-      sb.append("nodeID:");
-      sb.append(this.nodeID);
+      sb.append("jobID:");
+      sb.append(this.jobID);
       first = false;
       if (!first) sb.append(", ");
-      sb.append("taskID:");
-      sb.append(this.taskID);
+      sb.append("node:");
+      if (this.node == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.node);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -5040,18 +5122,19 @@ public class Siyapath {
             break;
           }
           switch (schemeField.id) {
-            case 1: // NODE_ID
+            case 1: // JOB_ID
               if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.nodeID = iprot.readI32();
-                struct.setNodeIDIsSet(true);
+                struct.jobID = iprot.readI32();
+                struct.setJobIDIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 2: // TASK_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.taskID = iprot.readI32();
-                struct.setTaskIDIsSet(true);
+            case 2: // NODE
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.node = new NodeData();
+                struct.node.read(iprot);
+                struct.setNodeIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -5071,12 +5154,14 @@ public class Siyapath {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(NODE_ID_FIELD_DESC);
-        oprot.writeI32(struct.nodeID);
+        oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
+        oprot.writeI32(struct.jobID);
         oprot.writeFieldEnd();
-        oprot.writeFieldBegin(TASK_ID_FIELD_DESC);
-        oprot.writeI32(struct.taskID);
-        oprot.writeFieldEnd();
+        if (struct.node != null) {
+          oprot.writeFieldBegin(NODE_FIELD_DESC);
+          struct.node.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -5095,18 +5180,18 @@ public class Siyapath {
       public void write(org.apache.thrift.protocol.TProtocol prot, requestBecomeBackup_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
-        if (struct.isSetNodeID()) {
+        if (struct.isSetJobID()) {
           optionals.set(0);
         }
-        if (struct.isSetTaskID()) {
+        if (struct.isSetNode()) {
           optionals.set(1);
         }
         oprot.writeBitSet(optionals, 2);
-        if (struct.isSetNodeID()) {
-          oprot.writeI32(struct.nodeID);
+        if (struct.isSetJobID()) {
+          oprot.writeI32(struct.jobID);
         }
-        if (struct.isSetTaskID()) {
-          oprot.writeI32(struct.taskID);
+        if (struct.isSetNode()) {
+          struct.node.write(oprot);
         }
       }
 
@@ -5115,12 +5200,13 @@ public class Siyapath {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
-          struct.nodeID = iprot.readI32();
-          struct.setNodeIDIsSet(true);
+          struct.jobID = iprot.readI32();
+          struct.setJobIDIsSet(true);
         }
         if (incoming.get(1)) {
-          struct.taskID = iprot.readI32();
-          struct.setTaskIDIsSet(true);
+          struct.node = new NodeData();
+          struct.node.read(iprot);
+          struct.setNodeIsSet(true);
         }
       }
     }
@@ -5325,7 +5411,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(requestBecomeBackup_result other) {
@@ -5818,7 +5911,24 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_jobID = true;
+      builder.append(present_jobID);
+      if (present_jobID)
+        builder.append(jobID);
+
+      boolean present_user = true && (isSetUser());
+      builder.append(present_user);
+      if (present_user)
+        builder.append(user);
+
+      boolean present_tasks = true && (isSetTasks());
+      builder.append(present_tasks);
+      if (present_tasks)
+        builder.append(tasks);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(submitJob_args other) {
@@ -6291,7 +6401,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(submitJob_result other) {
@@ -6644,7 +6761,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_task = true && (isSetTask());
+      builder.append(present_task);
+      if (present_task)
+        builder.append(task);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(submitTask_args other) {
@@ -7002,7 +7126,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(submitTask_result other) {
@@ -7352,7 +7483,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_jobID = true;
+      builder.append(present_jobID);
+      if (present_jobID)
+        builder.append(jobID);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getJobStatusFromJobHandler_args other) {
@@ -7704,7 +7842,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getJobStatusFromJobHandler_result other) {
@@ -8054,7 +8199,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_taskID = true;
+      builder.append(present_taskID);
+      if (present_taskID)
+        builder.append(taskID);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getTaskStatusFromTaskProcessor_args other) {
@@ -8406,7 +8558,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getTaskStatusFromTaskProcessor_result other) {
@@ -8756,7 +8915,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_jobID = true;
+      builder.append(present_jobID);
+      if (present_jobID)
+        builder.append(jobID);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getJobResult_args other) {
@@ -9130,7 +9296,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(getJobResult_result other) {
@@ -9523,7 +9696,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_task = true && (isSetTask());
+      builder.append(present_task);
+      if (present_task)
+        builder.append(task);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(sendTaskResult_args other) {
@@ -9881,7 +10061,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true;
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(sendTaskResult_result other) {
@@ -10287,7 +10474,19 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_username = true && (isSetUsername());
+      builder.append(present_username);
+      if (present_username)
+        builder.append(username);
+
+      boolean present_password = true && (isSetPassword());
+      builder.append(present_password);
+      if (present_password)
+        builder.append(password);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(userLogin_args other) {
@@ -10681,7 +10880,14 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      return 0;
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
     }
 
     public int compareTo(userLogin_result other) {
