@@ -8,13 +8,16 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.*;
-import org.siyapath.service.*;
+import org.siyapath.FrameworkInformation;
+import org.siyapath.NodeContext;
+import org.siyapath.NodeInfo;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +26,14 @@ public class UserHandler {
 
     private NodeContext context;
     private NodeInfo jobHandlerNode;
+    private NodeInfo clientEnd;
     private Map taskList = new HashMap<Integer, Task>();
     private int jobId;
     private int taskCounter;
 
     public UserHandler() {
-        this.context = new NodeContext();
+        this.clientEnd = new NodeInfo();
+        this.context = new NodeContext(clientEnd);
         jobId = CommonUtils.getRandomNumber(1000);
     }
 
