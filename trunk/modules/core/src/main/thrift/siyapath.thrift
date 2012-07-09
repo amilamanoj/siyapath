@@ -57,8 +57,8 @@ service Siyapath {
     //ping to see if member is alive
     bool isAlive(),
 
-    //request a member to become a backup node for given task
-    bool requestBecomeBackup(1:i32 nodeID, 2:i32 taskID ),
+    //request a member to become a backup node for given job
+    bool requestBecomeBackup(1:i32 jobID, 2:NodeData node ),
 
     //Submitting a job
     string submitJob(1:i32 jobID 2:NodeData user, 3:map<i32,Task> tasks ),

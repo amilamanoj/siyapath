@@ -8,8 +8,12 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.*;
-import org.siyapath.service.*;
+import org.siyapath.NodeContext;
+import org.siyapath.NodeInfo;
+import org.siyapath.SiyapathNode;
+import org.siyapath.service.NodeData;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
@@ -27,6 +31,7 @@ public class JobHandler {
     private Map<SiyapathNode, Task> taskProcessingNodes = null;
     private NodeContext context;
     private Map<Integer, Task> tasks = null;   //taskID and task
+    private NodeInfo backupNode;
 
     public int getJobId() {
         return jobId;
@@ -41,6 +46,7 @@ public class JobHandler {
     }
 
     public void startScheduling() {
+        createBackup();
         log.info("Starting job:" + jobId);
         JobThread jobThread = new JobThread();
         jobThread.start();
@@ -68,7 +74,8 @@ public class JobHandler {
 
     /**
      * Submits a task to a specified node
-     * @param task task to submit
+     *
+     * @param task            task to submit
      * @param destinationNode node to submit to
      */
     public void sendTask(Task task, NodeInfo destinationNode) {            //changed
@@ -97,6 +104,34 @@ public class JobHandler {
             e.printStackTrace();
         }
 
+    }
+
+    private void createBackup() {
+        NodeData thisNode = CommonUtils.serialize(context.getNodeInfo());
+
+        boolean isBackupAccepted = false;
+        do {
+            NodeInfo selectedNode = context.getRandomMember(); //TODO: improve selection
+            TTransport transport = new TSocket("localhost", selectedNode.getPort());
+
+            try {
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                log.info("JobID:" + jobId + "-Requesting backup from" + selectedNode);
+                isBackupAccepted = client.requestBecomeBackup(jobId, thisNode);
+                if (isBackupAccepted) {
+                    log.info("JobID:" + jobId + "-Backup request accepted by" + selectedNode);
+                    backupNode = selectedNode;
+                } else {
+                    log.info("JobID:" + jobId + "-Backup request denied by" + selectedNode);
+                }
+            } catch (TTransportException e) {
+                e.printStackTrace();
+            } catch (TException e) {
+                e.printStackTrace();
+            }
+        } while (!isBackupAccepted);    //TODO: improve handling denials
     }
 
 //    private NodeInfo getProcessingNode() {

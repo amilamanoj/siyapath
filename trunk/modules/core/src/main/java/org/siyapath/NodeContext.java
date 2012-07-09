@@ -207,4 +207,13 @@ public class NodeContext {
     public void setMemWithNodeSet(ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet) {
         this.memWithNodeSet = memWithNodeSet;
     }
+
+    public boolean isBackup() {
+        return isBackup;
+    }
+
+    public void setBackup(boolean backup) {
+        isBackup = backup;
+    }
+
 }

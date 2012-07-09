@@ -3,11 +3,15 @@ package org.siyapath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
+import org.siyapath.common.BackupHandler;
 import org.siyapath.gossip.GossipImpl;
 import org.siyapath.job.JobHandler;
 import org.siyapath.job.TaskProcessor;
+import org.siyapath.service.NodeData;
+import org.siyapath.service.NodeResourceData;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
-import org.siyapath.service.*;
 
 import java.util.Map;
 import java.util.Set;
@@ -50,8 +54,8 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public Set<NodeData> memberDiscovery(NodeData nodeData,Set<NodeData> knownNodes) throws TException {
-        return CommonUtils.serialize(gossipImpl.memberDiscovery(CommonUtils.deSerialize(nodeData),CommonUtils.deSerialize(knownNodes)));
+    public Set<NodeData> memberDiscovery(NodeData nodeData, Set<NodeData> knownNodes) throws TException {
+        return CommonUtils.serialize(gossipImpl.memberDiscovery(CommonUtils.deSerialize(nodeData), CommonUtils.deSerialize(knownNodes)));
     }
 
     /**
@@ -73,14 +77,17 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param nodeID
-     * @param taskID
+     * @param jobID
+     * @param node
      * @return true if node becomes backup node for processing job, false otherwise
      * @throws TException
      */
     @Override
-    public boolean requestBecomeBackup(int nodeID, int taskID) throws TException {
-        throw new UnsupportedOperationException();
+    public boolean requestBecomeBackup(int jobID, NodeData node) throws TException {
+        log.info("Received backup request. JobID:" + jobID + " from:" + CommonUtils.deSerialize
+                (node));
+        BackupHandler backupHandler = new BackupHandler(nodeContext);
+        return backupHandler.requestBecomeBackup(jobID, CommonUtils.deSerialize(node));
     }
 
     /**
@@ -91,11 +98,11 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks) throws TException {
-        log.info("Received a new job. JobID:" + jobID + " from: "+ CommonUtils.deSerialize(sender));
+        log.info("Received a new job. JobID:" + jobID + " from: " + CommonUtils.deSerialize(sender));
         JobHandler jobHandler = new JobHandler(nodeContext, jobID, tasks);
         nodeContext.addJob(jobHandler);
         jobHandler.startScheduling();
-        return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + jobID + ":" +  "Accepted";
+        return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + jobID + ":" + "Accepted";
     }
 
     /**
@@ -105,7 +112,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean submitTask(Task task) throws TException {
-        log.info("Received a new task. TaskID:" + task.getTaskID() + " from: "+ CommonUtils.deSerialize(task.getSender()));
+        log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
         TaskProcessor taskProcessor = new TaskProcessor(task, nodeContext);
         taskProcessor.processTask();
         return true;
@@ -117,21 +124,15 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public boolean getJobStatusFromJobHandler (int jobID) throws TException {
+    public boolean getJobStatusFromJobHandler(int jobID) throws TException {
         throw new UnsupportedOperationException();
-
-
-
 
 
     }
 
     @Override
-    public boolean getTaskStatusFromTaskProcessor (int taskID) throws TException {
+    public boolean getTaskStatusFromTaskProcessor(int taskID) throws TException {
         throw new UnsupportedOperationException();
-
-
-
 
 
     }
