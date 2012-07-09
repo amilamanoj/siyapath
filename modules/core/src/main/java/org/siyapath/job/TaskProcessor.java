@@ -26,9 +26,6 @@ public class TaskProcessor {
 
     private final Log log = LogFactory.getLog(TaskProcessor.class);
     private Task task;
-    private Class theLoadedClass;
-    TaskClassLoader taskClassLoader;
-    private String finalResult;
     int computedResultToBeHandedOverTo;
     private NodeContext context;
 
@@ -37,37 +34,52 @@ public class TaskProcessor {
      */
     public TaskProcessor(Task task, NodeContext nodeContext) {
         this.task = task;
-        computedResultToBeHandedOverTo = task.getSender().getPort();
+//        computedResultToBeHandedOverTo = task.getSender().getPort();
         context = nodeContext;
-
-//        to be used for jar
-//        for(String name : names){}
     }
 
-    public void processTask() {
-        taskClassLoader = new TaskClassLoader();
-        try {
-            // TODO: verify if expected name is necessary
-            theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
-            SiyapathTask taskInstance = (SiyapathTask) theLoadedClass.newInstance();
-            log.info("Starting task processing. TaskID: " + task.getTaskID());
-//            MonitorThread monitor = new MonitorThread();
-            taskInstance.process();
-//            monitor.start();
-            finalResult =  (String) taskInstance.getResults();
-//            monitor.stopMonitor();
-            log.info("Task processing is completed.");
-            log.info("Results: " + finalResult);
-            task.setTaskResult(finalResult);
+    public void startProcessing() {
+        log.info("Preparing to start the task: " + task.getTaskID());
+        TaskThread jobThread = new TaskThread();
+        jobThread.start();
+    }
+
+    private class TaskThread extends Thread {
+        private Class theLoadedClass;
+        private TaskClassLoader taskClassLoader;
+
+        @Override
+        public void run() {
+            processTask();
+        }
+
+        private void processTask() {
+            taskClassLoader = new TaskClassLoader();
+            try {
+                // TODO: verify if expected name is necessary
+                theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
+                SiyapathTask taskInstance = (SiyapathTask) theLoadedClass.newInstance();
+//                MonitorThread monitor = new MonitorThread();
+                taskInstance.setData(task.getTaskData());
+                log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
+                taskInstance.process();
+//                monitor.start();
+                String finalResult = (String) taskInstance.getResults();
+//                monitor.stopMonitor();
+                log.info("Task processing is completed.");
+                log.info("Results: " + finalResult);
+                task.setTaskResult(finalResult);
 //            sendResultToDistributingNode();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     public void sendResultToDistributingNode() {
 
@@ -106,7 +118,7 @@ public class TaskProcessor {
 
             isRunning = true;
             while (isRunning) {
-                System.out.println("Cpu usage: " +monitor.getCpuUsage());
+                System.out.println("Cpu usage: " + monitor.getCpuUsage());
                 try {
                     sleep(2);
                 } catch (InterruptedException e) {

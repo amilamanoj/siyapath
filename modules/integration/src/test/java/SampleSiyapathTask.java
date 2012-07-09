@@ -11,8 +11,6 @@ public class SampleSiyapathTask implements SiyapathTask {
 
     @Override
     public void process() {
-        testInit();
-
         if (preProcessData()) {
             results = "";
             for (long num = startNumber; num <= endNumber; num++) {
@@ -63,10 +61,6 @@ public class SampleSiyapathTask implements SiyapathTask {
         return true;
     }
 
-
-    private void testInit(){
-        this.setData("20,500000");
-    }
 
     /**
      *  For testing
