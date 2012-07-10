@@ -31,6 +31,7 @@ public class UserHandler {
     private Map taskList = new HashMap<Integer, Task>();
     private int jobId;
     private int taskCounter;
+    private boolean jobStatus = false;
 
     public UserHandler() {
         this.clientEnd = new NodeInfo();
@@ -156,7 +157,7 @@ public class UserHandler {
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
             Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer(taskProgramFile.getAbsolutePath()),
                     inputData, getJobInterfaceName(),
-                    CommonUtils.serialize(context.getNodeInfo()), requiredResources , null);
+                    CommonUtils.serialize(context.getNodeInfo()), requiredResources , null, false);
 
             taskList.put(taskId, task);
 
@@ -193,7 +194,6 @@ public class UserHandler {
     public void pollStatusOfJob(int jobID){
         //
         TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
-        boolean jobStatus = false;
         try {
             log.debug("Polling status of job: " + jobID);
             transport.open();
@@ -213,7 +213,7 @@ public class UserHandler {
         }
 
     }
-
+//Thread runs while job status is false, i.e. Job is incomplete
     private class JobStatusPollThread extends Thread {
 
         public boolean isRunning = false;
@@ -222,7 +222,7 @@ public class UserHandler {
         public void run() {
 
             isRunning = true;
-            while (isRunning) {
+            while (!jobStatus) {
                 pollStatusOfJob(jobId);
                 try {
                     sleep(10000);
@@ -236,5 +236,17 @@ public class UserHandler {
             isRunning = false;
         }
     }
+
+    public void demo(){
+        JobStatusPollThread thread = new JobStatusPollThread();
+        thread.start();
+    }
+
+    //    DEMO only
+//    public static void main(String[] args) {
+//        UserHandler userHandler = new UserHandler();
+////    JobStatusPollThread thread = new JobStatusPollThread()
+//        userHandler.demo();
+//    }
 
 }

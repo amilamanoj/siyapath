@@ -29,7 +29,8 @@ struct Task {
     5: string className,
     6: NodeData sender,
     7: string requiredResources,
-    8: string taskResult
+    8: string taskResult,
+    9: bool taskCompletionStatus
 }
 
 struct Job {
@@ -71,7 +72,7 @@ service Siyapath {
     bool getJobStatusFromJobHandler(1:i32 jobID, 2:i32 port),
 
     //Getting current status of a job
-    bool getTaskStatusFromTaskProcessor(1:i32 taskID),
+    bool getTaskStatusFromTaskProcessor(1:Task task, 2:i32 port),
 
     //Getting the computation result of a job
     map<i32,Task> getJobResult (1:i32 jobID),
