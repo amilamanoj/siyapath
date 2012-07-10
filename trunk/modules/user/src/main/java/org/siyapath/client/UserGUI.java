@@ -12,10 +12,11 @@ import java.util.Map;
  */
 public class UserGUI extends JFrame {
 
-    private UserHandler handler;
+    UserHandler handler;
     private JobEditorGUI jobEditor;
     private String loggedPerson;
     private Map taskFileList;
+    private JobStatusUI jobStatusUI;
 
     /**
      * @param handler
@@ -24,6 +25,7 @@ public class UserGUI extends JFrame {
         initComponents();
         this.handler = handler;
         this.jobEditor = new JobEditorGUI(this, true, this);
+        this.jobStatusUI = new JobStatusUI(handler);
         jobSubmitButton.setEnabled(false);
         loginPanel.setVisible(true);
         userPanel.setVisible(false);
@@ -68,6 +70,7 @@ public class UserGUI extends JFrame {
         userProfileMenu = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenu = new javax.swing.JMenuItem();
+        JobStatusButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Siyapath - Volunteer Computing");
@@ -142,6 +145,13 @@ public class UserGUI extends JFrame {
             }
         });
 
+        JobStatusButton.setText("View Job Status");
+        JobStatusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JobStatusButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout userPanelLayout = new javax.swing.GroupLayout(userPanel);
         userPanel.setLayout(userPanelLayout);
         userPanelLayout.setHorizontalGroup(
@@ -150,19 +160,20 @@ public class UserGUI extends JFrame {
                                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(userPanelLayout.createSequentialGroup()
                                                 .addComponent(userWelcomeLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 403, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 413, Short.MAX_VALUE))
                                         .addGroup(userPanelLayout.createSequentialGroup()
                                                 .addContainerGap()
-                                                .addComponent(jobSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                                .addComponent(jobSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(userPanelLayout.createSequentialGroup()
                                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jobInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
                                         .addGroup(userPanelLayout.createSequentialGroup()
                                                 .addGap(226, 226, 226)
-                                                .addComponent(createEditJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jobInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
+                                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addComponent(JobStatusButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(createEditJobButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))))
                                 .addContainerGap())
         );
         userPanelLayout.setVerticalGroup(
@@ -175,7 +186,9 @@ public class UserGUI extends JFrame {
                                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(userPanelLayout.createSequentialGroup()
                                                 .addComponent(createEditJobButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                                                .addGap(113, 113, 113))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(JobStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(66, 66, 66))
                                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(jobSubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))))
@@ -485,6 +498,11 @@ public class UserGUI extends JFrame {
         jobEditor.setVisible(true);
     }
 
+    private void JobStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
+
+        jobStatusUI.setVisible(true);
+    }
+
     private void usernameTextActionPerformed(ActionEvent evt) {
     }
 
@@ -632,6 +650,7 @@ public class UserGUI extends JFrame {
     private javax.swing.JMenuItem userProfileMenu;
     private javax.swing.JLabel userWelcomeLabel;
     private javax.swing.JTextField usernameText;
+    private javax.swing.JButton JobStatusButton;
 
 
 }

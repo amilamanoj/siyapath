@@ -127,25 +127,27 @@ public class SiyapathService implements Siyapath.Iface {
     @Override
     public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
         //send the ip, port n stuff as params, codegen idl and replace
+        boolean jobStatus;
         NodeInfo handlerNodeInfo = new NodeInfo();
 //        handlerNodeInfo.setIp();
         handlerNodeInfo.setPort(port);
 //        handlerNodeInfo.setNodeId();
         NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
         JobHandler jobHandler = new JobHandler(handlerNodeContext,jobID, new HashMap<Integer,Task>());
-//        jobHandler.acquireProcessingJobStatus(jobID);
-        jobHandler.thriftCall(jobID);
-        //get the status and send it to the client end
-        /////set return
-        return true;
+        jobStatus = jobHandler.thriftCall(jobID);
+        return jobStatus;
 
     }
 
     @Override
-    public boolean getTaskStatusFromTaskProcessor(int taskID) throws TException {
-        throw new UnsupportedOperationException();
-
-
+    public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws TException {
+        boolean taskStatus;
+        NodeInfo taskProcessorNodeInfo = new NodeInfo();
+        taskProcessorNodeInfo.setPort(port);
+        NodeContext taskProcessorNodeContext = new NodeContext(taskProcessorNodeInfo);
+        TaskProcessor taskProcessor = new TaskProcessor(task, taskProcessorNodeContext);
+        taskStatus = taskProcessor.isTaskStatus();
+        return taskStatus;
     }
 
     /**

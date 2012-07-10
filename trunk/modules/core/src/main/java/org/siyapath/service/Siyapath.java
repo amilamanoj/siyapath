@@ -52,7 +52,7 @@ public class Siyapath {
 
     public boolean getJobStatusFromJobHandler(int jobID, int port) throws org.apache.thrift.TException;
 
-    public boolean getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException;
+    public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws org.apache.thrift.TException;
 
     public Map<Integer,Task> getJobResult(int jobID) throws org.apache.thrift.TException;
 
@@ -82,7 +82,7 @@ public class Siyapath {
 
     public void getJobStatusFromJobHandler(int jobID, int port, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobStatusFromJobHandler_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getTaskStatusFromTaskProcessor(int taskID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException;
+    public void getTaskStatusFromTaskProcessor(Task task, int port, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getJobResult(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobResult_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -322,16 +322,17 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getJobStatusFromJobHandler failed: unknown result");
     }
 
-    public boolean getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException
+    public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws org.apache.thrift.TException
     {
-      send_getTaskStatusFromTaskProcessor(taskID);
+      send_getTaskStatusFromTaskProcessor(task, port);
       return recv_getTaskStatusFromTaskProcessor();
     }
 
-    public void send_getTaskStatusFromTaskProcessor(int taskID) throws org.apache.thrift.TException
+    public void send_getTaskStatusFromTaskProcessor(Task task, int port) throws org.apache.thrift.TException
     {
       getTaskStatusFromTaskProcessor_args args = new getTaskStatusFromTaskProcessor_args();
-      args.setTaskID(taskID);
+      args.setTask(task);
+      args.setPort(port);
       sendBase("getTaskStatusFromTaskProcessor", args);
     }
 
@@ -730,24 +731,27 @@ public class Siyapath {
       }
     }
 
-    public void getTaskStatusFromTaskProcessor(int taskID, org.apache.thrift.async.AsyncMethodCallback<getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException {
+    public void getTaskStatusFromTaskProcessor(Task task, int port, org.apache.thrift.async.AsyncMethodCallback<getTaskStatusFromTaskProcessor_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getTaskStatusFromTaskProcessor_call method_call = new getTaskStatusFromTaskProcessor_call(taskID, resultHandler, this, ___protocolFactory, ___transport);
+      getTaskStatusFromTaskProcessor_call method_call = new getTaskStatusFromTaskProcessor_call(task, port, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getTaskStatusFromTaskProcessor_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private int taskID;
-      public getTaskStatusFromTaskProcessor_call(int taskID, org.apache.thrift.async.AsyncMethodCallback<getTaskStatusFromTaskProcessor_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private Task task;
+      private int port;
+      public getTaskStatusFromTaskProcessor_call(Task task, int port, org.apache.thrift.async.AsyncMethodCallback<getTaskStatusFromTaskProcessor_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.taskID = taskID;
+        this.task = task;
+        this.port = port;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getTaskStatusFromTaskProcessor", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getTaskStatusFromTaskProcessor_args args = new getTaskStatusFromTaskProcessor_args();
-        args.setTaskID(taskID);
+        args.setTask(task);
+        args.setPort(port);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1050,7 +1054,7 @@ public class Siyapath {
 
       protected getTaskStatusFromTaskProcessor_result getResult(I iface, getTaskStatusFromTaskProcessor_args args) throws org.apache.thrift.TException {
         getTaskStatusFromTaskProcessor_result result = new getTaskStatusFromTaskProcessor_result();
-        result.success = iface.getTaskStatusFromTaskProcessor(args.taskID);
+        result.success = iface.getTaskStatusFromTaskProcessor(args.task, args.port);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -7965,7 +7969,8 @@ public class Siyapath {
   public static class getTaskStatusFromTaskProcessor_args implements org.apache.thrift.TBase<getTaskStatusFromTaskProcessor_args, getTaskStatusFromTaskProcessor_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getTaskStatusFromTaskProcessor_args");
 
-    private static final org.apache.thrift.protocol.TField TASK_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("taskID", org.apache.thrift.protocol.TType.I32, (short)1);
+    private static final org.apache.thrift.protocol.TField TASK_FIELD_DESC = new org.apache.thrift.protocol.TField("task", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField PORT_FIELD_DESC = new org.apache.thrift.protocol.TField("port", org.apache.thrift.protocol.TType.I32, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -7973,11 +7978,13 @@ public class Siyapath {
       schemes.put(TupleScheme.class, new getTaskStatusFromTaskProcessor_argsTupleSchemeFactory());
     }
 
-    public int taskID; // required
+    public Task task; // required
+    public int port; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      TASK_ID((short)1, "taskID");
+      TASK((short)1, "task"),
+      PORT((short)2, "port");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -7992,8 +7999,10 @@ public class Siyapath {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // TASK_ID
-            return TASK_ID;
+          case 1: // TASK
+            return TASK;
+          case 2: // PORT
+            return PORT;
           default:
             return null;
         }
@@ -8034,12 +8043,14 @@ public class Siyapath {
     }
 
     // isset id assignments
-    private static final int __TASKID_ISSET_ID = 0;
+    private static final int __PORT_ISSET_ID = 0;
     private BitSet __isset_bit_vector = new BitSet(1);
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TASK_ID, new org.apache.thrift.meta_data.FieldMetaData("taskID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.TASK, new org.apache.thrift.meta_data.FieldMetaData("task", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Task.class)));
+      tmpMap.put(_Fields.PORT, new org.apache.thrift.meta_data.FieldMetaData("port", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getTaskStatusFromTaskProcessor_args.class, metaDataMap);
@@ -8049,11 +8060,13 @@ public class Siyapath {
     }
 
     public getTaskStatusFromTaskProcessor_args(
-      int taskID)
+      Task task,
+      int port)
     {
       this();
-      this.taskID = taskID;
-      setTaskIDIsSet(true);
+      this.task = task;
+      this.port = port;
+      setPortIsSet(true);
     }
 
     /**
@@ -8062,7 +8075,10 @@ public class Siyapath {
     public getTaskStatusFromTaskProcessor_args(getTaskStatusFromTaskProcessor_args other) {
       __isset_bit_vector.clear();
       __isset_bit_vector.or(other.__isset_bit_vector);
-      this.taskID = other.taskID;
+      if (other.isSetTask()) {
+        this.task = new Task(other.task);
+      }
+      this.port = other.port;
     }
 
     public getTaskStatusFromTaskProcessor_args deepCopy() {
@@ -8071,40 +8087,73 @@ public class Siyapath {
 
     @Override
     public void clear() {
-      setTaskIDIsSet(false);
-      this.taskID = 0;
+      this.task = null;
+      setPortIsSet(false);
+      this.port = 0;
     }
 
-    public int getTaskID() {
-      return this.taskID;
+    public Task getTask() {
+      return this.task;
     }
 
-    public getTaskStatusFromTaskProcessor_args setTaskID(int taskID) {
-      this.taskID = taskID;
-      setTaskIDIsSet(true);
+    public getTaskStatusFromTaskProcessor_args setTask(Task task) {
+      this.task = task;
       return this;
     }
 
-    public void unsetTaskID() {
-      __isset_bit_vector.clear(__TASKID_ISSET_ID);
+    public void unsetTask() {
+      this.task = null;
     }
 
-    /** Returns true if field taskID is set (has been assigned a value) and false otherwise */
-    public boolean isSetTaskID() {
-      return __isset_bit_vector.get(__TASKID_ISSET_ID);
+    /** Returns true if field task is set (has been assigned a value) and false otherwise */
+    public boolean isSetTask() {
+      return this.task != null;
     }
 
-    public void setTaskIDIsSet(boolean value) {
-      __isset_bit_vector.set(__TASKID_ISSET_ID, value);
+    public void setTaskIsSet(boolean value) {
+      if (!value) {
+        this.task = null;
+      }
+    }
+
+    public int getPort() {
+      return this.port;
+    }
+
+    public getTaskStatusFromTaskProcessor_args setPort(int port) {
+      this.port = port;
+      setPortIsSet(true);
+      return this;
+    }
+
+    public void unsetPort() {
+      __isset_bit_vector.clear(__PORT_ISSET_ID);
+    }
+
+    /** Returns true if field port is set (has been assigned a value) and false otherwise */
+    public boolean isSetPort() {
+      return __isset_bit_vector.get(__PORT_ISSET_ID);
+    }
+
+    public void setPortIsSet(boolean value) {
+      __isset_bit_vector.set(__PORT_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case TASK_ID:
+      case TASK:
         if (value == null) {
-          unsetTaskID();
+          unsetTask();
         } else {
-          setTaskID((Integer)value);
+          setTask((Task)value);
+        }
+        break;
+
+      case PORT:
+        if (value == null) {
+          unsetPort();
+        } else {
+          setPort((Integer)value);
         }
         break;
 
@@ -8113,8 +8162,11 @@ public class Siyapath {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case TASK_ID:
-        return Integer.valueOf(getTaskID());
+      case TASK:
+        return getTask();
+
+      case PORT:
+        return Integer.valueOf(getPort());
 
       }
       throw new IllegalStateException();
@@ -8127,8 +8179,10 @@ public class Siyapath {
       }
 
       switch (field) {
-      case TASK_ID:
-        return isSetTaskID();
+      case TASK:
+        return isSetTask();
+      case PORT:
+        return isSetPort();
       }
       throw new IllegalStateException();
     }
@@ -8146,12 +8200,21 @@ public class Siyapath {
       if (that == null)
         return false;
 
-      boolean this_present_taskID = true;
-      boolean that_present_taskID = true;
-      if (this_present_taskID || that_present_taskID) {
-        if (!(this_present_taskID && that_present_taskID))
+      boolean this_present_task = true && this.isSetTask();
+      boolean that_present_task = true && that.isSetTask();
+      if (this_present_task || that_present_task) {
+        if (!(this_present_task && that_present_task))
           return false;
-        if (this.taskID != that.taskID)
+        if (!this.task.equals(that.task))
+          return false;
+      }
+
+      boolean this_present_port = true;
+      boolean that_present_port = true;
+      if (this_present_port || that_present_port) {
+        if (!(this_present_port && that_present_port))
+          return false;
+        if (this.port != that.port)
           return false;
       }
 
@@ -8171,12 +8234,22 @@ public class Siyapath {
       int lastComparison = 0;
       getTaskStatusFromTaskProcessor_args typedOther = (getTaskStatusFromTaskProcessor_args)other;
 
-      lastComparison = Boolean.valueOf(isSetTaskID()).compareTo(typedOther.isSetTaskID());
+      lastComparison = Boolean.valueOf(isSetTask()).compareTo(typedOther.isSetTask());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetTaskID()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskID, typedOther.taskID);
+      if (isSetTask()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.task, typedOther.task);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetPort()).compareTo(typedOther.isSetPort());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetPort()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.port, typedOther.port);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -8201,8 +8274,16 @@ public class Siyapath {
       StringBuilder sb = new StringBuilder("getTaskStatusFromTaskProcessor_args(");
       boolean first = true;
 
-      sb.append("taskID:");
-      sb.append(this.taskID);
+      sb.append("task:");
+      if (this.task == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.task);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("port:");
+      sb.append(this.port);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -8248,10 +8329,19 @@ public class Siyapath {
             break;
           }
           switch (schemeField.id) {
-            case 1: // TASK_ID
+            case 1: // TASK
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.task = new Task();
+                struct.task.read(iprot);
+                struct.setTaskIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // PORT
               if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.taskID = iprot.readI32();
-                struct.setTaskIDIsSet(true);
+                struct.port = iprot.readI32();
+                struct.setPortIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -8271,8 +8361,13 @@ public class Siyapath {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(TASK_ID_FIELD_DESC);
-        oprot.writeI32(struct.taskID);
+        if (struct.task != null) {
+          oprot.writeFieldBegin(TASK_FIELD_DESC);
+          struct.task.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldBegin(PORT_FIELD_DESC);
+        oprot.writeI32(struct.port);
         oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
@@ -8292,22 +8387,33 @@ public class Siyapath {
       public void write(org.apache.thrift.protocol.TProtocol prot, getTaskStatusFromTaskProcessor_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
-        if (struct.isSetTaskID()) {
+        if (struct.isSetTask()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetTaskID()) {
-          oprot.writeI32(struct.taskID);
+        if (struct.isSetPort()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
+        if (struct.isSetTask()) {
+          struct.task.write(oprot);
+        }
+        if (struct.isSetPort()) {
+          oprot.writeI32(struct.port);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getTaskStatusFromTaskProcessor_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
-          struct.taskID = iprot.readI32();
-          struct.setTaskIDIsSet(true);
+          struct.task = new Task();
+          struct.task.read(iprot);
+          struct.setTaskIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.port = iprot.readI32();
+          struct.setPortIsSet(true);
         }
       }
     }
