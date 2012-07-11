@@ -82,6 +82,7 @@ public class UserHandler {
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
             sendJob(selectedNode);
+            setJobHandlerNode(selectedNode);
         } else {
             log.warn("Could not get a distributor node");
         }
@@ -105,6 +106,7 @@ public class UserHandler {
             log.info("Number of members from bootstrapper: " + context.getMemberCount());
             selectedMember = context.getRandomMember();
             setJobHandlerNode(selectedMember);
+            System.out.println("damn1111111111111111111" + selectedMember.getPort());
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
 //                res = "connecEx";
@@ -194,56 +196,78 @@ public class UserHandler {
      */
     public void pollStatusOfJob(int jobID){
         //
-        TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
-        try {
-            log.debug("Polling status of job: " + jobID);
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            jobStatus = client.getJobStatusFromJobHandler(jobID,getJobHandlerNode().getPort());
-            log.debug("Status of " + jobID + " is " + jobStatus);
-            //TODO: convey client, repeat at task level & content tbd after scheduler/handler has job id assignment
-        } catch (TTransportException e) {
-            if (e.getCause() instanceof ConnectException) {
+        System.out.println("damnnnnnnnnnnnnnnnnnnnnnnnnn2"+getJobHandlerNode().getPort());
+TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
+try {
+        log.info("pollStatusOfJob(int jobID)---Polling status of job: " + jobID);
+transport.open();
+TProtocol protocol = new TBinaryProtocol(transport);
+Siyapath.Client client = new Siyapath.Client(protocol);
+jobStatus = client.getJobStatusFromJobHandler(jobID,getJobHandlerNode().getPort());
+System.out.println("================================================");
+log.info("Status of " + jobID + " is " + jobStatus);
+//TODO: convey client, repeat at task level & content tbd after scheduler/handler has job id assignment
+} catch (TTransportException e) {
+        if (e.getCause() instanceof ConnectException) {
+        e.printStackTrace();
+}
+        } catch (TException e) {
+        e.printStackTrace();
+} catch (Exception e){
+    e.printStackTrace();
+}
+finally {
+        transport.close();
+}
+
+        }
+//Thread runs while job status is false, i.e. Job is incomplete
+private class JobStatusPollThread extends Thread {
+
+    public boolean isRunning = false;
+
+    @Override
+    public void run() {
+        log.info(" First Job status polling thread started");
+        int count=0;
+
+        while (!jobStatus) {
+            pollStatusOfJob(jobId);
+            log.info("Job status after polling tis time is " + jobStatus);
+            count++;
+            log.info("Polled iteration: " + count);
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }catch (Exception e){
                 e.printStackTrace();
             }
-        } catch (TException e) {
-            e.printStackTrace();
-        } finally {
-            transport.close();
-        }
-
-    }
-//Thread runs while job status is false, i.e. Job is incomplete
-    private class JobStatusPollThread extends Thread {
-
-        public boolean isRunning = false;
-
-        @Override
-        public void run() {
-
-            isRunning = true;
-            while (!jobStatus) {
-                pollStatusOfJob(jobId);
-                try {
-                    sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void stopPolling() {
-            isRunning = false;
         }
     }
+
+    public void stopPolling() {
+        isRunning = false;
+    }
+}
 
     public void demo(){
         JobStatusPollThread thread = new JobStatusPollThread();
         thread.start();
+        log.info("Started Job Status Polling thread.");
+//        int count =0;
+//        while (!jobStatus) {
+//            log.info("Job status before polling tis time is " + jobStatus);
+//            pollStatusOfJob(jobId);
+//            log.info("Job status after polling tis time is " + jobStatus);
+//            count++;
+//            log.info("Polled iteration: " + count);
+//
+//        }
+
     }
 
-    //    DEMO only
+////        DEMO only
 //    public static void main(String[] args) {
 //        UserHandler userHandler = new UserHandler();
 ////    JobStatusPollThread thread = new JobStatusPollThread()

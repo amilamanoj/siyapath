@@ -1,5 +1,7 @@
 package org.siyapath.client;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  * Created by IntelliJ IDEA.
  * User: HP
@@ -37,6 +39,7 @@ public class JobStatusUI extends javax.swing.JFrame{
         viewStatisButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TaskTable = new javax.swing.JTable();
+        DefaultTableModel model = (DefaultTableModel) TaskTable.getModel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
