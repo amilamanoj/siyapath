@@ -1,12 +1,11 @@
 package org.siyapath;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.siyapath.job.JobHandler;
 import org.siyapath.utils.CommonUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * for a Siyapath node instance.
  */
 public class NodeContext {
+
+    private static final Log log = LogFactory.getLog(NodeContext.class);
 
     public enum NodeStatus {
         CREATED,
@@ -26,7 +27,7 @@ public class NodeContext {
      * This node's information
      */
     private NodeInfo nodeInfo;
-    private ArrayList<JobHandler> jobHandlerList;
+    private Map<Integer,JobHandler> jobHandlerMap;
     /**
      * List of known member nodes
      */
@@ -47,7 +48,7 @@ public class NodeContext {
     public NodeContext(NodeInfo nodeInfo) {
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashSet<NodeResource>();
-        this.jobHandlerList = new ArrayList<JobHandler>();
+        this.jobHandlerMap = new HashMap<Integer, JobHandler>();
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
@@ -198,8 +199,25 @@ public class NodeContext {
         this.memberResource = memberResource;
     }
 
-    public void addJob(JobHandler jobHandler) {
-        jobHandlerList.add(jobHandler);
+    public JobHandler getJobHandler(int jobId){
+        JobHandler jobHandler=null;
+
+        Set<Integer> jobIds = jobHandlerMap.keySet();
+
+        for(Integer id : jobIds){
+            if(jobId==id){
+                jobHandler = jobHandlerMap.get(jobId);
+                log.info("Right! Got the job!");
+            }else {
+                log.info("No such job submitted");
+            }
+        }
+        log.info("Returning.");
+        return jobHandler;
+    }
+
+    public void addJob(int jobId, JobHandler jobHandler) {
+        jobHandlerMap.put(jobId, jobHandler);
     }
 
     public ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> getMemWithNodeSet() {

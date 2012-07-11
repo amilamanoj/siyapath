@@ -159,11 +159,14 @@ public class JobHandler {
         Task task;
 
         Set<Map.Entry<NodeInfo,Task>> entrySet = taskProcessingNodes.entrySet();
+        log.info("map entryset done, next starting the for each");
 
         for(Map.Entry<NodeInfo,Task> entry : entrySet){
             port = entry.getKey().getPort();
+            log.info("porttttttttttt: " + port );
 //            taskID = entry.getValue().getTaskID();
             task = entry.getValue();
+            log.info("got a task, going task level");
             acquireTaskProcessingStatus(task, port);
             boolean isTaskCompleted = acquireTaskProcessingStatus(task, port);
             task.setTaskCompletionStatus(isTaskCompleted);
@@ -224,6 +227,7 @@ public class JobHandler {
 
         @Override
         public void run() {
+            log.info("Started status poll thread at JH");
 
             isRunning = true;
             while (isRunning) {
@@ -259,6 +263,7 @@ public class JobHandler {
     public boolean thriftCall(int jobID){
         StatusPollThread statusPollThread = new StatusPollThread();
         statusPollThread.setJobID(jobID);
+        log.info("Gonna start the status poll thread at Job handler");
         statusPollThread.start();
         return overallStatus;
 

@@ -499,7 +499,6 @@ public class UserGUI extends JFrame {
     }
 
     private void JobStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
         jobStatusUI.setVisible(true);
     }
 

@@ -13,7 +13,6 @@ import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -101,7 +100,7 @@ public class SiyapathService implements Siyapath.Iface {
     public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks) throws TException {
         log.info("Received a new job. JobID:" + jobID + " from: " + CommonUtils.deSerialize(sender));
         JobHandler jobHandler = new JobHandler(nodeContext, jobID, tasks);
-        nodeContext.addJob(jobHandler);
+        nodeContext.addJob(jobID,jobHandler);
         jobHandler.startScheduling();
         return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + jobID + ":" + "Accepted";
     }
@@ -128,15 +127,19 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
         //send the ip, port n stuff as params, codegen idl and replace
         boolean jobStatus;
+        System.out.println("inside the thrift callllll");
         NodeInfo handlerNodeInfo = new NodeInfo();
 //        handlerNodeInfo.setIp();
         handlerNodeInfo.setPort(port);
 //        handlerNodeInfo.setNodeId();
-        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
-        JobHandler jobHandler = new JobHandler(handlerNodeContext,jobID, new HashMap<Integer,Task>());
+
+        log.info("Contacting the JobHandler.");
+        JobHandler jobHandler = nodeContext.getJobHandler(jobID);
+
+//        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
+//        JobHandler jobHandler = new JobHandler(handlerNodeContext,jobID, new HashMap<Integer,Task>());
         jobStatus = jobHandler.thriftCall(jobID);
         return jobStatus;
-
     }
 
     @Override
