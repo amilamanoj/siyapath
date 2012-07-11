@@ -28,9 +28,10 @@ struct Task {
     4: string taskData,
     5: string className,
     6: NodeData sender,
-    7: string requiredResources,
-    8: string taskResult,
-    9: bool taskCompletionStatus
+    7: NodeData backup,
+    8: string requiredResources,
+    9: string taskResult,
+    10: bool taskCompletionStatus
 }
 
 struct Job {

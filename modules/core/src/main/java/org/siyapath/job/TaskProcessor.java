@@ -27,7 +27,6 @@ public class TaskProcessor {
 
     private final Log log = LogFactory.getLog(TaskProcessor.class);
     private Task task;
-    int computedResultToBeHandedOverTo;
     private NodeContext context;
     private boolean taskStatus;
 
@@ -36,7 +35,6 @@ public class TaskProcessor {
      */
     public TaskProcessor(Task task, NodeContext nodeContext) {
         this.task = task;
-//        computedResultToBeHandedOverTo = task.getSender().getPort();
         context = nodeContext;
     }
 
@@ -73,7 +71,7 @@ public class TaskProcessor {
                 log.info("Results: " + finalResult);
                 task.setTaskResult(finalResult);
                 setTaskStatus(true);
-//            sendResultToDistributingNode();
+                sendResultToDistributingNode();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
@@ -93,20 +91,40 @@ public class TaskProcessor {
         //setting the new sender as the processing node
         task.setSender(thisNode);
 
-        TTransport transport = new TSocket("localhost", computedResultToBeHandedOverTo);
+        TTransport transport = new TSocket("localhost", task.getSender().getPort());
 
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            log.info("Sending computed result back to Distributing node." + computedResultToBeHandedOverTo);
-            client.sendTaskResult(task);
+            if (client.isAlive()) {
+                log.info("Sending computed result back to Distributing node." + task.getSender());
+                client.sendTaskResult(task);
+            } else {
+                log.warn("Task Distributor is no longer available on port: " + task.getSender());
+                sendResultToBackupNode();
+            }
 
         } catch (TTransportException e) {
             e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {
-                log.warn("Task Distributor is no longer available on port: " + computedResultToBeHandedOverTo);
+                log.warn("Task Distributor is no longer available on port: " + task.getSender());
             }
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendResultToBackupNode() {
+        TTransport transport = new TSocket("localhost", task.getBackup().getPort());
+        try {
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            log.info("Sending computed result to the backup node." + task.getBackup());
+            client.sendTaskResult(task);
+        } catch (TTransportException e) {
+            e.printStackTrace();
         } catch (TException e) {
             e.printStackTrace();
         }
