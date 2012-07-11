@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -39,9 +40,10 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   private static final org.apache.thrift.protocol.TField TASK_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("taskData", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField CLASS_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("className", org.apache.thrift.protocol.TType.STRING, (short)5);
   private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.STRUCT, (short)6);
-  private static final org.apache.thrift.protocol.TField REQUIRED_RESOURCES_FIELD_DESC = new org.apache.thrift.protocol.TField("requiredResources", org.apache.thrift.protocol.TType.STRING, (short)7);
-  private static final org.apache.thrift.protocol.TField TASK_RESULT_FIELD_DESC = new org.apache.thrift.protocol.TField("taskResult", org.apache.thrift.protocol.TType.STRING, (short)8);
-  private static final org.apache.thrift.protocol.TField TASK_COMPLETION_STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("taskCompletionStatus", org.apache.thrift.protocol.TType.BOOL, (short)9);
+  private static final org.apache.thrift.protocol.TField BACKUP_FIELD_DESC = new org.apache.thrift.protocol.TField("backup", org.apache.thrift.protocol.TType.STRUCT, (short)7);
+  private static final org.apache.thrift.protocol.TField REQUIRED_RESOURCES_FIELD_DESC = new org.apache.thrift.protocol.TField("requiredResources", org.apache.thrift.protocol.TType.STRING, (short)8);
+  private static final org.apache.thrift.protocol.TField TASK_RESULT_FIELD_DESC = new org.apache.thrift.protocol.TField("taskResult", org.apache.thrift.protocol.TType.STRING, (short)9);
+  private static final org.apache.thrift.protocol.TField TASK_COMPLETION_STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("taskCompletionStatus", org.apache.thrift.protocol.TType.BOOL, (short)10);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -55,6 +57,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   public String taskData; // required
   public String className; // required
   public NodeData sender; // required
+  public NodeData backup; // required
   public String requiredResources; // required
   public String taskResult; // required
   public boolean taskCompletionStatus; // required
@@ -67,9 +70,10 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     TASK_DATA((short)4, "taskData"),
     CLASS_NAME((short)5, "className"),
     SENDER((short)6, "sender"),
-    REQUIRED_RESOURCES((short)7, "requiredResources"),
-    TASK_RESULT((short)8, "taskResult"),
-    TASK_COMPLETION_STATUS((short)9, "taskCompletionStatus");
+    BACKUP((short)7, "backup"),
+    REQUIRED_RESOURCES((short)8, "requiredResources"),
+    TASK_RESULT((short)9, "taskResult"),
+    TASK_COMPLETION_STATUS((short)10, "taskCompletionStatus");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -96,11 +100,13 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
           return CLASS_NAME;
         case 6: // SENDER
           return SENDER;
-        case 7: // REQUIRED_RESOURCES
+        case 7: // BACKUP
+          return BACKUP;
+        case 8: // REQUIRED_RESOURCES
           return REQUIRED_RESOURCES;
-        case 8: // TASK_RESULT
+        case 9: // TASK_RESULT
           return TASK_RESULT;
-        case 9: // TASK_COMPLETION_STATUS
+        case 10: // TASK_COMPLETION_STATUS
           return TASK_COMPLETION_STATUS;
         default:
           return null;
@@ -161,6 +167,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.SENDER, new org.apache.thrift.meta_data.FieldMetaData("sender", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
+    tmpMap.put(_Fields.BACKUP, new org.apache.thrift.meta_data.FieldMetaData("backup", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     tmpMap.put(_Fields.REQUIRED_RESOURCES, new org.apache.thrift.meta_data.FieldMetaData("requiredResources", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.TASK_RESULT, new org.apache.thrift.meta_data.FieldMetaData("taskResult", org.apache.thrift.TFieldRequirementType.DEFAULT, 
@@ -181,6 +189,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     String taskData,
     String className,
     NodeData sender,
+    NodeData backup,
     String requiredResources,
     String taskResult,
     boolean taskCompletionStatus)
@@ -194,6 +203,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.taskData = taskData;
     this.className = className;
     this.sender = sender;
+    this.backup = backup;
     this.requiredResources = requiredResources;
     this.taskResult = taskResult;
     this.taskCompletionStatus = taskCompletionStatus;
@@ -221,6 +231,9 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     if (other.isSetSender()) {
       this.sender = new NodeData(other.sender);
     }
+    if (other.isSetBackup()) {
+      this.backup = new NodeData(other.backup);
+    }
     if (other.isSetRequiredResources()) {
       this.requiredResources = other.requiredResources;
     }
@@ -244,6 +257,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.taskData = null;
     this.className = null;
     this.sender = null;
+    this.backup = null;
     this.requiredResources = null;
     this.taskResult = null;
     setTaskCompletionStatusIsSet(false);
@@ -402,6 +416,30 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
   }
 
+  public NodeData getBackup() {
+    return this.backup;
+  }
+
+  public Task setBackup(NodeData backup) {
+    this.backup = backup;
+    return this;
+  }
+
+  public void unsetBackup() {
+    this.backup = null;
+  }
+
+  /** Returns true if field backup is set (has been assigned a value) and false otherwise */
+  public boolean isSetBackup() {
+    return this.backup != null;
+  }
+
+  public void setBackupIsSet(boolean value) {
+    if (!value) {
+      this.backup = null;
+    }
+  }
+
   public String getRequiredResources() {
     return this.requiredResources;
   }
@@ -523,6 +561,14 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       }
       break;
 
+    case BACKUP:
+      if (value == null) {
+        unsetBackup();
+      } else {
+        setBackup((NodeData)value);
+      }
+      break;
+
     case REQUIRED_RESOURCES:
       if (value == null) {
         unsetRequiredResources();
@@ -570,6 +616,9 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     case SENDER:
       return getSender();
 
+    case BACKUP:
+      return getBackup();
+
     case REQUIRED_RESOURCES:
       return getRequiredResources();
 
@@ -602,6 +651,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       return isSetClassName();
     case SENDER:
       return isSetSender();
+    case BACKUP:
+      return isSetBackup();
     case REQUIRED_RESOURCES:
       return isSetRequiredResources();
     case TASK_RESULT:
@@ -679,6 +730,15 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         return false;
     }
 
+    boolean this_present_backup = true && this.isSetBackup();
+    boolean that_present_backup = true && that.isSetBackup();
+    if (this_present_backup || that_present_backup) {
+      if (!(this_present_backup && that_present_backup))
+        return false;
+      if (!this.backup.equals(that.backup))
+        return false;
+    }
+
     boolean this_present_requiredResources = true && this.isSetRequiredResources();
     boolean that_present_requiredResources = true && that.isSetRequiredResources();
     if (this_present_requiredResources || that_present_requiredResources) {
@@ -711,7 +771,59 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_taskID = true;
+    builder.append(present_taskID);
+    if (present_taskID)
+      builder.append(taskID);
+
+    boolean present_jobID = true;
+    builder.append(present_jobID);
+    if (present_jobID)
+      builder.append(jobID);
+
+    boolean present_taskProgram = true && (isSetTaskProgram());
+    builder.append(present_taskProgram);
+    if (present_taskProgram)
+      builder.append(taskProgram);
+
+    boolean present_taskData = true && (isSetTaskData());
+    builder.append(present_taskData);
+    if (present_taskData)
+      builder.append(taskData);
+
+    boolean present_className = true && (isSetClassName());
+    builder.append(present_className);
+    if (present_className)
+      builder.append(className);
+
+    boolean present_sender = true && (isSetSender());
+    builder.append(present_sender);
+    if (present_sender)
+      builder.append(sender);
+
+    boolean present_backup = true && (isSetBackup());
+    builder.append(present_backup);
+    if (present_backup)
+      builder.append(backup);
+
+    boolean present_requiredResources = true && (isSetRequiredResources());
+    builder.append(present_requiredResources);
+    if (present_requiredResources)
+      builder.append(requiredResources);
+
+    boolean present_taskResult = true && (isSetTaskResult());
+    builder.append(present_taskResult);
+    if (present_taskResult)
+      builder.append(taskResult);
+
+    boolean present_taskCompletionStatus = true;
+    builder.append(present_taskCompletionStatus);
+    if (present_taskCompletionStatus)
+      builder.append(taskCompletionStatus);
+
+    return builder.toHashCode();
   }
 
   public int compareTo(Task other) {
@@ -778,6 +890,16 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
     if (isSetSender()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sender, typedOther.sender);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetBackup()).compareTo(typedOther.isSetBackup());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBackup()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.backup, typedOther.backup);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -869,6 +991,14 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       sb.append("null");
     } else {
       sb.append(this.sender);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("backup:");
+    if (this.backup == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.backup);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -984,7 +1114,16 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 7: // REQUIRED_RESOURCES
+          case 7: // BACKUP
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+              struct.backup = new NodeData();
+              struct.backup.read(iprot);
+              struct.setBackupIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 8: // REQUIRED_RESOURCES
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.requiredResources = iprot.readString();
               struct.setRequiredResourcesIsSet(true);
@@ -992,7 +1131,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // TASK_RESULT
+          case 9: // TASK_RESULT
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.taskResult = iprot.readString();
               struct.setTaskResultIsSet(true);
@@ -1000,7 +1139,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 9: // TASK_COMPLETION_STATUS
+          case 10: // TASK_COMPLETION_STATUS
             if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
               struct.taskCompletionStatus = iprot.readBool();
               struct.setTaskCompletionStatusIsSet(true);
@@ -1047,6 +1186,11 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.sender != null) {
         oprot.writeFieldBegin(SENDER_FIELD_DESC);
         struct.sender.write(oprot);
+        oprot.writeFieldEnd();
+      }
+      if (struct.backup != null) {
+        oprot.writeFieldBegin(BACKUP_FIELD_DESC);
+        struct.backup.write(oprot);
         oprot.writeFieldEnd();
       }
       if (struct.requiredResources != null) {
@@ -1098,16 +1242,19 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetSender()) {
         optionals.set(5);
       }
-      if (struct.isSetRequiredResources()) {
+      if (struct.isSetBackup()) {
         optionals.set(6);
       }
-      if (struct.isSetTaskResult()) {
+      if (struct.isSetRequiredResources()) {
         optionals.set(7);
       }
-      if (struct.isSetTaskCompletionStatus()) {
+      if (struct.isSetTaskResult()) {
         optionals.set(8);
       }
-      oprot.writeBitSet(optionals, 9);
+      if (struct.isSetTaskCompletionStatus()) {
+        optionals.set(9);
+      }
+      oprot.writeBitSet(optionals, 10);
       if (struct.isSetTaskID()) {
         oprot.writeI32(struct.taskID);
       }
@@ -1126,6 +1273,9 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetSender()) {
         struct.sender.write(oprot);
       }
+      if (struct.isSetBackup()) {
+        struct.backup.write(oprot);
+      }
       if (struct.isSetRequiredResources()) {
         oprot.writeString(struct.requiredResources);
       }
@@ -1140,7 +1290,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Task struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(9);
+      BitSet incoming = iprot.readBitSet(10);
       if (incoming.get(0)) {
         struct.taskID = iprot.readI32();
         struct.setTaskIDIsSet(true);
@@ -1167,14 +1317,19 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         struct.setSenderIsSet(true);
       }
       if (incoming.get(6)) {
+        struct.backup = new NodeData();
+        struct.backup.read(iprot);
+        struct.setBackupIsSet(true);
+      }
+      if (incoming.get(7)) {
         struct.requiredResources = iprot.readString();
         struct.setRequiredResourcesIsSet(true);
       }
-      if (incoming.get(7)) {
+      if (incoming.get(8)) {
         struct.taskResult = iprot.readString();
         struct.setTaskResultIsSet(true);
       }
-      if (incoming.get(8)) {
+      if (incoming.get(9)) {
         struct.taskCompletionStatus = iprot.readBool();
         struct.setTaskCompletionStatusIsSet(true);
       }

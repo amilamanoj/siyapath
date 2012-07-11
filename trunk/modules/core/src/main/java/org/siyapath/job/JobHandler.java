@@ -69,6 +69,7 @@ public class JobHandler {
             JobScheduler scheduler = getJobScheduler();
 
             for (Task t : tasks.values()) {
+                t.setBackup(CommonUtils.serialize(backupNode));
                 NodeInfo selectedNode = scheduler.selectTaskProcessorNode(t);
                 log.info("JobID:" + currentJob.getJobID() + "-TaskID:" + t.getTaskID() + "-Sending to: " + selectedNode);
                 sendTask(t, selectedNode);
