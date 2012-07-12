@@ -31,16 +31,11 @@ public class JobHandler {
 
     private Map<NodeInfo, Task> taskProcessingNodes = null;
     private NodeContext context;
-//    private Map<Integer, Task> tasks = null;   //taskID and task
+    //    private Map<Integer, Task> tasks = null;   //taskID and task
     private NodeInfo backupNode;
     private Job currentJob;
     private boolean overallStatus = false;
 
-//    public int getJobId() {
-//        return jobId;
-//    }
-//
-//    private int jobId;
 
     public JobHandler(NodeContext nodeContext, int jobId, Map<Integer, Task> tasks) {
         //uses the default constructor at the sender non-requisition
@@ -74,10 +69,10 @@ public class JobHandler {
                 log.info("JobID:" + currentJob.getJobID() + "-TaskID:" + t.getTaskID() + "-Sending to: " + selectedNode);
                 sendTask(t, selectedNode);
                 if(taskProcessingNodes!=null){
-                    taskProcessingNodes.put(selectedNode, t);    
+                    taskProcessingNodes.put(selectedNode, t);
                 }
                 //else?-no
-                
+
             }
         }
     }
@@ -159,37 +154,25 @@ public class JobHandler {
         Task task;
 
         Set<Map.Entry<NodeInfo,Task>> entrySet = taskProcessingNodes.entrySet();
-        log.info("map entryset done, next starting the for each");
+//        log.info("map entryset done, next starting the for each =====8 acq job pro stats");
 
         for(Map.Entry<NodeInfo,Task> entry : entrySet){
             port = entry.getKey().getPort();
-            log.info("porttttttttttt: " + port );
+//            log.info("port of task processor guy : " + port );
 //            taskID = entry.getValue().getTaskID();
             task = entry.getValue();
-            log.info("got a task, going task level");
+            log.info("got a task, going task level, task id is " + task.getTaskID());
             acquireTaskProcessingStatus(task, port);
             boolean isTaskCompleted = acquireTaskProcessingStatus(task, port);
             task.setTaskCompletionStatus(isTaskCompleted);
 
         }
-//
-//        Set<NodeInfo> nodes = taskProcessingNodes.keySet();
-//        for (NodeInfo nodeInfo : nodes){
-//
-//        }
 
-//        int count = taskProcessingNodes.size();
         boolean dummy = true;
         for(Task task1 : taskProcessingNodes.values()){
-            dummy = dummy && task1.isTaskCompletionStatus();  //bool taskComplete
+            dummy = dummy && task1.isTaskCompletionStatus();
         }
         jobStatus = dummy;
-//        Task task1;
-//        Collection<Task> taskCollection = taskProcessingNodes.values();
-//        Iterator iterator = taskCollection.iterator();
-//        while (iterator.hasNext()){
-//
-//        }
 
         return jobStatus;
 
@@ -202,10 +185,11 @@ public class JobHandler {
         int taskID = task.getTaskID();// null check - check service class if u actually have the taskID set
         try {
             log.info("Polling status of task through JobHandler node " + context.getNodeInfo().getNodeId() +
-                    " for processing node on port: " + port + ". TaskID is " + taskID);
+                    " for processing node on port: " + port + ". TaskID is " + taskID );
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
+//            log.info("leaving JH acqtaskPstatus for thriftcall ============11");
             taskStatus = client.getTaskStatusFromTaskProcessor(task, port);
 //            log.info?
         } catch (TTransportException e) {
@@ -240,12 +224,12 @@ public class JobHandler {
                     }
                 }else{
                     stopPolling();
-                    log.info("Completed Job " + this.getJobID() + "Terminating thread.");
+                    log.info("Completed task, Terminating thread.");
                 }
             }
         }
 
-//        means job is completed
+        //        means job is completed
         public void stopPolling() {
             isRunning = false;
             overallStatus = true;

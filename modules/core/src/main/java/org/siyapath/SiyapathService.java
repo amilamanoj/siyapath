@@ -114,6 +114,7 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean submitTask(Task task) throws TException {
         log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
         TaskProcessor taskProcessor = new TaskProcessor(task, nodeContext);
+        nodeContext.addTask(task.getTaskID(), taskProcessor);
         taskProcessor.startProcessing();
         return true;
     }
@@ -127,13 +128,13 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
         //send the ip, port n stuff as params, codegen idl and replace
         boolean jobStatus;
-        System.out.println("inside the thrift callllll");
+//        System.out.println("inside the thrift callllll =====4");
         NodeInfo handlerNodeInfo = new NodeInfo();
 //        handlerNodeInfo.setIp();
         handlerNodeInfo.setPort(port);
 //        handlerNodeInfo.setNodeId();
 
-        log.info("Contacting the JobHandler.");
+//        log.info("Contacting the JobHandler.===5");
         JobHandler jobHandler = nodeContext.getJobHandler(jobID);
 
 //        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
@@ -144,11 +145,13 @@ public class SiyapathService implements Siyapath.Iface {
 
     @Override
     public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws TException {
+        log.info("at service class for task level, task id is " + task.getTaskID());
         boolean taskStatus;
         NodeInfo taskProcessorNodeInfo = new NodeInfo();
         taskProcessorNodeInfo.setPort(port);
-        NodeContext taskProcessorNodeContext = new NodeContext(taskProcessorNodeInfo);
-        TaskProcessor taskProcessor = new TaskProcessor(task, taskProcessorNodeContext);
+        TaskProcessor taskProcessor = nodeContext.getTaskProcessor(task.getTaskID());
+//        NodeContext taskProcessorNodeContext = new NodeContext(taskProcessorNodeInfo);
+//        TaskProcessor taskProcessor = new TaskProcessor(task, taskProcessorNodeContext);
         taskStatus = taskProcessor.isTaskStatus();
         return taskStatus;
     }

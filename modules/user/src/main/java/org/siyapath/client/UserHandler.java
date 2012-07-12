@@ -106,7 +106,7 @@ public class UserHandler {
             log.info("Number of members from bootstrapper: " + context.getMemberCount());
             selectedMember = context.getRandomMember();
             setJobHandlerNode(selectedMember);
-            System.out.println("damn1111111111111111111" + selectedMember.getPort());
+//            System.out.println("damn1111111111111111111" + selectedMember.getPort());
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
 //                res = "connecEx";
@@ -196,15 +196,15 @@ public class UserHandler {
      */
     public void pollStatusOfJob(int jobID){
         //
-        System.out.println("damnnnnnnnnnnnnnnnnnnnnnnnnn2"+getJobHandlerNode().getPort());
+//        System.out.println("damnnnnnnnnnnnnnnnnnnnnnnnnn2"+getJobHandlerNode().getPort());
 TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
 try {
-        log.info("pollStatusOfJob(int jobID)---Polling status of job: " + jobID);
+        log.info("Polling status of job: " + jobID);
 transport.open();
 TProtocol protocol = new TBinaryProtocol(transport);
 Siyapath.Client client = new Siyapath.Client(protocol);
 jobStatus = client.getJobStatusFromJobHandler(jobID,getJobHandlerNode().getPort());
-System.out.println("================================================");
+//System.out.println("================================================");
 log.info("Status of " + jobID + " is " + jobStatus);
 //TODO: convey client, repeat at task level & content tbd after scheduler/handler has job id assignment
 } catch (TTransportException e) {
@@ -228,14 +228,17 @@ private class JobStatusPollThread extends Thread {
 
     @Override
     public void run() {
-        log.info(" First Job status polling thread started");
+        log.info("Job status polling thread started");
         int count=0;
 
         while (!jobStatus) {
             pollStatusOfJob(jobId);
-            log.info("Job status after polling tis time is " + jobStatus);
+            log.info("Job status after polling is " + jobStatus);
             count++;
             log.info("Polled iteration: " + count);
+            if(jobStatus){
+                log.info("status polling thread terminating");
+            }
             try {
                 sleep(1000);
             } catch (InterruptedException e) {
@@ -254,7 +257,7 @@ private class JobStatusPollThread extends Thread {
     public void demo(){
         JobStatusPollThread thread = new JobStatusPollThread();
         thread.start();
-        log.info("Started Job Status Polling thread.");
+//        log.info("Started Job Status Polling thread.===1");
 //        int count =0;
 //        while (!jobStatus) {
 //            log.info("Job status before polling tis time is " + jobStatus);
