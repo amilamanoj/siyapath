@@ -58,6 +58,7 @@ public class TaskProcessor {
             taskClassLoader = new TaskClassLoader();
             try {
                 // TODO: verify if expected name is necessary
+                log.info("process task method runiing $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
                 SiyapathTask taskInstance = (SiyapathTask) theLoadedClass.newInstance();
 //                MonitorThread monitor = new MonitorThread();
@@ -131,6 +132,7 @@ public class TaskProcessor {
     }
 
     public boolean isTaskStatus() {
+        log.info("now at task processor======13");
         return taskStatus;
     }
 

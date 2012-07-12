@@ -3,6 +3,7 @@ package org.siyapath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.job.JobHandler;
+import org.siyapath.job.TaskProcessor;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.*;
@@ -28,6 +29,7 @@ public class NodeContext {
      */
     private NodeInfo nodeInfo;
     private Map<Integer,JobHandler> jobHandlerMap;
+    private Map<Integer,TaskProcessor> taskProcessorMap;
     /**
      * List of known member nodes
      */
@@ -49,6 +51,7 @@ public class NodeContext {
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashSet<NodeResource>();
         this.jobHandlerMap = new HashMap<Integer, JobHandler>();
+        this.taskProcessorMap = new HashMap<Integer, TaskProcessor>();
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
@@ -215,9 +218,30 @@ public class NodeContext {
         log.info("Returning.");
         return jobHandler;
     }
+    
+    public TaskProcessor getTaskProcessor(int taskId){
+        TaskProcessor taskProcessor=null;
+        
+        Set<Integer> taskIds = taskProcessorMap.keySet();
+
+        for(Integer id : taskIds){
+            if(taskId==id){
+                taskProcessor = taskProcessorMap.get(taskId);
+                log.info("Cool! Got the task!");
+            } else {
+                log.info("No such task distributed");
+            }
+        }
+        log.info("returning matched task");
+        return taskProcessor;
+    }
 
     public void addJob(int jobId, JobHandler jobHandler) {
         jobHandlerMap.put(jobId, jobHandler);
+    }
+
+    public void addTask(int taskId, TaskProcessor taskProcessor){
+        taskProcessorMap.put(taskId, taskProcessor);
     }
 
     public ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> getMemWithNodeSet() {
