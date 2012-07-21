@@ -5,12 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.siyapath.common.BackupHandler;
 import org.siyapath.gossip.GossipImpl;
-import org.siyapath.job.JobHandler;
 import org.siyapath.job.TaskProcessor;
-import org.siyapath.service.NodeData;
-import org.siyapath.service.NodeResourceData;
-import org.siyapath.service.Siyapath;
-import org.siyapath.service.Task;
+import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.Map;
@@ -91,18 +87,15 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param tasks
-     * @param jobID
-     * @return String success if job successfully submitted
+     * @param job received job
+     * @return String success if job is accepted
      * @throws TException
      */
     @Override
-    public String submitJob(int jobID, NodeData sender, Map<Integer, Task> tasks) throws TException {
-        log.info("Received a new job. JobID:" + jobID + " from: " + CommonUtils.deSerialize(sender));
-        JobHandler jobHandler = new JobHandler(nodeContext, jobID, tasks);
-        nodeContext.addJob(jobID,jobHandler);
-        jobHandler.startScheduling();
-        return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + jobID + ":" + "Accepted";
+    public String submitJob(Job job) throws TException {
+        log.info("Received a new job. JobID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
+        nodeContext.getJobProcessor().addNewJob(job);
+        return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + job.getJobID() + ":" + "Accepted";
     }
 
     /**
@@ -114,7 +107,6 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean submitTask(Task task) throws TException {
         log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
         TaskProcessor taskProcessor = new TaskProcessor(task, nodeContext);
-        nodeContext.addTask(task.getTaskID(), taskProcessor);
         taskProcessor.startProcessing();
         return true;
     }
@@ -128,30 +120,25 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
         //send the ip, port n stuff as params, codegen idl and replace
         boolean jobStatus;
-//        System.out.println("inside the thrift callllll =====4");
         NodeInfo handlerNodeInfo = new NodeInfo();
 //        handlerNodeInfo.setIp();
         handlerNodeInfo.setPort(port);
 //        handlerNodeInfo.setNodeId();
+        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
+//        JobProcessor jobHandler = new JobProcessor(handlerNodeContext,jobID, new HashMap<Integer,Task>());
+//        jobStatus = jobHandler.thriftCall(jobID);
+//        return jobStatus;
+        return false;
 
-//        log.info("Contacting the JobHandler.===5");
-        JobHandler jobHandler = nodeContext.getJobHandler(jobID);
-
-//        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
-//        JobHandler jobHandler = new JobHandler(handlerNodeContext,jobID, new HashMap<Integer,Task>());
-        jobStatus = jobHandler.thriftCall(jobID);
-        return jobStatus;
     }
 
     @Override
     public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws TException {
-        log.info("at service class for task level, task id is " + task.getTaskID());
         boolean taskStatus;
         NodeInfo taskProcessorNodeInfo = new NodeInfo();
         taskProcessorNodeInfo.setPort(port);
-        TaskProcessor taskProcessor = nodeContext.getTaskProcessor(task.getTaskID());
-//        NodeContext taskProcessorNodeContext = new NodeContext(taskProcessorNodeInfo);
-//        TaskProcessor taskProcessor = new TaskProcessor(task, taskProcessorNodeContext);
+        NodeContext taskProcessorNodeContext = new NodeContext(taskProcessorNodeInfo);
+        TaskProcessor taskProcessor = new TaskProcessor(task, taskProcessorNodeContext);
         taskStatus = taskProcessor.isTaskStatus();
         return taskStatus;
     }
@@ -172,7 +159,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean sendTaskResult(Task task) {
-//        JobHandler taskDistributor = new JobHandler(task, nodeContext);
+//        JobProcessor taskDistributor = new JobProcessor(task, nodeContext);
 //        taskDistributor.sendResultToUserNode();
         return true;
     }

@@ -2,7 +2,7 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.siyapath.job.JobHandler;
+import org.siyapath.job.JobProcessor;
 import org.siyapath.job.TaskProcessor;
 import org.siyapath.utils.CommonUtils;
 
@@ -16,6 +16,24 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NodeContext {
 
     private static final Log log = LogFactory.getLog(NodeContext.class);
+    private JobProcessor jobProcessor;
+
+
+    /**
+     * This node's information
+     */
+    private NodeInfo nodeInfo;
+//    private Map<Integer,JobHandler> jobHandlerMap;
+//    private Map<Integer,TaskProcessor> taskProcessorMap;
+    /**
+     * List of known member nodes
+     */
+    private HashSet<NodeInfo> members;
+    //    TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
+    private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;
+    private boolean isBackup;
+    private HashSet<NodeResource> memberResource;
+    private NodeResource nodeResource;
 
     public enum NodeStatus {
         CREATED,
@@ -24,25 +42,7 @@ public class NodeContext {
         PROCESSING
     }
 
-    /**
-     * This node's information
-     */
-    private NodeInfo nodeInfo;
-    private Map<Integer,JobHandler> jobHandlerMap;
-    private Map<Integer,TaskProcessor> taskProcessorMap;
-    /**
-     * List of known member nodes
-     */
-    private HashSet<NodeInfo> members;
-//    TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
-    private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;
-    private boolean isBackup;
-    private HashSet<NodeResource> memberResource;
-
     private NodeStatus nodeStatus;
-
-    private NodeResource nodeResource;
-
 
     /**
      *
@@ -50,8 +50,7 @@ public class NodeContext {
     public NodeContext(NodeInfo nodeInfo) {
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashSet<NodeResource>();
-        this.jobHandlerMap = new HashMap<Integer, JobHandler>();
-        this.taskProcessorMap = new HashMap<Integer, TaskProcessor>();
+//        this.taskProcessorMap = new HashMap<Integer, TaskProcessor>();
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
@@ -64,6 +63,13 @@ public class NodeContext {
 
     public void setNodeStatus(NodeStatus status) {
         nodeStatus = status;
+    }
+
+    public JobProcessor getJobProcessor() {
+        if (jobProcessor == null) {
+            jobProcessor = new JobProcessor(this); //lazy loading
+        }
+        return jobProcessor;
     }
 
     /**
@@ -202,47 +208,47 @@ public class NodeContext {
         this.memberResource = memberResource;
     }
 
-    public JobHandler getJobHandler(int jobId){
-        JobHandler jobHandler=null;
+//    public JobHandler getJobHandler(int jobId){
+//        JobHandler jobHandler=null;
+//
+//        Set<Integer> jobIds = jobHandlerMap.keySet();
+//
+//        for(Integer id : jobIds){
+//            if(jobId==id){
+//                jobHandler = jobHandlerMap.get(jobId);
+//                log.info("Right! Got the job!");
+//            }else {
+//                log.info("No such job submitted");
+//            }
+//        }
+//        log.info("Returning.");
+//        return jobHandler;
+//    }
 
-        Set<Integer> jobIds = jobHandlerMap.keySet();
+//    public TaskProcessor getTaskProcessor(int taskId){
+//        TaskProcessor taskProcessor=null;
+//
+//        Set<Integer> taskIds = taskProcessorMap.keySet();
+//
+//        for(Integer id : taskIds){
+//            if(taskId==id){
+//                taskProcessor = taskProcessorMap.get(taskId);
+//                log.info("Cool! Got the task!");
+//            } else {
+//                log.info("No such task distributed");
+//            }
+//        }
+//        log.info("returning matched task");
+//        return taskProcessor;
+//    }
 
-        for(Integer id : jobIds){
-            if(jobId==id){
-                jobHandler = jobHandlerMap.get(jobId);
-                log.info("Right! Got the job!");
-            }else {
-                log.info("No such job submitted");
-            }
-        }
-        log.info("Returning.");
-        return jobHandler;
-    }
-    
-    public TaskProcessor getTaskProcessor(int taskId){
-        TaskProcessor taskProcessor=null;
-        
-        Set<Integer> taskIds = taskProcessorMap.keySet();
+//    public void addJob(int jobId, JobHandler jobHandler) {
+//        jobHandlerMap.put(jobId, jobHandler);
+//    }
 
-        for(Integer id : taskIds){
-            if(taskId==id){
-                taskProcessor = taskProcessorMap.get(taskId);
-                log.info("Cool! Got the task!");
-            } else {
-                log.info("No such task distributed");
-            }
-        }
-        log.info("returning matched task");
-        return taskProcessor;
-    }
-
-    public void addJob(int jobId, JobHandler jobHandler) {
-        jobHandlerMap.put(jobId, jobHandler);
-    }
-
-    public void addTask(int taskId, TaskProcessor taskProcessor){
-        taskProcessorMap.put(taskId, taskProcessor);
-    }
+//    public void addTask(int taskId, TaskProcessor taskProcessor){
+//        taskProcessorMap.put(taskId, taskProcessor);
+//    }
 
     public ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> getMemWithNodeSet() {
         return memWithNodeSet;

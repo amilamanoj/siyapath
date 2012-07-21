@@ -36,7 +36,7 @@ struct Task {
 
 struct Job {
     1: i32 jobID,
-    2: i32 sender,
+    2: NodeData user,
     3: map<i32,Task> tasks
 }
 
@@ -64,7 +64,7 @@ service Siyapath {
     bool requestBecomeBackup(1:i32 jobID, 2:NodeData node ),
 
     //Submitting a job
-    string submitJob(1:i32 jobID 2:NodeData user, 3:map<i32,Task> tasks ),
+    string submitJob(1:Job job),
 
     //Submitting a task
     bool submitTask(1:Task task),

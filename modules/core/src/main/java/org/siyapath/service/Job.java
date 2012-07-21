@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -32,7 +31,7 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Job");
 
   private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
-  private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.I32, (short)2);
+  private static final org.apache.thrift.protocol.TField USER_FIELD_DESC = new org.apache.thrift.protocol.TField("user", org.apache.thrift.protocol.TType.STRUCT, (short)2);
   private static final org.apache.thrift.protocol.TField TASKS_FIELD_DESC = new org.apache.thrift.protocol.TField("tasks", org.apache.thrift.protocol.TType.MAP, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
@@ -42,13 +41,13 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   }
 
   public int jobID; // required
-  public int sender; // required
+  public NodeData user; // required
   public Map<Integer,Task> tasks; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     JOB_ID((short)1, "jobID"),
-    SENDER((short)2, "sender"),
+    USER((short)2, "user"),
     TASKS((short)3, "tasks");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
@@ -66,8 +65,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       switch(fieldId) {
         case 1: // JOB_ID
           return JOB_ID;
-        case 2: // SENDER
-          return SENDER;
+        case 2: // USER
+          return USER;
         case 3: // TASKS
           return TASKS;
         default:
@@ -111,15 +110,14 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   // isset id assignments
   private static final int __JOBID_ISSET_ID = 0;
-  private static final int __SENDER_ISSET_ID = 1;
-  private BitSet __isset_bit_vector = new BitSet(2);
+  private BitSet __isset_bit_vector = new BitSet(1);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.SENDER, new org.apache.thrift.meta_data.FieldMetaData("sender", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.USER, new org.apache.thrift.meta_data.FieldMetaData("user", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     tmpMap.put(_Fields.TASKS, new org.apache.thrift.meta_data.FieldMetaData("tasks", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
             new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
@@ -133,14 +131,13 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   public Job(
     int jobID,
-    int sender,
+    NodeData user,
     Map<Integer,Task> tasks)
   {
     this();
     this.jobID = jobID;
     setJobIDIsSet(true);
-    this.sender = sender;
-    setSenderIsSet(true);
+    this.user = user;
     this.tasks = tasks;
   }
 
@@ -151,7 +148,9 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
     this.jobID = other.jobID;
-    this.sender = other.sender;
+    if (other.isSetUser()) {
+      this.user = new NodeData(other.user);
+    }
     if (other.isSetTasks()) {
       Map<Integer,Task> __this__tasks = new HashMap<Integer,Task>();
       for (Map.Entry<Integer, Task> other_element : other.tasks.entrySet()) {
@@ -177,8 +176,7 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   public void clear() {
     setJobIDIsSet(false);
     this.jobID = 0;
-    setSenderIsSet(false);
-    this.sender = 0;
+    this.user = null;
     this.tasks = null;
   }
 
@@ -205,27 +203,28 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     __isset_bit_vector.set(__JOBID_ISSET_ID, value);
   }
 
-  public int getSender() {
-    return this.sender;
+  public NodeData getUser() {
+    return this.user;
   }
 
-  public Job setSender(int sender) {
-    this.sender = sender;
-    setSenderIsSet(true);
+  public Job setUser(NodeData user) {
+    this.user = user;
     return this;
   }
 
-  public void unsetSender() {
-    __isset_bit_vector.clear(__SENDER_ISSET_ID);
+  public void unsetUser() {
+    this.user = null;
   }
 
-  /** Returns true if field sender is set (has been assigned a value) and false otherwise */
-  public boolean isSetSender() {
-    return __isset_bit_vector.get(__SENDER_ISSET_ID);
+  /** Returns true if field user is set (has been assigned a value) and false otherwise */
+  public boolean isSetUser() {
+    return this.user != null;
   }
 
-  public void setSenderIsSet(boolean value) {
-    __isset_bit_vector.set(__SENDER_ISSET_ID, value);
+  public void setUserIsSet(boolean value) {
+    if (!value) {
+      this.user = null;
+    }
   }
 
   public int getTasksSize() {
@@ -273,11 +272,11 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       }
       break;
 
-    case SENDER:
+    case USER:
       if (value == null) {
-        unsetSender();
+        unsetUser();
       } else {
-        setSender((Integer)value);
+        setUser((NodeData)value);
       }
       break;
 
@@ -297,8 +296,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     case JOB_ID:
       return Integer.valueOf(getJobID());
 
-    case SENDER:
-      return Integer.valueOf(getSender());
+    case USER:
+      return getUser();
 
     case TASKS:
       return getTasks();
@@ -316,8 +315,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     switch (field) {
     case JOB_ID:
       return isSetJobID();
-    case SENDER:
-      return isSetSender();
+    case USER:
+      return isSetUser();
     case TASKS:
       return isSetTasks();
     }
@@ -346,12 +345,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return false;
     }
 
-    boolean this_present_sender = true;
-    boolean that_present_sender = true;
-    if (this_present_sender || that_present_sender) {
-      if (!(this_present_sender && that_present_sender))
+    boolean this_present_user = true && this.isSetUser();
+    boolean that_present_user = true && that.isSetUser();
+    if (this_present_user || that_present_user) {
+      if (!(this_present_user && that_present_user))
         return false;
-      if (this.sender != that.sender)
+      if (!this.user.equals(that.user))
         return false;
     }
 
@@ -369,24 +368,7 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   @Override
   public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-
-    boolean present_jobID = true;
-    builder.append(present_jobID);
-    if (present_jobID)
-      builder.append(jobID);
-
-    boolean present_sender = true;
-    builder.append(present_sender);
-    if (present_sender)
-      builder.append(sender);
-
-    boolean present_tasks = true && (isSetTasks());
-    builder.append(present_tasks);
-    if (present_tasks)
-      builder.append(tasks);
-
-    return builder.toHashCode();
+    return 0;
   }
 
   public int compareTo(Job other) {
@@ -407,12 +389,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSender()).compareTo(typedOther.isSetSender());
+    lastComparison = Boolean.valueOf(isSetUser()).compareTo(typedOther.isSetUser());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSender()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sender, typedOther.sender);
+    if (isSetUser()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.user, typedOther.user);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -451,8 +433,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     sb.append(this.jobID);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("sender:");
-    sb.append(this.sender);
+    sb.append("user:");
+    if (this.user == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.user);
+    }
     first = false;
     if (!first) sb.append(", ");
     sb.append("tasks:");
@@ -514,10 +500,11 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // SENDER
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.sender = iprot.readI32();
-              struct.setSenderIsSet(true);
+          case 2: // USER
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+              struct.user = new NodeData();
+              struct.user.read(iprot);
+              struct.setUserIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -561,9 +548,11 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
       oprot.writeI32(struct.jobID);
       oprot.writeFieldEnd();
-      oprot.writeFieldBegin(SENDER_FIELD_DESC);
-      oprot.writeI32(struct.sender);
-      oprot.writeFieldEnd();
+      if (struct.user != null) {
+        oprot.writeFieldBegin(USER_FIELD_DESC);
+        struct.user.write(oprot);
+        oprot.writeFieldEnd();
+      }
       if (struct.tasks != null) {
         oprot.writeFieldBegin(TASKS_FIELD_DESC);
         {
@@ -598,7 +587,7 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       if (struct.isSetJobID()) {
         optionals.set(0);
       }
-      if (struct.isSetSender()) {
+      if (struct.isSetUser()) {
         optionals.set(1);
       }
       if (struct.isSetTasks()) {
@@ -608,8 +597,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       if (struct.isSetJobID()) {
         oprot.writeI32(struct.jobID);
       }
-      if (struct.isSetSender()) {
-        oprot.writeI32(struct.sender);
+      if (struct.isSetUser()) {
+        struct.user.write(oprot);
       }
       if (struct.isSetTasks()) {
         {
@@ -632,8 +621,9 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         struct.setJobIDIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.sender = iprot.readI32();
-        struct.setSenderIsSet(true);
+        struct.user = new NodeData();
+        struct.user.read(iprot);
+        struct.setUserIsSet(true);
       }
       if (incoming.get(2)) {
         {
