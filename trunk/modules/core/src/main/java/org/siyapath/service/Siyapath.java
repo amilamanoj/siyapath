@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -47,7 +46,7 @@ public class Siyapath {
 
     public boolean requestBecomeBackup(int jobID, NodeData node) throws org.apache.thrift.TException;
 
-    public String submitJob(int jobID, NodeData user, Map<Integer, Task> tasks) throws org.apache.thrift.TException;
+    public String submitJob(Job job) throws org.apache.thrift.TException;
 
     public boolean submitTask(Task task) throws org.apache.thrift.TException;
 
@@ -77,7 +76,7 @@ public class Siyapath {
 
     public void requestBecomeBackup(int jobID, NodeData node, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requestBecomeBackup_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void submitJob(int jobID, NodeData user, Map<Integer, Task> tasks, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitJob_call> resultHandler) throws org.apache.thrift.TException;
+    public void submitJob(Job job, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitJob_call> resultHandler) throws org.apache.thrift.TException;
 
     public void submitTask(Task task, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.submitTask_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -251,18 +250,16 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "requestBecomeBackup failed: unknown result");
     }
 
-    public String submitJob(int jobID, NodeData user, Map<Integer,Task> tasks) throws org.apache.thrift.TException
+    public String submitJob(Job job) throws org.apache.thrift.TException
     {
-      send_submitJob(jobID, user, tasks);
+      send_submitJob(job);
       return recv_submitJob();
     }
 
-    public void send_submitJob(int jobID, NodeData user, Map<Integer,Task> tasks) throws org.apache.thrift.TException
+    public void send_submitJob(Job job) throws org.apache.thrift.TException
     {
       submitJob_args args = new submitJob_args();
-      args.setJobID(jobID);
-      args.setUser(user);
-      args.setTasks(tasks);
+      args.setJob(job);
       sendBase("submitJob", args);
     }
 
@@ -458,7 +455,7 @@ public class Siyapath {
       }
 
       public NodeResourceData getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -490,7 +487,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -525,7 +522,7 @@ public class Siyapath {
       }
 
       public Set<NodeData> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -554,7 +551,7 @@ public class Siyapath {
       }
 
       public Set<NodeData> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -583,7 +580,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -618,7 +615,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -627,36 +624,30 @@ public class Siyapath {
       }
     }
 
-    public void submitJob(int jobID, NodeData user, Map<Integer,Task> tasks, org.apache.thrift.async.AsyncMethodCallback<submitJob_call> resultHandler) throws org.apache.thrift.TException {
+    public void submitJob(Job job, org.apache.thrift.async.AsyncMethodCallback<submitJob_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      submitJob_call method_call = new submitJob_call(jobID, user, tasks, resultHandler, this, ___protocolFactory, ___transport);
+      submitJob_call method_call = new submitJob_call(job, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class submitJob_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private int jobID;
-      private NodeData user;
-      private Map<Integer,Task> tasks;
-      public submitJob_call(int jobID, NodeData user, Map<Integer,Task> tasks, org.apache.thrift.async.AsyncMethodCallback<submitJob_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private Job job;
+      public submitJob_call(Job job, org.apache.thrift.async.AsyncMethodCallback<submitJob_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.jobID = jobID;
-        this.user = user;
-        this.tasks = tasks;
+        this.job = job;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("submitJob", org.apache.thrift.protocol.TMessageType.CALL, 0));
         submitJob_args args = new submitJob_args();
-        args.setJobID(jobID);
-        args.setUser(user);
-        args.setTasks(tasks);
+        args.setJob(job);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
       public String getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -688,7 +679,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -723,7 +714,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -758,7 +749,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -790,7 +781,7 @@ public class Siyapath {
       }
 
       public Map<Integer,Task> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -822,7 +813,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -857,7 +848,7 @@ public class Siyapath {
       }
 
       public String getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -1005,7 +996,7 @@ public class Siyapath {
 
       protected submitJob_result getResult(I iface, submitJob_args args) throws org.apache.thrift.TException {
         submitJob_result result = new submitJob_result();
-        result.success = iface.submitJob(args.jobID, args.user, args.tasks);
+        result.success = iface.submitJob(args.job);
         return result;
       }
     }
@@ -1307,14 +1298,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_resourceData = true && (isSetResourceData());
-      builder.append(present_resourceData);
-      if (present_resourceData)
-        builder.append(resourceData);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(resourceGossip_args other) {
@@ -1669,14 +1653,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(resourceGossip_result other) {
@@ -2031,14 +2008,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_nodeData = true && (isSetNodeData());
-      builder.append(present_nodeData);
-      if (present_nodeData)
-        builder.append(nodeData);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyPresence_args other) {
@@ -2396,14 +2366,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyPresence_result other) {
@@ -2829,19 +2792,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_nodeData = true && (isSetNodeData());
-      builder.append(present_nodeData);
-      if (present_nodeData)
-        builder.append(nodeData);
-
-      boolean present_knownNodes = true && (isSetKnownNodes());
-      builder.append(present_knownNodes);
-      if (present_knownNodes)
-        builder.append(knownNodes);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(memberDiscovery_args other) {
@@ -3291,14 +3242,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(memberDiscovery_result other) {
@@ -3620,9 +3564,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getMembers_args other) {
@@ -3952,14 +3894,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getMembers_result other) {
@@ -4281,9 +4216,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(isAlive_args other) {
@@ -4596,14 +4529,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(isAlive_result other) {
@@ -5012,19 +4938,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      boolean present_node = true && (isSetNode());
-      builder.append(present_node);
-      if (present_node)
-        builder.append(node);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(requestBecomeBackup_args other) {
@@ -5419,14 +5333,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(requestBecomeBackup_result other) {
@@ -5581,9 +5488,7 @@ public class Siyapath {
   public static class submitJob_args implements org.apache.thrift.TBase<submitJob_args, submitJob_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("submitJob_args");
 
-    private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
-    private static final org.apache.thrift.protocol.TField USER_FIELD_DESC = new org.apache.thrift.protocol.TField("user", org.apache.thrift.protocol.TType.STRUCT, (short)2);
-    private static final org.apache.thrift.protocol.TField TASKS_FIELD_DESC = new org.apache.thrift.protocol.TField("tasks", org.apache.thrift.protocol.TType.MAP, (short)3);
+    private static final org.apache.thrift.protocol.TField JOB_FIELD_DESC = new org.apache.thrift.protocol.TField("job", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -5591,15 +5496,11 @@ public class Siyapath {
       schemes.put(TupleScheme.class, new submitJob_argsTupleSchemeFactory());
     }
 
-    public int jobID; // required
-    public NodeData user; // required
-    public Map<Integer,Task> tasks; // required
+    public Job job; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      JOB_ID((short)1, "jobID"),
-      USER((short)2, "user"),
-      TASKS((short)3, "tasks");
+      JOB((short)1, "job");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -5614,12 +5515,8 @@ public class Siyapath {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // JOB_ID
-            return JOB_ID;
-          case 2: // USER
-            return USER;
-          case 3: // TASKS
-            return TASKS;
+          case 1: // JOB
+            return JOB;
           default:
             return null;
         }
@@ -5660,19 +5557,11 @@ public class Siyapath {
     }
 
     // isset id assignments
-    private static final int __JOBID_ISSET_ID = 0;
-    private BitSet __isset_bit_vector = new BitSet(1);
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-      tmpMap.put(_Fields.USER, new org.apache.thrift.meta_data.FieldMetaData("user", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
-      tmpMap.put(_Fields.TASKS, new org.apache.thrift.meta_data.FieldMetaData("tasks", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Task.class))));
+      tmpMap.put(_Fields.JOB, new org.apache.thrift.meta_data.FieldMetaData("job", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Job.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(submitJob_args.class, metaDataMap);
     }
@@ -5681,41 +5570,18 @@ public class Siyapath {
     }
 
     public submitJob_args(
-      int jobID,
-      NodeData user,
-      Map<Integer,Task> tasks)
+      Job job)
     {
       this();
-      this.jobID = jobID;
-      setJobIDIsSet(true);
-      this.user = user;
-      this.tasks = tasks;
+      this.job = job;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public submitJob_args(submitJob_args other) {
-      __isset_bit_vector.clear();
-      __isset_bit_vector.or(other.__isset_bit_vector);
-      this.jobID = other.jobID;
-      if (other.isSetUser()) {
-        this.user = new NodeData(other.user);
-      }
-      if (other.isSetTasks()) {
-        Map<Integer,Task> __this__tasks = new HashMap<Integer,Task>();
-        for (Map.Entry<Integer, Task> other_element : other.tasks.entrySet()) {
-
-          Integer other_element_key = other_element.getKey();
-          Task other_element_value = other_element.getValue();
-
-          Integer __this__tasks_copy_key = other_element_key;
-
-          Task __this__tasks_copy_value = new Task(other_element_value);
-
-          __this__tasks.put(__this__tasks_copy_key, __this__tasks_copy_value);
-        }
-        this.tasks = __this__tasks;
+      if (other.isSetJob()) {
+        this.job = new Job(other.job);
       }
     }
 
@@ -5725,117 +5591,40 @@ public class Siyapath {
 
     @Override
     public void clear() {
-      setJobIDIsSet(false);
-      this.jobID = 0;
-      this.user = null;
-      this.tasks = null;
+      this.job = null;
     }
 
-    public int getJobID() {
-      return this.jobID;
+    public Job getJob() {
+      return this.job;
     }
 
-    public submitJob_args setJobID(int jobID) {
-      this.jobID = jobID;
-      setJobIDIsSet(true);
+    public submitJob_args setJob(Job job) {
+      this.job = job;
       return this;
     }
 
-    public void unsetJobID() {
-      __isset_bit_vector.clear(__JOBID_ISSET_ID);
+    public void unsetJob() {
+      this.job = null;
     }
 
-    /** Returns true if field jobID is set (has been assigned a value) and false otherwise */
-    public boolean isSetJobID() {
-      return __isset_bit_vector.get(__JOBID_ISSET_ID);
+    /** Returns true if field job is set (has been assigned a value) and false otherwise */
+    public boolean isSetJob() {
+      return this.job != null;
     }
 
-    public void setJobIDIsSet(boolean value) {
-      __isset_bit_vector.set(__JOBID_ISSET_ID, value);
-    }
-
-    public NodeData getUser() {
-      return this.user;
-    }
-
-    public submitJob_args setUser(NodeData user) {
-      this.user = user;
-      return this;
-    }
-
-    public void unsetUser() {
-      this.user = null;
-    }
-
-    /** Returns true if field user is set (has been assigned a value) and false otherwise */
-    public boolean isSetUser() {
-      return this.user != null;
-    }
-
-    public void setUserIsSet(boolean value) {
+    public void setJobIsSet(boolean value) {
       if (!value) {
-        this.user = null;
-      }
-    }
-
-    public int getTasksSize() {
-      return (this.tasks == null) ? 0 : this.tasks.size();
-    }
-
-    public void putToTasks(int key, Task val) {
-      if (this.tasks == null) {
-        this.tasks = new HashMap<Integer,Task>();
-      }
-      this.tasks.put(key, val);
-    }
-
-    public Map<Integer,Task> getTasks() {
-      return this.tasks;
-    }
-
-    public submitJob_args setTasks(Map<Integer,Task> tasks) {
-      this.tasks = tasks;
-      return this;
-    }
-
-    public void unsetTasks() {
-      this.tasks = null;
-    }
-
-    /** Returns true if field tasks is set (has been assigned a value) and false otherwise */
-    public boolean isSetTasks() {
-      return this.tasks != null;
-    }
-
-    public void setTasksIsSet(boolean value) {
-      if (!value) {
-        this.tasks = null;
+        this.job = null;
       }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case JOB_ID:
+      case JOB:
         if (value == null) {
-          unsetJobID();
+          unsetJob();
         } else {
-          setJobID((Integer)value);
-        }
-        break;
-
-      case USER:
-        if (value == null) {
-          unsetUser();
-        } else {
-          setUser((NodeData)value);
-        }
-        break;
-
-      case TASKS:
-        if (value == null) {
-          unsetTasks();
-        } else {
-          setTasks((Map<Integer,Task>)value);
+          setJob((Job)value);
         }
         break;
 
@@ -5844,14 +5633,8 @@ public class Siyapath {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case JOB_ID:
-        return Integer.valueOf(getJobID());
-
-      case USER:
-        return getUser();
-
-      case TASKS:
-        return getTasks();
+      case JOB:
+        return getJob();
 
       }
       throw new IllegalStateException();
@@ -5864,12 +5647,8 @@ public class Siyapath {
       }
 
       switch (field) {
-      case JOB_ID:
-        return isSetJobID();
-      case USER:
-        return isSetUser();
-      case TASKS:
-        return isSetTasks();
+      case JOB:
+        return isSetJob();
       }
       throw new IllegalStateException();
     }
@@ -5887,30 +5666,12 @@ public class Siyapath {
       if (that == null)
         return false;
 
-      boolean this_present_jobID = true;
-      boolean that_present_jobID = true;
-      if (this_present_jobID || that_present_jobID) {
-        if (!(this_present_jobID && that_present_jobID))
+      boolean this_present_job = true && this.isSetJob();
+      boolean that_present_job = true && that.isSetJob();
+      if (this_present_job || that_present_job) {
+        if (!(this_present_job && that_present_job))
           return false;
-        if (this.jobID != that.jobID)
-          return false;
-      }
-
-      boolean this_present_user = true && this.isSetUser();
-      boolean that_present_user = true && that.isSetUser();
-      if (this_present_user || that_present_user) {
-        if (!(this_present_user && that_present_user))
-          return false;
-        if (!this.user.equals(that.user))
-          return false;
-      }
-
-      boolean this_present_tasks = true && this.isSetTasks();
-      boolean that_present_tasks = true && that.isSetTasks();
-      if (this_present_tasks || that_present_tasks) {
-        if (!(this_present_tasks && that_present_tasks))
-          return false;
-        if (!this.tasks.equals(that.tasks))
+        if (!this.job.equals(that.job))
           return false;
       }
 
@@ -5919,24 +5680,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      boolean present_user = true && (isSetUser());
-      builder.append(present_user);
-      if (present_user)
-        builder.append(user);
-
-      boolean present_tasks = true && (isSetTasks());
-      builder.append(present_tasks);
-      if (present_tasks)
-        builder.append(tasks);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitJob_args other) {
@@ -5947,32 +5691,12 @@ public class Siyapath {
       int lastComparison = 0;
       submitJob_args typedOther = (submitJob_args)other;
 
-      lastComparison = Boolean.valueOf(isSetJobID()).compareTo(typedOther.isSetJobID());
+      lastComparison = Boolean.valueOf(isSetJob()).compareTo(typedOther.isSetJob());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetJobID()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.jobID, typedOther.jobID);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = Boolean.valueOf(isSetUser()).compareTo(typedOther.isSetUser());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetUser()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.user, typedOther.user);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = Boolean.valueOf(isSetTasks()).compareTo(typedOther.isSetTasks());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetTasks()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tasks, typedOther.tasks);
+      if (isSetJob()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.job, typedOther.job);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -5997,23 +5721,11 @@ public class Siyapath {
       StringBuilder sb = new StringBuilder("submitJob_args(");
       boolean first = true;
 
-      sb.append("jobID:");
-      sb.append(this.jobID);
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("user:");
-      if (this.user == null) {
+      sb.append("job:");
+      if (this.job == null) {
         sb.append("null");
       } else {
-        sb.append(this.user);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("tasks:");
-      if (this.tasks == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.tasks);
+        sb.append(this.job);
       }
       first = false;
       sb.append(")");
@@ -6034,8 +5746,6 @@ public class Siyapath {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -6060,40 +5770,11 @@ public class Siyapath {
             break;
           }
           switch (schemeField.id) {
-            case 1: // JOB_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.jobID = iprot.readI32();
-                struct.setJobIDIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // USER
+            case 1: // JOB
               if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.user = new NodeData();
-                struct.user.read(iprot);
-                struct.setUserIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 3: // TASKS
-              if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
-                {
-                  org.apache.thrift.protocol.TMap _map44 = iprot.readMapBegin();
-                  struct.tasks = new HashMap<Integer,Task>(2*_map44.size);
-                  for (int _i45 = 0; _i45 < _map44.size; ++_i45)
-                  {
-                    int _key46; // required
-                    Task _val47; // required
-                    _key46 = iprot.readI32();
-                    _val47 = new Task();
-                    _val47.read(iprot);
-                    struct.tasks.put(_key46, _val47);
-                  }
-                  iprot.readMapEnd();
-                }
-                struct.setTasksIsSet(true);
+                struct.job = new Job();
+                struct.job.read(iprot);
+                struct.setJobIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -6113,25 +5794,9 @@ public class Siyapath {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
-        oprot.writeI32(struct.jobID);
-        oprot.writeFieldEnd();
-        if (struct.user != null) {
-          oprot.writeFieldBegin(USER_FIELD_DESC);
-          struct.user.write(oprot);
-          oprot.writeFieldEnd();
-        }
-        if (struct.tasks != null) {
-          oprot.writeFieldBegin(TASKS_FIELD_DESC);
-          {
-            oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.tasks.size()));
-            for (Map.Entry<Integer, Task> _iter48 : struct.tasks.entrySet())
-            {
-              oprot.writeI32(_iter48.getKey());
-              _iter48.getValue().write(oprot);
-            }
-            oprot.writeMapEnd();
-          }
+        if (struct.job != null) {
+          oprot.writeFieldBegin(JOB_FIELD_DESC);
+          struct.job.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -6152,62 +5817,23 @@ public class Siyapath {
       public void write(org.apache.thrift.protocol.TProtocol prot, submitJob_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
-        if (struct.isSetJobID()) {
+        if (struct.isSetJob()) {
           optionals.set(0);
         }
-        if (struct.isSetUser()) {
-          optionals.set(1);
-        }
-        if (struct.isSetTasks()) {
-          optionals.set(2);
-        }
-        oprot.writeBitSet(optionals, 3);
-        if (struct.isSetJobID()) {
-          oprot.writeI32(struct.jobID);
-        }
-        if (struct.isSetUser()) {
-          struct.user.write(oprot);
-        }
-        if (struct.isSetTasks()) {
-          {
-            oprot.writeI32(struct.tasks.size());
-            for (Map.Entry<Integer, Task> _iter49 : struct.tasks.entrySet())
-            {
-              oprot.writeI32(_iter49.getKey());
-              _iter49.getValue().write(oprot);
-            }
-          }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetJob()) {
+          struct.job.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, submitJob_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(3);
+        BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.jobID = iprot.readI32();
-          struct.setJobIDIsSet(true);
-        }
-        if (incoming.get(1)) {
-          struct.user = new NodeData();
-          struct.user.read(iprot);
-          struct.setUserIsSet(true);
-        }
-        if (incoming.get(2)) {
-          {
-            org.apache.thrift.protocol.TMap _map50 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.tasks = new HashMap<Integer,Task>(2*_map50.size);
-            for (int _i51 = 0; _i51 < _map50.size; ++_i51)
-            {
-              int _key52; // required
-              Task _val53; // required
-              _key52 = iprot.readI32();
-              _val53 = new Task();
-              _val53.read(iprot);
-              struct.tasks.put(_key52, _val53);
-            }
-          }
-          struct.setTasksIsSet(true);
+          struct.job = new Job();
+          struct.job.read(iprot);
+          struct.setJobIsSet(true);
         }
       }
     }
@@ -6409,14 +6035,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitJob_result other) {
@@ -6769,14 +6388,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_task = true && (isSetTask());
-      builder.append(present_task);
-      if (present_task)
-        builder.append(task);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitTask_args other) {
@@ -7134,14 +6746,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitTask_result other) {
@@ -7550,19 +7155,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      boolean present_port = true;
-      builder.append(present_port);
-      if (present_port)
-        builder.append(port);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobStatusFromJobHandler_args other) {
@@ -7949,14 +7542,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobStatusFromJobHandler_result other) {
@@ -8365,19 +7951,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_task = true && (isSetTask());
-      builder.append(present_task);
-      if (present_task)
-        builder.append(task);
-
-      boolean present_port = true;
-      builder.append(present_port);
-      if (present_port)
-        builder.append(port);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getTaskStatusFromTaskProcessor_args other) {
@@ -8772,14 +8346,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getTaskStatusFromTaskProcessor_result other) {
@@ -9129,14 +8696,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobResult_args other) {
@@ -9510,14 +9070,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobResult_result other) {
@@ -9610,16 +9163,16 @@ public class Siyapath {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
-                  org.apache.thrift.protocol.TMap _map54 = iprot.readMapBegin();
-                  struct.success = new HashMap<Integer,Task>(2*_map54.size);
-                  for (int _i55 = 0; _i55 < _map54.size; ++_i55)
+                  org.apache.thrift.protocol.TMap _map44 = iprot.readMapBegin();
+                  struct.success = new HashMap<Integer,Task>(2*_map44.size);
+                  for (int _i45 = 0; _i45 < _map44.size; ++_i45)
                   {
-                    int _key56; // required
-                    Task _val57; // required
-                    _key56 = iprot.readI32();
-                    _val57 = new Task();
-                    _val57.read(iprot);
-                    struct.success.put(_key56, _val57);
+                    int _key46; // required
+                    Task _val47; // required
+                    _key46 = iprot.readI32();
+                    _val47 = new Task();
+                    _val47.read(iprot);
+                    struct.success.put(_key46, _val47);
                   }
                   iprot.readMapEnd();
                 }
@@ -9647,10 +9200,10 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Map.Entry<Integer, Task> _iter58 : struct.success.entrySet())
+            for (Map.Entry<Integer, Task> _iter48 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter58.getKey());
-              _iter58.getValue().write(oprot);
+              oprot.writeI32(_iter48.getKey());
+              _iter48.getValue().write(oprot);
             }
             oprot.writeMapEnd();
           }
@@ -9681,10 +9234,10 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Map.Entry<Integer, Task> _iter59 : struct.success.entrySet())
+            for (Map.Entry<Integer, Task> _iter49 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter59.getKey());
-              _iter59.getValue().write(oprot);
+              oprot.writeI32(_iter49.getKey());
+              _iter49.getValue().write(oprot);
             }
           }
         }
@@ -9696,16 +9249,16 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TMap _map60 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashMap<Integer,Task>(2*_map60.size);
-            for (int _i61 = 0; _i61 < _map60.size; ++_i61)
+            org.apache.thrift.protocol.TMap _map50 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashMap<Integer,Task>(2*_map50.size);
+            for (int _i51 = 0; _i51 < _map50.size; ++_i51)
             {
-              int _key62; // required
-              Task _val63; // required
-              _key62 = iprot.readI32();
-              _val63 = new Task();
-              _val63.read(iprot);
-              struct.success.put(_key62, _val63);
+              int _key52; // required
+              Task _val53; // required
+              _key52 = iprot.readI32();
+              _val53 = new Task();
+              _val53.read(iprot);
+              struct.success.put(_key52, _val53);
             }
           }
           struct.setSuccessIsSet(true);
@@ -9910,14 +9463,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_task = true && (isSetTask());
-      builder.append(present_task);
-      if (present_task)
-        builder.append(task);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResult_args other) {
@@ -10275,14 +9821,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResult_result other) {
@@ -10688,19 +10227,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_username = true && (isSetUsername());
-      builder.append(present_username);
-      if (present_username)
-        builder.append(username);
-
-      boolean present_password = true && (isSetPassword());
-      builder.append(present_password);
-      if (present_password)
-        builder.append(password);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(userLogin_args other) {
@@ -11094,14 +10621,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(userLogin_result other) {

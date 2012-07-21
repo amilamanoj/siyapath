@@ -20,7 +20,7 @@ import java.net.ConnectException;
 
 /*
 * Required implementation for the submit task operation on IDL, at the recipient's end.
-* Assumes that a single .class is sent by the JobHandler node ftm.
+* Assumes that a single .class is sent by the JobProcessor node ftm.
 * TODO: extend to use a .zip/jar with multiple .class files
 * */
 public class TaskProcessor {

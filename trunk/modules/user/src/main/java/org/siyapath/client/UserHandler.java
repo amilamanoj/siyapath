@@ -12,6 +12,7 @@ import org.siyapath.FrameworkInformation;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.job.SiyapathTask;
+import org.siyapath.service.Job;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
@@ -135,7 +136,8 @@ public class UserHandler {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.submitJob(jobId, CommonUtils.serialize(context.getNodeInfo()), taskList);
+            Job job = new Job(jobId, CommonUtils.serialize(context.getNodeInfo()), taskList);
+            client.submitJob(job);
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 e.printStackTrace();
@@ -190,7 +192,7 @@ public class UserHandler {
 
 
     /**
-     * Contacts back the selected JobHandler to get job status
+     * Contacts back the selected JobProcessor to get job status
      *
      * @param jobID
      */
