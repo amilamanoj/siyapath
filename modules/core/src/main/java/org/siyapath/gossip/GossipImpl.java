@@ -104,10 +104,10 @@ public class GossipImpl {
                 Set<NodeInfo> newSet = mergeSets(nodeContext.getMemberSet(), discoveredNodes);
                 nodeContext.updateMemberSet(newSet);
                 nodeContext.addMemNodeSet(randomMember, discoveredNodes);
-                log.info("members Fetched:");
-                for (NodeInfo i : discoveredNodes) {
-                    log.info(i);
-                }
+                log.info("Members fetched " + discoveredNodes.size());
+//                for (NodeInfo i : discoveredNodes) {
+//                    log.info(i);
+//                }
 
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {

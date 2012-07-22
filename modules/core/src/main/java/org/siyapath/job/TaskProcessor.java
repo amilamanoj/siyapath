@@ -69,7 +69,7 @@ public class TaskProcessor {
                 String finalResult = (String) taskInstance.getResults();
 //                monitor.stopMonitor();
                 log.info("Task processing is completed.");
-                log.info("Results: " + finalResult);
+                log.info("Results: " + finalResult.substring(0,100));
                 task.setTaskResult(finalResult);
                 setTaskStatus(true);
                 sendResultToDistributingNode();
