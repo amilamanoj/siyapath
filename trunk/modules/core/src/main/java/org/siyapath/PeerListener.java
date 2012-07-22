@@ -38,7 +38,7 @@ public class PeerListener {
      */
     private void initializeThriftServer(Siyapath.Processor processor) {
         try {
-            log.info("Initializing thrift server with the port:" + nodeContext.getNodeInfo().getPort());
+            log.debug("Initializing thrift server with the port:" + nodeContext.getNodeInfo().getPort());
             serverTransport = new TServerSocket(nodeContext.getNodeInfo().getPort());
             server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
             // Use this for a multithreaded server
@@ -49,7 +49,7 @@ public class PeerListener {
     }
 
     public void start() {
-        log.info("Starting to listen for incoming connections");
+        log.debug("Starting to listen for incoming connections");
         new ListenerThread("ListenerThread-" + nodeContext.getNodeInfo().toString()).start();
         while (!isRunning()) {
             log.debug("Waiting until the listener is started...");

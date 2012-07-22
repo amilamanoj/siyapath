@@ -34,6 +34,15 @@ public class NodeContext {
     private boolean isBackup;
     private HashSet<NodeResource> memberResource;
     private NodeResource nodeResource;
+    private boolean presenceNotified;
+
+    public boolean isPresenceNotified() {
+        return presenceNotified;
+    }
+
+    public void setPresenceNotified(boolean presenceNotified) {
+        this.presenceNotified = presenceNotified;
+    }
 
     public enum NodeStatus {
         CREATED,

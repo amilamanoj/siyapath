@@ -22,13 +22,40 @@ public class PeerWorker {
     private static final Log log = LogFactory.getLog(PeerWorker.class);
 
     private NodeContext nodeContext;
+    private GossipImpl gossiper;
 
     public PeerWorker(NodeContext nodeContext) {
         this.nodeContext = nodeContext;
+        this.gossiper = new GossipImpl(nodeContext);
     }
 
     public void start() {
         new WorkerThread("ListenerThread-" + nodeContext.getNodeInfo().toString()).start();
+    }
+
+    /**
+     * @return true if a bootstrapper node exists, false otherwise
+     */
+    private boolean notifyPresence() {
+        boolean presenceNotified = false;
+        log.debug("Trying to connect to a bootstrapper node");
+        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
+        try {
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            presenceNotified = client.notifyPresence(CommonUtils.serialize(nodeContext.getNodeInfo()));
+        } catch (TTransportException e) {
+//            e.printStackTrace();
+            if (e.getCause() instanceof ConnectException) {
+                log.debug("Could not connect to the bootstrapper :(");
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
+        return presenceNotified;
     }
 
     private void initiateMembers() {
@@ -53,11 +80,11 @@ public class PeerWorker {
         }
     }
 
-    private Set<NodeInfo> removeSelf(Set<NodeInfo> nodes){
-            if(nodes.contains(nodeContext.getNodeInfo())){
-                nodes.remove(nodeContext.getNodeInfo());
-            }
-          return nodes;
+    private Set<NodeInfo> removeSelf(Set<NodeInfo> nodes) {
+        if (nodes.contains(nodeContext.getNodeInfo())) {
+            nodes.remove(nodeContext.getNodeInfo());
+        }
+        return nodes;
     }
 
     private class WorkerThread extends Thread {
@@ -74,14 +101,17 @@ public class PeerWorker {
             isRunning = true;
             while (isRunning) {
                 if (!nodeContext.isBootstrapper()) {
-                    if (!nodeContext.membersExist()) {
-                        log.info("No known members. Contacting the bootstrapper to get some nodes");
+                    if (!nodeContext.isPresenceNotified()) {
+                        log.debug("Notifying presence to bootstrapper node");
+                        nodeContext.setPresenceNotified(notifyPresence());
+                    } else if (!nodeContext.membersExist()) {
+                        log.debug("No known members. Contacting the bootstrapper to get some nodes");
                         initiateMembers();
                     } else {
-                        log.info("Number of known members: " + nodeContext.getMemberCount());
-                        new GossipImpl(nodeContext).memberGossiper();
-                        new GossipImpl(nodeContext).resourceGossiper();
+                        gossiper.memberGossiper();
+                        gossiper.resourceGossiper();
                     }
+                    log.info("Number of known members: " + nodeContext.getMemberCount());
                 }
                 try {
                     sleep(5000);
