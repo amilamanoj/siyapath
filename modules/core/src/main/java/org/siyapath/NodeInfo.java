@@ -1,5 +1,6 @@
 package org.siyapath;
 
+import org.siyapath.service.NodeStatus;
 import org.siyapath.utils.CommonUtils;
 
 public class NodeInfo {
@@ -7,13 +8,45 @@ public class NodeInfo {
     private String ip;
     private int port;
     private boolean bootstrapper;
+    private org.siyapath.service.NodeStatus nodeStatus;
+
+    public void setNodeStatus(org.siyapath.service.NodeStatus nodeStatus) {
+        this.nodeStatus = nodeStatus;
+    }
+
+
+   /* public enum NodeStatus {
+        CREATED(1) ,
+        STARTING (2),
+        BUSY (3),
+        IDLE(4);
+         int ind;
+        NodeStatus(int i) {
+            ind=i;
+        }
+    } */
 
     public NodeInfo() {
         ip = CommonUtils.getIPAddress();
         port = CommonUtils.getRandomPort();
         nodeId = CommonUtils.getRandomNumber(10000); //TODO: make the Id unique
         this.bootstrapper = false;
+        setNodeStatus(NodeStatus.CREATED);
 
+    }
+
+    public NodeStatus getNodeStatus() {
+           return nodeStatus;
+       }
+
+
+
+    public boolean isIdle(){
+        if(nodeStatus==NodeStatus.IDLE){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     /**

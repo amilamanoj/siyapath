@@ -2,6 +2,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeContext;
 import org.siyapath.SiyapathNode;
+import org.siyapath.service.NodeStatus;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -30,7 +31,7 @@ public class SiyapathNodeController {
         log.info("Starting node: " + siyapathNode.getNodeContext().getNodeInfo().getNodeId());
         nodeThread.start();
 
-        while (siyapathNode.getNodeContext().getNodeStatus() != NodeContext.NodeStatus.LISTENING) {
+        while (!siyapathNode.getNodeContext().getNodeInfo().isIdle()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -45,7 +46,7 @@ public class SiyapathNodeController {
     }
 
     public boolean isStarted() {
-        return siyapathNode.getNodeContext().getNodeStatus() == NodeContext.NodeStatus.LISTENING;
+        return siyapathNode.getNodeContext().getNodeInfo().isIdle();
     }
 
     class NodeThread extends Thread {
