@@ -20,6 +20,8 @@ import org.siyapath.utils.CommonUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,10 +39,21 @@ public class UserHandler {
     public UserHandler() {
         this.clientEnd = new NodeInfo();
         this.context = new NodeContext(clientEnd);
-        jobId = CommonUtils.getRandomNumber(1000);
     }
 
     public int getJobId() {
+        return jobId;
+    }
+
+    /**
+     * Creates a unique jobID by appending ip and timestamp and a random number
+     * @return the created jobID
+     */
+    public int generateJobID() {
+        String ip = context.getNodeInfo().getIp();
+        String timestamp = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss.S").format(new Date());
+        int random = CommonUtils.getRandomNumber(1000);
+        jobId = Math.abs((ip + "::" + timestamp + "::" + random).hashCode());
         return jobId;
     }
 
@@ -77,6 +90,7 @@ public class UserHandler {
      * @param taskList list of tasks
      */
     public void submitJob(Map<String, TaskData> taskList) {
+        taskCounter = 0;
         for (TaskData task : taskList.values()) {
             addTask(task.getClassFile(), task.getInputData() , task.getRequiredResources());
         }
@@ -157,7 +171,7 @@ public class UserHandler {
      */
     private void addTask(File taskProgramFile, String inputData , String requiredResources) {
         try {
-            int taskId = taskCounter++;
+            int taskId = jobId + taskCounter++;
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
             Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer
                     (taskProgramFile.getAbsolutePath()), inputData, getJobInterfaceName(),

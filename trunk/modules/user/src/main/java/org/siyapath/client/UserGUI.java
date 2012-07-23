@@ -536,7 +536,7 @@ public class UserGUI extends JFrame {
 
     public void jobUpdated(String jobName, Map taskFileList) {
         this.taskFileList = taskFileList;
-        int jobId = handler.getJobId();
+        int jobId = handler.generateJobID();
         jobInfoLabel.setText("<html>Job Id:" + jobId + "<br>Job Name:" + jobName + "<br>No. of tasks:" + taskFileList.keySet().size() + "</html>");
         jobSubmitButton.setEnabled(true);
         createEditJobButton.setText("Edit Job...");
