@@ -94,7 +94,6 @@ public class CommonUtils {
         node.setNodeID(nodeInfo.getNodeId());
         node.setIp(nodeInfo.getIp());
         node.setPort(nodeInfo.getPort());
-        node.setNodeStatus(nodeInfo.getNodeStatus());
         return node;
     }
 
@@ -130,7 +129,6 @@ public class CommonUtils {
         node.setNodeId(nodeData.getNodeID());
         node.setIp(nodeData.getIp());
         node.setPort(nodeData.getPort());
-        node.setNodeStatus(nodeData.getNodeStatus());
         return node;
     }
 

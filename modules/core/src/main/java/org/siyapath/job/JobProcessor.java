@@ -17,7 +17,6 @@ import org.siyapath.service.NodeData;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
-import org.siyapath.service.NodeStatus;
 
 import java.net.ConnectException;
 import java.util.concurrent.*;
@@ -70,7 +69,6 @@ public class JobProcessor {
                     e.printStackTrace();  //TODO: handle exception
                 }
             }
-            context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
             log.info("Added " + job.getTasks().size() + " tasks to the queue");
         }
     }
@@ -87,9 +85,6 @@ public class JobProcessor {
                     if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.
                         log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
                         dispatchTask(task, getJobScheduler().selectTaskProcessorNode(task));
-                    }
-                    if (taskQueue.isEmpty()) {
-                        context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //TODO: handle exception
