@@ -15,13 +15,12 @@ import org.siyapath.service.NodeData;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
-import org.siyapath.service.NodeStatus;
 
 import java.net.ConnectException;
 
 /*
 * Required implementation for the submit task operation on IDL, at the recipient's end.
-* Assumes that a single .class is sent by the JobHandler node ftm.
+* Assumes that a single .class is sent by the JobProcessor node ftm.
 * TODO: extend to use a .zip/jar with multiple .class files
 * */
 public class TaskProcessor {
@@ -58,7 +57,6 @@ public class TaskProcessor {
             setTaskStatus(false);
             taskClassLoader = new TaskClassLoader();
             try {
-                context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
                 // TODO: verify if expected name is necessary
                 log.info("process task method runiing $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
@@ -71,11 +69,10 @@ public class TaskProcessor {
                 String finalResult = (String) taskInstance.getResults();
 //                monitor.stopMonitor();
                 log.info("Task processing is completed.");
-                log.info("Results: " + finalResult);
+                log.info("Results: " + finalResult.substring(0,100));
                 task.setTaskResult(finalResult);
                 setTaskStatus(true);
                 sendResultToDistributingNode();
-                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {

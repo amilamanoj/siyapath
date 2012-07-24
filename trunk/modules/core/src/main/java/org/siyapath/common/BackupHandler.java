@@ -23,7 +23,7 @@ public class BackupHandler {
      * @return true if request is accepted, false otherwise
      */
     public boolean requestBecomeBackup(int jobID, NodeInfo nodeToBackup) {
-        if (context.isBackup() || !context.getNodeInfo().isIdle()) {
+        if (context.isBackup() || context.getNodeStatus() != NodeContext.NodeStatus.LISTENING) {
             return false;
         }
         this.jobID = jobID;
