@@ -3,16 +3,8 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
-import org.siyapath.utils.CommonUtils;
 import org.siyapath.service.*;
-
-import java.net.ConnectException;
+import org.siyapath.service.NodeStatus;
 
 public class SiyapathNode {
 
@@ -48,7 +40,7 @@ public class SiyapathNode {
     }
 
     public void startSiyapathNode() {
-        nodeContext.setNodeStatus(NodeContext.NodeStatus.STARTING);
+        nodeContext.getNodeInfo().setNodeStatus(NodeStatus.STARTING);
         log.info("Initializing Siyapath Node: " + nodeContext.getNodeInfo());
 
         if (nodeContext.isBootstrapper()) {
@@ -63,9 +55,8 @@ public class SiyapathNode {
         peerListener = new PeerListener(processor, nodeContext);
         peerListener.start();
         peerWorker = new PeerWorker(nodeContext);
+        nodeContext.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
         peerWorker.start();
-
-        nodeContext.setNodeStatus(NodeContext.NodeStatus.LISTENING);
     }
 
 

@@ -1,14 +1,23 @@
 
 namespace java org.siyapath.service
 
+enum NodeStatus {
+  CREATED = 1,
+  STARTING = 2,
+  BUSY = 3,
+  IDLE = 4
+}
+
 /**
  * Contains information about a particular node
  */
 struct NodeData {
     1: i32 nodeID,
     2: string ip,
-    3: i32 port
+    3: i32 port,
+    4: NodeStatus nodeStatus
 }
+
 
 /**
  * Contains information about a particular node
