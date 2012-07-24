@@ -175,8 +175,7 @@ public class UserHandler {
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
             Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer
                     (taskProgramFile.getAbsolutePath()), inputData, getJobInterfaceName(),
-                    CommonUtils.serialize(context.getNodeInfo()), null, requiredResources , null,
-                    false);
+                    CommonUtils.serialize(context.getNodeInfo()), null, requiredResources);
 
             taskList.put(taskId, task);
 

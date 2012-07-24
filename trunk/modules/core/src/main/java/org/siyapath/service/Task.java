@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -41,8 +42,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.STRUCT, (short)6);
   private static final org.apache.thrift.protocol.TField BACKUP_FIELD_DESC = new org.apache.thrift.protocol.TField("backup", org.apache.thrift.protocol.TType.STRUCT, (short)7);
   private static final org.apache.thrift.protocol.TField REQUIRED_RESOURCES_FIELD_DESC = new org.apache.thrift.protocol.TField("requiredResources", org.apache.thrift.protocol.TType.STRING, (short)8);
-  private static final org.apache.thrift.protocol.TField TASK_RESULT_FIELD_DESC = new org.apache.thrift.protocol.TField("taskResult", org.apache.thrift.protocol.TType.STRING, (short)9);
-  private static final org.apache.thrift.protocol.TField TASK_COMPLETION_STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("taskCompletionStatus", org.apache.thrift.protocol.TType.BOOL, (short)10);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -58,8 +57,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   public NodeData sender; // required
   public NodeData backup; // required
   public String requiredResources; // required
-  public String taskResult; // required
-  public boolean taskCompletionStatus; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -70,9 +67,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     CLASS_NAME((short)5, "className"),
     SENDER((short)6, "sender"),
     BACKUP((short)7, "backup"),
-    REQUIRED_RESOURCES((short)8, "requiredResources"),
-    TASK_RESULT((short)9, "taskResult"),
-    TASK_COMPLETION_STATUS((short)10, "taskCompletionStatus");
+    REQUIRED_RESOURCES((short)8, "requiredResources");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -103,10 +98,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
           return BACKUP;
         case 8: // REQUIRED_RESOURCES
           return REQUIRED_RESOURCES;
-        case 9: // TASK_RESULT
-          return TASK_RESULT;
-        case 10: // TASK_COMPLETION_STATUS
-          return TASK_COMPLETION_STATUS;
         default:
           return null;
       }
@@ -149,8 +140,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   // isset id assignments
   private static final int __TASKID_ISSET_ID = 0;
   private static final int __JOBID_ISSET_ID = 1;
-  private static final int __TASKCOMPLETIONSTATUS_ISSET_ID = 2;
-  private BitSet __isset_bit_vector = new BitSet(3);
+  private BitSet __isset_bit_vector = new BitSet(2);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -170,10 +160,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     tmpMap.put(_Fields.REQUIRED_RESOURCES, new org.apache.thrift.meta_data.FieldMetaData("requiredResources", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.TASK_RESULT, new org.apache.thrift.meta_data.FieldMetaData("taskResult", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.TASK_COMPLETION_STATUS, new org.apache.thrift.meta_data.FieldMetaData("taskCompletionStatus", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Task.class, metaDataMap);
   }
@@ -189,9 +175,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     String className,
     NodeData sender,
     NodeData backup,
-    String requiredResources,
-    String taskResult,
-    boolean taskCompletionStatus)
+    String requiredResources)
   {
     this();
     this.taskID = taskID;
@@ -204,9 +188,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.sender = sender;
     this.backup = backup;
     this.requiredResources = requiredResources;
-    this.taskResult = taskResult;
-    this.taskCompletionStatus = taskCompletionStatus;
-    setTaskCompletionStatusIsSet(true);
   }
 
   /**
@@ -236,10 +217,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     if (other.isSetRequiredResources()) {
       this.requiredResources = other.requiredResources;
     }
-    if (other.isSetTaskResult()) {
-      this.taskResult = other.taskResult;
-    }
-    this.taskCompletionStatus = other.taskCompletionStatus;
   }
 
   public Task deepCopy() {
@@ -258,9 +235,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.sender = null;
     this.backup = null;
     this.requiredResources = null;
-    this.taskResult = null;
-    setTaskCompletionStatusIsSet(false);
-    this.taskCompletionStatus = false;
   }
 
   public int getTaskID() {
@@ -463,53 +437,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
   }
 
-  public String getTaskResult() {
-    return this.taskResult;
-  }
-
-  public Task setTaskResult(String taskResult) {
-    this.taskResult = taskResult;
-    return this;
-  }
-
-  public void unsetTaskResult() {
-    this.taskResult = null;
-  }
-
-  /** Returns true if field taskResult is set (has been assigned a value) and false otherwise */
-  public boolean isSetTaskResult() {
-    return this.taskResult != null;
-  }
-
-  public void setTaskResultIsSet(boolean value) {
-    if (!value) {
-      this.taskResult = null;
-    }
-  }
-
-  public boolean isTaskCompletionStatus() {
-    return this.taskCompletionStatus;
-  }
-
-  public Task setTaskCompletionStatus(boolean taskCompletionStatus) {
-    this.taskCompletionStatus = taskCompletionStatus;
-    setTaskCompletionStatusIsSet(true);
-    return this;
-  }
-
-  public void unsetTaskCompletionStatus() {
-    __isset_bit_vector.clear(__TASKCOMPLETIONSTATUS_ISSET_ID);
-  }
-
-  /** Returns true if field taskCompletionStatus is set (has been assigned a value) and false otherwise */
-  public boolean isSetTaskCompletionStatus() {
-    return __isset_bit_vector.get(__TASKCOMPLETIONSTATUS_ISSET_ID);
-  }
-
-  public void setTaskCompletionStatusIsSet(boolean value) {
-    __isset_bit_vector.set(__TASKCOMPLETIONSTATUS_ISSET_ID, value);
-  }
-
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case TASK_ID:
@@ -576,22 +503,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       }
       break;
 
-    case TASK_RESULT:
-      if (value == null) {
-        unsetTaskResult();
-      } else {
-        setTaskResult((String)value);
-      }
-      break;
-
-    case TASK_COMPLETION_STATUS:
-      if (value == null) {
-        unsetTaskCompletionStatus();
-      } else {
-        setTaskCompletionStatus((Boolean)value);
-      }
-      break;
-
     }
   }
 
@@ -621,12 +532,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     case REQUIRED_RESOURCES:
       return getRequiredResources();
 
-    case TASK_RESULT:
-      return getTaskResult();
-
-    case TASK_COMPLETION_STATUS:
-      return Boolean.valueOf(isTaskCompletionStatus());
-
     }
     throw new IllegalStateException();
   }
@@ -654,10 +559,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       return isSetBackup();
     case REQUIRED_RESOURCES:
       return isSetRequiredResources();
-    case TASK_RESULT:
-      return isSetTaskResult();
-    case TASK_COMPLETION_STATUS:
-      return isSetTaskCompletionStatus();
     }
     throw new IllegalStateException();
   }
@@ -747,30 +648,54 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         return false;
     }
 
-    boolean this_present_taskResult = true && this.isSetTaskResult();
-    boolean that_present_taskResult = true && that.isSetTaskResult();
-    if (this_present_taskResult || that_present_taskResult) {
-      if (!(this_present_taskResult && that_present_taskResult))
-        return false;
-      if (!this.taskResult.equals(that.taskResult))
-        return false;
-    }
-
-    boolean this_present_taskCompletionStatus = true;
-    boolean that_present_taskCompletionStatus = true;
-    if (this_present_taskCompletionStatus || that_present_taskCompletionStatus) {
-      if (!(this_present_taskCompletionStatus && that_present_taskCompletionStatus))
-        return false;
-      if (this.taskCompletionStatus != that.taskCompletionStatus)
-        return false;
-    }
-
     return true;
   }
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_taskID = true;
+    builder.append(present_taskID);
+    if (present_taskID)
+      builder.append(taskID);
+
+    boolean present_jobID = true;
+    builder.append(present_jobID);
+    if (present_jobID)
+      builder.append(jobID);
+
+    boolean present_taskProgram = true && (isSetTaskProgram());
+    builder.append(present_taskProgram);
+    if (present_taskProgram)
+      builder.append(taskProgram);
+
+    boolean present_taskData = true && (isSetTaskData());
+    builder.append(present_taskData);
+    if (present_taskData)
+      builder.append(taskData);
+
+    boolean present_className = true && (isSetClassName());
+    builder.append(present_className);
+    if (present_className)
+      builder.append(className);
+
+    boolean present_sender = true && (isSetSender());
+    builder.append(present_sender);
+    if (present_sender)
+      builder.append(sender);
+
+    boolean present_backup = true && (isSetBackup());
+    builder.append(present_backup);
+    if (present_backup)
+      builder.append(backup);
+
+    boolean present_requiredResources = true && (isSetRequiredResources());
+    builder.append(present_requiredResources);
+    if (present_requiredResources)
+      builder.append(requiredResources);
+
+    return builder.toHashCode();
   }
 
   public int compareTo(Task other) {
@@ -861,26 +786,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetTaskResult()).compareTo(typedOther.isSetTaskResult());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetTaskResult()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskResult, typedOther.taskResult);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetTaskCompletionStatus()).compareTo(typedOther.isSetTaskCompletionStatus());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetTaskCompletionStatus()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskCompletionStatus, typedOther.taskCompletionStatus);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     return 0;
   }
 
@@ -955,18 +860,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     } else {
       sb.append(this.requiredResources);
     }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("taskResult:");
-    if (this.taskResult == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.taskResult);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("taskCompletionStatus:");
-    sb.append(this.taskCompletionStatus);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -1078,22 +971,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 9: // TASK_RESULT
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.taskResult = iprot.readString();
-              struct.setTaskResultIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 10: // TASK_COMPLETION_STATUS
-            if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
-              struct.taskCompletionStatus = iprot.readBool();
-              struct.setTaskCompletionStatusIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -1145,14 +1022,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         oprot.writeString(struct.requiredResources);
         oprot.writeFieldEnd();
       }
-      if (struct.taskResult != null) {
-        oprot.writeFieldBegin(TASK_RESULT_FIELD_DESC);
-        oprot.writeString(struct.taskResult);
-        oprot.writeFieldEnd();
-      }
-      oprot.writeFieldBegin(TASK_COMPLETION_STATUS_FIELD_DESC);
-      oprot.writeBool(struct.taskCompletionStatus);
-      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1195,13 +1064,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetRequiredResources()) {
         optionals.set(7);
       }
-      if (struct.isSetTaskResult()) {
-        optionals.set(8);
-      }
-      if (struct.isSetTaskCompletionStatus()) {
-        optionals.set(9);
-      }
-      oprot.writeBitSet(optionals, 10);
+      oprot.writeBitSet(optionals, 8);
       if (struct.isSetTaskID()) {
         oprot.writeI32(struct.taskID);
       }
@@ -1226,18 +1089,12 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetRequiredResources()) {
         oprot.writeString(struct.requiredResources);
       }
-      if (struct.isSetTaskResult()) {
-        oprot.writeString(struct.taskResult);
-      }
-      if (struct.isSetTaskCompletionStatus()) {
-        oprot.writeBool(struct.taskCompletionStatus);
-      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Task struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(10);
+      BitSet incoming = iprot.readBitSet(8);
       if (incoming.get(0)) {
         struct.taskID = iprot.readI32();
         struct.setTaskIDIsSet(true);
@@ -1271,14 +1128,6 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (incoming.get(7)) {
         struct.requiredResources = iprot.readString();
         struct.setRequiredResourcesIsSet(true);
-      }
-      if (incoming.get(8)) {
-        struct.taskResult = iprot.readString();
-        struct.setTaskResultIsSet(true);
-      }
-      if (incoming.get(9)) {
-        struct.taskCompletionStatus = iprot.readBool();
-        struct.setTaskCompletionStatusIsSet(true);
       }
     }
   }

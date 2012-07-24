@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -49,7 +50,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
   public int port; // required
   /**
    * 
-   * @see NodeStatus
+   * @see org.siyapath.service.NodeStatus
    */
   public NodeStatus nodeStatus; // required
 
@@ -60,7 +61,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
     PORT((short)3, "port"),
     /**
      * 
-     * @see NodeStatus
+     * @see org.siyapath.service.NodeStatus
      */
     NODE_STATUS((short)4, "nodeStatus");
 
@@ -263,7 +264,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
 
   /**
    * 
-   * @see NodeStatus
+   * @see org.siyapath.service.NodeStatus
    */
   public NodeStatus getNodeStatus() {
     return this.nodeStatus;
@@ -271,7 +272,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
 
   /**
    * 
-   * @see NodeStatus
+   * @see org.siyapath.service.NodeStatus
    */
   public NodeData setNodeStatus(NodeStatus nodeStatus) {
     this.nodeStatus = nodeStatus;
@@ -421,7 +422,29 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_nodeID = true;
+    builder.append(present_nodeID);
+    if (present_nodeID)
+      builder.append(nodeID);
+
+    boolean present_ip = true && (isSetIp());
+    builder.append(present_ip);
+    if (present_ip)
+      builder.append(ip);
+
+    boolean present_port = true;
+    builder.append(present_port);
+    if (present_port)
+      builder.append(port);
+
+    boolean present_nodeStatus = true && (isSetNodeStatus());
+    builder.append(present_nodeStatus);
+    if (present_nodeStatus)
+      builder.append(nodeStatus.getValue());
+
+    return builder.toHashCode();
   }
 
   public int compareTo(NodeData other) {

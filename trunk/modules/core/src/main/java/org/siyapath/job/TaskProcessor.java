@@ -72,7 +72,7 @@ public class TaskProcessor {
 //                monitor.stopMonitor();
                 log.info("Task processing is completed.");
                 log.info("Results: " + finalResult.substring(0,100));
-                task.setTaskResult(finalResult);
+//                task.setTaskResult(finalResult);
                 setTaskStatus(true);
                 sendResultToDistributingNode();
                 context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
