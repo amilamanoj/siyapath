@@ -20,6 +20,7 @@ import org.siyapath.utils.CommonUtils;
 import org.siyapath.service.NodeStatus;
 
 import java.net.ConnectException;
+import java.util.Map;
 import java.util.concurrent.*;
 
 
@@ -36,6 +37,8 @@ public class JobProcessor {
     private NodeInfo backupNode;
 
     private BlockingQueue<Task> taskQueue;     // or Deque? i.e. double ended queue
+    private Map<Integer, Job> jobMap;
+    private Map<Integer, ProcessingTask> taskMap;
 
     public JobProcessor(NodeContext nodeContext) {
         //uses the default constructor at the sender non-requisition
@@ -51,6 +54,7 @@ public class JobProcessor {
 //        createBackup();
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
+        jobMap.put(job.getJobID(), job);
     }
 
     class TaskCollector implements Runnable {
@@ -66,6 +70,8 @@ public class JobProcessor {
             for (Task task : job.getTasks().values()) {
                 try {
                     taskQueue.put(task);
+                    taskMap.put(task.getTaskID(), new ProcessingTask(job.getJobID(),
+                            task.getTaskID(), ProcessingTask.TaskStatus.RECEIVED));
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //TODO: handle exception
                 }
@@ -129,6 +135,9 @@ public class JobProcessor {
             } catch (TException e) {
                 e.printStackTrace();
             }
+            ProcessingTask pTask = taskMap.get(task.getTaskID());
+            pTask.setProcessingNode(destinationNode);
+            pTask.setStatus(ProcessingTask.TaskStatus.PROCESSING);
 
         }
     }
