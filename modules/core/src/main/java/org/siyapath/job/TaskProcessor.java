@@ -15,6 +15,7 @@ import org.siyapath.service.NodeData;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
+import org.siyapath.service.NodeStatus;
 
 import java.net.ConnectException;
 
@@ -58,6 +59,7 @@ public class TaskProcessor {
             taskClassLoader = new TaskClassLoader();
             try {
                 // TODO: verify if expected name is necessary
+                context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
                 log.info("process task method runiing $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
                 SiyapathTask taskInstance = (SiyapathTask) theLoadedClass.newInstance();
@@ -73,6 +75,7 @@ public class TaskProcessor {
                 task.setTaskResult(finalResult);
                 setTaskStatus(true);
                 sendResultToDistributingNode();
+                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {

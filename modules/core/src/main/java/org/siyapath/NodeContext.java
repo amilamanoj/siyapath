@@ -44,14 +44,9 @@ public class NodeContext {
         this.presenceNotified = presenceNotified;
     }
 
-    public enum NodeStatus {
-        CREATED,
-        STARTING,
-        LISTENING,
-        PROCESSING
-    }
 
-    private NodeStatus nodeStatus;
+
+
 
     /**
      *
@@ -63,16 +58,8 @@ public class NodeContext {
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
-        nodeStatus = NodeStatus.CREATED;
     }
 
-    public NodeStatus getNodeStatus() {
-        return nodeStatus;
-    }
-
-    public void setNodeStatus(NodeStatus status) {
-        nodeStatus = status;
-    }
 
     public JobProcessor getJobProcessor() {
         if (jobProcessor == null) {
