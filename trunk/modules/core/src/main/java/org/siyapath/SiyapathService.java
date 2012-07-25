@@ -154,13 +154,13 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param task
+     * @param result
      * @return true if computed result sent successfully, false otherwise
      */
     @Override
-    public boolean sendTaskResult(Task task) {
-//        JobProcessor taskDistributor = new JobProcessor(task, nodeContext);
-//        taskDistributor.sendResultToUserNode();
+    public boolean sendTaskResult(Result result) {
+        log.info("Received results: JobID:" + result.getJobID() + " TaskID: " + result.getTaskID());
+        nodeContext.getJobProcessor().resultsReceived(result);
         return true;
     }
 

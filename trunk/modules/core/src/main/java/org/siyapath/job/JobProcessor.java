@@ -12,12 +12,8 @@ import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathConstants;
 import org.siyapath.job.scheduling.PushJobScheduler;
-import org.siyapath.service.Job;
-import org.siyapath.service.NodeData;
-import org.siyapath.service.Siyapath;
-import org.siyapath.service.Task;
+import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
-import org.siyapath.service.NodeStatus;
 
 import java.net.ConnectException;
 import java.util.Map;
@@ -53,8 +49,13 @@ public class JobProcessor {
     public void addNewJob(Job job) {
 //        createBackup();
         log.info("Adding new job:" + job.getJobID() + " to the queue");
+        jobMap.put(job.getJobID(), job);
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
         jobMap.put(job.getJobID(), job);
+    }
+
+    public void resultsReceived(Result result) {
+        //TODO
     }
 
     class TaskCollector implements Runnable {
@@ -89,13 +90,13 @@ public class JobProcessor {
         public void run() {
             while (active) {
                 try {
-                    Task task = taskQueue.poll(10, TimeUnit.SECONDS);
+                    if (taskQueue.isEmpty()) {
+                        context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+                    }
+                    Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
                     if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.
                         log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
                         dispatchTask(task, getJobScheduler().selectTaskProcessorNode(task));
-                    }
-                    if (taskQueue.isEmpty()) {
-                        context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //TODO: handle exception

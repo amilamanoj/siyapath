@@ -27,31 +27,28 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * A job has a set of tasks
- */
-public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.Serializable, Cloneable {
-  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Job");
+public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, java.io.Serializable, Cloneable {
+  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Result");
 
   private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
-  private static final org.apache.thrift.protocol.TField USER_FIELD_DESC = new org.apache.thrift.protocol.TField("user", org.apache.thrift.protocol.TType.STRUCT, (short)2);
-  private static final org.apache.thrift.protocol.TField TASKS_FIELD_DESC = new org.apache.thrift.protocol.TField("tasks", org.apache.thrift.protocol.TType.MAP, (short)3);
+  private static final org.apache.thrift.protocol.TField TASK_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("taskID", org.apache.thrift.protocol.TType.I32, (short)2);
+  private static final org.apache.thrift.protocol.TField RESULTS_FIELD_DESC = new org.apache.thrift.protocol.TField("results", org.apache.thrift.protocol.TType.STRING, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
-    schemes.put(StandardScheme.class, new JobStandardSchemeFactory());
-    schemes.put(TupleScheme.class, new JobTupleSchemeFactory());
+    schemes.put(StandardScheme.class, new ResultStandardSchemeFactory());
+    schemes.put(TupleScheme.class, new ResultTupleSchemeFactory());
   }
 
   public int jobID; // required
-  public NodeData user; // required
-  public Map<Integer,Task> tasks; // required
+  public int taskID; // required
+  public String results; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     JOB_ID((short)1, "jobID"),
-    USER((short)2, "user"),
-    TASKS((short)3, "tasks");
+    TASK_ID((short)2, "taskID"),
+    RESULTS((short)3, "results");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -68,10 +65,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       switch(fieldId) {
         case 1: // JOB_ID
           return JOB_ID;
-        case 2: // USER
-          return USER;
-        case 3: // TASKS
-          return TASKS;
+        case 2: // TASK_ID
+          return TASK_ID;
+        case 3: // RESULTS
+          return RESULTS;
         default:
           return null;
       }
@@ -113,81 +110,68 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   // isset id assignments
   private static final int __JOBID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __TASKID_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
-    tmpMap.put(_Fields.USER, new org.apache.thrift.meta_data.FieldMetaData("user", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
-    tmpMap.put(_Fields.TASKS, new org.apache.thrift.meta_data.FieldMetaData("tasks", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
-            new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
-            new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Task.class))));
+    tmpMap.put(_Fields.TASK_ID, new org.apache.thrift.meta_data.FieldMetaData("taskID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.RESULTS, new org.apache.thrift.meta_data.FieldMetaData("results", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Job.class, metaDataMap);
+    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Result.class, metaDataMap);
   }
 
-  public Job() {
+  public Result() {
   }
 
-  public Job(
+  public Result(
     int jobID,
-    NodeData user,
-    Map<Integer,Task> tasks)
+    int taskID,
+    String results)
   {
     this();
     this.jobID = jobID;
     setJobIDIsSet(true);
-    this.user = user;
-    this.tasks = tasks;
+    this.taskID = taskID;
+    setTaskIDIsSet(true);
+    this.results = results;
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public Job(Job other) {
+  public Result(Result other) {
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
     this.jobID = other.jobID;
-    if (other.isSetUser()) {
-      this.user = new NodeData(other.user);
-    }
-    if (other.isSetTasks()) {
-      Map<Integer,Task> __this__tasks = new HashMap<Integer,Task>();
-      for (Map.Entry<Integer, Task> other_element : other.tasks.entrySet()) {
-
-        Integer other_element_key = other_element.getKey();
-        Task other_element_value = other_element.getValue();
-
-        Integer __this__tasks_copy_key = other_element_key;
-
-        Task __this__tasks_copy_value = new Task(other_element_value);
-
-        __this__tasks.put(__this__tasks_copy_key, __this__tasks_copy_value);
-      }
-      this.tasks = __this__tasks;
+    this.taskID = other.taskID;
+    if (other.isSetResults()) {
+      this.results = other.results;
     }
   }
 
-  public Job deepCopy() {
-    return new Job(this);
+  public Result deepCopy() {
+    return new Result(this);
   }
 
   @Override
   public void clear() {
     setJobIDIsSet(false);
     this.jobID = 0;
-    this.user = null;
-    this.tasks = null;
+    setTaskIDIsSet(false);
+    this.taskID = 0;
+    this.results = null;
   }
 
   public int getJobID() {
     return this.jobID;
   }
 
-  public Job setJobID(int jobID) {
+  public Result setJobID(int jobID) {
     this.jobID = jobID;
     setJobIDIsSet(true);
     return this;
@@ -206,62 +190,50 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     __isset_bit_vector.set(__JOBID_ISSET_ID, value);
   }
 
-  public NodeData getUser() {
-    return this.user;
+  public int getTaskID() {
+    return this.taskID;
   }
 
-  public Job setUser(NodeData user) {
-    this.user = user;
+  public Result setTaskID(int taskID) {
+    this.taskID = taskID;
+    setTaskIDIsSet(true);
     return this;
   }
 
-  public void unsetUser() {
-    this.user = null;
+  public void unsetTaskID() {
+    __isset_bit_vector.clear(__TASKID_ISSET_ID);
   }
 
-  /** Returns true if field user is set (has been assigned a value) and false otherwise */
-  public boolean isSetUser() {
-    return this.user != null;
+  /** Returns true if field taskID is set (has been assigned a value) and false otherwise */
+  public boolean isSetTaskID() {
+    return __isset_bit_vector.get(__TASKID_ISSET_ID);
   }
 
-  public void setUserIsSet(boolean value) {
-    if (!value) {
-      this.user = null;
-    }
+  public void setTaskIDIsSet(boolean value) {
+    __isset_bit_vector.set(__TASKID_ISSET_ID, value);
   }
 
-  public int getTasksSize() {
-    return (this.tasks == null) ? 0 : this.tasks.size();
+  public String getResults() {
+    return this.results;
   }
 
-  public void putToTasks(int key, Task val) {
-    if (this.tasks == null) {
-      this.tasks = new HashMap<Integer,Task>();
-    }
-    this.tasks.put(key, val);
-  }
-
-  public Map<Integer,Task> getTasks() {
-    return this.tasks;
-  }
-
-  public Job setTasks(Map<Integer,Task> tasks) {
-    this.tasks = tasks;
+  public Result setResults(String results) {
+    this.results = results;
     return this;
   }
 
-  public void unsetTasks() {
-    this.tasks = null;
+  public void unsetResults() {
+    this.results = null;
   }
 
-  /** Returns true if field tasks is set (has been assigned a value) and false otherwise */
-  public boolean isSetTasks() {
-    return this.tasks != null;
+  /** Returns true if field results is set (has been assigned a value) and false otherwise */
+  public boolean isSetResults() {
+    return this.results != null;
   }
 
-  public void setTasksIsSet(boolean value) {
+  public void setResultsIsSet(boolean value) {
     if (!value) {
-      this.tasks = null;
+      this.results = null;
     }
   }
 
@@ -275,19 +247,19 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       }
       break;
 
-    case USER:
+    case TASK_ID:
       if (value == null) {
-        unsetUser();
+        unsetTaskID();
       } else {
-        setUser((NodeData)value);
+        setTaskID((Integer)value);
       }
       break;
 
-    case TASKS:
+    case RESULTS:
       if (value == null) {
-        unsetTasks();
+        unsetResults();
       } else {
-        setTasks((Map<Integer,Task>)value);
+        setResults((String)value);
       }
       break;
 
@@ -299,11 +271,11 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     case JOB_ID:
       return Integer.valueOf(getJobID());
 
-    case USER:
-      return getUser();
+    case TASK_ID:
+      return Integer.valueOf(getTaskID());
 
-    case TASKS:
-      return getTasks();
+    case RESULTS:
+      return getResults();
 
     }
     throw new IllegalStateException();
@@ -318,10 +290,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     switch (field) {
     case JOB_ID:
       return isSetJobID();
-    case USER:
-      return isSetUser();
-    case TASKS:
-      return isSetTasks();
+    case TASK_ID:
+      return isSetTaskID();
+    case RESULTS:
+      return isSetResults();
     }
     throw new IllegalStateException();
   }
@@ -330,12 +302,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof Job)
-      return this.equals((Job)that);
+    if (that instanceof Result)
+      return this.equals((Result)that);
     return false;
   }
 
-  public boolean equals(Job that) {
+  public boolean equals(Result that) {
     if (that == null)
       return false;
 
@@ -348,21 +320,21 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return false;
     }
 
-    boolean this_present_user = true && this.isSetUser();
-    boolean that_present_user = true && that.isSetUser();
-    if (this_present_user || that_present_user) {
-      if (!(this_present_user && that_present_user))
+    boolean this_present_taskID = true;
+    boolean that_present_taskID = true;
+    if (this_present_taskID || that_present_taskID) {
+      if (!(this_present_taskID && that_present_taskID))
         return false;
-      if (!this.user.equals(that.user))
+      if (this.taskID != that.taskID)
         return false;
     }
 
-    boolean this_present_tasks = true && this.isSetTasks();
-    boolean that_present_tasks = true && that.isSetTasks();
-    if (this_present_tasks || that_present_tasks) {
-      if (!(this_present_tasks && that_present_tasks))
+    boolean this_present_results = true && this.isSetResults();
+    boolean that_present_results = true && that.isSetResults();
+    if (this_present_results || that_present_results) {
+      if (!(this_present_results && that_present_results))
         return false;
-      if (!this.tasks.equals(that.tasks))
+      if (!this.results.equals(that.results))
         return false;
     }
 
@@ -374,13 +346,13 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     return 0;
   }
 
-  public int compareTo(Job other) {
+  public int compareTo(Result other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    Job typedOther = (Job)other;
+    Result typedOther = (Result)other;
 
     lastComparison = Boolean.valueOf(isSetJobID()).compareTo(typedOther.isSetJobID());
     if (lastComparison != 0) {
@@ -392,22 +364,22 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetUser()).compareTo(typedOther.isSetUser());
+    lastComparison = Boolean.valueOf(isSetTaskID()).compareTo(typedOther.isSetTaskID());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetUser()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.user, typedOther.user);
+    if (isSetTaskID()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskID, typedOther.taskID);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetTasks()).compareTo(typedOther.isSetTasks());
+    lastComparison = Boolean.valueOf(isSetResults()).compareTo(typedOther.isSetResults());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetTasks()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tasks, typedOther.tasks);
+    if (isSetResults()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.results, typedOther.results);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -429,26 +401,22 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("Job(");
+    StringBuilder sb = new StringBuilder("Result(");
     boolean first = true;
 
     sb.append("jobID:");
     sb.append(this.jobID);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("user:");
-    if (this.user == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.user);
-    }
+    sb.append("taskID:");
+    sb.append(this.taskID);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("tasks:");
-    if (this.tasks == null) {
+    sb.append("results:");
+    if (this.results == null) {
       sb.append("null");
     } else {
-      sb.append(this.tasks);
+      sb.append(this.results);
     }
     first = false;
     sb.append(")");
@@ -477,15 +445,15 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     }
   }
 
-  private static class JobStandardSchemeFactory implements SchemeFactory {
-    public JobStandardScheme getScheme() {
-      return new JobStandardScheme();
+  private static class ResultStandardSchemeFactory implements SchemeFactory {
+    public ResultStandardScheme getScheme() {
+      return new ResultStandardScheme();
     }
   }
 
-  private static class JobStandardScheme extends StandardScheme<Job> {
+  private static class ResultStandardScheme extends StandardScheme<Result> {
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot, Job struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol iprot, Result struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TField schemeField;
       iprot.readStructBegin();
       while (true)
@@ -503,32 +471,18 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // USER
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.user = new NodeData();
-              struct.user.read(iprot);
-              struct.setUserIsSet(true);
+          case 2: // TASK_ID
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.taskID = iprot.readI32();
+              struct.setTaskIDIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 3: // TASKS
-            if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
-              {
-                org.apache.thrift.protocol.TMap _map10 = iprot.readMapBegin();
-                struct.tasks = new HashMap<Integer,Task>(2*_map10.size);
-                for (int _i11 = 0; _i11 < _map10.size; ++_i11)
-                {
-                  int _key12; // required
-                  Task _val13; // required
-                  _key12 = iprot.readI32();
-                  _val13 = new Task();
-                  _val13.read(iprot);
-                  struct.tasks.put(_key12, _val13);
-                }
-                iprot.readMapEnd();
-              }
-              struct.setTasksIsSet(true);
+          case 3: // RESULTS
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.results = iprot.readString();
+              struct.setResultsIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -544,29 +498,19 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       struct.validate();
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot, Job struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol oprot, Result struct) throws org.apache.thrift.TException {
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
       oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
       oprot.writeI32(struct.jobID);
       oprot.writeFieldEnd();
-      if (struct.user != null) {
-        oprot.writeFieldBegin(USER_FIELD_DESC);
-        struct.user.write(oprot);
-        oprot.writeFieldEnd();
-      }
-      if (struct.tasks != null) {
-        oprot.writeFieldBegin(TASKS_FIELD_DESC);
-        {
-          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.tasks.size()));
-          for (Map.Entry<Integer, Task> _iter14 : struct.tasks.entrySet())
-          {
-            oprot.writeI32(_iter14.getKey());
-            _iter14.getValue().write(oprot);
-          }
-          oprot.writeMapEnd();
-        }
+      oprot.writeFieldBegin(TASK_ID_FIELD_DESC);
+      oprot.writeI32(struct.taskID);
+      oprot.writeFieldEnd();
+      if (struct.results != null) {
+        oprot.writeFieldBegin(RESULTS_FIELD_DESC);
+        oprot.writeString(struct.results);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -575,48 +519,41 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   }
 
-  private static class JobTupleSchemeFactory implements SchemeFactory {
-    public JobTupleScheme getScheme() {
-      return new JobTupleScheme();
+  private static class ResultTupleSchemeFactory implements SchemeFactory {
+    public ResultTupleScheme getScheme() {
+      return new ResultTupleScheme();
     }
   }
 
-  private static class JobTupleScheme extends TupleScheme<Job> {
+  private static class ResultTupleScheme extends TupleScheme<Result> {
 
     @Override
-    public void write(org.apache.thrift.protocol.TProtocol prot, Job struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol prot, Result struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       BitSet optionals = new BitSet();
       if (struct.isSetJobID()) {
         optionals.set(0);
       }
-      if (struct.isSetUser()) {
+      if (struct.isSetTaskID()) {
         optionals.set(1);
       }
-      if (struct.isSetTasks()) {
+      if (struct.isSetResults()) {
         optionals.set(2);
       }
       oprot.writeBitSet(optionals, 3);
       if (struct.isSetJobID()) {
         oprot.writeI32(struct.jobID);
       }
-      if (struct.isSetUser()) {
-        struct.user.write(oprot);
+      if (struct.isSetTaskID()) {
+        oprot.writeI32(struct.taskID);
       }
-      if (struct.isSetTasks()) {
-        {
-          oprot.writeI32(struct.tasks.size());
-          for (Map.Entry<Integer, Task> _iter15 : struct.tasks.entrySet())
-          {
-            oprot.writeI32(_iter15.getKey());
-            _iter15.getValue().write(oprot);
-          }
-        }
+      if (struct.isSetResults()) {
+        oprot.writeString(struct.results);
       }
     }
 
     @Override
-    public void read(org.apache.thrift.protocol.TProtocol prot, Job struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol prot, Result struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
       BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
@@ -624,25 +561,12 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         struct.setJobIDIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.user = new NodeData();
-        struct.user.read(iprot);
-        struct.setUserIsSet(true);
+        struct.taskID = iprot.readI32();
+        struct.setTaskIDIsSet(true);
       }
       if (incoming.get(2)) {
-        {
-          org.apache.thrift.protocol.TMap _map16 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-          struct.tasks = new HashMap<Integer,Task>(2*_map16.size);
-          for (int _i17 = 0; _i17 < _map16.size; ++_i17)
-          {
-            int _key18; // required
-            Task _val19; // required
-            _key18 = iprot.readI32();
-            _val19 = new Task();
-            _val19.read(iprot);
-            struct.tasks.put(_key18, _val19);
-          }
-        }
-        struct.setTasksIsSet(true);
+        struct.results = iprot.readString();
+        struct.setResultsIsSet(true);
       }
     }
   }
