@@ -41,10 +41,20 @@ struct Task {
     8: string requiredResources
 }
 
+/**
+ * A job has a set of tasks
+ */
 struct Job {
     1: i32 jobID,
     2: NodeData user,
     3: map<i32,Task> tasks
+}
+
+
+struct Result {
+    1: i32 jobID,
+    2: i32 taskID,
+    3: string results
 }
 
 /**
@@ -86,7 +96,7 @@ service Siyapath {
     map<i32,Task> getJobResult (1:i32 jobID),
 
     //Sending task result to job-distributing node
-    bool sendTaskResult (1:Task task),
+    bool sendTaskResult (1:Result result),
 
     //User authentication
     string userLogin(1:string username, 2:string password)

@@ -11,11 +11,8 @@ import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.monitor.LimitedCpuUsageMonitor;
-import org.siyapath.service.NodeData;
-import org.siyapath.service.Siyapath;
-import org.siyapath.service.Task;
+import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
-import org.siyapath.service.NodeStatus;
 
 import java.net.ConnectException;
 
@@ -71,10 +68,10 @@ public class TaskProcessor {
                 String finalResult = (String) taskInstance.getResults();
 //                monitor.stopMonitor();
                 log.info("Task processing is completed.");
-                log.info("Results: " + finalResult.substring(0,100));
+                log.info("Results: " + finalResult.substring(0, 100));
 //                task.setTaskResult(finalResult);
                 setTaskStatus(true);
-                sendResultToDistributingNode();
+                deliverTaskResult(finalResult);
                 context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -87,26 +84,27 @@ public class TaskProcessor {
     }
 
 
-    public void sendResultToDistributingNode() {
+    public void deliverTaskResult(String result) {
 
 
-        NodeInfo nodeInfo = context.getNodeInfo();
-        NodeData thisNode = CommonUtils.serialize(nodeInfo);
+//        NodeInfo nodeInfo = context.getNodeInfo();
+//        NodeData thisNode = CommonUtils.serialize(nodeInfo);
         //setting the new sender as the processing node
-        task.setSender(thisNode);
+//        task.setSender(thisNode);
 
         TTransport transport = new TSocket("localhost", task.getSender().getPort());
 
+        Result taskResult = new Result(task.getJobID(), task.getTaskID(), result);
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             if (client.isAlive()) {
                 log.info("Sending computed result back to Distributing node." + task.getSender());
-                client.sendTaskResult(task);
+                client.sendTaskResult(taskResult);
             } else {
                 log.warn("Task Distributor is no longer available on port: " + task.getSender());
-                sendResultToBackupNode();
+                sendResultToBackupNode(taskResult);
             }
 
         } catch (TTransportException e) {
@@ -119,14 +117,14 @@ public class TaskProcessor {
         }
     }
 
-    private void sendResultToBackupNode() {
+    private void sendResultToBackupNode(Result result) {
         TTransport transport = new TSocket("localhost", task.getBackup().getPort());
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             log.info("Sending computed result to the backup node." + task.getBackup());
-            client.sendTaskResult(task);
+            client.sendTaskResult(result);
         } catch (TTransportException e) {
             e.printStackTrace();
         } catch (TException e) {
