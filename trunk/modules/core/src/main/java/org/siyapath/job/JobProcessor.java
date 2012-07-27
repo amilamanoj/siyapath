@@ -16,6 +16,7 @@ import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -42,6 +43,8 @@ public class JobProcessor {
         taskDispatcherExecutor = Executors.newFixedThreadPool(10);
         taskCollectorExecutor = Executors.newFixedThreadPool(10);
         taskQueue = new LinkedBlockingQueue<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
+        jobMap = new HashMap<Integer, Job>();
+        taskMap = new HashMap<Integer, ProcessingTask>();
 
         taskDispatcherExecutor.submit(new TaskDispatcher());
     }
