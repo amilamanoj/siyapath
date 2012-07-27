@@ -52,6 +52,7 @@ public class TaskProcessor {
         }
 
         private void processTask() {
+            Result taskResult = new Result(task.getJobID(), task.getTaskID(), null);
             setTaskStatus(false);
             taskClassLoader = new TaskClassLoader();
             try {
@@ -59,20 +60,24 @@ public class TaskProcessor {
                 context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
                 log.info("process task method runiing $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
-                SiyapathTask taskInstance = (SiyapathTask) theLoadedClass.newInstance();
-//                MonitorThread monitor = new MonitorThread();
-                taskInstance.setData(task.getTaskData());
-                log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
-                taskInstance.process();
+                Object object = theLoadedClass.newInstance();
+                SiyapathTask taskInstance;
+                if (object instanceof SiyapathTask) {
+                    taskInstance = (SiyapathTask) object;
+                    // MonitorThread monitor = new MonitorThread();
+                    taskInstance.setData(task.getTaskData());
+                    log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
+                    taskInstance.process();
 //                monitor.start();
-                String finalResult = (String) taskInstance.getResults();
+                    String finalResult = (String) taskInstance.getResults();
 //                monitor.stopMonitor();
-                log.info("Task processing is completed.");
-                log.info("Results: " + finalResult.substring(0, 100));
-//                task.setTaskResult(finalResult);
-                setTaskStatus(true);
-                deliverTaskResult(finalResult);
-                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+                    log.info("Task processing is completed.");
+                    log.info("Results: " + finalResult.substring(0, 100));
+                    taskResult.setResults(finalResult);
+                } else {
+                    // processing failed
+                }
+                deliverTaskResult(taskResult);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
@@ -80,11 +85,16 @@ public class TaskProcessor {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+            setTaskStatus(true);
+            context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
         }
     }
 
 
-    public void deliverTaskResult(String result) {
+    public void deliverTaskResult(Result result) {
+
+       Integer a = null;
+
 
 
 //        NodeInfo nodeInfo = context.getNodeInfo();
@@ -94,17 +104,16 @@ public class TaskProcessor {
 
         TTransport transport = new TSocket("localhost", task.getSender().getPort());
 
-        Result taskResult = new Result(task.getJobID(), task.getTaskID(), result);
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             if (client.isAlive()) {
                 log.info("Sending computed result back to Distributing node." + task.getSender());
-                client.sendTaskResult(taskResult);
+                client.sendTaskResult(result);
             } else {
                 log.warn("Task Distributor is no longer available on port: " + task.getSender());
-                sendResultToBackupNode(taskResult);
+                sendResultToBackupNode(result);
             }
 
         } catch (TTransportException e) {
