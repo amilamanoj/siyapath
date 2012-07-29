@@ -9,10 +9,11 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
-import org.siyapath.NodeInfo;
 import org.siyapath.monitor.LimitedCpuUsageMonitor;
-import org.siyapath.service.*;
-import org.siyapath.utils.CommonUtils;
+import org.siyapath.service.NodeStatus;
+import org.siyapath.service.Result;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
 
 import java.net.ConnectException;
 
@@ -38,8 +39,8 @@ public class TaskProcessor {
 
     public void startProcessing() {
         log.info("Preparing to start the task: " + task.getTaskID());
-        TaskThread jobThread = new TaskThread();
-        jobThread.start();
+        TaskThread taskThread = new TaskThread();
+        taskThread.start();
     }
 
     private class TaskThread extends Thread {
@@ -58,7 +59,6 @@ public class TaskProcessor {
             try {
                 // TODO: verify if expected name is necessary
                 context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
-                log.info("process task method runiing $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
                 Object object = theLoadedClass.newInstance();
                 SiyapathTask taskInstance;
@@ -93,15 +93,6 @@ public class TaskProcessor {
 
     public void deliverTaskResult(Result result) {
 
-       Integer a = null;
-
-
-
-//        NodeInfo nodeInfo = context.getNodeInfo();
-//        NodeData thisNode = CommonUtils.serialize(nodeInfo);
-        //setting the new sender as the processing node
-//        task.setSender(thisNode);
-
         TTransport transport = new TSocket("localhost", task.getSender().getPort());
 
         try {
@@ -123,6 +114,8 @@ public class TaskProcessor {
             }
         } catch (TException e) {
             e.printStackTrace();
+        } finally {
+            transport.close();
         }
     }
 
@@ -142,7 +135,6 @@ public class TaskProcessor {
     }
 
     public boolean isTaskStatus() {
-        log.info("now at task processor======13");
         return taskStatus;
     }
 

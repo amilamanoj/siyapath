@@ -89,6 +89,9 @@ service Siyapath {
     //Getting current status of a job
     bool getJobStatusFromJobHandler(1:i32 jobID, 2:i32 port),
 
+    //new job status polling
+    map<i32,string> getJobStatus(1:i32 jobId),
+
     //Getting current status of a job
     bool getTaskStatusFromTaskProcessor(1:Task task, 2:i32 port),
 

@@ -112,25 +112,37 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
+     *
+     * @param jobId
+     * @return task status map for the given JobId, with the mapping of taskID to task completion status
+     */
+    @Override
+    public Map<Integer,String> getJobStatus(int jobId){
+        return nodeContext.getJobProcessor().getTaskStatusesForJob(jobId);
+
+    }
+
+    /**
      * @param jobID
      * @return
      * @throws TException
      */
     @Override
+    //TODO: y boolean? temporarily removed
     public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
-        //send the ip, port n stuff as params, codegen idl and replace
-        boolean jobStatus;
-        NodeInfo handlerNodeInfo = new NodeInfo();
-//        handlerNodeInfo.setIp();
-        handlerNodeInfo.setPort(port);
-//        handlerNodeInfo.setNodeId();
-        NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
-//        JobProcessor jobHandler = new JobProcessor(handlerNodeContext,jobID, new HashMap<Integer,Task>());
-//        jobStatus = jobHandler.thriftCall(jobID);
-//        return jobStatus;
-        return false;
-
+        return true;
     }
+
+////        //send the ip, port n stuff as params, codegen idl and replace
+//boolean jobStatus;
+//    NodeInfo handlerNodeInfo = new NodeInfo();
+////        handlerNodeInfo.setIp();
+//    handlerNodeInfo.setPort(port);
+//    //        handlerNodeInfo.setNodeId();
+//    NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
+////        JobProcessor jobHandler = new JobProcessor(handlerNodeContext,jobID, new HashMap<Integer,Task>());
+////        jobStatus = jobHandler.thriftCall(jobID);
+////        return jobStatus;
 
     @Override
     public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws TException {
