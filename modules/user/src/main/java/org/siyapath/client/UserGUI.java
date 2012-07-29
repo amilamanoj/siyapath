@@ -25,7 +25,6 @@ public class UserGUI extends JFrame {
         initComponents();
         this.handler = handler;
         this.jobEditor = new JobEditorGUI(this, true, this);
-        this.jobStatusUI = new JobStatusUI(handler);
         jobSubmitButton.setEnabled(false);
         loginPanel.setVisible(true);
         userPanel.setVisible(false);
@@ -499,7 +498,8 @@ public class UserGUI extends JFrame {
     }
 
     private void JobStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        jobStatusUI.setVisible(true);
+        StatusUiThread statusUiThread = new StatusUiThread();
+        statusUiThread.run();
     }
 
     private void usernameTextActionPerformed(ActionEvent evt) {
@@ -614,6 +614,16 @@ public class UserGUI extends JFrame {
     private void showSplash() {
 //        SplashScreen ss = new SplashScreen(this, true);
 //        ss.setVisible(true);
+    }
+
+    private class StatusUiThread extends Thread{
+
+        @Override
+        public void run(){
+            jobStatusUI = new JobStatusUI(handler);
+            jobStatusUI.setVisible(true);
+        }
+
     }
 
     private javax.swing.JButton aboutButton;

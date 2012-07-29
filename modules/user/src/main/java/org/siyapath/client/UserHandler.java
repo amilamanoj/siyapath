@@ -17,6 +17,8 @@ import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -24,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
@@ -31,10 +34,14 @@ public class UserHandler {
     private NodeContext context;
     private NodeInfo jobHandlerNode;
     private NodeInfo clientEnd;
-    private Map taskList = new HashMap<Integer, Task>();
+    private Map taskList = new HashMap<Integer, Task>();   //TODO: needed? nh
     private int jobId;
     private int taskCounter;
-    private boolean jobStatus = false;
+//    private boolean jobStatus = false;
+
+    Map<Integer,String> taskCompletionDataMap;
+    private Vector<Vector<String>> allRows = new Vector<Vector<String>>();
+    Vector<String> eachRow = null;
 
     public UserHandler() {
         this.clientEnd = new NodeInfo();
@@ -109,7 +116,7 @@ public class UserHandler {
      * @return Node information of the selected node
      */
     private NodeInfo getDistributorNode() {
-//        String res = null;
+
         NodeInfo selectedMember = null;
         TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
         try {
@@ -121,14 +128,11 @@ public class UserHandler {
             log.info("Number of members from bootstrapper: " + context.getMemberCount());
             selectedMember = context.getRandomMember();
             setJobHandlerNode(selectedMember);
-//            System.out.println("damn1111111111111111111" + selectedMember.getPort());
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
-//                res = "connecEx";
                 e.printStackTrace();
             }
         } catch (TException e) {
-//            res = "tEx";
             e.printStackTrace();
         } finally {
             transport.close();
@@ -204,86 +208,140 @@ public class UserHandler {
     }
 
 
+    
+
+    public void updateTableDataVectors(){
+
+        if(!allRows.isEmpty()){
+            allRows.removeAllElements();
+        }
+        for(Map.Entry<Integer,String> task : taskCompletionDataMap.entrySet()){
+            eachRow = new Vector<String>();
+            eachRow.add(task.getKey().toString());
+            eachRow.add(task.getValue());
+            allRows.add(eachRow);
+        }
+    }
+
     /**
-     * Contacts back the selected JobProcessor to get job status
-     *
-     * @param jobID
+     * Starts a new thread for polling status from JobProcessor
      */
-    public void pollStatusOfJob(int jobID){
-        //
-//        System.out.println("damnnnnnnnnnnnnnnnnnnnnnnnnn2"+getJobHandlerNode().getPort());
-TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
-try {
-        log.info("Polling status of job: " + jobID);
-transport.open();
-TProtocol protocol = new TBinaryProtocol(transport);
-Siyapath.Client client = new Siyapath.Client(protocol);
-jobStatus = client.getJobStatusFromJobHandler(jobID,getJobHandlerNode().getPort());
-//System.out.println("================================================");
-log.info("Status of " + jobID + " is " + jobStatus);
-//TODO: convey client, repeat at task level & content tbd after scheduler/handler has job id assignment
-} catch (TTransportException e) {
-        if (e.getCause() instanceof ConnectException) {
-        e.printStackTrace();
-}
-        } catch (TException e) {
-        e.printStackTrace();
-} catch (Exception e){
-    e.printStackTrace();
-}
-finally {
-        transport.close();
-}
+    public void startPollingThread(int jobId, JTable table){
+        JobStatusPollThread jobStatusPollThread = new JobStatusPollThread(jobId, table);
+        jobStatusPollThread.start();
+    }
 
+    public Vector<Vector<String>> getAllRows() {
+        return allRows;
+    }
+
+    /**
+     * Thread runs while job status is false, i.e. Job is incomplete
+     */
+    private class JobStatusPollThread extends Thread {
+        
+        int jobId;
+        boolean jobStatus;
+        int count;
+        JTable table;
+        
+        JobStatusPollThread(int jobId, JTable table){
+            this.jobId = jobId;
+            this.table = table;
         }
-//Thread runs while job status is false, i.e. Job is incomplete
-private class JobStatusPollThread extends Thread {
-
-    public boolean isRunning = false;
-
-    @Override
-    public void run() {
-        log.info("Job status polling thread started");
-        int count=0;
-
-        while (!jobStatus) {
-            pollStatusOfJob(jobId);
-            log.info("Job status after polling is " + jobStatus);
-            count++;
-            log.info("Polled iteration: " + count);
-            if(jobStatus){
-                log.info("status polling thread terminating");
+        
+        @Override
+        public void run() {
+            log.info("Polling thread started for JobId: " + jobId);
+    
+            jobStatus=false;
+    
+            while (!jobStatus) {
+                count++;
+                pollStatusFromJobProcessor(jobId);
+                try {
+                    sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
+        }
+
+        /**
+         * Contacts back the selected JobProcessor to get job status
+         * @param jobID
+         */
+        public void pollStatusFromJobProcessor(int jobID){
+
+            TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
+
             try {
-                sleep(1000);
-            } catch (InterruptedException e) {
+                log.info("Polling status of job: " + jobID + " count: " + count);
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                //gets the map of task statuses from JobProcessor
+                //Maps each taskId to its processing status <Integer,String>
+                taskCompletionDataMap = client.getJobStatus(jobID);
+                //sets vectors to be fed to Status UI
+                updateTableDataVectors();
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.fireTableDataChanged();
+                jobStatus = assessJobStatusFromTaskStatuses(taskCompletionDataMap);
+
+            } catch (TTransportException e) {
+                if (e.getCause() instanceof ConnectException) {
+                    e.printStackTrace();
+                }
+            } catch (TException e) {
                 e.printStackTrace();
-            }catch (Exception e){
+            } catch (Exception e){
                 e.printStackTrace();
             }
+            finally {
+                transport.close();
+            }
         }
-    }
 
-    public void stopPolling() {
-        isRunning = false;
-    }
-}
+        public boolean assessJobStatusFromTaskStatuses(Map<Integer, String> statusMap){
 
-    public void demo(){
-        JobStatusPollThread thread = new JobStatusPollThread();
-        thread.start();
-//        log.info("Started Job Status Polling thread.===1");
-//        int count =0;
-//        while (!jobStatus) {
-//            log.info("Job status before polling tis time is " + jobStatus);
-//            pollStatusOfJob(jobId);
-//            log.info("Job status after polling tis time is " + jobStatus);
-//            count++;
-//            log.info("Polled iteration: " + count);
+            boolean statusCondition = true;
+            boolean eachTaskStatus;
+
+            for(String taskStatus : statusMap.values()){
+                if(taskStatus.equalsIgnoreCase("DONE")){
+                    eachTaskStatus = true;
+                }else{
+                    eachTaskStatus = false;
+                }
+
+                if (statusCondition && eachTaskStatus) statusCondition = true;
+                else statusCondition = false;
+            }
+            return statusCondition;
+        }
+        
+    }
+    
+    
+
+//    public void demo(){
+//        JobStatusPollThread thread = new JobStatusPollThread();
+//        thread.start();
+////        log.info("Started Job Status Polling thread.===1");
+////        int count =0;
+////        while (!jobStatus) {
+////            log.info("Job status before polling tis time is " + jobStatus);
+////            pollStatusFromJobProcessor(jobId);
+////            log.info("Job status after polling tis time is " + jobStatus);
+////            count++;
+////            log.info("Polled iteration: " + count);
+////
+////        }
 //
-//        }
-
-    }
+//    }
 
 ////        DEMO only
 //    public static void main(String[] args) {

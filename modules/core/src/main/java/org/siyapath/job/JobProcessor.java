@@ -18,6 +18,7 @@ import org.siyapath.utils.CommonUtils;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.*;
 
 
@@ -34,8 +35,8 @@ public class JobProcessor {
     private NodeInfo backupNode;
 
     private BlockingQueue<Task> taskQueue;     // or Deque? i.e. double ended queue
-    private Map<Integer, Job> jobMap;
-    private Map<Integer, ProcessingTask> taskMap;
+    private Map<Integer, Job> jobMap;               // jobID mapped to Job
+    private Map<Integer, ProcessingTask> taskMap;   // taskID mapped to ProcessingTask
 
     public JobProcessor(NodeContext nodeContext) {
         //uses the default constructor at the sender non-requisition
@@ -54,11 +55,16 @@ public class JobProcessor {
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
-        jobMap.put(job.getJobID(), job);
     }
 
     public void resultsReceived(Result result) {
         //TODO
+        int taskId = result.getTaskID();
+        for(Map.Entry<Integer,ProcessingTask> entry : taskMap.entrySet()){
+            if(entry.getKey().intValue()==taskId){
+                entry.getValue().setStatus(ProcessingTask.TaskStatus.DONE);
+            }
+        }
     }
 
     class TaskCollector implements Runnable {
@@ -148,6 +154,29 @@ public class JobProcessor {
 
     private JobScheduler getJobScheduler() {
         return new PushJobScheduler(context);
+    }
+
+    /**
+     *
+     *
+     * @param jobId
+     * @return task status map for the given JobId, with the mapping taskID to task completion status
+     */
+    public Map<Integer,String> getTaskStatusesForJob(int jobId){
+
+        Map<Integer,String> taskStatusMap = null;
+
+        if (jobMap!=null){
+            Job requestedJob = jobMap.get(jobId);
+            Set<Integer> taskIds = requestedJob.getTasks().keySet(); // task ids of the requested job: should be there tasks:P
+            taskStatusMap = new HashMap<Integer, String>();
+
+            for (Integer taskId : taskIds){
+                ProcessingTask processingTask = (ProcessingTask)taskMap.get(taskId);
+                taskStatusMap.put(taskId, processingTask.getStatus().toString());
+            }
+        }
+        return taskStatusMap;
     }
 
     /*

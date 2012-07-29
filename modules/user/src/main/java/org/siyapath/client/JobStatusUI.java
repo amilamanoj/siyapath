@@ -1,27 +1,27 @@
 package org.siyapath.client;
-
-import javax.swing.table.DefaultTableModel;
-
-/**
- * Created by IntelliJ IDEA.
- * User: HP
- * Date: 7/10/12
- * Time: 4:48 AM
- * To change this template use File | Settings | File Templates.
- */
-public class JobStatusUI extends javax.swing.JFrame{
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
+import javax.swing.table.DefaultTableModel;
+import java.util.Vector;
+
+public class JobStatusUI extends javax.swing.JFrame {
+
     UserHandler handler;
+    DefaultTableModel model=null;
+    Vector<String> headers;
 
     /** Creates new form JobStatusUI */
     public JobStatusUI(UserHandler handler) {
-        initComponents();
+        headers = new Vector<String>();
+        headers.add("Task ID");
+        headers.add("Status");
         this.handler = handler;
+        this.model = new DefaultTableModel(handler.getAllRows(), headers);
+        initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
@@ -33,117 +33,101 @@ public class JobStatusUI extends javax.swing.JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
-        jobIDLabel = new javax.swing.JLabel();
-        jobIDTextField = new javax.swing.JTextField();
-        jobStatusLabel = new javax.swing.JLabel();
-        viewStatisButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jobIdLabel = new javax.swing.JLabel();
+        jobIdTextField = new javax.swing.JTextField();
+        viewStatusButton = new javax.swing.JButton();
+        lowerPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TaskTable = new javax.swing.JTable();
-        DefaultTableModel model = (DefaultTableModel) TaskTable.getModel();
+        taskStatusTable = new javax.swing.JTable(model);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-        jobIDLabel.setText("Enter Job ID:");
+        jobIdLabel.setText("Enter Job ID:");
 
-        jobIDTextField.addActionListener(new java.awt.event.ActionListener() {
+        viewStatusButton.setText("View Status");
+        viewStatusButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jobIDTextFieldActionPerformed(evt);
+                viewStatusButtonActionPerformed(evt);
             }
         });
 
-        jobStatusLabel.setText("Job is ");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(jobIdLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jobIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                                .addComponent(viewStatusButton)
+                                .addGap(82, 82, 82))
+        );
+        jPanel1Layout.setVerticalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(46, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jobIdLabel)
+                                        .addComponent(jobIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(viewStatusButton))
+                                .addGap(27, 27, 27))
+        );
 
-        viewStatisButton.setText("View Status");
-        viewStatisButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewStatisButtonActionPerformed(evt);
-            }
-        });
+        jScrollPane1.setViewportView(taskStatusTable);
 
-        TaskTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                        {null, null},
-                        {null, null},
-                        {null, null}
-                },
-                new String[]{
-                        "Task", "Status"
-                }
-        ));
-        jScrollPane1.setViewportView(TaskTable);
+        javax.swing.GroupLayout lowerPanelLayout = new javax.swing.GroupLayout(lowerPanel);
+        lowerPanel.setLayout(lowerPanelLayout);
+        lowerPanelLayout.setHorizontalGroup(
+                lowerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(lowerPanelLayout.createSequentialGroup()
+                                .addGap(46, 46, 46)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(54, Short.MAX_VALUE))
+        );
+        lowerPanelLayout.setVerticalGroup(
+                lowerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(lowerPanelLayout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(34, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(45, 45, 45)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jobStatusLabel)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jobIDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(27, 27, 27)
-                                                                .addComponent(jobIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(53, 53, 53)
-                                                                .addComponent(viewStatisButton))))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(73, 73, 73)
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(48, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lowerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jobIDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jobIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(viewStatisButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jobStatusLabel)
-                                .addGap(49, 49, 49)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                                .addGap(85, 85, 85))
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lowerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>
 
-    private void viewStatisButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        handler.demo();
+    private void viewStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        //TODO: get the value from textField
 
-
-
-
-
-
-        // TODO add your handling code here:
+        int jobId = Integer.parseInt(jobIdTextField.getText());
+        handler.startPollingThread(jobId, taskStatusTable);
     }
-
-    private void jobIDTextFieldActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new JobStatusUI().setVisible(true);
-//            }
-//        });
-//    }
-
     // Variables declaration - do not modify
-    private javax.swing.JTable TaskTable;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel jobIDLabel;
-    private javax.swing.JTextField jobIDTextField;
-    private javax.swing.JLabel jobStatusLabel;
-    private javax.swing.JButton viewStatisButton;
+    private javax.swing.JLabel jobIdLabel;
+    private javax.swing.JTextField jobIdTextField;
+    private javax.swing.JPanel lowerPanel;
+    public javax.swing.JTable taskStatusTable;
+    private javax.swing.JButton viewStatusButton;
     // End of variables declaration
 
 }
