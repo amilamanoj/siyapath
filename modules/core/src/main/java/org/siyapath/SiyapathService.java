@@ -128,39 +128,6 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    //TODO: y boolean? temporarily removed
-    public boolean getJobStatusFromJobHandler(int jobID, int port) throws TException {
-        return true;
-    }
-
-////        //send the ip, port n stuff as params, codegen idl and replace
-//boolean jobStatus;
-//    NodeInfo handlerNodeInfo = new NodeInfo();
-////        handlerNodeInfo.setIp();
-//    handlerNodeInfo.setPort(port);
-//    //        handlerNodeInfo.setNodeId();
-//    NodeContext handlerNodeContext = new NodeContext(handlerNodeInfo);
-////        JobProcessor jobHandler = new JobProcessor(handlerNodeContext,jobID, new HashMap<Integer,Task>());
-////        jobStatus = jobHandler.thriftCall(jobID);
-////        return jobStatus;
-
-    @Override
-    public boolean getTaskStatusFromTaskProcessor(Task task, int port) throws TException {
-        boolean taskStatus;
-        NodeInfo taskProcessorNodeInfo = new NodeInfo();
-        taskProcessorNodeInfo.setPort(port);
-        NodeContext taskProcessorNodeContext = new NodeContext(taskProcessorNodeInfo);
-        TaskProcessor taskProcessor = new TaskProcessor(task, taskProcessorNodeContext);
-        taskStatus = taskProcessor.isTaskStatus();
-        return taskStatus;
-    }
-
-    /**
-     * @param jobID
-     * @return
-     * @throws TException
-     */
-    @Override
     public Map<Integer, Task> getJobResult(int jobID) throws TException {
         throw new UnsupportedOperationException();
     }
