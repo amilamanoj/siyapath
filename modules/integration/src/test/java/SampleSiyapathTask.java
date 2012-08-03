@@ -1,4 +1,4 @@
-import org.siyapath.job.SiyapathTask;
+import org.siyapath.task.SiyapathTask;
 
 import java.util.StringTokenizer;
 

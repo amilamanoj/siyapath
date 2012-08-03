@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.siyapath.common.BackupHandler;
 import org.siyapath.gossip.GossipImpl;
-import org.siyapath.job.TaskProcessor;
+import org.siyapath.task.TaskProcessor;
 import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
