@@ -1,4 +1,4 @@
-package org.siyapath.job;
+package org.siyapath.task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,54 +44,83 @@ public class TaskProcessor {
     }
 
     private class TaskThread extends Thread {
-        private Class theLoadedClass;
-        private TaskClassLoader taskClassLoader;
 
         @Override
         public void run() {
             processTask();
         }
 
-        private void processTask() {
-            Result taskResult = new Result(task.getJobID(), task.getTaskID(), null);
-            setTaskStatus(false);
-            taskClassLoader = new TaskClassLoader();
+    }
+
+    private void processTask() {
+        Result taskResult = new Result(task.getJobID(), task.getTaskID(), null);
+        setTaskStatus(false);
+
+        SiyapathTask taskInstance = getTaskInstance();
+
+        if (taskInstance != null) {
+            // MonitorThread monitor = new MonitorThread();
+            SiyapathSecurityManager siyapathSecurityManager = new SiyapathSecurityManager("secpass");
+
+            // sand-boxing with a custom security manager that denies most permissions
+            SecurityManager oldSecurityManager = System.getSecurityManager();
+            System.setSecurityManager(siyapathSecurityManager);
             try {
-                // TODO: verify if expected name is necessary
-                context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
-                theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
-                Object object = theLoadedClass.newInstance();
-                SiyapathTask taskInstance;
-                if (object instanceof SiyapathTask) {
-                    taskInstance = (SiyapathTask) object;
-                    // MonitorThread monitor = new MonitorThread();
-                    taskInstance.setData(task.getTaskData());
-                    log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
-                    taskInstance.process();
+            taskInstance.setData(task.getTaskData());
+            log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
+            taskInstance.process();
 //                monitor.start();
-                    String finalResult = (String) taskInstance.getResults();
+            String finalResult = (String) taskInstance.getResults();
 //                monitor.stopMonitor();
-                    log.info("Task processing is completed.");
-                    log.info("Results: " + finalResult.substring(0, 100));
-                    taskResult.setResults(finalResult);
-                } else {
-                    // processing failed
-                }
-                deliverTaskResult(taskResult);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            log.info("Task processing is completed.");
+
+            siyapathSecurityManager.disable("secpass");
+            System.setSecurityManager(oldSecurityManager);
+
+            log.info("Results: " + finalResult.substring(0, 100));
+            taskResult.setResults(finalResult);
+            deliverTaskResult(taskResult);
             setTaskStatus(true);
-            context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+            }
+            catch (SecurityException e){
+                // TODO: handle illegal operation
+                siyapathSecurityManager.disable("secpass");
+                System.setSecurityManager(oldSecurityManager);
+                log.info("Task Processing aborted due to an attempt of illegal operation");
+            }
+        } else {
+            // processing failed
         }
+        context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+    }
+
+    private SiyapathTask getTaskInstance() {
+        TaskClassLoader taskClassLoader;
+        taskClassLoader = new TaskClassLoader();
+        // TODO: verify if expected name is necessary
+        context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
+        Class theLoadedClass = null;
+        try {
+            theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
+
+            Object object = theLoadedClass.newInstance();
+
+            if (object instanceof SiyapathTask) {
+                return (SiyapathTask) object;
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
-    public void deliverTaskResult(Result result) {
+    private void deliverTaskResult(Result result) {
 
         TTransport transport = new TSocket("localhost", task.getSender().getPort());
 

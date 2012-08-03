@@ -11,7 +11,7 @@ import org.apache.thrift.transport.TTransportException;
 import org.siyapath.FrameworkInformation;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
-import org.siyapath.job.SiyapathTask;
+import org.siyapath.task.SiyapathTask;
 import org.siyapath.service.Job;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;

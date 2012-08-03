@@ -1,7 +1,10 @@
-package org.siyapath.job;
+package org.siyapath.task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.security.ProtectionDomain;
+import java.util.PropertyPermission;
 
 public class TaskClassLoader extends ClassLoader{
 
@@ -25,4 +28,5 @@ public class TaskClassLoader extends ClassLoader{
 
     return loadingClass;
     }
+
 }
