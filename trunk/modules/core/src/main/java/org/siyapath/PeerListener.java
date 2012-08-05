@@ -2,10 +2,12 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TSimpleServer;
+import org.apache.thrift.server.*;
+
 import org.apache.thrift.transport.TServerSocket;
+import org.apache.thrift.transport.TNonblockingServerSocket;
 import org.apache.thrift.transport.TServerTransport;
+import org.apache.thrift.transport.TNonblockingServerTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.service.*;
 
@@ -40,9 +42,18 @@ public class PeerListener {
         try {
             log.debug("Initializing thrift server with the port:" + nodeContext.getNodeInfo().getPort());
             serverTransport = new TServerSocket(nodeContext.getNodeInfo().getPort());
-            server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
-            // Use this for a multithreaded server
-            // TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
+            //simple server
+            // server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
+            // Thread Pool Server
+            server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
+            //Threaded Selector Server
+            //TNonblockingServerTransport serverTransport1 = new TNonblockingServerSocket(nodeContext.getNodeInfo().getPort());
+            // server = new TThreadedSelectorServer(new TThreadedSelectorServer.Args(serverTransport1).processor(processor));
+            //Half Sync/Half Async  Server
+            // server = new THsHaServer(new THsHaServer.Args(serverTransport1).processor(processor));
+            //Non blocking Server
+            // server = new TNonblockingServer(new TNonblockingServer.Args(serverTransport1).processor(processor));
+
         } catch (TTransportException e) {
             e.printStackTrace();
         }
