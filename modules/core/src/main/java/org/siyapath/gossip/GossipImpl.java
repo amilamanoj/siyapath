@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
@@ -99,6 +100,7 @@ public class GossipImpl {
         log.info("Getting a random member to gossip:" + randomMember);
         if (randomMember != null) {
             TTransport transport = new TSocket("localhost", randomMember.getPort());
+             //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
@@ -138,6 +140,7 @@ public class GossipImpl {
         log.info("Getting a random member to gossip resources:" + randomMember);
         if (randomMember != null) {
             TTransport transport = new TSocket("localhost", randomMember.getPort());
+             //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
