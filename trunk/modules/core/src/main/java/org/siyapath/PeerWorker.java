@@ -62,7 +62,7 @@ public class PeerWorker {
 
     private void initiateMembers() {
         TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
-          //TTransport transport = new TFramedTransport(new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT));
+        //TTransport transport = new TFramedTransport(new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT));
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -102,6 +102,7 @@ public class PeerWorker {
         public void run() {
 
             isRunning = true;
+            nodeContext.setWorkerEnabled(true);
             while (isRunning) {
                 if (!nodeContext.isBootstrapper()) {
                     if (!nodeContext.isPresenceNotified()) {
@@ -122,6 +123,11 @@ public class PeerWorker {
                     e.printStackTrace();
                 }
             }
+        }
+
+        public void shutDown() {
+            isRunning = false;
+            nodeContext.setWorkerEnabled(false);
         }
     }
 }

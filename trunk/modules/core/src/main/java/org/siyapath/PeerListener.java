@@ -81,6 +81,7 @@ public class PeerListener {
     public void stop() {
         log.info("Stopping listening for incoming connections");
         server.stop();
+        nodeContext.setListenerEnabled(false);
     }
 
     private class ListenerThread extends Thread {
@@ -91,9 +92,8 @@ public class PeerListener {
 
         @Override
         public void run() {
-
+            nodeContext.setListenerEnabled(true);
             server.serve();
-//            server.stop();
 
         }
     }
