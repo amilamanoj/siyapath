@@ -36,7 +36,7 @@ public class UserHandler {
     private NodeInfo clientEnd;
     private Map taskList = new HashMap<Integer, Task>();   //TODO: needed? nh
     private int jobId;
-    private int taskCounter;
+    private String jobIdString;
 //    private boolean jobStatus = false;
 
     Map<Integer,String> taskCompletionDataMap;
@@ -60,7 +60,8 @@ public class UserHandler {
         String ip = context.getNodeInfo().getIp();
         String timestamp = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss.S").format(new Date());
         int random = CommonUtils.getRandomNumber(1000);
-        jobId = Math.abs((ip + "::" + timestamp + "::" + random).hashCode());
+        jobIdString = ip + "::" + timestamp + "::" + random;
+        jobId = Math.abs(jobIdString.hashCode());
         return jobId;
     }
 
@@ -97,9 +98,10 @@ public class UserHandler {
      * @param taskList list of tasks
      */
     public void submitJob(Map<String, TaskData> taskList) {
-        taskCounter = 0;
+        int taskCounter = 0;
         for (TaskData task : taskList.values()) {
-            addTask(task.getClassFile(), task.getInputData() , task.getRequiredResources());
+            int taskId = Math.abs((jobIdString + "::" + taskCounter++).hashCode());
+            addTask(taskId, task.getClassFile(), task.getInputData(), task.getRequiredResources());
         }
         NodeInfo selectedNode = getDistributorNode();
         if (selectedNode != null) {
@@ -173,9 +175,9 @@ public class UserHandler {
      * @param taskProgramFile class for the task to be created
      * @param inputData input data
      */
-    private void addTask(File taskProgramFile, String inputData , String requiredResources) {
+    private void addTask(int taskId, File taskProgramFile, String inputData ,
+                         String requiredResources) {
         try {
-            int taskId = jobId + taskCounter++;
             //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
             Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer
                     (taskProgramFile.getAbsolutePath()), inputData, getJobInterfaceName(),
