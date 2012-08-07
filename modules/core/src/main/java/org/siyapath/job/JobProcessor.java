@@ -59,12 +59,9 @@ public class JobProcessor {
 
     public void resultsReceived(Result result) {
         //TODO
-        int taskId = result.getTaskID();
-        for(Map.Entry<Integer,ProcessingTask> entry : taskMap.entrySet()){
-            if(entry.getKey().intValue()==taskId){
-                entry.getValue().setStatus(ProcessingTask.TaskStatus.DONE);
-            }
-        }
+        ProcessingTask pTask = taskMap.get(result.getTaskID());
+        pTask.setResult(result.getResults());
+        pTask.setStatus(ProcessingTask.TaskStatus.DONE);
     }
 
     class TaskCollector implements Runnable {
