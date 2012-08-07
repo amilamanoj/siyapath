@@ -22,10 +22,9 @@ import java.util.Map;
 import java.util.Set;
 
 
-    /**
-     * This class provides overall gossip related operation implementation
-     *
-     */
+/**
+ * This class provides overall gossip related operation implementation
+ */
 public class GossipImpl {
 
     private static final Log log = LogFactory.getLog(GossipImpl.class);
@@ -100,7 +99,7 @@ public class GossipImpl {
         log.info("Getting a random member to gossip:" + randomMember);
         if (randomMember != null) {
             TTransport transport = new TSocket("localhost", randomMember.getPort());
-             //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
+            //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
@@ -111,15 +110,12 @@ public class GossipImpl {
                 nodeContext.updateMemberSet(newSet);
                 nodeContext.addMemNodeSet(randomMember, discoveredNodes);
                 log.info("Members fetched " + discoveredNodes.size());
-//                for (NodeInfo i : discoveredNodes) {
-//                    log.info(i);
-//                }
-
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
-                    System.out.println("Could not connect to the bootstrapper :(");
+                    log.error("Could not connect to the member node for member gossiping");
+                } else {
+                    e.printStackTrace();
                 }
-
             } catch (TException e) {
                 e.printStackTrace();
 
@@ -140,7 +136,7 @@ public class GossipImpl {
         log.info("Getting a random member to gossip resources:" + randomMember);
         if (randomMember != null) {
             TTransport transport = new TSocket("localhost", randomMember.getPort());
-             //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
+            //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
@@ -152,9 +148,10 @@ public class GossipImpl {
 
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
-                    System.out.println("Could not connect to the bootstrapper :(");
+                    log.error("Could not connect to the member node for resource gossiping");
+                } else {
+                    e.printStackTrace();
                 }
-
             } catch (TException e) {
                 e.printStackTrace();
 

@@ -48,9 +48,10 @@ public class PeerWorker {
             Siyapath.Client client = new Siyapath.Client(protocol);
             presenceNotified = client.notifyPresence(CommonUtils.serialize(nodeContext.getNodeInfo()));
         } catch (TTransportException e) {
-//            e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {
-                log.debug("Could not connect to the bootstrapper :(");
+                log.error("Could not connect to the bootstrapper to notify presense");
+            } else {
+                e.printStackTrace();
             }
         } catch (TException e) {
             e.printStackTrace();
@@ -72,9 +73,10 @@ public class PeerWorker {
 
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
-                log.error("Could not connect to the bootstrapper :(");
+                log.error("Could not connect to the bootstrapper to fetch nodes");
+            } else {
+                e.printStackTrace();
             }
-
         } catch (TException e) {
             e.printStackTrace();
 

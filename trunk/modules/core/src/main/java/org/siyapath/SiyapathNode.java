@@ -8,6 +8,8 @@ import org.siyapath.service.NodeStatus;
 import org.siyapath.ui.NodeGUI;
 import org.siyapath.ui.NodeUIHandler;
 
+import javax.swing.*;
+
 public class SiyapathNode {
 
     private static final Log log = LogFactory.getLog(SiyapathNode.class);
@@ -43,6 +45,13 @@ public class SiyapathNode {
         SiyapathNode node = new SiyapathNode(nodeInfo);
 
         if (showUI) {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (UnsupportedLookAndFeelException e) {
+            } catch (ClassNotFoundException e) {
+            } catch (InstantiationException e) {
+            } catch (IllegalAccessException e) {
+            }
             node.getNodeContext().setGuiEnabled(true);
             NodeGUI gui = new NodeGUI();
             gui.setVisible(true);
