@@ -26,26 +26,35 @@ public class NodeUIHandler {
 
     private class UIUpdater implements Runnable {
         private boolean active;
+
         @Override
         public void run() {
-             active = true;
+            active = true;
 
             while (active) {
 
                 ui.setListenerStat(nodeContext.isListenerEnabled() ? "ON" : "OFF");
                 ui.setWorkerStat(nodeContext.isWorkerEnabled() ? "ON" : "OFF");
-                ui.setMemberCount(String.valueOf(nodeContext.getMemberCount()));
+                int memberCount = nodeContext.getMemberCount();
+                ui.setMemberCount(String.valueOf(memberCount));
                 StringBuilder members = new StringBuilder();
 
-                for (NodeInfo node: nodeContext.getMemberSet()) {
-                    members.append(node.getIp());
-                    members.append("\n");
+                if (memberCount < 1) {
+                    members.append("<No known members>");
+                } else {
+                    members.append("<html>");
+                    for (NodeInfo node : nodeContext.getMemberSet()) {
+                        members.append(node.toString());
+                        members.append("<br />");
+                    }
+                    members.append("</html>");
                 }
+                ui.setMembers(members.toString());
 
-
+                ui.setStatus(nodeContext.getNodeInfo().getNodeStatus().name());
 
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

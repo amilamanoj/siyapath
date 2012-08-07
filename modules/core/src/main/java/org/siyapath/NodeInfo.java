@@ -15,16 +15,16 @@ public class NodeInfo {
     }
 
 
-   /* public enum NodeStatus {
-        CREATED(1) ,
-        STARTING (2),
-        BUSY (3),
-        IDLE(4);
-         int ind;
-        NodeStatus(int i) {
-            ind=i;
-        }
-    } */
+    /* public enum NodeStatus {
+       CREATED(1) ,
+       STARTING (2),
+       BUSY (3),
+       IDLE(4);
+        int ind;
+       NodeStatus(int i) {
+           ind=i;
+       }
+   } */
 
     public NodeInfo() {
         ip = CommonUtils.getIPAddress();
@@ -36,21 +36,19 @@ public class NodeInfo {
     }
 
     public NodeStatus getNodeStatus() {
-           return nodeStatus;
-       }
+        return nodeStatus;
+    }
 
 
-
-    public boolean isIdle(){
-        if(nodeStatus==NodeStatus.IDLE){
+    public boolean isIdle() {
+        if (nodeStatus == NodeStatus.IDLE) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     /**
-     *
      * @return port number
      */
     public int getPort() {
@@ -58,7 +56,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @param port
      */
     public void setPort(int port) {
@@ -66,7 +63,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @return node ID
      */
     public int getNodeId() {
@@ -74,7 +70,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @param nodeId
      */
     public void setNodeId(int nodeId) {
@@ -82,7 +77,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @return ip address
      */
     public String getIp() {
@@ -90,7 +84,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @param ip
      */
     public void setIp(String ip) {
@@ -98,7 +91,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @return true if bootstrapper false otherwise
      */
     public boolean isBootstrapper() {
@@ -106,7 +98,6 @@ public class NodeInfo {
     }
 
     /**
-     *
      * @param bootstrapper
      */
     public void setBootstrapper(boolean bootstrapper) {
@@ -132,6 +123,6 @@ public class NodeInfo {
 
     @Override
     public String toString() {
-        return "Node-id:" + nodeId + "-port:" + port;
+        return "NodeID:" + nodeId + " IP-" + ip + ":" + port;
     }
 }
