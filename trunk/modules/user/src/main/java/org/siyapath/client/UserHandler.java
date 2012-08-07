@@ -80,7 +80,7 @@ public class UserHandler {
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 res = "connecEx";
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         } catch (TException e) {
             res = "tEx";
