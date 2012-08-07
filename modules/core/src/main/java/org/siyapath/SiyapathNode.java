@@ -5,6 +5,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.service.*;
 import org.siyapath.service.NodeStatus;
+import org.siyapath.ui.NodeGUI;
+import org.siyapath.ui.NodeUIHandler;
 
 public class SiyapathNode {
 
@@ -28,14 +30,25 @@ public class SiyapathNode {
      */
     public static void main(String[] args) {
         NodeInfo nodeInfo = new NodeInfo();
-
+        boolean showUI = true;
         if (args.length == 1) {
             if (args[0].equals("bs")) {
                 nodeInfo.setBootstrapper(true);
                 nodeInfo.setPort(FrameworkInformation.BOOTSTRAP_PORT);
+                showUI = false;
+            } else if (args[0].equals("cl")) {
+                showUI = false;
             }
         }
         SiyapathNode node = new SiyapathNode(nodeInfo);
+
+        if (showUI) {
+            node.getNodeContext().setGuiEnabled(true);
+            NodeGUI gui = new NodeGUI();
+            gui.setVisible(true);
+            NodeUIHandler uiHandler = new NodeUIHandler(node.getNodeContext(), gui);
+            uiHandler.startMonitor();
+        }
         node.startSiyapathNode();
     }
 
@@ -58,7 +71,6 @@ public class SiyapathNode {
         nodeContext.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
         peerWorker.start();
     }
-
 
 
     public NodeContext getNodeContext() {

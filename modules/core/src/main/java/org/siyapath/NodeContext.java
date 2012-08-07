@@ -34,17 +34,9 @@ public class NodeContext {
     private HashSet<NodeResource> memberResource;
     private NodeResource nodeResource;
     private boolean presenceNotified;
-
-    public boolean isPresenceNotified() {
-        return presenceNotified;
-    }
-
-    public void setPresenceNotified(boolean presenceNotified) {
-        this.presenceNotified = presenceNotified;
-    }
-
-
-
+    private boolean guiEnabled;
+    private boolean listenerEnabled;
+    private boolean workerEnabled;
 
 
     /**
@@ -261,4 +253,35 @@ public class NodeContext {
         isBackup = backup;
     }
 
+    public boolean isPresenceNotified() {
+        return presenceNotified;
+    }
+
+    public void setPresenceNotified(boolean presenceNotified) {
+        this.presenceNotified = presenceNotified;
+    }
+
+    public boolean isGuiEnabled() {
+        return guiEnabled;
+    }
+
+    public void setGuiEnabled(boolean guiEnabled) {
+        this.guiEnabled = guiEnabled;
+    }
+
+    public boolean isListenerEnabled() {
+        return listenerEnabled;
+    }
+
+    public void setListenerEnabled(boolean listenerEnabled) {
+        this.listenerEnabled = listenerEnabled;
+    }
+
+    public boolean isWorkerEnabled() {
+        return workerEnabled;
+    }
+
+    public void setWorkerEnabled(boolean workerEnabled) {
+        this.workerEnabled = workerEnabled;
+    }
 }

@@ -2,8 +2,6 @@ package org.siyapath.client;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.Map;
 
@@ -23,6 +21,7 @@ public class UserGUI extends JFrame {
      */
     public UserGUI(UserHandler handler) {
         initComponents();
+        siyapathLogo.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/siyapathLogo232x184.png")));
         this.handler = handler;
         this.jobEditor = new JobEditorGUI(this, true, this);
         jobSubmitButton.setEnabled(false);
@@ -44,7 +43,7 @@ public class UserGUI extends JFrame {
         loginWelcomeLabel = new javax.swing.JLabel();
         loginInfoLabel = new javax.swing.JLabel();
         loginButton = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
+        siyapathLogo = new javax.swing.JLabel();
         userPanel = new javax.swing.JPanel();
         userWelcomeLabel = new javax.swing.JLabel();
         userLogoutButton = new javax.swing.JButton();
@@ -65,7 +64,7 @@ public class UserGUI extends JFrame {
         aboutMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Library Management System");
+        setTitle("Siyapath - Volunteer Computing");
         setBounds(new java.awt.Rectangle(0, 0, 700, 500));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -74,7 +73,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        nameLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 24)); // NOI18N
+        nameLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 24));
         nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nameLabel.setText("Siyapath - Volunteer Computing");
         nameLabel.setPreferredSize(new java.awt.Dimension(800, 40));
@@ -88,7 +87,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         aboutButton.setText("About");
         aboutButton.setIconTextGap(10);
         aboutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -100,12 +99,12 @@ public class UserGUI extends JFrame {
         controlPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         controlPane.setOpaque(true);
 
-        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18)); // NOI18N
+        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18));
         loginWelcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginWelcomeLabel.setText("Welcome to Siyapath");
         loginWelcomeLabel.setPreferredSize(new java.awt.Dimension(800, 40));
 
-        loginInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loginInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
         loginInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginInfoLabel.setText("You are not connected. please login...");
         loginInfoLabel.setPreferredSize(new java.awt.Dimension(800, 40));
@@ -118,8 +117,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon("D:\\FYP\\Site\\siyapathLogo_small.png")); // NOI18N
+        siyapathLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
         loginPanel.setLayout(loginPanelLayout);
@@ -128,7 +126,7 @@ public class UserGUI extends JFrame {
                         .addGroup(loginPanelLayout.createSequentialGroup()
                                 .addGap(91, 91, 91)
                                 .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                        .addComponent(jLabel9)
+                                        .addComponent(siyapathLogo)
                                         .addComponent(loginInfoLabel, 0, 0, Short.MAX_VALUE)
                                         .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
                                         .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -139,7 +137,7 @@ public class UserGUI extends JFrame {
                         .addGroup(loginPanelLayout.createSequentialGroup()
                                 .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                .addComponent(siyapathLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(loginInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -355,7 +353,8 @@ public class UserGUI extends JFrame {
 
         getAccessibleContext().setAccessibleName("Siyapath - Volunteer Computing");
 
-        pack();    }
+        pack();
+    }
 
     private void exitButtonActionPerformed(ActionEvent evt) {
         exit();
@@ -506,10 +505,10 @@ public class UserGUI extends JFrame {
 //        ss.setVisible(true);
     }
 
-    private class StatusUiThread extends Thread{
+    private class StatusUiThread extends Thread {
 
         @Override
-        public void run(){
+        public void run() {
             jobStatusUI = new JobStatusUI(handler);
             jobStatusUI.setVisible(true);
         }
@@ -526,7 +525,7 @@ public class UserGUI extends JFrame {
     private javax.swing.JMenuItem exitMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel siyapathLogo;
     private javax.swing.JLabel jobInfoLabel;
     private javax.swing.JButton jobSubmitButton;
     private javax.swing.JButton loginButton;
