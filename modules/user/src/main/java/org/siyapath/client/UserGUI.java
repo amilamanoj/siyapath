@@ -40,27 +40,21 @@ public class UserGUI extends JFrame {
         exitButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
         controlPane = new javax.swing.JLayeredPane();
+        loginPanel = new javax.swing.JPanel();
+        loginWelcomeLabel = new javax.swing.JLabel();
+        loginInfoLabel = new javax.swing.JLabel();
+        loginButton = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
         userPanel = new javax.swing.JPanel();
         userWelcomeLabel = new javax.swing.JLabel();
         userLogoutButton = new javax.swing.JButton();
         jobSubmitButton = new javax.swing.JButton();
         jobInfoLabel = new javax.swing.JLabel();
         createEditJobButton = new javax.swing.JButton();
-        loginPanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        usernameText = new javax.swing.JTextField();
-        passwordText = new javax.swing.JPasswordField();
-        loginButton = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         busyPanel = new javax.swing.JPanel();
         busyLabel = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         statusPanel = new javax.swing.JPanel();
-        siyapathLogo = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
         systemMenu = new javax.swing.JMenu();
         logoutMenu = new javax.swing.JMenuItem();
@@ -69,10 +63,9 @@ public class UserGUI extends JFrame {
         userProfileMenu = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenu = new javax.swing.JMenuItem();
-        JobStatusButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Siyapath - Volunteer Computing");
+        setTitle("Library Management System");
         setBounds(new java.awt.Rectangle(0, 0, 700, 500));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -81,7 +74,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        nameLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 24));
+        nameLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 24)); // NOI18N
         nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nameLabel.setText("Siyapath - Volunteer Computing");
         nameLabel.setPreferredSize(new java.awt.Dimension(800, 40));
@@ -95,7 +88,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
+        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
         aboutButton.setText("About");
         aboutButton.setIconTextGap(10);
         aboutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -107,10 +100,60 @@ public class UserGUI extends JFrame {
         controlPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         controlPane.setOpaque(true);
 
-        userWelcomeLabel.setFont(new java.awt.Font("Bodoni MT", 0, 16)); // NOI18N
+        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18)); // NOI18N
+        loginWelcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        loginWelcomeLabel.setText("Welcome to Siyapath");
+        loginWelcomeLabel.setPreferredSize(new java.awt.Dimension(800, 40));
+
+        loginInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loginInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        loginInfoLabel.setText("You are not connected. please login...");
+        loginInfoLabel.setPreferredSize(new java.awt.Dimension(800, 40));
+
+        loginButton.setText("Connect");
+
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setIcon(new javax.swing.ImageIcon("D:\\FYP\\Site\\siyapathLogo_small.png")); // NOI18N
+
+        javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
+        loginPanel.setLayout(loginPanelLayout);
+        loginPanelLayout.setHorizontalGroup(
+                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(loginPanelLayout.createSequentialGroup()
+                                .addGap(91, 91, 91)
+                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(jLabel9)
+                                        .addComponent(loginInfoLabel, 0, 0, Short.MAX_VALUE)
+                                        .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(93, 93, 93))
+        );
+        loginPanelLayout.setVerticalGroup(
+                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(loginPanelLayout.createSequentialGroup()
+                                .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(loginInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+        );
+
+        loginPanel.setBounds(10, 10, 590, 340);
+        controlPane.add(loginPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        userWelcomeLabel.setFont(new java.awt.Font("Bodoni MT", 0, 16));
         userWelcomeLabel.setText("Welcome");
 
-        userLogoutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        userLogoutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         userLogoutButton.setText("Logout");
         userLogoutButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         userLogoutButton.setIconTextGap(40);
@@ -120,7 +163,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        jobSubmitButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        jobSubmitButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         jobSubmitButton.setText("Submit Job");
         jobSubmitButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jobSubmitButton.setIconTextGap(20);
@@ -130,24 +173,17 @@ public class UserGUI extends JFrame {
             }
         });
 
-        jobInfoLabel.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        jobInfoLabel.setFont(new java.awt.Font("Bodoni MT", 0, 24));
         jobInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jobInfoLabel.setText("No Job Defined");
 
-        createEditJobButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        createEditJobButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         createEditJobButton.setText("Create Job...");
         createEditJobButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         createEditJobButton.setIconTextGap(20);
         createEditJobButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createEditJobButtonActionPerformed(evt);
-            }
-        });
-
-        JobStatusButton.setText("View Job Status");
-        JobStatusButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JobStatusButtonActionPerformed(evt);
             }
         });
 
@@ -167,12 +203,10 @@ public class UserGUI extends JFrame {
                                 .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(userPanelLayout.createSequentialGroup()
                                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jobInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
                                         .addGroup(userPanelLayout.createSequentialGroup()
                                                 .addGap(226, 226, 226)
-                                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(JobStatusButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(createEditJobButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))))
+                                                .addComponent(createEditJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jobInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
                                 .addContainerGap())
         );
         userPanelLayout.setVerticalGroup(
@@ -184,129 +218,15 @@ public class UserGUI extends JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(userPanelLayout.createSequentialGroup()
-                                                .addComponent(createEditJobButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(JobStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(66, 66, 66))
+                                                .addComponent(createEditJobButton, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                                                .addGap(113, 113, 113))
                                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(jobSubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))))
         );
 
-        userPanel.setBounds(10, 10, 590, 310);
+        userPanel.setBounds(10, 10, 590, 340);
         controlPane.add(userPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 14));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Welcome to Siyapath");
-        jLabel2.setPreferredSize(new java.awt.Dimension(800, 40));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("You are not logged in. please login below...");
-        jLabel3.setPreferredSize(new java.awt.Dimension(800, 40));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel6.setText("Username:");
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel7.setText("Password:");
-
-        usernameText.setFont(new java.awt.Font("Tahoma", 0, 14));
-        usernameText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usernameTextActionPerformed(evt);
-            }
-        });
-        usernameText.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                usernameTextKeyPressed(evt);
-            }
-        });
-
-        passwordText.setFont(new java.awt.Font("Tahoma", 0, 14));
-        passwordText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordTextActionPerformed(evt);
-            }
-        });
-        passwordText.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                passwordTextKeyPressed(evt);
-            }
-        });
-
-        loginButton.setText("Login");
-        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                loginButtonMouseClicked(evt);
-            }
-        });
-        loginButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel8.setText("Please enter your credentials below:");
-
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
-        loginPanel.setLayout(loginPanelLayout);
-        loginPanelLayout.setHorizontalGroup(
-                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(loginPanelLayout.createSequentialGroup()
-                                .addGap(91, 91, 91)
-                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                                        .addComponent(jLabel3, 0, 0, Short.MAX_VALUE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, loginPanelLayout.createSequentialGroup()
-                                                .addComponent(jLabel8)
-                                                .addGap(182, 182, 182))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginPanelLayout.createSequentialGroup()
-                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel6))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(passwordText, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                                                        .addComponent(usernameText, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                                                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(93, 93, 93))
-        );
-        loginPanelLayout.setVerticalGroup(
-                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(loginPanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(loginPanelLayout.createSequentialGroup()
-                                                .addGap(15, 15, 15)
-                                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jLabel6)
-                                                        .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(passwordText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel7))
-                                                .addGap(7, 7, 7))
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(61, Short.MAX_VALUE))
-        );
-
-        loginPanel.setBounds(10, 10, 590, 310);
-        controlPane.add(loginPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         busyLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
         busyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -329,14 +249,14 @@ public class UserGUI extends JFrame {
         busyPanelLayout.setVerticalGroup(
                 busyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, busyPanelLayout.createSequentialGroup()
-                                .addContainerGap(192, Short.MAX_VALUE)
+                                .addContainerGap(222, Short.MAX_VALUE)
                                 .addComponent(busyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4)
                                 .addGap(85, 85, 85))
         );
 
-        busyPanel.setBounds(10, 10, 590, 310);
+        busyPanel.setBounds(10, 10, 590, 340);
         controlPane.add(busyPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
@@ -347,10 +267,10 @@ public class UserGUI extends JFrame {
         );
         statusPanelLayout.setVerticalGroup(
                 statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 310, Short.MAX_VALUE)
+                        .addGap(0, 340, Short.MAX_VALUE)
         );
 
-        statusPanel.setBounds(10, 10, 590, 310);
+        statusPanel.setBounds(10, 10, 590, 340);
         controlPane.add(statusPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         systemMenu.setText("System");
@@ -379,11 +299,6 @@ public class UserGUI extends JFrame {
         mainMenuBar.add(systemMenu);
 
         userMenu.setText("User");
-        userMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userMenuActionPerformed(evt);
-            }
-        });
 
         userProfileMenu.setText("My Profile");
         userProfileMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -396,11 +311,6 @@ public class UserGUI extends JFrame {
         mainMenuBar.add(userMenu);
 
         helpMenu.setText("Help");
-        helpMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpMenuActionPerformed(evt);
-            }
-        });
 
         aboutMenu.setText("About");
         aboutMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -418,30 +328,24 @@ public class UserGUI extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(controlPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+                                        .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                .addComponent(siyapathLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(nameLabel, 0, 0, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(aboutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
-                                                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(controlPane, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(aboutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
+                                                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(siyapathLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(controlPane, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(controlPane, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(aboutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -449,8 +353,9 @@ public class UserGUI extends JFrame {
                                 .addGap(12, 12, 12))
         );
 
-        pack();
-    }
+        getAccessibleContext().setAccessibleName("Siyapath - Volunteer Computing");
+
+        pack();    }
 
     private void exitButtonActionPerformed(ActionEvent evt) {
         exit();
@@ -469,12 +374,6 @@ public class UserGUI extends JFrame {
 
     private void logoutMenuActionPerformed(ActionEvent evt) {
         logOut();
-    }
-
-    private void userMenuActionPerformed(ActionEvent evt) {
-    }
-
-    private void helpMenuActionPerformed(ActionEvent evt) {
     }
 
     private void exitMenuActionPerformed(ActionEvent evt) {
@@ -502,29 +401,20 @@ public class UserGUI extends JFrame {
         statusUiThread.run();
     }
 
-    private void usernameTextActionPerformed(ActionEvent evt) {
-    }
+//    private void usernameTextKeyPressed(KeyEvent evt) {
+//        int keyCode = evt.getKeyCode();
+//        if (keyCode == 10) {
+//            passwordText.requestFocus();
+//            passwordText.selectAll();
+//        }
+//    }
 
-    private void usernameTextKeyPressed(KeyEvent evt) {
-        int keyCode = evt.getKeyCode();
-        if (keyCode == 10) {
-            passwordText.requestFocus();
-            passwordText.selectAll();
-        }
-    }
-
-    private void passwordTextActionPerformed(ActionEvent evt) {
-    }
-
-    private void passwordTextKeyPressed(KeyEvent evt) {
-        int keyCode = evt.getKeyCode();
-        if (keyCode == 10) {
-            login();
-        }
-    }
-
-    private void loginButtonMouseClicked(MouseEvent evt) {
-    }
+//    private void passwordTextKeyPressed(KeyEvent evt) {
+//        int keyCode = evt.getKeyCode();
+//        if (keyCode == 10) {
+//            login();
+//        }
+//    }
 
     private void loginButtonActionPerformed(ActionEvent evt) {
         login();
@@ -556,20 +446,20 @@ public class UserGUI extends JFrame {
 
     private void login() {
         busy();
-        String userName = usernameText.getText();
-        String password = String.valueOf(passwordText.getPassword());
-        String res = handler.authenticate(userName, password);
+//        String userName = usernameText.getText();
+//        String password = String.valueOf(passwordText.getPassword());
+        String res = handler.authenticate("admin", "admin");
         if (res.equals("connecEx")) {
             JOptionPane.showMessageDialog(this, "Could not connect to bootstrapper", "Login Failed", JOptionPane.ERROR_MESSAGE);
             loggedOut();
         } else if (res.equals("success")) {
-            loggedPerson = userName;
+//            loggedPerson = userName;
             logged();
         } else {
             loggedOut();
             JOptionPane.showMessageDialog(this, "Invalid username or password, access denied!", "Login Failed", JOptionPane.ERROR_MESSAGE);
-            usernameText.requestFocus();
-            usernameText.selectAll();
+//            usernameText.requestFocus();
+//            usernameText.selectAll();
         }
     }
 
@@ -598,8 +488,8 @@ public class UserGUI extends JFrame {
     }
 
     public void loggedOut() {
-        usernameText.setText(null);
-        passwordText.setText(null);
+//        usernameText.setText(null);
+//        passwordText.setText(null);
         busyPanel.setVisible(false);
         loginPanel.setVisible(true);
         userPanel.setVisible(false);
@@ -635,22 +525,17 @@ public class UserGUI extends JFrame {
     private javax.swing.JButton exitButton;
     private javax.swing.JMenuItem exitMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jobInfoLabel;
     private javax.swing.JButton jobSubmitButton;
     private javax.swing.JButton loginButton;
+    private javax.swing.JLabel loginInfoLabel;
     private javax.swing.JPanel loginPanel;
+    private javax.swing.JLabel loginWelcomeLabel;
     private javax.swing.JMenuItem logoutMenu;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JLabel nameLabel;
-    private javax.swing.JPasswordField passwordText;
-    private javax.swing.JLabel siyapathLogo;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JMenu systemMenu;
     private javax.swing.JButton userLogoutButton;
@@ -658,8 +543,6 @@ public class UserGUI extends JFrame {
     private javax.swing.JPanel userPanel;
     private javax.swing.JMenuItem userProfileMenu;
     private javax.swing.JLabel userWelcomeLabel;
-    private javax.swing.JTextField usernameText;
-    private javax.swing.JButton JobStatusButton;
 
 
 }
