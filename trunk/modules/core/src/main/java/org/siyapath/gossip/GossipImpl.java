@@ -98,7 +98,7 @@ public class GossipImpl {
         NodeInfo randomMember = nodeContext.getRandomMember();
         log.info("Getting a random member to gossip:" + randomMember);
         if (randomMember != null) {
-            TTransport transport = new TSocket("localhost", randomMember.getPort());
+            TTransport transport = new TSocket(randomMember.getIp(), randomMember.getPort());
             //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
             try {
                 transport.open();
@@ -135,7 +135,7 @@ public class GossipImpl {
         NodeInfo randomMember = nodeContext.getRandomMember();
         log.info("Getting a random member to gossip resources:" + randomMember);
         if (randomMember != null) {
-            TTransport transport = new TSocket("localhost", randomMember.getPort());
+            TTransport transport = new TSocket(randomMember.getIp(), randomMember.getPort());
             //TTransport transport = new TFramedTransport(new TSocket("localhost",  randomMember.getPort()));
             try {
                 transport.open();
