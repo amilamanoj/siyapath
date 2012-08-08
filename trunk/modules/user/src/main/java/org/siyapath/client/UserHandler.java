@@ -28,12 +28,8 @@ public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
 
     private NodeContext context;
-//    private NodeInfo jobHandlerNode;
     private NodeInfo clientEnd;
     private Map<Integer, JobData> jobMap = new HashMap<Integer, JobData>();
-    private int jobId;
-    private String jobIdString;
-//    private boolean jobStatus = false;
 
     Map<Integer, String> taskCompletionDataMap;
     private Vector<Vector<String>> allRows = new Vector<Vector<String>>();
@@ -44,8 +40,8 @@ public class UserHandler {
         this.context = new NodeContext(clientEnd);
     }
 
-    public int getJobId() {
-        return jobId;
+    public JobData getJobData(int jobId){
+        return jobMap.get(jobId);
     }
 
     /**
@@ -53,13 +49,12 @@ public class UserHandler {
      *
      * @return the created jobID
      */
-    public int generateJobID() {
+    public String generateJobIDString() {
         String ip = context.getNodeInfo().getIp();
         String timestamp = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss.S").format(new Date());
         int random = CommonUtils.getRandomNumber(1000);
-        jobIdString = ip + "::" + timestamp + "::" + random;
-        jobId = Math.abs(jobIdString.hashCode());
-        return jobId;
+        String jobIdString = ip + "::" + timestamp + "::" + random;
+        return jobIdString;
     }
 
     /**
@@ -98,29 +93,31 @@ public class UserHandler {
      *
      * @param taskList list of tasks
      */
-    public void submitJob(String name, Map<String, TaskData> taskList) throws SubmissionFailedException {
+    public int submitJob(String name, Map<String, TaskData> taskList) throws SubmissionFailedException {
         NodeInfo selectedNode = null;
         Job job = null;
         try {
             job = createJob(taskList);
             selectedNode = getDistributorNode();
-            JobData jobData = new JobData(job.jobID, name, job, selectedNode);
+            JobData jobData = new JobData(job.getJobID(), name, job, selectedNode);
             jobMap.put(jobData.getId(), jobData);
 
             sendJob(job, selectedNode);
         } catch (Exception e) {
             throw new SubmissionFailedException("Could not submit the job", e);
         }
+        return job.getJobID();
     }
 
     private Job createJob(Map<String, TaskData> taskList) throws IOException {
-        int jobId = this.generateJobID();
+        String jobIdString = this.generateJobIDString();
+        int jobId = Math.abs(jobIdString.hashCode());
         int taskCounter = 0;
         Map<Integer, Task> taskMap = new HashMap<Integer, Task>();
 
         for (TaskData taskData : taskList.values()) {
             int taskId = Math.abs((jobIdString + "::" + taskCounter++).hashCode());
-            Task task = createTask(taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResources());
+            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResources());
             taskMap.put(taskId, task);
         }
 
@@ -133,9 +130,8 @@ public class UserHandler {
      * @param taskProgramFile class for the task to be created
      * @param inputData       input data
      */
-    private Task createTask(int taskId, File taskProgramFile, String inputData,
+    private Task createTask(int jobId, int taskId, File taskProgramFile, String inputData,
                             String requiredResources) throws IOException {
-        //TODO: implement assigning taskID, jobID. Client will ask JobScheduler/Handler for next available jobID
         Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer
                 (taskProgramFile.getAbsolutePath()), inputData, getJobInterfaceName(),
                 CommonUtils.serialize(context.getNodeInfo()), null, requiredResources);

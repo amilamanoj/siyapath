@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.Map;
+import java.util.Vector;
 
 /*
  * The graphical user interface of siyapath client
@@ -16,17 +17,25 @@ public class UserGUI extends JFrame {
     private String loggedPerson;
     private Map taskFileList;
     private JobStatusUI jobStatusUI;
-    private DefaultTableModel model;
+    private DefaultComboBoxModel comboBoxModel;
+    private DefaultTableModel tableModel;
+    private Vector<String> tableHeaders;
 
 
     /**
      * @param handler
      */
     public UserGUI(UserHandler handler) {
+        this.handler = handler;
+        this.jobEditor = new JobEditorGUI(this, true, this, handler);
+        this.comboBoxModel = new DefaultComboBoxModel();
+        tableHeaders = new Vector<String>();
+        tableHeaders.add("Task ID");
+        tableHeaders.add("Status");
+        this.tableModel = new DefaultTableModel(handler.getAllRows(), tableHeaders);
         initComponents();
         siyapathLogo.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/siyapathLogo232x184.png")));
-        this.handler = handler;
-        this.jobEditor = new JobEditorGUI(this, true, this);
+
 //        jobSubmitButton.setEnabled(false);
         loginPanel.setVisible(true);
         startPanel.setVisible(false);
@@ -61,9 +70,9 @@ public class UserGUI extends JFrame {
         jobIDLabel = new javax.swing.JLabel();
         jobNameLabel = new javax.swing.JLabel();
         taskDistributorLabel = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        taskCountLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        taskStatusTable = new javax.swing.JTable(model);
+        taskStatusTable = new javax.swing.JTable(tableModel);
         getStatusButton = new javax.swing.JButton();
         getResultsButton = new javax.swing.JButton();
         busyPanel = new javax.swing.JPanel();
@@ -123,7 +132,7 @@ public class UserGUI extends JFrame {
         jobInfoLabel.setText("No Job defined, add a new Job below");
 
         jobComboBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jobComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jobComboBox.setModel(comboBoxModel);
 
         javax.swing.GroupLayout startPanelLayout = new javax.swing.GroupLayout(startPanel);
         startPanel.setLayout(startPanelLayout);
@@ -227,8 +236,8 @@ public class UserGUI extends JFrame {
         taskDistributorLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         taskDistributorLabel.setText("-");
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel10.setText("0");
+        taskCountLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        taskCountLabel.setText("0");
 
         jScrollPane1.setViewportView(taskStatusTable);
 
@@ -275,7 +284,7 @@ public class UserGUI extends JFrame {
                                                         .addComponent(taskDistributorLabel)
                                                         .addComponent(jobNameLabel)
                                                         .addComponent(jobIDLabel)
-                                                        .addComponent(jLabel10))))
+                                                        .addComponent(taskCountLabel))))
                                 .addContainerGap(40, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
@@ -298,7 +307,7 @@ public class UserGUI extends JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(taskDistributorLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel10)))
+                                                .addComponent(taskCountLabel)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                                 .addComponent(jLabel6)
                                 .addGap(18, 18, 18)
@@ -499,17 +508,14 @@ public class UserGUI extends JFrame {
         login();
     }
 
-//    private void jobSubmitButtonActionPerformed(ActionEvent evt) {
-//        handler.submitJob(taskFileList);
-//    }
-
-    public void jobUpdated(String jobName, Map taskFileList) {
-        // todo
-//        this.taskFileList = taskFileList;
-//        int jobId = handler.generateJobID();
-//        jobInfoLabel.setText("<html>Job Id:" + jobId + "<br>Job Name:" + jobName + "<br>No. of tasks:" + taskFileList.keySet().size() + "</html>");
-//        jobSubmitButton.setEnabled(true);
-//        createEditJobButton.setText("Edit Job...");
+    public void jobUpdated(int jobID) {
+        JobData jobData = handler.getJobData(jobID);
+        comboBoxModel.addElement(jobData.getName());
+        statusPanel.setVisible(true);
+        jobIDLabel.setText(String.valueOf(jobData.getId()));
+        jobNameLabel.setText(jobData.getName());
+        taskDistributorLabel.setText(jobData.getDistributorNode().toString());
+        taskCountLabel.setText(String.valueOf(jobData.getJob().getTasksSize()));
     }
 
     private void about() {
@@ -610,7 +616,7 @@ public class UserGUI extends JFrame {
     private javax.swing.JButton getStatusButton;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel taskCountLabel;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

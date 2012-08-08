@@ -23,19 +23,29 @@ import java.util.Map;
  */
 public class JobEditorGUI extends javax.swing.JDialog {
 
+    private javax.swing.JLabel JobNameLabel;
+    private javax.swing.JButton addTaskButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jobNameText;
+    private javax.swing.JButton okButton;
+    private javax.swing.JLabel tasksLabel;
+    private javax.swing.JList tasksList;
+
     private DefaultListModel listModel;
     private Map<String, TaskData> taskFileList = new HashMap<String, TaskData>();
     private UserGUI userGUI;
+    private UserHandler handler;
     private int counter;
-
 
     /**
      * Creates new form JobEditor
      */
-    public JobEditorGUI(java.awt.Frame parent, boolean modal, UserGUI userGUI) {
+    public JobEditorGUI(java.awt.Frame parent, boolean modal, UserGUI userGUI, UserHandler handler) {
         super(parent, modal);
         this.listModel = new DefaultListModel();
         this.userGUI = userGUI;
+        this.handler = handler;
         initComponents();
         okButton.setEnabled(false);
         this.setLocationRelativeTo(null);
@@ -133,8 +143,14 @@ public class JobEditorGUI extends javax.swing.JDialog {
     }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        userGUI.jobUpdated(jobNameText.getText(), taskFileList);
-        this.dispose();
+        try {
+            int jobID = handler.submitJob(jobNameText.getText(), taskFileList);
+            userGUI.jobUpdated(jobID);
+            this.dispose();
+        } catch (SubmissionFailedException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Job submission failed: " + e.getCause().getMessage(), "Job Submission Failed", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,12 +171,5 @@ public class JobEditorGUI extends javax.swing.JDialog {
         }
     }
 
-    private javax.swing.JLabel JobNameLabel;
-    private javax.swing.JButton addTaskButton;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jobNameText;
-    private javax.swing.JButton okButton;
-    private javax.swing.JLabel tasksLabel;
-    private javax.swing.JList tasksList;
+
 }
