@@ -8,9 +8,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.FrameworkInformation;
-import org.siyapath.NodeContext;
-import org.siyapath.NodeInfo;
+import org.siyapath.*;
+import org.siyapath.service.NodeStatus;
 import org.siyapath.task.SiyapathTask;
 import org.siyapath.service.Job;
 import org.siyapath.service.Siyapath;
@@ -23,10 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
@@ -128,8 +124,6 @@ public class UserHandler {
             Siyapath.Client client = new Siyapath.Client(protocol);
             context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
             log.info("Number of members from bootstrapper: " + context.getMemberCount());
-            selectedMember = context.getRandomMember();
-            setJobHandlerNode(selectedMember);
         } catch (TTransportException e) {
             if (e.getCause() instanceof ConnectException) {
                 e.printStackTrace();
@@ -140,6 +134,20 @@ public class UserHandler {
             transport.close();
         }
         log.info("Selected node: " + selectedMember);
+
+        Set<NodeInfo> nodes = context.getMemberSet();
+
+        Iterator<NodeInfo> nodeItr = nodes.iterator();
+
+        while (nodeItr.hasNext()) {
+            NodeInfo nodeInfo = nodeItr.next();
+            if (nodeInfo.isIdle() || nodeInfo.getNodeStatus() == NodeStatus.DISTRIBUTING) {
+                selectedMember = nodeInfo;
+                return selectedMember;
+            }
+        }
+
+        selectedMember = context.getRandomMember();
 
         return selectedMember;
     }

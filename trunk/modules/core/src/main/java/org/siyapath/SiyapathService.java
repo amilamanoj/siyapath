@@ -129,7 +129,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public Map<Integer, Task> getJobResult(int jobID) throws TException {
-        throw new UnsupportedOperationException();
+        return nodeContext.getJobProcessor().getJobResult();
     }
 
     /**

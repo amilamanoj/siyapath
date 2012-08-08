@@ -38,6 +38,9 @@ public class TaskProcessor {
     }
 
     public void startProcessing() {
+        if(context.getNodeInfo().getNodeStatus()==NodeStatus.IDLE){  //TODO: need to reject accepting tasks if not idle
+        context.getNodeInfo().setNodeStatus(NodeStatus.PRECESSING);
+        }
         log.info("Preparing to start the task: " + task.getTaskID());
         TaskThread taskThread = new TaskThread();
         taskThread.start();
@@ -91,14 +94,16 @@ public class TaskProcessor {
         } else {
             // processing failed
         }
+        if(context.getNodeInfo().getNodeStatus()!=NodeStatus.DISTRIBUTING){  //TODO: need to reject accepting tasks if not idle
         context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+        }
     }
 
     private SiyapathTask getTaskInstance() {
         TaskClassLoader taskClassLoader;
         taskClassLoader = new TaskClassLoader();
         // TODO: verify if expected name is necessary
-        context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
+
         Class theLoadedClass = null;
         try {
             theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
