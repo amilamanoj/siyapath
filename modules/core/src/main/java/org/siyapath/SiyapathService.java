@@ -158,5 +158,15 @@ public class SiyapathService implements Siyapath.Iface {
         }
     }
 
+    /**
+     *
+     * @return Current Node Status
+     * @throws TException
+     */
+    @Override
+    public NodeStatus getNodeStatus() throws TException {
+        return nodeContext.getNodeInfo().getNodeStatus();
+    }
+
 
 }

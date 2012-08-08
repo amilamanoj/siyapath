@@ -4,8 +4,10 @@ namespace java org.siyapath.service
 enum NodeStatus {
   CREATED = 1,
   STARTING = 2,
-  BUSY = 3,
-  IDLE = 4
+  PRECESSING = 3,
+  DISTRIBUTING = 4,
+  BUSY = 5,
+  IDLE = 6
 }
 
 /**
@@ -96,5 +98,8 @@ service Siyapath {
     bool sendTaskResult (1:Result result),
 
     //User authentication
-    string userLogin(1:string username, 2:string password)
+    string userLogin(1:string username, 2:string password),
+
+    //Retrieving current Node Status
+    NodeStatus getNodeStatus()
 }
