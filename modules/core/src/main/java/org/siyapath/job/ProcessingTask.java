@@ -9,9 +9,14 @@ public class ProcessingTask {
     private NodeInfo processingNode;
     private TaskStatus status;
     private String result;
+    private ReplicationStatus replicationStatus;
 
     public enum TaskStatus {
         RECEIVED, PROCESSING, DONE
+    }
+
+    public enum ReplicationStatus {
+        ORIGINAL, REPLICA
     }
 
     public ProcessingTask(int jobID, int taskID, TaskStatus status) {
@@ -42,5 +47,13 @@ public class ProcessingTask {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public ReplicationStatus getReplicationStatus(){
+        return replicationStatus;
+    }
+
+    public void setReplicationStatus(ReplicationStatus replicationStatus){
+        this.replicationStatus = replicationStatus;
     }
 }

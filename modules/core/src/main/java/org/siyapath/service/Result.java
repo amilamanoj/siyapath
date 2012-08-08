@@ -33,6 +33,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
   private static final org.apache.thrift.protocol.TField TASK_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("taskID", org.apache.thrift.protocol.TType.I32, (short)2);
   private static final org.apache.thrift.protocol.TField RESULTS_FIELD_DESC = new org.apache.thrift.protocol.TField("results", org.apache.thrift.protocol.TType.STRING, (short)3);
+  private static final org.apache.thrift.protocol.TField PROCESSING_NODE_FIELD_DESC = new org.apache.thrift.protocol.TField("processingNode", org.apache.thrift.protocol.TType.STRUCT, (short)4);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -43,12 +44,14 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   public int jobID; // required
   public int taskID; // required
   public String results; // required
+  public NodeData processingNode; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     JOB_ID((short)1, "jobID"),
     TASK_ID((short)2, "taskID"),
-    RESULTS((short)3, "results");
+    RESULTS((short)3, "results"),
+    PROCESSING_NODE((short)4, "processingNode");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -69,6 +72,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
           return TASK_ID;
         case 3: // RESULTS
           return RESULTS;
+        case 4: // PROCESSING_NODE
+          return PROCESSING_NODE;
         default:
           return null;
       }
@@ -121,6 +126,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     tmpMap.put(_Fields.RESULTS, new org.apache.thrift.meta_data.FieldMetaData("results", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.PROCESSING_NODE, new org.apache.thrift.meta_data.FieldMetaData("processingNode", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Result.class, metaDataMap);
   }
@@ -131,7 +138,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   public Result(
     int jobID,
     int taskID,
-    String results)
+    String results,
+    NodeData processingNode)
   {
     this();
     this.jobID = jobID;
@@ -139,6 +147,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     this.taskID = taskID;
     setTaskIDIsSet(true);
     this.results = results;
+    this.processingNode = processingNode;
   }
 
   /**
@@ -151,6 +160,9 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     this.taskID = other.taskID;
     if (other.isSetResults()) {
       this.results = other.results;
+    }
+    if (other.isSetProcessingNode()) {
+      this.processingNode = new NodeData(other.processingNode);
     }
   }
 
@@ -165,6 +177,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     setTaskIDIsSet(false);
     this.taskID = 0;
     this.results = null;
+    this.processingNode = null;
   }
 
   public int getJobID() {
@@ -237,6 +250,30 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     }
   }
 
+  public NodeData getProcessingNode() {
+    return this.processingNode;
+  }
+
+  public Result setProcessingNode(NodeData processingNode) {
+    this.processingNode = processingNode;
+    return this;
+  }
+
+  public void unsetProcessingNode() {
+    this.processingNode = null;
+  }
+
+  /** Returns true if field processingNode is set (has been assigned a value) and false otherwise */
+  public boolean isSetProcessingNode() {
+    return this.processingNode != null;
+  }
+
+  public void setProcessingNodeIsSet(boolean value) {
+    if (!value) {
+      this.processingNode = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case JOB_ID:
@@ -263,6 +300,14 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       }
       break;
 
+    case PROCESSING_NODE:
+      if (value == null) {
+        unsetProcessingNode();
+      } else {
+        setProcessingNode((NodeData)value);
+      }
+      break;
+
     }
   }
 
@@ -276,6 +321,9 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
 
     case RESULTS:
       return getResults();
+
+    case PROCESSING_NODE:
+      return getProcessingNode();
 
     }
     throw new IllegalStateException();
@@ -294,6 +342,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       return isSetTaskID();
     case RESULTS:
       return isSetResults();
+    case PROCESSING_NODE:
+      return isSetProcessingNode();
     }
     throw new IllegalStateException();
   }
@@ -335,6 +385,15 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (!(this_present_results && that_present_results))
         return false;
       if (!this.results.equals(that.results))
+        return false;
+    }
+
+    boolean this_present_processingNode = true && this.isSetProcessingNode();
+    boolean that_present_processingNode = true && that.isSetProcessingNode();
+    if (this_present_processingNode || that_present_processingNode) {
+      if (!(this_present_processingNode && that_present_processingNode))
+        return false;
+      if (!this.processingNode.equals(that.processingNode))
         return false;
     }
 
@@ -384,6 +443,16 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetProcessingNode()).compareTo(typedOther.isSetProcessingNode());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetProcessingNode()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.processingNode, typedOther.processingNode);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -417,6 +486,14 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       sb.append("null");
     } else {
       sb.append(this.results);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("processingNode:");
+    if (this.processingNode == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.processingNode);
     }
     first = false;
     sb.append(")");
@@ -487,6 +564,15 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 4: // PROCESSING_NODE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+              struct.processingNode = new NodeData();
+              struct.processingNode.read(iprot);
+              struct.setProcessingNodeIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -511,6 +597,11 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (struct.results != null) {
         oprot.writeFieldBegin(RESULTS_FIELD_DESC);
         oprot.writeString(struct.results);
+        oprot.writeFieldEnd();
+      }
+      if (struct.processingNode != null) {
+        oprot.writeFieldBegin(PROCESSING_NODE_FIELD_DESC);
+        struct.processingNode.write(oprot);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -540,7 +631,10 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (struct.isSetResults()) {
         optionals.set(2);
       }
-      oprot.writeBitSet(optionals, 3);
+      if (struct.isSetProcessingNode()) {
+        optionals.set(3);
+      }
+      oprot.writeBitSet(optionals, 4);
       if (struct.isSetJobID()) {
         oprot.writeI32(struct.jobID);
       }
@@ -550,12 +644,15 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (struct.isSetResults()) {
         oprot.writeString(struct.results);
       }
+      if (struct.isSetProcessingNode()) {
+        struct.processingNode.write(oprot);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Result struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(3);
+      BitSet incoming = iprot.readBitSet(4);
       if (incoming.get(0)) {
         struct.jobID = iprot.readI32();
         struct.setJobIDIsSet(true);
@@ -567,6 +664,11 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (incoming.get(2)) {
         struct.results = iprot.readString();
         struct.setResultsIsSet(true);
+      }
+      if (incoming.get(3)) {
+        struct.processingNode = new NodeData();
+        struct.processingNode.read(iprot);
+        struct.setProcessingNodeIsSet(true);
       }
     }
   }

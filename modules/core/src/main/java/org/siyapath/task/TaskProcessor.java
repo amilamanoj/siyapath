@@ -10,10 +10,8 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.monitor.LimitedCpuUsageMonitor;
-import org.siyapath.service.NodeStatus;
-import org.siyapath.service.Result;
-import org.siyapath.service.Siyapath;
-import org.siyapath.service.Task;
+import org.siyapath.service.*;
+import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 
@@ -51,11 +49,14 @@ public class TaskProcessor {
         public void run() {
             processTask();
         }
-
     }
 
+
+//        NodeInfo nodeInfo = context.getNodeInfo();
+//NodeData thisNode = CommonUtils.serialize(nodeInfo);
+
     private void processTask() {
-        Result taskResult = new Result(task.getJobID(), task.getTaskID(), null);
+        Result taskResult = new Result(task.getJobID(), task.getTaskID(), null, CommonUtils.serialize(context.getNodeInfo()));
 
         SiyapathTask taskInstance = getTaskInstance();
 
