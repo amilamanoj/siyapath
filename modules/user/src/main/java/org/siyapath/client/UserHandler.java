@@ -68,7 +68,7 @@ public class UserHandler {
      */
     public String authenticate(String username, String password) {
         String res = null;
-        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
+        TTransport transport = new TSocket(CommonUtils.getBootstrapperIP(), CommonUtils.getBootstrapperPort());
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -116,7 +116,7 @@ public class UserHandler {
     private NodeInfo getDistributorNode() {
 
         NodeInfo selectedMember = null;
-        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
+        TTransport transport = new TSocket(CommonUtils.getBootstrapperIP(), CommonUtils.getBootstrapperPort());
         try {
             log.info("Getting list of members from bootstrap");
             transport.open();
@@ -158,7 +158,7 @@ public class UserHandler {
      * @param node destination node
      */
     private void sendJob(NodeInfo node) {
-        TTransport transport = new TSocket("localhost", node.getPort());
+        TTransport transport = new TSocket(node.getIp(), node.getPort());
         try {
             log.info("Sending new job to node: " + node);
             transport.open();
@@ -285,7 +285,8 @@ public class UserHandler {
          */
         public void pollStatusFromJobProcessor(int jobID){
 
-            TTransport transport = new TSocket("localhost", getJobHandlerNode().getPort());
+            TTransport transport = new TSocket(getJobHandlerNode().getIp(),
+                    getJobHandlerNode().getPort());
 
             try {
                 log.info("Polling status of job: " + jobID + " count: " + count);

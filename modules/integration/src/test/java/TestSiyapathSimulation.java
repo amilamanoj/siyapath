@@ -2,8 +2,8 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.siyapath.FrameworkInformation;
 import org.siyapath.NodeInfo;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.SiyapathNode;
 import org.siyapath.client.TaskData;
 import org.siyapath.client.UserHandler;
@@ -83,7 +83,7 @@ public class TestSiyapathSimulation extends TestCase {
         log.info("Starting Bootstrapper Node");
         NodeInfo bootStrapperInfo = new NodeInfo();
         bootStrapperInfo.setBootstrapper(true);
-        bootStrapperInfo.setPort(FrameworkInformation.BOOTSTRAP_PORT);
+        bootStrapperInfo.setPort(SiyapathConstants.BOOTSTRAP_PORT);
         SiyapathNode bootStrapperNode = new SiyapathNode(bootStrapperInfo);
 
         SiyapathNodeController bootStrapperController = new SiyapathNodeController(bootStrapperNode, null);

@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
@@ -41,7 +40,7 @@ public class PeerWorker {
         boolean presenceNotified = false;
         log.debug("Trying to connect to a bootstrapper node");
         //TTransport transport = new TFramedTransport(new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT));
-        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
+        TTransport transport = new TSocket(CommonUtils.getBootstrapperIP(), CommonUtils.getBootstrapperPort());
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -62,7 +61,7 @@ public class PeerWorker {
     }
 
     private void initiateMembers() {
-        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
+        TTransport transport = new TSocket(CommonUtils.getBootstrapperIP(), CommonUtils.getBootstrapperPort());
         //TTransport transport = new TFramedTransport(new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT));
         try {
             transport.open();

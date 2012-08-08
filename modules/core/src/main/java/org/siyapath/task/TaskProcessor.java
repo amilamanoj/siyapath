@@ -127,7 +127,7 @@ public class TaskProcessor {
 
     private void deliverTaskResult(Result result) {
 
-        TTransport transport = new TSocket("localhost", task.getSender().getPort());
+        TTransport transport = new TSocket(task.getSender().getIp(), task.getSender().getPort());
 
         try {
             transport.open();
@@ -154,7 +154,7 @@ public class TaskProcessor {
     }
 
     private void sendResultToBackupNode(Result result) {
-        TTransport transport = new TSocket("localhost", task.getBackup().getPort());
+        TTransport transport = new TSocket(task.getBackup().getIp(), task.getBackup().getPort());
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);

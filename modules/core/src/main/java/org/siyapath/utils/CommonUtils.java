@@ -4,7 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
 import org.siyapath.NodeResource;
-import org.siyapath.service.*;
+import org.siyapath.service.NodeData;
+import org.siyapath.service.NodeResourceData;
 
 import java.io.*;
 import java.net.*;
@@ -43,21 +44,21 @@ public class CommonUtils {
         List<InetAddress> ipAddresses = new ArrayList<InetAddress>();
         String ipAddress = null;
 
-        Enumeration e = null;
+        Enumeration e;
         try {
             e = NetworkInterface.getNetworkInterfaces();
+
+            while (e.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) e.nextElement();
+                if (ni.isLoopback() || !ni.isUp()) continue;
+
+                for (Enumeration e2 = ni.getInetAddresses(); e2.hasMoreElements(); ) {
+                    InetAddress ip = (InetAddress) e2.nextElement();
+                    ipAddresses.add(ip);
+                }
+            }
         } catch (SocketException e1) {
             e1.printStackTrace();
-        }
-        while (e.hasMoreElements()) {
-            NetworkInterface ni = (NetworkInterface) e.nextElement();
-            // if (ni.isLoopback() || !ni.isUp()) continue;
-
-            Enumeration e2 = ni.getInetAddresses();
-            while (e2.hasMoreElements()) {
-                InetAddress ip = (InetAddress) e2.nextElement();
-                ipAddresses.add(ip);
-            }
         }
         if (ipAddresses.isEmpty()) {
             return null;
@@ -74,7 +75,15 @@ public class CommonUtils {
             ipAddress = ipAddresses.get(0).getHostAddress();
         }
 
-        return ipAddress;
+        return "localhost";//ipAddress;  //TODO: only for testing
+    }
+
+    public static String getBootstrapperIP(){
+        return "localhost";        //TODO
+    }
+
+    public static int getBootstrapperPort(){
+        return 9020;               //TODO
     }
 
     /**
@@ -158,7 +167,6 @@ public class CommonUtils {
     }
 
     /**
-     *
      * @return ByteBuffer for byte array from given byte-code
      * @throws java.io.IOException
      */

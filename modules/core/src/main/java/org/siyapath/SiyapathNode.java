@@ -7,6 +7,7 @@ import org.siyapath.service.*;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.ui.NodeGUI;
 import org.siyapath.ui.NodeUIHandler;
+import org.siyapath.utils.CommonUtils;
 
 import javax.swing.*;
 
@@ -36,7 +37,7 @@ public class SiyapathNode {
         if (args.length == 1) {
             if (args[0].equals("bs")) {
                 nodeInfo.setBootstrapper(true);
-                nodeInfo.setPort(FrameworkInformation.BOOTSTRAP_PORT);
+                nodeInfo.setPort(CommonUtils.getBootstrapperPort());
                 showUI = false;
             } else if (args[0].equals("cl")) {
                 showUI = false;

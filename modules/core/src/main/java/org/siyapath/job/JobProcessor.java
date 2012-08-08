@@ -127,7 +127,7 @@ public class JobProcessor {
             int jobId = task.getJobID();
 
             log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect to selected task-processor: " + destinationNode);
-            TTransport transport = new TSocket("localhost", destinationNode.getPort());
+            TTransport transport = new TSocket(destinationNode.getIp(), destinationNode.getPort());
 
             try {
                 transport.open();
