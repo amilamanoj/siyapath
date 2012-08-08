@@ -56,7 +56,8 @@ struct Job {
 struct Result {
     1: i32 jobID,
     2: i32 taskID,
-    3: string results
+    3: string results,
+    4: NodeData processingNode
 }
 
 /**
