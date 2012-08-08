@@ -14,8 +14,10 @@ import org.apache.thrift.TEnum;
 public enum NodeStatus implements org.apache.thrift.TEnum {
   CREATED(1),
   STARTING(2),
-  BUSY(3),
-  IDLE(4);
+  PRECESSING(3),
+  DISTRIBUTING(4),
+  BUSY(5),
+  IDLE(6);
 
   private final int value;
 
@@ -41,8 +43,12 @@ public enum NodeStatus implements org.apache.thrift.TEnum {
       case 2:
         return STARTING;
       case 3:
-        return BUSY;
+        return PRECESSING;
       case 4:
+        return DISTRIBUTING;
+      case 5:
+        return BUSY;
+      case 6:
         return IDLE;
       default:
         return null;
