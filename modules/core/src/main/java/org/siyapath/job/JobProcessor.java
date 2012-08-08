@@ -52,6 +52,9 @@ public class JobProcessor {
 
     public void addNewJob(Job job) {
 //        createBackup();
+        if(context.getNodeInfo().getNodeStatus()==NodeStatus.IDLE){  //TODO: need to reject adding jobs if this node is a processor
+         context.getNodeInfo().setNodeStatus(NodeStatus.DISTRIBUTING);
+        }
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
@@ -83,7 +86,7 @@ public class JobProcessor {
                     e.printStackTrace();  //TODO: handle exception
                 }
             }
-            context.getNodeInfo().setNodeStatus(NodeStatus.BUSY);
+            context.getNodeInfo().setNodeStatus(NodeStatus.PRECESSING);
             log.info("Added " + job.getTasks().size() + " tasks to the queue");
         }
     }
@@ -96,7 +99,7 @@ public class JobProcessor {
         public void run() {
             while (active) {
                 try {
-                    if (taskQueue.isEmpty()) {
+                    if (taskQueue.isEmpty() && jobMap.isEmpty()) {
                         context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
                     }
                     Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
@@ -174,6 +177,15 @@ public class JobProcessor {
             }
         }
         return taskStatusMap;
+    }
+
+    public Map<Integer, Task> getJobResult(){
+        if(jobMap.isEmpty() && taskQueue.isEmpty()){
+            if(context.getNodeInfo().getNodeStatus()!=NodeStatus.PRECESSING){
+            context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);  //TODO:If this is a processor node
+            }
+        }
+        return null;
     }
 
     /*
