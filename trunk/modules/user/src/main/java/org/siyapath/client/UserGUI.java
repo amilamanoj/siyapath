@@ -1,6 +1,7 @@
 package org.siyapath.client;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.Map;
@@ -10,11 +11,13 @@ import java.util.Map;
  */
 public class UserGUI extends JFrame {
 
-    UserHandler handler;
+    private UserHandler handler;
     private JobEditorGUI jobEditor;
     private String loggedPerson;
     private Map taskFileList;
     private JobStatusUI jobStatusUI;
+    private DefaultTableModel model;
+
 
     /**
      * @param handler
@@ -24,10 +27,11 @@ public class UserGUI extends JFrame {
         siyapathLogo.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/siyapathLogo232x184.png")));
         this.handler = handler;
         this.jobEditor = new JobEditorGUI(this, true, this);
-        jobSubmitButton.setEnabled(false);
+//        jobSubmitButton.setEnabled(false);
         loginPanel.setVisible(true);
-        userPanel.setVisible(false);
+        startPanel.setVisible(false);
         busyPanel.setVisible(false);
+        statusPanel.setVisible(false);
         userMenu.setVisible(false);
         logoutMenu.setVisible(false);
         this.setLocationRelativeTo(null);
@@ -39,21 +43,33 @@ public class UserGUI extends JFrame {
         exitButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
         controlPane = new javax.swing.JLayeredPane();
+        startPanel = new javax.swing.JPanel();
+        jobListLabel = new javax.swing.JLabel();
+        jobInfoLabel = new javax.swing.JLabel();
+        jobComboBox = new javax.swing.JComboBox();
         loginPanel = new javax.swing.JPanel();
         loginWelcomeLabel = new javax.swing.JLabel();
         loginInfoLabel = new javax.swing.JLabel();
         loginButton = new javax.swing.JButton();
         siyapathLogo = new javax.swing.JLabel();
-        userPanel = new javax.swing.JPanel();
-        userWelcomeLabel = new javax.swing.JLabel();
-        userLogoutButton = new javax.swing.JButton();
-        jobSubmitButton = new javax.swing.JButton();
-        jobInfoLabel = new javax.swing.JLabel();
-        createEditJobButton = new javax.swing.JButton();
+        statusPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jobIDLabel = new javax.swing.JLabel();
+        jobNameLabel = new javax.swing.JLabel();
+        taskDistributorLabel = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taskStatusTable = new javax.swing.JTable(model);
+        getStatusButton = new javax.swing.JButton();
+        getResultsButton = new javax.swing.JButton();
         busyPanel = new javax.swing.JPanel();
         busyLabel = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        statusPanel = new javax.swing.JPanel();
+        addJobButton = new javax.swing.JButton();
         mainMenuBar = new javax.swing.JMenuBar();
         systemMenu = new javax.swing.JMenu();
         logoutMenu = new javax.swing.JMenuItem();
@@ -87,7 +103,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
+        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
         aboutButton.setText("About");
         aboutButton.setIconTextGap(10);
         aboutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +115,47 @@ public class UserGUI extends JFrame {
         controlPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         controlPane.setOpaque(true);
 
-        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18));
+        jobListLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jobListLabel.setText("Jobs:");
+
+        jobInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jobInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jobInfoLabel.setText("No Job defined, add a new Job below");
+
+        jobComboBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jobComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout startPanelLayout = new javax.swing.GroupLayout(startPanel);
+        startPanel.setLayout(startPanelLayout);
+        startPanelLayout.setHorizontalGroup(
+                startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(startPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(startPanelLayout.createSequentialGroup()
+                                                .addComponent(jobListLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jobComboBox, 0, 533, Short.MAX_VALUE)
+                                                .addContainerGap())
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, startPanelLayout.createSequentialGroup()
+                                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(119, 119, 119))))
+        );
+        startPanelLayout.setVerticalGroup(
+                startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(startPanelLayout.createSequentialGroup()
+                                .addGroup(startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jobComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                                        .addComponent(jobListLabel))
+                                .addGap(108, 108, 108)
+                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(126, 126, 126))
+        );
+
+        startPanel.setBounds(10, 10, 590, 340);
+        controlPane.add(startPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18)); // NOI18N
         loginWelcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginWelcomeLabel.setText("Welcome to Siyapath");
         loginWelcomeLabel.setPreferredSize(new java.awt.Dimension(800, 40));
@@ -110,7 +166,6 @@ public class UserGUI extends JFrame {
         loginInfoLabel.setPreferredSize(new java.awt.Dimension(800, 40));
 
         loginButton.setText("Connect");
-
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
@@ -148,83 +203,116 @@ public class UserGUI extends JFrame {
         loginPanel.setBounds(10, 10, 590, 340);
         controlPane.add(loginPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        userWelcomeLabel.setFont(new java.awt.Font("Bodoni MT", 0, 16));
-        userWelcomeLabel.setText("Welcome");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("Job ID:");
 
-        userLogoutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
-        userLogoutButton.setText("Logout");
-        userLogoutButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        userLogoutButton.setIconTextGap(40);
-        userLogoutButton.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("Name");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setText("Task Distributer:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setText("No of tasks:");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setText("Status:");
+
+        jobIDLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jobIDLabel.setText("0");
+
+        jobNameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jobNameLabel.setText("-");
+
+        taskDistributorLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        taskDistributorLabel.setText("-");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel10.setText("0");
+
+        jScrollPane1.setViewportView(taskStatusTable);
+
+        getStatusButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        getStatusButton.setText("Update Status");
+        getStatusButton.setIconTextGap(10);
+        getStatusButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userLogoutButtonActionPerformed(evt);
+                getStatusButtonActionPerformed(evt);
             }
         });
 
-        jobSubmitButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
-        jobSubmitButton.setText("Submit Job");
-        jobSubmitButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jobSubmitButton.setIconTextGap(20);
-        jobSubmitButton.addActionListener(new java.awt.event.ActionListener() {
+        getResultsButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        getResultsButton.setText("Retrieve Results");
+        getResultsButton.setIconTextGap(10);
+        getResultsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jobSubmitButtonActionPerformed(evt);
+                getResultsButtonActionPerformed(evt);
             }
         });
 
-        jobInfoLabel.setFont(new java.awt.Font("Bodoni MT", 0, 24));
-        jobInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jobInfoLabel.setText("No Job Defined");
-
-        createEditJobButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
-        createEditJobButton.setText("Create Job...");
-        createEditJobButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        createEditJobButton.setIconTextGap(20);
-        createEditJobButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createEditJobButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout userPanelLayout = new javax.swing.GroupLayout(userPanel);
-        userPanel.setLayout(userPanelLayout);
-        userPanelLayout.setHorizontalGroup(
-                userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(userPanelLayout.createSequentialGroup()
-                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(userPanelLayout.createSequentialGroup()
-                                                .addComponent(userWelcomeLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 413, Short.MAX_VALUE))
-                                        .addGroup(userPanelLayout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(jobSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(userPanelLayout.createSequentialGroup()
-                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(userPanelLayout.createSequentialGroup()
-                                                .addGap(226, 226, 226)
-                                                .addComponent(createEditJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jobInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
-                                .addContainerGap())
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+                statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel6)
+                                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(35, 35, 35)
+                                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(getResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(getStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(jLabel2)
+                                                        .addComponent(jLabel1)
+                                                        .addComponent(jLabel5))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(taskDistributorLabel)
+                                                        .addComponent(jobNameLabel)
+                                                        .addComponent(jobIDLabel)
+                                                        .addComponent(jLabel10))))
+                                .addContainerGap(40, Short.MAX_VALUE))
         );
-        userPanelLayout.setVerticalGroup(
-                userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(userPanelLayout.createSequentialGroup()
-                                .addComponent(userWelcomeLabel)
-                                .addGap(3, 3, 3)
-                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(userPanelLayout.createSequentialGroup()
-                                                .addComponent(createEditJobButton, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                                                .addGap(113, 113, 113))
-                                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(userLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jobSubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))))
+        statusPanelLayout.setVerticalGroup(
+                statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                                .addComponent(jLabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel5))
+                                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                                .addComponent(jobIDLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jobNameLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(taskDistributorLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel10)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                                .addComponent(getStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(getResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(42, 42, 42))
         );
 
-        userPanel.setBounds(10, 10, 590, 340);
-        controlPane.add(userPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        statusPanel.setBounds(10, 40, 590, 310);
+        controlPane.add(statusPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         busyLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
         busyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -257,26 +345,16 @@ public class UserGUI extends JFrame {
         busyPanel.setBounds(10, 10, 590, 340);
         controlPane.add(busyPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-                statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 590, Short.MAX_VALUE)
-        );
-        statusPanelLayout.setVerticalGroup(
-                statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 340, Short.MAX_VALUE)
-        );
-
-        statusPanel.setBounds(10, 10, 590, 340);
-        controlPane.add(statusPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        systemMenu.setText("System");
-        systemMenu.addActionListener(new java.awt.event.ActionListener() {
+        addJobButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        addJobButton.setText("Add New Job...");
+        addJobButton.setIconTextGap(10);
+        addJobButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                systemMenuActionPerformed(evt);
+                addJobButtonActionPerformed(evt);
             }
         });
+
+        systemMenu.setText("System");
 
         logoutMenu.setText("Logout");
         logoutMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -333,7 +411,9 @@ public class UserGUI extends JFrame {
                                         .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                 .addComponent(aboutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 172, Short.MAX_VALUE)
+                                                .addComponent(addJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap())
         );
@@ -347,14 +427,13 @@ public class UserGUI extends JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(aboutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(addJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(12, 12, 12))
         );
 
-        getAccessibleContext().setAccessibleName("Siyapath - Volunteer Computing");
-
         pack();
-    }
+    }// </editor-fold>
 
     private void exitButtonActionPerformed(ActionEvent evt) {
         exit();
@@ -362,13 +441,6 @@ public class UserGUI extends JFrame {
 
     private void aboutButtonActionPerformed(ActionEvent evt) {
         about();
-    }
-
-    private void userLogoutButtonActionPerformed(ActionEvent evt) {
-        logOut();
-    }
-
-    private void systemMenuActionPerformed(ActionEvent evt) {
     }
 
     private void logoutMenuActionPerformed(ActionEvent evt) {
@@ -391,7 +463,15 @@ public class UserGUI extends JFrame {
         exit();
     }
 
-    private void createEditJobButtonActionPerformed(ActionEvent evt) {
+    private void getStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void getResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void addJobButtonActionPerformed(java.awt.event.ActionEvent evt) {
         jobEditor.setVisible(true);
     }
 
@@ -427,7 +507,7 @@ public class UserGUI extends JFrame {
         this.taskFileList = taskFileList;
         int jobId = handler.generateJobID();
         jobInfoLabel.setText("<html>Job Id:" + jobId + "<br>Job Name:" + jobName + "<br>No. of tasks:" + taskFileList.keySet().size() + "</html>");
-        jobSubmitButton.setEnabled(true);
+//        jobSubmitButton.setEnabled(true);
         createEditJobButton.setText("Edit Job...");
     }
 
@@ -472,16 +552,17 @@ public class UserGUI extends JFrame {
     public void logged() {
         loginPanel.setVisible(false);
         busyPanel.setVisible(false);
-        userPanel.setVisible(true);
+        startPanel.setVisible(true);
+        statusPanel.setVisible(false);
         userMenu.setVisible(true);
         logoutMenu.setVisible(true);
-        userWelcomeLabel.setText("Welcome " + loggedPerson);
+//        userWelcomeLabel.setText("Welcome " + loggedPerson);
     }
 
     public void busy() {
         busyPanel.setVisible(true);
         loginPanel.setVisible(false);
-        userPanel.setVisible(false);
+//        userPanel.setVisible(false);
         userMenu.setVisible(false);
         logoutMenu.setVisible(false);
     }
@@ -491,7 +572,7 @@ public class UserGUI extends JFrame {
 //        passwordText.setText(null);
         busyPanel.setVisible(false);
         loginPanel.setVisible(true);
-        userPanel.setVisible(false);
+//        userPanel.setVisible(false);
         userMenu.setVisible(false);
         logoutMenu.setVisible(false);
     }
@@ -517,17 +598,29 @@ public class UserGUI extends JFrame {
 
     private javax.swing.JButton aboutButton;
     private javax.swing.JMenuItem aboutMenu;
+    private javax.swing.JButton addJobButton;
     private javax.swing.JLabel busyLabel;
     private javax.swing.JPanel busyPanel;
     private javax.swing.JLayeredPane controlPane;
     private javax.swing.JButton createEditJobButton;
     private javax.swing.JButton exitButton;
     private javax.swing.JMenuItem exitMenu;
+    private javax.swing.JButton getResultsButton;
+    private javax.swing.JButton getStatusButton;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel siyapathLogo;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox jobComboBox;
+    private javax.swing.JLabel jobIDLabel;
     private javax.swing.JLabel jobInfoLabel;
-    private javax.swing.JButton jobSubmitButton;
+    private javax.swing.JLabel jobListLabel;
+    private javax.swing.JLabel jobNameLabel;
     private javax.swing.JButton loginButton;
     private javax.swing.JLabel loginInfoLabel;
     private javax.swing.JPanel loginPanel;
@@ -535,13 +628,14 @@ public class UserGUI extends JFrame {
     private javax.swing.JMenuItem logoutMenu;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel siyapathLogo;
+    private javax.swing.JPanel startPanel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JMenu systemMenu;
-    private javax.swing.JButton userLogoutButton;
+    private javax.swing.JLabel taskDistributorLabel;
+    public javax.swing.JTable taskStatusTable;
     private javax.swing.JMenu userMenu;
-    private javax.swing.JPanel userPanel;
     private javax.swing.JMenuItem userProfileMenu;
-    private javax.swing.JLabel userWelcomeLabel;
 
 
 }

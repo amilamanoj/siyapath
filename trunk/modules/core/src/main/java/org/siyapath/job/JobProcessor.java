@@ -157,8 +157,6 @@ public class JobProcessor {
     }
 
     /**
-     *
-     *
      * @param jobId
      * @return task status map for the given JobId, with the mapping taskID to task completion status
      */
@@ -166,16 +164,14 @@ public class JobProcessor {
 
         Map<Integer,String> taskStatusMap = null;
 
-        if (jobMap!=null){
             Job requestedJob = jobMap.get(jobId);
             Set<Integer> taskIds = requestedJob.getTasks().keySet(); // task ids of the requested job: should be there tasks:P
             taskStatusMap = new HashMap<Integer, String>();
 
             for (Integer taskId : taskIds){
-                ProcessingTask processingTask = (ProcessingTask)taskMap.get(taskId);
+                ProcessingTask processingTask = taskMap.get(taskId);
                 taskStatusMap.put(taskId, processingTask.getStatus().toString());
             }
-        }
         return taskStatusMap;
     }
 
