@@ -27,7 +27,6 @@ public class TaskProcessor {
     private final Log log = LogFactory.getLog(TaskProcessor.class);
     private Task task;
     private NodeContext context;
-    private boolean taskStatus;
 
     /**
      * @param task
@@ -57,7 +56,6 @@ public class TaskProcessor {
 
     private void processTask() {
         Result taskResult = new Result(task.getJobID(), task.getTaskID(), null);
-        setTaskStatus(false);
 
         SiyapathTask taskInstance = getTaskInstance();
 
@@ -83,7 +81,6 @@ public class TaskProcessor {
             log.info("Results: " + finalResult.substring(0, 100));
             taskResult.setResults(finalResult);
             deliverTaskResult(taskResult);
-            setTaskStatus(true);
             }
             catch (SecurityException e){
                 // TODO: handle illegal operation
@@ -166,14 +163,6 @@ public class TaskProcessor {
         } catch (TException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(boolean taskStatus) {
-        this.taskStatus = taskStatus;
     }
 
     private class MonitorThread extends Thread {
