@@ -3,10 +3,10 @@ package org.siyapath.client;
 import java.io.File;
 
 public class TaskData {
-    String name;
-    File classFile;
-    String inputData;
-    String requiredResources;
+    private String name;
+    private File classFile;
+    private String inputData;
+    private String requiredResources;
 
     public TaskData(String name, File classFile, String inputData, String requiredResources) {
         this.name = name;

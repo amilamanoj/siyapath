@@ -499,16 +499,17 @@ public class UserGUI extends JFrame {
         login();
     }
 
-    private void jobSubmitButtonActionPerformed(ActionEvent evt) {
-        handler.submitJob(taskFileList);
-    }
+//    private void jobSubmitButtonActionPerformed(ActionEvent evt) {
+//        handler.submitJob(taskFileList);
+//    }
 
     public void jobUpdated(String jobName, Map taskFileList) {
-        this.taskFileList = taskFileList;
-        int jobId = handler.generateJobID();
-        jobInfoLabel.setText("<html>Job Id:" + jobId + "<br>Job Name:" + jobName + "<br>No. of tasks:" + taskFileList.keySet().size() + "</html>");
+        // todo
+//        this.taskFileList = taskFileList;
+//        int jobId = handler.generateJobID();
+//        jobInfoLabel.setText("<html>Job Id:" + jobId + "<br>Job Name:" + jobName + "<br>No. of tasks:" + taskFileList.keySet().size() + "</html>");
 //        jobSubmitButton.setEnabled(true);
-        createEditJobButton.setText("Edit Job...");
+//        createEditJobButton.setText("Edit Job...");
     }
 
     private void about() {
