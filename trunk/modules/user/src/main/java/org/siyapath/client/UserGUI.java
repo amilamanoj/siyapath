@@ -52,15 +52,6 @@ public class UserGUI extends JFrame {
         exitButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
         controlPane = new javax.swing.JLayeredPane();
-        startPanel = new javax.swing.JPanel();
-        jobListLabel = new javax.swing.JLabel();
-        jobInfoLabel = new javax.swing.JLabel();
-        jobComboBox = new javax.swing.JComboBox();
-        loginPanel = new javax.swing.JPanel();
-        loginWelcomeLabel = new javax.swing.JLabel();
-        loginInfoLabel = new javax.swing.JLabel();
-        loginButton = new javax.swing.JButton();
-        siyapathLogo = new javax.swing.JLabel();
         statusPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -75,6 +66,15 @@ public class UserGUI extends JFrame {
         taskStatusTable = new javax.swing.JTable(tableModel);
         getStatusButton = new javax.swing.JButton();
         getResultsButton = new javax.swing.JButton();
+        startPanel = new javax.swing.JPanel();
+        jobListLabel = new javax.swing.JLabel();
+        jobInfoLabel = new javax.swing.JLabel();
+        jobComboBox = new javax.swing.JComboBox(comboBoxModel);
+        loginPanel = new javax.swing.JPanel();
+        loginWelcomeLabel = new javax.swing.JLabel();
+        loginInfoLabel = new javax.swing.JLabel();
+        loginButton = new javax.swing.JButton();
+        siyapathLogo = new javax.swing.JLabel();
         busyPanel = new javax.swing.JPanel();
         busyLabel = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -112,7 +112,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         aboutButton.setText("About");
         aboutButton.setIconTextGap(10);
         aboutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -124,116 +124,28 @@ public class UserGUI extends JFrame {
         controlPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         controlPane.setOpaque(true);
 
-        jobListLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jobListLabel.setText("Jobs:");
-
-        jobInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jobInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jobInfoLabel.setText("No Job defined, add a new Job below");
-
-        jobComboBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jobComboBox.setModel(comboBoxModel);
-
-        javax.swing.GroupLayout startPanelLayout = new javax.swing.GroupLayout(startPanel);
-        startPanel.setLayout(startPanelLayout);
-        startPanelLayout.setHorizontalGroup(
-                startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(startPanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(startPanelLayout.createSequentialGroup()
-                                                .addComponent(jobListLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jobComboBox, 0, 533, Short.MAX_VALUE)
-                                                .addContainerGap())
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, startPanelLayout.createSequentialGroup()
-                                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(119, 119, 119))))
-        );
-        startPanelLayout.setVerticalGroup(
-                startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(startPanelLayout.createSequentialGroup()
-                                .addGroup(startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jobComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                                        .addComponent(jobListLabel))
-                                .addGap(108, 108, 108)
-                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(126, 126, 126))
-        );
-
-        startPanel.setBounds(10, 10, 590, 340);
-        controlPane.add(startPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18)); // NOI18N
-        loginWelcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        loginWelcomeLabel.setText("Welcome to Siyapath");
-        loginWelcomeLabel.setPreferredSize(new java.awt.Dimension(800, 40));
-
-        loginInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
-        loginInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        loginInfoLabel.setText("You are not connected. please login...");
-        loginInfoLabel.setPreferredSize(new java.awt.Dimension(800, 40));
-
-        loginButton.setText("Connect");
-        loginButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginButtonActionPerformed(evt);
-            }
-        });
-
-        siyapathLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
-        loginPanel.setLayout(loginPanelLayout);
-        loginPanelLayout.setHorizontalGroup(
-                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(loginPanelLayout.createSequentialGroup()
-                                .addGap(91, 91, 91)
-                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                        .addComponent(siyapathLogo)
-                                        .addComponent(loginInfoLabel, 0, 0, Short.MAX_VALUE)
-                                        .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(93, 93, 93))
-        );
-        loginPanelLayout.setVerticalGroup(
-                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(loginPanelLayout.createSequentialGroup()
-                                .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(siyapathLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(loginInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-        );
-
-        loginPanel.setBounds(10, 10, 590, 340);
-        controlPane.add(loginPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel1.setText("Job ID:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText("Name");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText("Task Distributer:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setText("No of tasks:");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel6.setText("Status:");
 
-        jobIDLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jobIDLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         jobIDLabel.setText("0");
 
-        jobNameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jobNameLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         jobNameLabel.setText("-");
 
-        taskDistributorLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        taskDistributorLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         taskDistributorLabel.setText("-");
 
         taskCountLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -241,7 +153,7 @@ public class UserGUI extends JFrame {
 
         jScrollPane1.setViewportView(taskStatusTable);
 
-        getStatusButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        getStatusButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         getStatusButton.setText("Update Status");
         getStatusButton.setIconTextGap(10);
         getStatusButton.addActionListener(new java.awt.event.ActionListener() {
@@ -250,7 +162,7 @@ public class UserGUI extends JFrame {
             }
         });
 
-        getResultsButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        getResultsButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         getResultsButton.setText("Retrieve Results");
         getResultsButton.setIconTextGap(10);
         getResultsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -323,6 +235,94 @@ public class UserGUI extends JFrame {
         statusPanel.setBounds(10, 40, 590, 310);
         controlPane.add(statusPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jobListLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jobListLabel.setText("Jobs:");
+
+        jobInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jobInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jobInfoLabel.setText("No Job defined, add a new Job below");
+
+        jobComboBox.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jobComboBox.setModel(comboBoxModel);
+
+        javax.swing.GroupLayout startPanelLayout = new javax.swing.GroupLayout(startPanel);
+        startPanel.setLayout(startPanelLayout);
+        startPanelLayout.setHorizontalGroup(
+                startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(startPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(startPanelLayout.createSequentialGroup()
+                                                .addComponent(jobListLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jobComboBox, 0, 533, Short.MAX_VALUE)
+                                                .addContainerGap())
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, startPanelLayout.createSequentialGroup()
+                                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(119, 119, 119))))
+        );
+        startPanelLayout.setVerticalGroup(
+                startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(startPanelLayout.createSequentialGroup()
+                                .addGroup(startPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jobComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                                        .addComponent(jobListLabel))
+                                .addGap(108, 108, 108)
+                                .addComponent(jobInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(126, 126, 126))
+        );
+
+        startPanel.setBounds(10, 10, 590, 340);
+        controlPane.add(startPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        loginWelcomeLabel.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 18));
+        loginWelcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        loginWelcomeLabel.setText("Welcome to Siyapath");
+        loginWelcomeLabel.setPreferredSize(new java.awt.Dimension(800, 40));
+
+        loginInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
+        loginInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        loginInfoLabel.setText("You are not connected. please login...");
+        loginInfoLabel.setPreferredSize(new java.awt.Dimension(800, 40));
+
+        loginButton.setText("Connect");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
+
+        siyapathLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
+        loginPanel.setLayout(loginPanelLayout);
+        loginPanelLayout.setHorizontalGroup(
+                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(loginPanelLayout.createSequentialGroup()
+                                .addGap(91, 91, 91)
+                                .addGroup(loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(siyapathLogo)
+                                        .addComponent(loginInfoLabel, 0, 0, Short.MAX_VALUE)
+                                        .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(93, 93, 93))
+        );
+        loginPanelLayout.setVerticalGroup(
+                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(loginPanelLayout.createSequentialGroup()
+                                .addComponent(loginWelcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(siyapathLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(loginInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+        );
+
+        loginPanel.setBounds(10, 10, 590, 340);
+        controlPane.add(loginPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         busyLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
         busyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         busyLabel.setText("Loading...");
@@ -354,7 +354,7 @@ public class UserGUI extends JFrame {
         busyPanel.setBounds(10, 10, 590, 340);
         controlPane.add(busyPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        addJobButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        addJobButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         addJobButton.setText("Add New Job...");
         addJobButton.setIconTextGap(10);
         addJobButton.addActionListener(new java.awt.event.ActionListener() {
