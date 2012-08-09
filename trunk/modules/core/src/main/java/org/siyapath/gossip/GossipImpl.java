@@ -81,7 +81,7 @@ public class GossipImpl {
      * @return the node resource of this node
      */
     public NodeResource resourceGossip(NodeResource receivedNodeResource) {
-        log.info("Remote node invoked member gossip resource with this node :" + nodeContext.getNodeInfo().getPort());
+        log.info("Remote node invoked member gossip resource with this node");
         HashSet<NodeResource> initialSet = nodeContext.getMemberResourceSet();
         HashSet<NodeResource> newSet = mergeNewNodeResource(initialSet, receivedNodeResource);
         nodeContext.updateMemberResourceSet(newSet);
@@ -209,7 +209,7 @@ public class GossipImpl {
 
     private HashSet<NodeInfo> getDiff(NodeInfo gossipMember) {
         HashSet<NodeInfo> tempSet = new HashSet<NodeInfo>();
-        HashSet<NodeInfo> initialSet = (HashSet<NodeInfo>) nodeContext.getMemberSet();
+        HashSet<NodeInfo> initialSet = (HashSet<NodeInfo>) ((HashSet<NodeInfo>) nodeContext.getMemberSet()).clone();
         initialSet.add(nodeContext.getNodeInfo());
         HashSet<NodeInfo> memberSet = (HashSet<NodeInfo>) nodeContext.getMemNodeSet(gossipMember);
         if (memberSet != null) {
