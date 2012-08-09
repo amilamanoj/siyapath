@@ -210,12 +210,11 @@ public class GossipImpl {
     private HashSet<NodeInfo> getDiff(NodeInfo gossipMember) {
         HashSet<NodeInfo> tempSet = new HashSet<NodeInfo>();
         HashSet<NodeInfo> initialSet = (HashSet<NodeInfo>) nodeContext.getMemberSet();
+        initialSet.add(nodeContext.getNodeInfo());
         HashSet<NodeInfo> memberSet = (HashSet<NodeInfo>) nodeContext.getMemNodeSet(gossipMember);
         if (memberSet != null) {
-            Iterator members = memberSet.iterator();
-            while (members.hasNext()) {
-                NodeInfo newNode = (NodeInfo) members.next();
-                if (!initialSet.contains(newNode)) {
+            for (NodeInfo newNode : initialSet) {
+                if (!memberSet.contains(newNode)) {
                     tempSet.add(newNode);
                 }
             }
