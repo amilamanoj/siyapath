@@ -134,7 +134,7 @@ public class JobProcessor {
                     e.printStackTrace();  //TODO: handle exception
                 }
             }
-            context.getNodeInfo().setNodeStatus(NodeStatus.PRECESSING);
+            context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING);
             log.info("Added " + job.getTasks().size() + " tasks to the queue");
         }
 
@@ -246,7 +246,7 @@ public class JobProcessor {
 
     public Map<Integer, Task> getJobResult(){
         if(jobMap.isEmpty() && taskQueue.isEmpty()){
-            if(context.getNodeInfo().getNodeStatus()!=NodeStatus.PRECESSING){
+            if(context.getNodeInfo().getNodeStatus()!=NodeStatus.PROCESSING){
             context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);  //TODO:If this is a processor node
             }
         }
