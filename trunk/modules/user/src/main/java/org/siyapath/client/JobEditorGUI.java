@@ -1,9 +1,11 @@
 package org.siyapath.client;
 
+import org.siyapath.service.Job;
 import org.siyapath.service.Task;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,7 +94,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         });
 
         okButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
-        okButton.setText("OK");
+        okButton.setText("Submit");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -143,14 +145,17 @@ public class JobEditorGUI extends javax.swing.JDialog {
     }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
+
         try {
-            int jobID = handler.submitJob(jobNameText.getText(), taskFileList);
-            userGUI.jobUpdated(jobID);
-            this.dispose();
-        } catch (SubmissionFailedException e) {
+            Job job = handler.createJob(taskFileList);
+            userGUI.startSubmission(jobNameText.getText(), job);
+            this.setVisible(false);
+        } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Job submission failed: " + e.getCause().getMessage(), "Job Submission Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Could not read task files, please verify." + e.getCause().getMessage(), "Job Creation error", JOptionPane.ERROR_MESSAGE);
+
         }
+//            JOptionPane.showMessageDialog(this, "Job submission failed: " + e.getCause().getMessage(), "Job Submission Failed", JOptionPane.ERROR_MESSAGE);
     }
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,7 +169,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         if (sFile != null) {
             String taskName = "Task-" + counter++ + ": " + sFile.getName();
             listModel.addElement(taskName);
-            taskFileList.put(taskName, new TaskData(taskName, sFile, "0,200000","Cores:4-Speed:2267Mhz"));  //TODO: update GUI
+            taskFileList.put(taskName, new TaskData(taskName, sFile, "0,200000", "Cores:4-Speed:2267Mhz"));  //TODO: update GUI
         }
         if (!listModel.isEmpty()) {
             okButton.setEnabled(true);

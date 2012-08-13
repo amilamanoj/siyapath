@@ -1,5 +1,7 @@
 package org.siyapath.client;
 
+import org.siyapath.service.Job;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -14,8 +16,8 @@ public class UserGUI extends JFrame {
 
     private UserHandler handler;
     private JobEditorGUI jobEditor;
-    private String loggedPerson;
-    private Map taskFileList;
+//    private String loggedPerson;
+//    private Map taskFileList;
     private JobStatusUI jobStatusUI;
     private DefaultComboBoxModel comboBoxModel;
     private DefaultTableModel tableModel;
@@ -35,14 +37,16 @@ public class UserGUI extends JFrame {
         this.tableModel = new DefaultTableModel(handler.getAllRows(), tableHeaders);
         initComponents();
         siyapathLogo.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/siyapathLogo232x184.png")));
+        busyLabel.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/busyIcon.gif")));
 
 //        jobSubmitButton.setEnabled(false);
+        addJobButton.setVisible(false);
         loginPanel.setVisible(true);
         startPanel.setVisible(false);
         busyPanel.setVisible(false);
         statusPanel.setVisible(false);
         userMenu.setVisible(false);
-        logoutMenu.setVisible(false);
+//        logoutMenu.setVisible(false);
         this.setLocationRelativeTo(null);
     }
 
@@ -81,7 +85,7 @@ public class UserGUI extends JFrame {
         addJobButton = new javax.swing.JButton();
         mainMenuBar = new javax.swing.JMenuBar();
         systemMenu = new javax.swing.JMenu();
-        logoutMenu = new javax.swing.JMenuItem();
+//        logoutMenu = new javax.swing.JMenuItem();
         exitMenu = new javax.swing.JMenuItem();
         userMenu = new javax.swing.JMenu();
         userProfileMenu = new javax.swing.JMenuItem();
@@ -325,7 +329,7 @@ public class UserGUI extends JFrame {
 
         busyLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
         busyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        busyLabel.setText("Loading...");
+        busyLabel.setText("Connecting...");
         busyLabel.setPreferredSize(new java.awt.Dimension(800, 40));
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -365,13 +369,13 @@ public class UserGUI extends JFrame {
 
         systemMenu.setText("System");
 
-        logoutMenu.setText("Logout");
-        logoutMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutMenuActionPerformed(evt);
-            }
-        });
-        systemMenu.add(logoutMenu);
+//        logoutMenu.setText("Logout");
+//        logoutMenu.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                logoutMenuActionPerformed(evt);
+//            }
+//        });
+//        systemMenu.add(logoutMenu);
 
         exitMenu.setText("Exit");
         exitMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -452,9 +456,9 @@ public class UserGUI extends JFrame {
         about();
     }
 
-    private void logoutMenuActionPerformed(ActionEvent evt) {
-        logOut();
-    }
+//    private void logoutMenuActionPerformed(ActionEvent evt) {
+//        logOut();
+//    }
 
     private void exitMenuActionPerformed(ActionEvent evt) {
         exit();
@@ -473,7 +477,8 @@ public class UserGUI extends JFrame {
     }
 
     private void getStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        StatusUiThread statusUiThread = new StatusUiThread();
+        statusUiThread.run();
     }
 
     private void getResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -484,10 +489,10 @@ public class UserGUI extends JFrame {
         jobEditor.setVisible(true);
     }
 
-    private void JobStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        StatusUiThread statusUiThread = new StatusUiThread();
-        statusUiThread.run();
-    }
+//    private void JobStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
+//        StatusUiThread statusUiThread = new StatusUiThread();
+//        statusUiThread.run();
+//    }
 
 //    private void usernameTextKeyPressed(KeyEvent evt) {
 //        int keyCode = evt.getKeyCode();
@@ -505,18 +510,9 @@ public class UserGUI extends JFrame {
 //    }
 
     private void loginButtonActionPerformed(ActionEvent evt) {
-        login();
+        new Thread(new LoginThread()).start();
     }
 
-    public void jobUpdated(int jobID) {
-        JobData jobData = handler.getJobData(jobID);
-        comboBoxModel.addElement(jobData.getName());
-        statusPanel.setVisible(true);
-        jobIDLabel.setText(String.valueOf(jobData.getId()));
-        jobNameLabel.setText(jobData.getName());
-        taskDistributorLabel.setText(jobData.getDistributorNode().toString());
-        taskCountLabel.setText(String.valueOf(jobData.getJob().getTasksSize()));
-    }
 
     private void about() {
         JOptionPane.showMessageDialog(this, "<html><a href=http://siyapath.org>(c) Siyapath Team 2012</a></html>", "About", JOptionPane.INFORMATION_MESSAGE);
@@ -527,6 +523,59 @@ public class UserGUI extends JFrame {
             System.exit(0);
         } else {
             setVisible(true);
+        }
+    }
+
+    private class SubmitThread implements Runnable {
+        private String name;
+        private Job job;
+
+        private SubmitThread(String name, Job job) {
+            this.name = name;
+            this.job = job;
+        }
+
+        @Override
+        public void run() {
+            try {
+                int jobID = handler.submitJob(name, job);
+                submissionSuccessful(jobID);
+            } catch (SubmissionFailedException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(UserGUI.this, "Job submission failed. Try again later." + e.getCause(), "Job submission error", JOptionPane.ERROR_MESSAGE);
+                if (comboBoxModel.getSize() == 0) {
+                     logged();
+                }
+                jobEditor.setVisible(true);
+            }
+        }
+    }
+
+    void startSubmission(String name, Job job) {
+        busy();
+        SubmitThread submitThread = new SubmitThread(name, job);
+        new Thread(submitThread).start();
+    }
+
+    void submissionSuccessful(int jobID){
+        JobData jobData = handler.getJobData(jobID);
+        comboBoxModel.addElement(jobData.getName());
+        statusPanel.setVisible(true);
+        busyLabel.setVisible(false);
+        jobIDLabel.setText(String.valueOf(jobData.getId()));
+        jobNameLabel.setText(jobData.getName());
+        taskDistributorLabel.setText(jobData.getDistributorNode().toString());
+        taskCountLabel.setText(String.valueOf(jobData.getJob().getTasksSize()));
+    }
+
+
+    private class LoginThread implements Runnable {
+
+        @Override
+        public void run() {
+            loginButton.setEnabled(false);
+            login();
+            loginButton.setEnabled(true);
         }
     }
 
@@ -549,12 +598,12 @@ public class UserGUI extends JFrame {
         }
     }
 
-    private void logOut() {
-        if (JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logging out", 0) == 0) {
-            loggedPerson = null;
-            loggedOut();
-        }
-    }
+//    private void logOut() {
+//        if (JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logging out", 0) == 0) {
+////            loggedPerson = null;
+//            loggedOut();
+//        }
+//    }
 
     public void logged() {
         loginPanel.setVisible(false);
@@ -562,16 +611,18 @@ public class UserGUI extends JFrame {
         startPanel.setVisible(true);
         statusPanel.setVisible(false);
         userMenu.setVisible(true);
-        logoutMenu.setVisible(true);
+//        logoutMenu.setVisible(true);
+        addJobButton.setVisible(true);
 //        userWelcomeLabel.setText("Welcome " + loggedPerson);
     }
 
     public void busy() {
         busyPanel.setVisible(true);
+        startPanel.setVisible(false);
         loginPanel.setVisible(false);
 //        userPanel.setVisible(false);
         userMenu.setVisible(false);
-        logoutMenu.setVisible(false);
+//        logoutMenu.setVisible(false);
     }
 
     public void loggedOut() {
@@ -581,17 +632,17 @@ public class UserGUI extends JFrame {
         loginPanel.setVisible(true);
 //        userPanel.setVisible(false);
         userMenu.setVisible(false);
-        logoutMenu.setVisible(false);
+//        logoutMenu.setVisible(false);
     }
 
     private void showUserProfile() {
         JOptionPane.showMessageDialog(this, "User Info", "User Profile", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void showSplash() {
+//    private void showSplash() {
 //        SplashScreen ss = new SplashScreen(this, true);
 //        ss.setVisible(true);
-    }
+//    }
 
     private class StatusUiThread extends Thread {
 
@@ -632,7 +683,7 @@ public class UserGUI extends JFrame {
     private javax.swing.JLabel loginInfoLabel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JLabel loginWelcomeLabel;
-    private javax.swing.JMenuItem logoutMenu;
+//    private javax.swing.JMenuItem logoutMenu;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel siyapathLogo;

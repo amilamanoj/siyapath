@@ -40,7 +40,7 @@ public class UserHandler {
         this.context = new NodeContext(clientEnd);
     }
 
-    public JobData getJobData(int jobId){
+    public JobData getJobData(int jobId) {
         return jobMap.get(jobId);
     }
 
@@ -91,25 +91,26 @@ public class UserHandler {
     /**
      * Prepares the new job, selects a distributor nodes and sends the job
      *
-     * @param taskList list of tasks
+     * @param job job
      */
-    public int submitJob(String name, Map<String, TaskData> taskList) throws SubmissionFailedException {
+    public int submitJob(String name, Job job) throws SubmissionFailedException {
         NodeInfo selectedNode = null;
-        Job job = null;
         try {
-            job = createJob(taskList);
             selectedNode = getDistributorNode();
+            if (selectedNode == null) {
+                throw new SubmissionFailedException("Could not select a job processor node", null);
+            }
             JobData jobData = new JobData(job.getJobID(), name, job, selectedNode);
-            jobMap.put(jobData.getId(), jobData);
-
             sendJob(job, selectedNode);
-        } catch (Exception e) {
+            jobMap.put(jobData.getId(), jobData);
+        } catch (TException e) {
+            e.printStackTrace();
             throw new SubmissionFailedException("Could not submit the job", e);
         }
         return job.getJobID();
     }
 
-    private Job createJob(Map<String, TaskData> taskList) throws IOException {
+    Job createJob(Map<String, TaskData> taskList) throws IOException {
         String jobIdString = this.generateJobIDString();
         int jobId = Math.abs(jobIdString.hashCode());
         int taskCounter = 0;
@@ -164,7 +165,6 @@ public class UserHandler {
         } finally {
             transport.close();
         }
-        log.info("Selected node: " + selectedMember);
 
         for (NodeInfo nodeInfo : context.getMemberSet()) {
             if (nodeInfo.isIdle() || nodeInfo.getNodeStatus() == NodeStatus.DISTRIBUTING) {
@@ -172,6 +172,8 @@ public class UserHandler {
                 break;
             }
         }
+        log.info("Selected node: " + selectedMember);
+
 
         return selectedMember;
     }
