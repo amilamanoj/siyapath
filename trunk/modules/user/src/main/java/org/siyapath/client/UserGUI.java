@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -22,6 +23,7 @@ public class UserGUI extends JFrame {
     private DefaultComboBoxModel comboBoxModel;
     private DefaultTableModel tableModel;
     private Vector<String> tableHeaders;
+    private Map<String, Integer> jobMap;
 
 
     /**
@@ -31,6 +33,7 @@ public class UserGUI extends JFrame {
         this.handler = handler;
         this.jobEditor = new JobEditorGUI(this, true, this, handler);
         this.comboBoxModel = new DefaultComboBoxModel();
+        this.jobMap = new HashMap<String, Integer>();
         tableHeaders = new Vector<String>();
         tableHeaders.add("Task ID");
         tableHeaders.add("Status");
@@ -248,7 +251,11 @@ public class UserGUI extends JFrame {
 
         jobComboBox.setFont(new java.awt.Font("Tahoma", 0, 14));
         jobComboBox.setModel(comboBoxModel);
-
+        jobComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jobComboBoxActionPerformed(evt);
+            }
+        });
         javax.swing.GroupLayout startPanelLayout = new javax.swing.GroupLayout(startPanel);
         startPanel.setLayout(startPanelLayout);
         startPanelLayout.setHorizontalGroup(
@@ -482,7 +489,7 @@ public class UserGUI extends JFrame {
     }
 
     private void getResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        handler.getJobResults(jobMap.get(((String)jobComboBox.getSelectedItem())));
     }
 
     private void addJobButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -557,15 +564,30 @@ public class UserGUI extends JFrame {
         new Thread(submitThread).start();
     }
 
+
+
     void submissionSuccessful(int jobID){
         JobData jobData = handler.getJobData(jobID);
-        comboBoxModel.addElement(jobData.getName());
+        String jobName =  jobData.getName();
+        jobMap.put(jobName, Integer.valueOf(jobID));
+        comboBoxModel.addElement(jobName);
+        startPanel.setVisible(true);
         statusPanel.setVisible(true);
         busyLabel.setVisible(false);
+        updateJobInfo(jobData);
+    }
+
+    void updateJobInfo(JobData jobData){
         jobIDLabel.setText(String.valueOf(jobData.getId()));
         jobNameLabel.setText(jobData.getName());
         taskDistributorLabel.setText(jobData.getDistributorNode().toString());
         taskCountLabel.setText(String.valueOf(jobData.getJob().getTasksSize()));
+    }
+
+    private void jobComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
+        String jobName = (String) jobComboBox.getSelectedItem();
+        JobData jobData = handler.getJobData(jobMap.get(jobName));
+        updateJobInfo(jobData);
     }
 
 
