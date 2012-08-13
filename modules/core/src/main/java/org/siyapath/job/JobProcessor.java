@@ -51,7 +51,7 @@ public class JobProcessor {
 
         jobMap = new HashMap<Integer, Job>();
         taskMap = new HashMap<Integer, ProcessingTask>();
-
+        taskReplicaMap = new HashMap<Integer, ProcessingTask>();
         taskDispatcherExecutor.submit(new TaskDispatcher());
     }
 
