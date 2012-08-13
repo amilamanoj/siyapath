@@ -9,11 +9,8 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.*;
-import org.siyapath.service.NodeStatus;
+import org.siyapath.service.*;
 import org.siyapath.task.SiyapathTask;
-import org.siyapath.service.Job;
-import org.siyapath.service.Siyapath;
-import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
 import javax.swing.*;
@@ -232,6 +229,34 @@ public class UserHandler {
     public Vector<Vector<String>> getAllRows() {
         return allRows;
     }
+
+    public void getJobResults(int jobId) {
+        JobData jobData = jobMap.get(jobId);
+        NodeInfo jobHandler = jobData.getDistributorNode();
+
+        TTransport transport = new TSocket(jobHandler.getIp(),
+                jobHandler.getPort());
+
+        try {
+            log.info("Retrieving results of job: " + jobData.getName());
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            client.getJobResult(jobId);    // TODO: display results
+
+        } catch (TTransportException e) {
+            if (e.getCause() instanceof ConnectException) {
+                e.printStackTrace();
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
+    }
+
 
     /**
      * Thread runs while job status is false, i.e. Job is incomplete
