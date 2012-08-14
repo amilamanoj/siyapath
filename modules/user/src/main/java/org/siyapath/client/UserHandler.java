@@ -28,9 +28,7 @@ public class UserHandler {
     private NodeInfo clientEnd;
     private Map<Integer, JobData> jobMap = new HashMap<Integer, JobData>();
 
-    Map<Integer, String> taskCompletionDataMap;
-    private Vector<Vector<String>> allRows = new Vector<Vector<String>>();
-    Vector<String> eachRow = null;
+
 
     public UserHandler() {
         this.clientEnd = new NodeInfo();
@@ -205,30 +203,17 @@ public class UserHandler {
     }
 
 
-    public void updateTableDataVectors() {
 
-        if (!allRows.isEmpty()) {
-            allRows.removeAllElements();
-        }
-        for (Map.Entry<Integer, String> task : taskCompletionDataMap.entrySet()) {
-            eachRow = new Vector<String>();
-            eachRow.add(task.getKey().toString());
-            eachRow.add(task.getValue());
-            allRows.add(eachRow);
-        }
-    }
 
     /**
      * Starts a new thread for polling status from JobProcessor
      */
-    public void startPollingThread(int jobId, JTable table) {
-        JobStatusPollThread jobStatusPollThread = new JobStatusPollThread(jobId, table);
-        jobStatusPollThread.start();
-    }
+//    public void startPollingThread(int jobId, JTable table) {
+//        JobStatusPollThread jobStatusPollThread = new JobStatusPollThread(jobId, table);
+//        jobStatusPollThread.start();
+//    }
 
-    public Vector<Vector<String>> getAllRows() {
-        return allRows;
-    }
+
 
     public void getJobResults(int jobId) {
         JobData jobData = jobMap.get(jobId);
@@ -261,117 +246,92 @@ public class UserHandler {
     /**
      * Thread runs while job status is false, i.e. Job is incomplete
      */
-    private class JobStatusPollThread extends Thread {
+//    private class JobStatusPollThread extends Thread {
 
-        int jobId;
-        boolean jobStatus;
-        int count;
-        JTable table;
+//        int jobId;
+//        boolean jobStatus;
+//        int count;
+//        JTable table;
 
-        JobStatusPollThread(int jobId, JTable table) {
-            this.jobId = jobId;
-            this.table = table;
-        }
+//        JobStatusPollThread(int jobId, JTable table) {
+//            this.jobId = jobId;
+//            this.table = table;
+//        }
+//
+//        @Override
+//        public void run() {
+//            log.info("Polling thread started for JobId: " + jobId);
+//
+//            jobStatus = false;
+//
+//            while (!jobStatus) {
+//                count++;
+//                pollStatusFromJobProcessor(jobId);
+//                try {
+//                    sleep(3000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
-        @Override
-        public void run() {
-            log.info("Polling thread started for JobId: " + jobId);
+    /**
+     * Contacts back the selected JobProcessor to get job status
+     *
+     * @param jobID
+     */
+    public  Map<Integer, String> pollStatusFromJobProcessor(int jobID) {
 
-            jobStatus = false;
+        NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
+        TTransport transport = new TSocket(jobHandler.getIp(),
+                jobHandler.getPort());
+        Map<Integer, String> taskCompletionDataMap = null;
+        try {
+            log.info("Polling status of job: " + jobID);
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            //gets the map of task statuses from JobProcessor
+            //Maps each taskId to its processing status <Integer,String>
+            taskCompletionDataMap = client.getJobStatus(jobID);
+            //sets vectors to be fed to Status UI
 
-            while (!jobStatus) {
-                count++;
-                pollStatusFromJobProcessor(jobId);
-                try {
-                    sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
-        /**
-         * Contacts back the selected JobProcessor to get job status
-         *
-         * @param jobID
-         */
-        public void pollStatusFromJobProcessor(int jobID) {
-
-            NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
-            TTransport transport = new TSocket(jobHandler.getIp(),
-                    jobHandler.getPort());
-
-            try {
-                log.info("Polling status of job: " + jobID + " count: " + count);
-                transport.open();
-                TProtocol protocol = new TBinaryProtocol(transport);
-                Siyapath.Client client = new Siyapath.Client(protocol);
-                //gets the map of task statuses from JobProcessor
-                //Maps each taskId to its processing status <Integer,String>
-                taskCompletionDataMap = client.getJobStatus(jobID);
-                //sets vectors to be fed to Status UI
-                updateTableDataVectors();
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                model.fireTableDataChanged();
-                jobStatus = assessJobStatusFromTaskStatuses(taskCompletionDataMap);
-
-            } catch (TTransportException e) {
-                if (e.getCause() instanceof ConnectException) {
-                    e.printStackTrace();
-                }
-            } catch (TException e) {
+        } catch (TTransportException e) {
+            if (e.getCause() instanceof ConnectException) {
                 e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                transport.close();
             }
+        } catch (TException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
         }
 
-        public boolean assessJobStatusFromTaskStatuses(Map<Integer, String> statusMap) {
-
-            boolean statusCondition = true;
-            boolean eachTaskStatus;
-
-            for (String taskStatus : statusMap.values()) {
-                if (taskStatus.equalsIgnoreCase("DONE")) {
-                    eachTaskStatus = true;
-                } else {
-                    eachTaskStatus = false;
-                }
-
-                if (statusCondition && eachTaskStatus) statusCondition = true;
-                else statusCondition = false;
-            }
-            return statusCondition;
-        }
-
+        return taskCompletionDataMap;
     }
 
+    public boolean assessJobStatusFromTaskStatuses(Map<Integer, String> statusMap) {
 
-//    public void demo(){
-//        JobStatusPollThread thread = new JobStatusPollThread();
-//        thread.start();
-////        log.info("Started Job Status Polling thread.===1");
-////        int count =0;
-////        while (!jobStatus) {
-////            log.info("Job status before polling tis time is " + jobStatus);
-////            pollStatusFromJobProcessor(jobId);
-////            log.info("Job status after polling tis time is " + jobStatus);
-////            count++;
-////            log.info("Polled iteration: " + count);
-////
-////        }
-//
-//    }
+        boolean statusCondition = true;
+        boolean eachTaskStatus;
 
-////        DEMO only
-//    public static void main(String[] args) {
-//        UserHandler userHandler = new UserHandler();
-////    JobStatusPollThread thread = new JobStatusPollThread()
-//        userHandler.demo();
-//    }
+        for (String taskStatus : statusMap.values()) {
+            if (taskStatus.equalsIgnoreCase("DONE")) {
+                eachTaskStatus = true;
+            } else {
+                eachTaskStatus = false;
+            }
+
+            if (statusCondition && eachTaskStatus) statusCondition = true;
+            else statusCondition = false;
+        }
+        return statusCondition;
+    }
 
 }
+
+
