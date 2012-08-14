@@ -205,16 +205,6 @@ public class UserHandler {
 
 
 
-    /**
-     * Starts a new thread for polling status from JobProcessor
-     */
-//    public void startPollingThread(int jobId, JTable table) {
-//        JobStatusPollThread jobStatusPollThread = new JobStatusPollThread(jobId, table);
-//        jobStatusPollThread.start();
-//    }
-
-
-
     public void getJobResults(int jobId) {
         JobData jobData = jobMap.get(jobId);
         NodeInfo jobHandler = jobData.getDistributorNode();
@@ -242,52 +232,17 @@ public class UserHandler {
         }
     }
 
-
-    /**
-     * Thread runs while job status is false, i.e. Job is incomplete
-     */
-//    private class JobStatusPollThread extends Thread {
-
-//        int jobId;
-//        boolean jobStatus;
-//        int count;
-//        JTable table;
-
-//        JobStatusPollThread(int jobId, JTable table) {
-//            this.jobId = jobId;
-//            this.table = table;
-//        }
-//
-//        @Override
-//        public void run() {
-//            log.info("Polling thread started for JobId: " + jobId);
-//
-//            jobStatus = false;
-//
-//            while (!jobStatus) {
-//                count++;
-//                pollStatusFromJobProcessor(jobId);
-//                try {
-//                    sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
     /**
      * Contacts back the selected JobProcessor to get job status
      *
      * @param jobID
      */
-    public  Map<Integer, String> pollStatusFromJobProcessor(int jobID) {
+    public  Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) {
 
         NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
         TTransport transport = new TSocket(jobHandler.getIp(),
                 jobHandler.getPort());
-        Map<Integer, String> taskCompletionDataMap = null;
+        Map<Integer, TaskResult> taskCompletionMap = null;
         try {
             log.info("Polling status of job: " + jobID);
             transport.open();
@@ -295,7 +250,7 @@ public class UserHandler {
             Siyapath.Client client = new Siyapath.Client(protocol);
             //gets the map of task statuses from JobProcessor
             //Maps each taskId to its processing status <Integer,String>
-            taskCompletionDataMap = client.getJobStatus(jobID);
+            taskCompletionMap = client.getJobStatus(jobID);
             //sets vectors to be fed to Status UI
 
 
@@ -311,7 +266,7 @@ public class UserHandler {
             transport.close();
         }
 
-        return taskCompletionDataMap;
+        return taskCompletionMap;
     }
 
     public boolean assessJobStatusFromTaskStatuses(Map<Integer, String> statusMap) {

@@ -117,7 +117,7 @@ public class SiyapathService implements Siyapath.Iface {
      * @return task status map for the given JobId, with the mapping of taskID to task completion status
      */
     @Override
-    public Map<Integer,String> getJobStatus(int jobId){
+    public Map<Integer,TaskResult> getJobStatus(int jobId){
         return nodeContext.getJobProcessor().getTaskStatusesForJob(jobId);
 
     }
@@ -128,8 +128,8 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public Map<Integer, Task> getJobResult(int jobID) throws TException {
-        return nodeContext.getJobProcessor().getJobResult();
+    public Map<Integer, TaskResult> getJobResult(int jobID) throws TException {
+        return null;
     }
 
     /**

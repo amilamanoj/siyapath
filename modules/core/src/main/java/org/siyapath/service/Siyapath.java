@@ -50,9 +50,9 @@ public class Siyapath {
 
     public boolean submitTask(Task task) throws org.apache.thrift.TException;
 
-    public Map<Integer,String> getJobStatus(int jobId) throws org.apache.thrift.TException;
+    public Map<Integer,TaskResult> getJobStatus(int jobId) throws org.apache.thrift.TException;
 
-    public Map<Integer,Task> getJobResult(int jobID) throws org.apache.thrift.TException;
+    public Map<Integer,TaskResult> getJobResult(int jobID) throws org.apache.thrift.TException;
 
     public boolean sendTaskResult(Result result) throws org.apache.thrift.TException;
 
@@ -296,7 +296,7 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "submitTask failed: unknown result");
     }
 
-    public Map<Integer,String> getJobStatus(int jobId) throws org.apache.thrift.TException
+    public Map<Integer,TaskResult> getJobStatus(int jobId) throws org.apache.thrift.TException
     {
       send_getJobStatus(jobId);
       return recv_getJobStatus();
@@ -309,7 +309,7 @@ public class Siyapath {
       sendBase("getJobStatus", args);
     }
 
-    public Map<Integer,String> recv_getJobStatus() throws org.apache.thrift.TException
+    public Map<Integer,TaskResult> recv_getJobStatus() throws org.apache.thrift.TException
     {
       getJobStatus_result result = new getJobStatus_result();
       receiveBase(result, "getJobStatus");
@@ -319,7 +319,7 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getJobStatus failed: unknown result");
     }
 
-    public Map<Integer,Task> getJobResult(int jobID) throws org.apache.thrift.TException
+    public Map<Integer,TaskResult> getJobResult(int jobID) throws org.apache.thrift.TException
     {
       send_getJobResult(jobID);
       return recv_getJobResult();
@@ -332,7 +332,7 @@ public class Siyapath {
       sendBase("getJobResult", args);
     }
 
-    public Map<Integer,Task> recv_getJobResult() throws org.apache.thrift.TException
+    public Map<Integer,TaskResult> recv_getJobResult() throws org.apache.thrift.TException
     {
       getJobResult_result result = new getJobResult_result();
       receiveBase(result, "getJobResult");
@@ -707,7 +707,7 @@ public class Siyapath {
         prot.writeMessageEnd();
       }
 
-      public Map<Integer,String> getResult() throws org.apache.thrift.TException {
+      public Map<Integer,TaskResult> getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -739,7 +739,7 @@ public class Siyapath {
         prot.writeMessageEnd();
       }
 
-      public Map<Integer,Task> getResult() throws org.apache.thrift.TException {
+      public Map<Integer,TaskResult> getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -7247,7 +7247,7 @@ public class Siyapath {
       schemes.put(TupleScheme.class, new getJobStatus_resultTupleSchemeFactory());
     }
 
-    public Map<Integer,String> success; // required
+    public Map<Integer,TaskResult> success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -7314,7 +7314,7 @@ public class Siyapath {
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
               new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, TaskResult.class))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobStatus_result.class, metaDataMap);
     }
@@ -7323,7 +7323,7 @@ public class Siyapath {
     }
 
     public getJobStatus_result(
-      Map<Integer,String> success)
+      Map<Integer,TaskResult> success)
     {
       this();
       this.success = success;
@@ -7334,15 +7334,15 @@ public class Siyapath {
      */
     public getJobStatus_result(getJobStatus_result other) {
       if (other.isSetSuccess()) {
-        Map<Integer,String> __this__success = new HashMap<Integer,String>();
-        for (Map.Entry<Integer, String> other_element : other.success.entrySet()) {
+        Map<Integer,TaskResult> __this__success = new HashMap<Integer,TaskResult>();
+        for (Map.Entry<Integer, TaskResult> other_element : other.success.entrySet()) {
 
           Integer other_element_key = other_element.getKey();
-          String other_element_value = other_element.getValue();
+          TaskResult other_element_value = other_element.getValue();
 
           Integer __this__success_copy_key = other_element_key;
 
-          String __this__success_copy_value = other_element_value;
+          TaskResult __this__success_copy_value = new TaskResult(other_element_value);
 
           __this__success.put(__this__success_copy_key, __this__success_copy_value);
         }
@@ -7363,18 +7363,18 @@ public class Siyapath {
       return (this.success == null) ? 0 : this.success.size();
     }
 
-    public void putToSuccess(int key, String val) {
+    public void putToSuccess(int key, TaskResult val) {
       if (this.success == null) {
-        this.success = new HashMap<Integer,String>();
+        this.success = new HashMap<Integer,TaskResult>();
       }
       this.success.put(key, val);
     }
 
-    public Map<Integer,String> getSuccess() {
+    public Map<Integer,TaskResult> getSuccess() {
       return this.success;
     }
 
-    public getJobStatus_result setSuccess(Map<Integer,String> success) {
+    public getJobStatus_result setSuccess(Map<Integer,TaskResult> success) {
       this.success = success;
       return this;
     }
@@ -7400,7 +7400,7 @@ public class Siyapath {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((Map<Integer,String>)value);
+          setSuccess((Map<Integer,TaskResult>)value);
         }
         break;
 
@@ -7550,13 +7550,14 @@ public class Siyapath {
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
                   org.apache.thrift.protocol.TMap _map44 = iprot.readMapBegin();
-                  struct.success = new HashMap<Integer,String>(2*_map44.size);
+                  struct.success = new HashMap<Integer,TaskResult>(2*_map44.size);
                   for (int _i45 = 0; _i45 < _map44.size; ++_i45)
                   {
                     int _key46; // required
-                    String _val47; // required
+                    TaskResult _val47; // required
                     _key46 = iprot.readI32();
-                    _val47 = iprot.readString();
+                    _val47 = new TaskResult();
+                    _val47.read(iprot);
                     struct.success.put(_key46, _val47);
                   }
                   iprot.readMapEnd();
@@ -7584,11 +7585,11 @@ public class Siyapath {
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
-            oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRING, struct.success.size()));
-            for (Map.Entry<Integer, String> _iter48 : struct.success.entrySet())
+            oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
+            for (Map.Entry<Integer, TaskResult> _iter48 : struct.success.entrySet())
             {
               oprot.writeI32(_iter48.getKey());
-              oprot.writeString(_iter48.getValue());
+              _iter48.getValue().write(oprot);
             }
             oprot.writeMapEnd();
           }
@@ -7619,10 +7620,10 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Map.Entry<Integer, String> _iter49 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter49 : struct.success.entrySet())
             {
               oprot.writeI32(_iter49.getKey());
-              oprot.writeString(_iter49.getValue());
+              _iter49.getValue().write(oprot);
             }
           }
         }
@@ -7634,14 +7635,15 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TMap _map50 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRING, iprot.readI32());
-            struct.success = new HashMap<Integer,String>(2*_map50.size);
+            org.apache.thrift.protocol.TMap _map50 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashMap<Integer,TaskResult>(2*_map50.size);
             for (int _i51 = 0; _i51 < _map50.size; ++_i51)
             {
               int _key52; // required
-              String _val53; // required
+              TaskResult _val53; // required
               _key52 = iprot.readI32();
-              _val53 = iprot.readString();
+              _val53 = new TaskResult();
+              _val53.read(iprot);
               struct.success.put(_key52, _val53);
             }
           }
@@ -8015,7 +8017,7 @@ public class Siyapath {
       schemes.put(TupleScheme.class, new getJobResult_resultTupleSchemeFactory());
     }
 
-    public Map<Integer,Task> success; // required
+    public Map<Integer,TaskResult> success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -8082,7 +8084,7 @@ public class Siyapath {
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
               new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Task.class))));
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, TaskResult.class))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getJobResult_result.class, metaDataMap);
     }
@@ -8091,7 +8093,7 @@ public class Siyapath {
     }
 
     public getJobResult_result(
-      Map<Integer,Task> success)
+      Map<Integer,TaskResult> success)
     {
       this();
       this.success = success;
@@ -8102,15 +8104,15 @@ public class Siyapath {
      */
     public getJobResult_result(getJobResult_result other) {
       if (other.isSetSuccess()) {
-        Map<Integer,Task> __this__success = new HashMap<Integer,Task>();
-        for (Map.Entry<Integer, Task> other_element : other.success.entrySet()) {
+        Map<Integer,TaskResult> __this__success = new HashMap<Integer,TaskResult>();
+        for (Map.Entry<Integer, TaskResult> other_element : other.success.entrySet()) {
 
           Integer other_element_key = other_element.getKey();
-          Task other_element_value = other_element.getValue();
+          TaskResult other_element_value = other_element.getValue();
 
           Integer __this__success_copy_key = other_element_key;
 
-          Task __this__success_copy_value = new Task(other_element_value);
+          TaskResult __this__success_copy_value = new TaskResult(other_element_value);
 
           __this__success.put(__this__success_copy_key, __this__success_copy_value);
         }
@@ -8131,18 +8133,18 @@ public class Siyapath {
       return (this.success == null) ? 0 : this.success.size();
     }
 
-    public void putToSuccess(int key, Task val) {
+    public void putToSuccess(int key, TaskResult val) {
       if (this.success == null) {
-        this.success = new HashMap<Integer,Task>();
+        this.success = new HashMap<Integer,TaskResult>();
       }
       this.success.put(key, val);
     }
 
-    public Map<Integer,Task> getSuccess() {
+    public Map<Integer,TaskResult> getSuccess() {
       return this.success;
     }
 
-    public getJobResult_result setSuccess(Map<Integer,Task> success) {
+    public getJobResult_result setSuccess(Map<Integer,TaskResult> success) {
       this.success = success;
       return this;
     }
@@ -8168,7 +8170,7 @@ public class Siyapath {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((Map<Integer,Task>)value);
+          setSuccess((Map<Integer,TaskResult>)value);
         }
         break;
 
@@ -8318,13 +8320,13 @@ public class Siyapath {
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
                   org.apache.thrift.protocol.TMap _map54 = iprot.readMapBegin();
-                  struct.success = new HashMap<Integer,Task>(2*_map54.size);
+                  struct.success = new HashMap<Integer,TaskResult>(2*_map54.size);
                   for (int _i55 = 0; _i55 < _map54.size; ++_i55)
                   {
                     int _key56; // required
-                    Task _val57; // required
+                    TaskResult _val57; // required
                     _key56 = iprot.readI32();
-                    _val57 = new Task();
+                    _val57 = new TaskResult();
                     _val57.read(iprot);
                     struct.success.put(_key56, _val57);
                   }
@@ -8354,7 +8356,7 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Map.Entry<Integer, Task> _iter58 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter58 : struct.success.entrySet())
             {
               oprot.writeI32(_iter58.getKey());
               _iter58.getValue().write(oprot);
@@ -8388,7 +8390,7 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Map.Entry<Integer, Task> _iter59 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter59 : struct.success.entrySet())
             {
               oprot.writeI32(_iter59.getKey());
               _iter59.getValue().write(oprot);
@@ -8404,13 +8406,13 @@ public class Siyapath {
         if (incoming.get(0)) {
           {
             org.apache.thrift.protocol.TMap _map60 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashMap<Integer,Task>(2*_map60.size);
+            struct.success = new HashMap<Integer,TaskResult>(2*_map60.size);
             for (int _i61 = 0; _i61 < _map60.size; ++_i61)
             {
               int _key62; // required
-              Task _val63; // required
+              TaskResult _val63; // required
               _key62 = iprot.readI32();
-              _val63 = new Task();
+              _val63 = new TaskResult();
               _val63.read(iprot);
               struct.success.put(_key62, _val63);
             }
