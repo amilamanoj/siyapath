@@ -176,7 +176,7 @@ public class JobProcessor {
          * @param destinationNode node to submit to
          * @param isReplica       if this task is a replication of some other task
          */
-        public void dispatchTask(Task task, NodeInfo destinationNode, boolean isReplica) {
+        public boolean dispatchTask(Task task, NodeInfo destinationNode, boolean isReplica) {
 
             NodeInfo nodeInfo = context.getNodeInfo();
             NodeData thisNode = CommonUtils.serialize(nodeInfo);
@@ -186,13 +186,24 @@ public class JobProcessor {
             log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect to selected task-processor: " + destinationNode);
             TTransport transport = new TSocket(destinationNode.getIp(), destinationNode.getPort());
 
+            boolean dispatchResult = false;
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Submitting to: " + destinationNode);
-                client.submitTask(task);
+                dispatchResult = client.submitTask(task);
                 log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Successfully submitted task to processing node!");
+                if (!isReplica){
+                    ProcessingTask pTask = taskMap.get(task.getTaskID());
+                    pTask.setProcessingNode(destinationNode);
+                    pTask.setStatus(ProcessingTask.TaskStatus.PROCESSING);
+                } else {
+                    ProcessingTask replicatedTask = new ProcessingTask(task.getJobID(), task.getTaskID(),
+                            ProcessingTask.TaskStatus.PROCESSING);
+                    replicatedTask.setReplicationStatus(ProcessingTask.ReplicationStatus.REPLICA);
+                    taskReplicaMap.put(task.getTaskID(), replicatedTask);
+                }
             } catch (TTransportException e) {
                 e.printStackTrace();
                 if (e.getCause() instanceof ConnectException) {
@@ -202,22 +213,11 @@ public class JobProcessor {
             } catch (TException e) {
                 e.printStackTrace();
             }
-            
-            if (!isReplica){
-                ProcessingTask pTask = taskMap.get(task.getTaskID());
-                pTask.setProcessingNode(destinationNode);
-                pTask.setStatus(ProcessingTask.TaskStatus.PROCESSING);    
-            } else {
-                ProcessingTask replicatedTask = new ProcessingTask(task.getJobID(), task.getTaskID(),
-                        ProcessingTask.TaskStatus.PROCESSING);
-                replicatedTask.setReplicationStatus(ProcessingTask.ReplicationStatus.REPLICA);
-                taskReplicaMap.put(task.getTaskID(), replicatedTask);
-            }
-            
+            return dispatchResult;
+
 //            new ProcessingTask(job.getJobID(),
 //                            task.getTaskID(), ProcessingTask.TaskStatus.RECEIVED
             
-
         }
     }
 

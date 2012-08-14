@@ -19,7 +19,7 @@ public class JobStatusUI extends javax.swing.JFrame {
         headers.add("Task ID");
         headers.add("Status");
         this.handler = handler;
-        this.model = new DefaultTableModel(handler.getAllRows(), headers);
+//        this.model = new DefaultTableModel(handler.getAllRows(), headers);
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -117,8 +117,8 @@ public class JobStatusUI extends javax.swing.JFrame {
     private void viewStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO: get the value from textField
 
-        int jobId = Integer.parseInt(jobIdTextField.getText());
-        handler.startPollingThread(jobId, taskStatusTable);
+//        int jobId = Integer.parseInt(jobIdTextField.getText());
+//        handler.startPollingThread(jobId, taskStatusTable);
     }
     // Variables declaration - do not modify
     private javax.swing.JPanel jPanel1;

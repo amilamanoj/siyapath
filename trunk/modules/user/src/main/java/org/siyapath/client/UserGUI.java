@@ -17,7 +17,7 @@ public class UserGUI extends JFrame {
 
     private UserHandler handler;
     private JobEditorGUI jobEditor;
-//    private String loggedPerson;
+    //    private String loggedPerson;
 //    private Map taskFileList;
     private JobStatusUI jobStatusUI;
     private DefaultComboBoxModel comboBoxModel;
@@ -25,6 +25,9 @@ public class UserGUI extends JFrame {
     private Vector<String> tableHeaders;
     private Map<String, Integer> jobMap;
 
+    //    Map<Integer, String> taskCompletionDataMap;
+    private Vector<Vector<String>> allRows = new Vector<Vector<String>>();
+    private Vector<String> eachRow = null;
 
     /**
      * @param handler
@@ -37,7 +40,7 @@ public class UserGUI extends JFrame {
         tableHeaders = new Vector<String>();
         tableHeaders.add("Task ID");
         tableHeaders.add("Status");
-        this.tableModel = new DefaultTableModel(handler.getAllRows(), tableHeaders);
+        this.tableModel = new DefaultTableModel(getAllRows(), tableHeaders);
         initComponents();
         siyapathLogo.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/siyapathLogo232x184.png")));
         busyLabel.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/busyIcon.gif")));
@@ -51,6 +54,10 @@ public class UserGUI extends JFrame {
         userMenu.setVisible(false);
 //        logoutMenu.setVisible(false);
         this.setLocationRelativeTo(null);
+    }
+
+    public Vector<Vector<String>> getAllRows() {
+        return allRows;
     }
 
     private void initComponents() {
@@ -484,12 +491,12 @@ public class UserGUI extends JFrame {
     }
 
     private void getStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        StatusUiThread statusUiThread = new StatusUiThread();
-        statusUiThread.run();
+        StatusUiThread statusUiThread = new StatusUiThread(comboBoxModel.getSelectedItem().toString(), jobMap.get(((String) jobComboBox.getSelectedItem())));
+        statusUiThread.start();
     }
 
     private void getResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        handler.getJobResults(jobMap.get(((String)jobComboBox.getSelectedItem())));
+        handler.getJobResults(jobMap.get(((String) jobComboBox.getSelectedItem())));
     }
 
     private void addJobButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -551,7 +558,7 @@ public class UserGUI extends JFrame {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(UserGUI.this, "Job submission failed. Try again later." + e.getCause(), "Job submission error", JOptionPane.ERROR_MESSAGE);
                 if (comboBoxModel.getSize() == 0) {
-                     logged();
+                    logged();
                 }
                 jobEditor.setVisible(true);
             }
@@ -565,10 +572,9 @@ public class UserGUI extends JFrame {
     }
 
 
-
-    void submissionSuccessful(int jobID){
+    void submissionSuccessful(int jobID) {
         JobData jobData = handler.getJobData(jobID);
-        String jobName =  jobData.getName();
+        String jobName = jobData.getName();
         jobMap.put(jobName, Integer.valueOf(jobID));
         comboBoxModel.addElement(jobName);
         startPanel.setVisible(true);
@@ -577,7 +583,7 @@ public class UserGUI extends JFrame {
         updateJobInfo(jobData);
     }
 
-    void updateJobInfo(JobData jobData){
+    void updateJobInfo(JobData jobData) {
         jobIDLabel.setText(String.valueOf(jobData.getId()));
         jobNameLabel.setText(jobData.getName());
         taskDistributorLabel.setText(jobData.getDistributorNode().toString());
@@ -668,10 +674,34 @@ public class UserGUI extends JFrame {
 
     private class StatusUiThread extends Thread {
 
+        int jobId;
+
+        private StatusUiThread(String name, int jobId) {
+            super(name);
+            this.jobId = jobId;
+        }
+
         @Override
         public void run() {
-            jobStatusUI = new JobStatusUI(handler);
-            jobStatusUI.setVisible(true);
+            Map<Integer, String> statusMap = handler.pollStatusFromJobProcessor(jobId);
+
+            updateTableDataVectors(statusMap);
+            DefaultTableModel model = (DefaultTableModel) taskStatusTable.getModel();
+            model.fireTableDataChanged();
+//            jobStatus = assessJobStatusFromTaskStatuses(taskCompletionDataMap);
+        }
+
+        public void updateTableDataVectors(Map<Integer, String> statusMap) {
+
+            if (!allRows.isEmpty()) {
+                allRows.removeAllElements();
+            }
+            for (Map.Entry<Integer, String> task : statusMap.entrySet()) {
+                eachRow = new Vector<String>();
+                eachRow.add(task.getKey().toString());
+                eachRow.add(task.getValue());
+                allRows.add(eachRow);
+            }
         }
 
     }
@@ -705,7 +735,7 @@ public class UserGUI extends JFrame {
     private javax.swing.JLabel loginInfoLabel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JLabel loginWelcomeLabel;
-//    private javax.swing.JMenuItem logoutMenu;
+    //    private javax.swing.JMenuItem logoutMenu;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel siyapathLogo;
