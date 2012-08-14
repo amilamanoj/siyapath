@@ -1,6 +1,7 @@
 package org.siyapath.job;
 
 import org.siyapath.NodeInfo;
+import org.siyapath.service.TaskStatus;
 
 public class ProcessingTask {
 
@@ -11,9 +12,7 @@ public class ProcessingTask {
     private String result;
     private ReplicationStatus replicationStatus;
 
-    public enum TaskStatus {
-        RECEIVED, PROCESSING, DONE
-    }
+
 
     public enum ReplicationStatus {
         ORIGINAL, REPLICA

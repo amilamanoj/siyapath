@@ -10,6 +10,12 @@ enum NodeStatus {
   IDLE = 6
 }
 
+enum TaskStatus {
+  RECEIVED = 1,
+  PROCESSING = 2,
+  DONE = 3
+}
+
 /**
  * Contains information about a particular node
  */
@@ -60,6 +66,11 @@ struct Result {
     4: NodeData processingNode
 }
 
+struct TaskResult {
+    1: TaskStatus status,
+    2: string results
+}
+
 /**
  * Service for communication related to gossip protocols
  */
@@ -90,10 +101,10 @@ service Siyapath {
     bool submitTask(1:Task task),
 
     //new job status polling
-    map<i32,string> getJobStatus(1:i32 jobId),
+    map<i32,TaskResult> getJobStatus(1:i32 jobId),
 
     //Getting the computation result of a job
-    map<i32,Task> getJobResult (1:i32 jobID),
+    map<i32,TaskResult> getJobResult (1:i32 jobID),
 
     //Sending task result to job-distributing node
     bool sendTaskResult (1:Result result),

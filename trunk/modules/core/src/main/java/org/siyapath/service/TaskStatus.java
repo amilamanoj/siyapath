@@ -11,17 +11,14 @@ import java.util.Map;
 import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
-public enum NodeStatus implements org.apache.thrift.TEnum {
-  CREATED(1),
-  STARTING(2),
-  PROCESSING(3),
-  DISTRIBUTING(4),
-  BUSY(5),
-  IDLE(6);
+public enum TaskStatus implements org.apache.thrift.TEnum {
+  RECEIVED(1),
+  PROCESSING(2),
+  DONE(3);
 
   private final int value;
 
-  private NodeStatus(int value) {
+  private TaskStatus(int value) {
     this.value = value;
   }
 
@@ -36,20 +33,14 @@ public enum NodeStatus implements org.apache.thrift.TEnum {
    * Find a the enum type by its integer value, as defined in the Thrift IDL.
    * @return null if the value is not found.
    */
-  public static NodeStatus findByValue(int value) { 
+  public static TaskStatus findByValue(int value) { 
     switch (value) {
       case 1:
-        return CREATED;
+        return RECEIVED;
       case 2:
-        return STARTING;
-      case 3:
         return PROCESSING;
-      case 4:
-        return DISTRIBUTING;
-      case 5:
-        return BUSY;
-      case 6:
-        return IDLE;
+      case 3:
+        return DONE;
       default:
         return null;
     }

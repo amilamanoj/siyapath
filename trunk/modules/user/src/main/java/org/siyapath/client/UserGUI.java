@@ -1,6 +1,7 @@
 package org.siyapath.client;
 
 import org.siyapath.service.Job;
+import org.siyapath.service.TaskResult;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +41,7 @@ public class UserGUI extends JFrame {
         tableHeaders = new Vector<String>();
         tableHeaders.add("Task ID");
         tableHeaders.add("Status");
+        tableHeaders.add("Result");
         this.tableModel = new DefaultTableModel(getAllRows(), tableHeaders);
         initComponents();
         siyapathLogo.setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/siyapathLogo232x184.png")));
@@ -683,23 +685,25 @@ public class UserGUI extends JFrame {
 
         @Override
         public void run() {
-            Map<Integer, String> statusMap = handler.pollStatusFromJobProcessor(jobId);
-
-            updateTableDataVectors(statusMap);
-            DefaultTableModel model = (DefaultTableModel) taskStatusTable.getModel();
-            model.fireTableDataChanged();
+            Map<Integer, TaskResult> statusMap = handler.pollStatusFromJobProcessor(jobId);
+            if (statusMap != null) {
+                updateTableDataVectors(statusMap);
+                DefaultTableModel model = (DefaultTableModel) taskStatusTable.getModel();
+                model.fireTableDataChanged();
 //            jobStatus = assessJobStatusFromTaskStatuses(taskCompletionDataMap);
+            }
         }
 
-        public void updateTableDataVectors(Map<Integer, String> statusMap) {
+        private void updateTableDataVectors(Map<Integer, TaskResult> statusMap) {
 
             if (!allRows.isEmpty()) {
                 allRows.removeAllElements();
             }
-            for (Map.Entry<Integer, String> task : statusMap.entrySet()) {
+            for (Map.Entry<Integer, TaskResult> task : statusMap.entrySet()) {
                 eachRow = new Vector<String>();
                 eachRow.add(task.getKey().toString());
-                eachRow.add(task.getValue());
+                eachRow.add(task.getValue().getStatus().toString());
+                eachRow.add(task.getValue().getResults());
                 allRows.add(eachRow);
             }
         }
@@ -712,7 +716,7 @@ public class UserGUI extends JFrame {
     private javax.swing.JLabel busyLabel;
     private javax.swing.JPanel busyPanel;
     private javax.swing.JLayeredPane controlPane;
-    private javax.swing.JButton createEditJobButton;
+    //    private javax.swing.JButton createEditJobButton;
     private javax.swing.JButton exitButton;
     private javax.swing.JMenuItem exitMenu;
     private javax.swing.JButton getResultsButton;
