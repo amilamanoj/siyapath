@@ -13,12 +13,14 @@ public class SiyapathSecurityManager extends SecurityManager {
 
     private String password;
     private boolean active;
+
     public SiyapathSecurityManager(String password) {
         this.password = password;
         this.active = true;
     }
 
 //    @Override
+
     /**
      * Does not permit the code to stop JVM
      */
@@ -27,9 +29,8 @@ public class SiyapathSecurityManager extends SecurityManager {
 //    }
     //TODO: override other checkXXX methods
     // the manager denies everything by default
-
-    public boolean disable(String password){
-        if (this.password.equalsIgnoreCase(password)){
+    public boolean disable(String password) {
+        if (this.password.equalsIgnoreCase(password)) {
             this.active = false;
             return true;
         }
@@ -38,10 +39,28 @@ public class SiyapathSecurityManager extends SecurityManager {
 
     @Override
     public void checkPermission(Permission perm) {
-        if (active == true){
+        if (active == true) {
             throw new SecurityException();
         }
     }
 
+    @Override
+    public void checkConnect(String host, int port) {
+        //allow
+    }
 
+    @Override
+    public void checkAccept(String host, int port) {
+        //allow
+    }
+
+    @Override
+    public void checkListen(int port) {
+        //allow
+    }
+
+    @Override
+    public void checkConnect(String host, int port, Object context) {
+        //allow
+    }
 }

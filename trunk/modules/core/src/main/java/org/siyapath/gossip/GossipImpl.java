@@ -5,20 +5,19 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.*;
-import org.siyapath.service.*;
-
+import org.siyapath.NodeContext;
+import org.siyapath.NodeInfo;
+import org.siyapath.NodeResource;
+import org.siyapath.SiyapathConstants;
+import org.siyapath.service.Siyapath;
 import org.siyapath.utils.CommonUtils;
 
-import javax.xml.bind.SchemaOutputResolver;
 import java.net.ConnectException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -110,6 +109,9 @@ public class GossipImpl {
                 nodeContext.updateMemberSet(newSet);
                 nodeContext.addMemNodeSet(randomMember, discoveredNodes);
                 log.info("Members fetched " + discoveredNodes.size());
+            } catch (SecurityException e) {
+                log.error("Could not member gossip due to Security Exception");
+                e.printStackTrace();
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
                     log.error("Could not connect to the member node for member gossiping");
@@ -146,6 +148,8 @@ public class GossipImpl {
                 nodeContext.updateMemberResourceSet(newSet);
                 log.info("Node Resource Fetched:" + discoveredNodeResource.getNodeInfo().getPort());
 
+            } catch (SecurityException e) {
+                log.error("Could not resource gossip due to Security Exception");
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
                     log.error("Could not connect to the member node for resource gossiping");

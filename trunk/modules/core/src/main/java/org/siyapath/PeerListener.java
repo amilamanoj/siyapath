@@ -2,14 +2,12 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.server.*;
-
+import org.apache.thrift.server.TServer;
+import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
-import org.apache.thrift.transport.TNonblockingServerSocket;
 import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TNonblockingServerTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.service.*;
+import org.siyapath.service.Siyapath;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -25,7 +23,6 @@ public class PeerListener {
 
 
     /**
-     *
      * @param processor
      * @param nodeContext
      */
@@ -35,7 +32,6 @@ public class PeerListener {
     }
 
     /**
-     *
      * @param processor
      */
     private void initializeThriftServer(Siyapath.Processor processor) {
@@ -71,7 +67,6 @@ public class PeerListener {
     }
 
     /**
-     *
      * @return true if thrift server thread is serving, false otherwise
      */
     public boolean isRunning() {
@@ -93,7 +88,11 @@ public class PeerListener {
         @Override
         public void run() {
             nodeContext.setListenerEnabled(true);
-            server.serve();
+            try {
+                server.serve();
+            } catch (SecurityException e) {
+                log.error("Could not gossip due to Security Exception");
+            }
 
         }
     }
