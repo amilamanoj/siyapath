@@ -30,7 +30,7 @@ public class PeerWorker {
     }
 
     public void start() {
-        new WorkerThread("ListenerThread-" + nodeContext.getNodeInfo().toString()).start();
+        new WorkerThread("WorkerThread-" + nodeContext.getNodeInfo().toString()).start();
     }
 
     /**

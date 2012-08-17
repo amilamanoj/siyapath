@@ -110,6 +110,9 @@ service Siyapath {
     //Sending task result to job-distributing node
     bool sendTaskResult (1:Result result),
 
+    //Notify job-distributing node that the task processor is alive
+    void notifyTaskLiveness (1:i32 taskID),
+
     //User authentication
     string userLogin(1:string username, 2:string password),
 

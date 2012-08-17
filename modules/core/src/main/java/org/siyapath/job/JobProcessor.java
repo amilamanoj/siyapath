@@ -52,6 +52,7 @@ public class JobProcessor {
         taskMap = new HashMap<Integer, ProcessingTask>();
 //        taskReplicaMap = new HashMap<Integer, ProcessingTask>();
         taskDispatcherExecutor.submit(new TaskDispatcher());
+        new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
     }
 
     public void addNewJob(Job job) {
@@ -185,24 +186,25 @@ public class JobProcessor {
             log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect to selected task-processor: " + destinationNode);
             TTransport transport = new TSocket(destinationNode.getIp(), destinationNode.getPort());
 
-            boolean dispatchResult = false;
+            boolean isDispatched = false;
             try {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Submitting to: " + destinationNode);
-                dispatchResult = client.submitTask(task);
-                log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Successfully submitted task to processing node!");
-                if (!isReplica) {
+                isDispatched = client.submitTask(task);
+                if (isDispatched && !isReplica) {
+                    log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Successfully submitted task to processing node!");
                     ProcessingTask pTask = taskMap.get(task.getTaskID());
                     pTask.setProcessingNode(destinationNode);
                     pTask.setStatus(TaskStatus.PROCESSING);
-                } else {
+                    pTask.setTimeLastUpdated(System.currentTimeMillis());
+                } //else {
 //                    ProcessingTask replicatedTask = new ProcessingTask(task.getJobID(), task.getTaskID(),
 //                            ProcessingTask.TaskStatus.PROCESSING);
 //                    replicatedTask.setReplicationStatus(ProcessingTask.ReplicationStatus.REPLICA);
 //                    taskReplicaMap.put(task.getTaskID(), replicatedTask);
-                }
+//                }
             } catch (TTransportException e) {
                 e.printStackTrace();
                 if (e.getCause() instanceof ConnectException) {
@@ -212,7 +214,7 @@ public class JobProcessor {
             } catch (TException e) {
                 e.printStackTrace();
             }
-            return dispatchResult;
+            return isDispatched;
 
 //            new ProcessingTask(job.getJobID(),
 //                            task.getTaskID(), ProcessingTask.TaskStatus.RECEIVED
@@ -250,6 +252,45 @@ public class JobProcessor {
             }
         }
         return taskStatusMap;
+    }
+
+    public void taskUpdateReceived(int taskID){
+         taskMap.get(taskID).setTimeLastUpdated(System.currentTimeMillis());
+    }
+
+    private class TaskTracker extends Thread {
+
+        boolean isRunning = false;
+
+        private TaskTracker(String name) {
+            super(name);
+        }
+
+        @Override
+        public void run() {
+            isRunning = true;
+            while (isRunning) {
+                for (ProcessingTask pTask : taskMap.values()) {
+                    long updateInterval = System.currentTimeMillis() - pTask.getTimeLastUpdated();
+                    if (pTask.getStatus() == TaskStatus.PROCESSING && updateInterval > SiyapathConstants
+                            .MAX_TASK_UPDATE_INTERVAL_MILLIS) {
+                        Task task = jobMap.get(pTask.getJobID()).getTasks().get(pTask.getTaskID());
+                        try {
+                            taskQueue.put(task);
+                            log.debug("Task: " + pTask.getTaskID() + " has no response from " +
+                                    "processor " + pTask.getProcessingNode() + ". Adding back to queue.");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();    //TODO: handle exception
+                        }
+                    }
+                }
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 //    public Map<Integer, Task> getJobResult() {

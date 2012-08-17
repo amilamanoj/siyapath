@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -41,7 +42,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see TaskStatus
+   * @see org.siyapath.service.TaskStatus
    */
   public TaskStatus status; // required
   public String results; // required
@@ -50,7 +51,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     /**
      * 
-     * @see TaskStatus
+     * @see org.siyapath.service.TaskStatus
      */
     STATUS((short)1, "status"),
     RESULTS((short)2, "results");
@@ -159,7 +160,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see TaskStatus
+   * @see org.siyapath.service.TaskStatus
    */
   public TaskStatus getStatus() {
     return this.status;
@@ -167,7 +168,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see TaskStatus
+   * @see org.siyapath.service.TaskStatus
    */
   public TaskResult setStatus(TaskStatus status) {
     this.status = status;
@@ -297,7 +298,19 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_status = true && (isSetStatus());
+    builder.append(present_status);
+    if (present_status)
+      builder.append(status.getValue());
+
+    boolean present_results = true && (isSetResults());
+    builder.append(present_results);
+    if (present_results)
+      builder.append(results);
+
+    return builder.toHashCode();
   }
 
   public int compareTo(TaskResult other) {
