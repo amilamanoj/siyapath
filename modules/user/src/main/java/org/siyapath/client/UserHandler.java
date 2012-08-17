@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -27,7 +28,6 @@ public class UserHandler {
     private NodeContext context;
     private NodeInfo clientEnd;
     private Map<Integer, JobData> jobMap = new HashMap<Integer, JobData>();
-
 
 
     public UserHandler() {
@@ -126,10 +126,10 @@ public class UserHandler {
      * @param taskProgramFile class for the task to be created
      * @param inputData       input data
      */
-    private Task createTask(int jobId, int taskId, File taskProgramFile, String inputData,
+    private Task createTask(int jobId, int taskId, File taskProgramFile, byte[] inputData,
                             String requiredResources) throws IOException {
         Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer
-                (taskProgramFile.getAbsolutePath()), inputData, getJobInterfaceName(),
+                (taskProgramFile.getAbsolutePath()), ByteBuffer.wrap(inputData), getJobInterfaceName(),
                 CommonUtils.serialize(context.getNodeInfo()), null, requiredResources);
         return task;
 
@@ -203,8 +203,6 @@ public class UserHandler {
     }
 
 
-
-
     public void getJobResults(int jobId) {
         JobData jobData = jobMap.get(jobId);
         NodeInfo jobHandler = jobData.getDistributorNode();
@@ -237,7 +235,7 @@ public class UserHandler {
      *
      * @param jobID
      */
-    public  Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) {
+    public Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) {
 
         NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
         TTransport transport = new TSocket(jobHandler.getIp(),

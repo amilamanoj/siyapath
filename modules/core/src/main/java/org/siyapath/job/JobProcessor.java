@@ -16,6 +16,7 @@ import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -66,13 +67,14 @@ public class JobProcessor {
     }
 
     public void resultsReceived(Result result) {
+        log.debug("Task results received. ID:" + result.getTaskID());
         ProcessingTask originalTask = taskMap.get(result.getTaskID());
 //        ProcessingTask replicatedTask = taskReplicaMap.get(result.getTaskID());
 
 //        if (!isResultOfReplicaTask(result)) {
-            originalTask.setResult(result.getResults());
-            originalTask.setStatus(TaskStatus.DONE);
-            taskMap.put(result.getTaskID(), originalTask);
+        originalTask.setResult(result.getResults());
+        originalTask.setStatus(TaskStatus.DONE);
+        taskMap.put(result.getTaskID(), originalTask);
 
 //        } else {
 //            replicatedTask.setResult(result.getResults());
@@ -241,7 +243,7 @@ public class JobProcessor {
             boolean jobComplete = true;
             for (Integer taskId : taskIds) {
                 ProcessingTask processingTask = taskMap.get(taskId);
-                TaskResult taskResult = new TaskResult( processingTask.getStatus(), processingTask.getResult());
+                TaskResult taskResult = new TaskResult(processingTask.getStatus(), ByteBuffer.wrap(processingTask.getResult()));
                 taskStatusMap.put(taskId, taskResult);
                 if (processingTask.getStatus() != TaskStatus.DONE) {
                     jobComplete = false;
@@ -255,8 +257,8 @@ public class JobProcessor {
         return taskStatusMap;
     }
 
-    public void taskUpdateReceived(int taskID){
-         taskMap.get(taskID).setTimeLastUpdated(System.currentTimeMillis());
+    public void taskUpdateReceived(int taskID) {
+        taskMap.get(taskID).setTimeLastUpdated(System.currentTimeMillis());
     }
 
     private class TaskTracker extends Thread {

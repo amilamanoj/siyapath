@@ -5,10 +5,10 @@ import java.io.File;
 public class TaskData {
     private String name;
     private File classFile;
-    private String inputData;
+    private byte[] inputData;
     private String requiredResources;
 
-    public TaskData(String name, File classFile, String inputData, String requiredResources) {
+    public TaskData(String name, File classFile, byte[] inputData, String requiredResources) {
         this.name = name;
         this.classFile = classFile;
         this.inputData = inputData;
@@ -23,7 +23,7 @@ public class TaskData {
         return classFile;
     }
 
-    public String getInputData() {
+    public byte[] getInputData() {
         return inputData;
     }
 

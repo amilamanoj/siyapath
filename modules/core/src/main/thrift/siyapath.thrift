@@ -43,7 +43,7 @@ struct Task {
     1: i32 taskID,
     2: i32 jobID,
     3: binary taskProgram,
-    4: string taskData,
+    4: binary taskData,
     5: string className,
     6: NodeData sender,
     7: NodeData backup,
@@ -63,13 +63,13 @@ struct Job {
 struct Result {
     1: i32 jobID,
     2: i32 taskID,
-    3: string results,
+    3: binary results,
     4: NodeData processingNode
 }
 
 struct TaskResult {
     1: TaskStatus status,
-    2: string results
+    2: binary results
 }
 
 /**

@@ -73,7 +73,7 @@ public class TaskProcessor extends Thread {
         siyapathSecurityManager.disable("secpass");
         System.setSecurityManager(defaultSecurityManager);
         log.info("Task processing is completed. ID: " + task.getTaskID());
-        log.debug("Results: " + taskResult.getResults().substring(0, 8) + "...");
+//        log.debug("Results: " + taskResult.getResults().substring(0, 8) + "...");
         notifier.stopNotifier();
 
         deliverTaskResult(taskResult);
@@ -102,7 +102,7 @@ public class TaskProcessor extends Thread {
             taskInstance.setData(task.getTaskData());
             taskInstance.process();
 //                monitor.start();
-            String finalResult = (String) taskInstance.getResults();
+            byte[] finalResult = taskInstance.getResults();
 //                monitor.stopMonitor();
             taskResult.setResults(finalResult);
 
@@ -111,7 +111,7 @@ public class TaskProcessor extends Thread {
 //            siyapathSecurityManager.disable("secpass");
 //            System.setSecurityManager(defaultSecurityManager);
             log.warn("Task Processing aborted due to an attempt of illegal operation");
-            taskResult.setResults("<Aborted>");
+            taskResult.setResults("<Aborted>".getBytes());
 
         } finally {
             setTaskFinished();

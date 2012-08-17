@@ -3,13 +3,15 @@ package org.siyapath.job;
 import org.siyapath.NodeInfo;
 import org.siyapath.service.TaskStatus;
 
+import java.nio.ByteBuffer;
+
 public class ProcessingTask {
 
     private int jobID;
     private int taskID;
     private NodeInfo processingNode;
     private TaskStatus status;
-    private String result;
+    private byte[] result;
     private ReplicationStatus replicationStatus;
     private long timeLastUpdated;
 
@@ -23,6 +25,7 @@ public class ProcessingTask {
         this.jobID = jobID;
         this.taskID = taskID;
         this.status = status;
+        this.result = new byte[1];
     }
 
     public int getJobID() {
@@ -33,11 +36,11 @@ public class ProcessingTask {
         return taskID;
     }
 
-    public String getResult() {
+    public byte[] getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(byte[] result) {
         this.result = result;
     }
 

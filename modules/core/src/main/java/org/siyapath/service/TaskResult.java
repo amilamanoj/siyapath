@@ -42,16 +42,16 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see org.siyapath.service.TaskStatus
+   * @see TaskStatus
    */
   public TaskStatus status; // required
-  public String results; // required
+  public ByteBuffer results; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     /**
      * 
-     * @see org.siyapath.service.TaskStatus
+     * @see TaskStatus
      */
     STATUS((short)1, "status"),
     RESULTS((short)2, "results");
@@ -119,7 +119,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
     tmpMap.put(_Fields.STATUS, new org.apache.thrift.meta_data.FieldMetaData("status", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, TaskStatus.class)));
     tmpMap.put(_Fields.RESULTS, new org.apache.thrift.meta_data.FieldMetaData("results", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , true)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TaskResult.class, metaDataMap);
   }
@@ -129,7 +129,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   public TaskResult(
     TaskStatus status,
-    String results)
+    ByteBuffer results)
   {
     this();
     this.status = status;
@@ -144,7 +144,8 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
       this.status = other.status;
     }
     if (other.isSetResults()) {
-      this.results = other.results;
+      this.results = org.apache.thrift.TBaseHelper.copyBinary(other.results);
+;
     }
   }
 
@@ -160,7 +161,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see org.siyapath.service.TaskStatus
+   * @see TaskStatus
    */
   public TaskStatus getStatus() {
     return this.status;
@@ -168,7 +169,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see org.siyapath.service.TaskStatus
+   * @see TaskStatus
    */
   public TaskResult setStatus(TaskStatus status) {
     this.status = status;
@@ -190,11 +191,21 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
     }
   }
 
-  public String getResults() {
-    return this.results;
+  public byte[] getResults() {
+    setResults(org.apache.thrift.TBaseHelper.rightSize(results));
+    return results == null ? null : results.array();
   }
 
-  public TaskResult setResults(String results) {
+  public ByteBuffer bufferForResults() {
+    return results;
+  }
+
+  public TaskResult setResults(byte[] results) {
+    setResults(results == null ? (ByteBuffer)null : ByteBuffer.wrap(results));
+    return this;
+  }
+
+  public TaskResult setResults(ByteBuffer results) {
     this.results = results;
     return this;
   }
@@ -228,7 +239,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
       if (value == null) {
         unsetResults();
       } else {
-        setResults((String)value);
+        setResults((ByteBuffer)value);
       }
       break;
 
@@ -373,7 +384,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
     if (this.results == null) {
       sb.append("null");
     } else {
-      sb.append(this.results);
+      org.apache.thrift.TBaseHelper.toString(this.results, sb);
     }
     first = false;
     sb.append(")");
@@ -428,7 +439,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
             break;
           case 2: // RESULTS
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.results = iprot.readString();
+              struct.results = iprot.readBinary();
               struct.setResultsIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -456,7 +467,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
       }
       if (struct.results != null) {
         oprot.writeFieldBegin(RESULTS_FIELD_DESC);
-        oprot.writeString(struct.results);
+        oprot.writeBinary(struct.results);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -488,7 +499,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
         oprot.writeI32(struct.status.getValue());
       }
       if (struct.isSetResults()) {
-        oprot.writeString(struct.results);
+        oprot.writeBinary(struct.results);
       }
     }
 
@@ -501,7 +512,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
         struct.setStatusIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.results = iprot.readString();
+        struct.results = iprot.readBinary();
         struct.setResultsIsSet(true);
       }
     }

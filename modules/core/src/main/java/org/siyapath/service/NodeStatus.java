@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
-public enum NodeStatus implements TEnum {
+public enum NodeStatus implements org.apache.thrift.TEnum {
   CREATED(1),
   STARTING(2),
   PROCESSING_IDLE(3),
