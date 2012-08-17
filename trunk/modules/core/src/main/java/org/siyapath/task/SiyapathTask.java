@@ -7,7 +7,7 @@ public interface SiyapathTask {
 
     void process();
     
-    void setData(Object data);
+    void setData(byte[] data);
 
-    Object getResults();
+    byte[] getResults();
 }

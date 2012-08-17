@@ -52,7 +52,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   public int taskID; // required
   public int jobID; // required
   public ByteBuffer taskProgram; // required
-  public String taskData; // required
+  public ByteBuffer taskData; // required
   public String className; // required
   public NodeData sender; // required
   public NodeData backup; // required
@@ -151,7 +151,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     tmpMap.put(_Fields.TASK_PROGRAM, new org.apache.thrift.meta_data.FieldMetaData("taskProgram", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , true)));
     tmpMap.put(_Fields.TASK_DATA, new org.apache.thrift.meta_data.FieldMetaData("taskData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , true)));
     tmpMap.put(_Fields.CLASS_NAME, new org.apache.thrift.meta_data.FieldMetaData("className", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.SENDER, new org.apache.thrift.meta_data.FieldMetaData("sender", org.apache.thrift.TFieldRequirementType.DEFAULT, 
@@ -171,7 +171,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     int taskID,
     int jobID,
     ByteBuffer taskProgram,
-    String taskData,
+    ByteBuffer taskData,
     String className,
     NodeData sender,
     NodeData backup,
@@ -203,7 +203,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
 ;
     }
     if (other.isSetTaskData()) {
-      this.taskData = other.taskData;
+      this.taskData = org.apache.thrift.TBaseHelper.copyBinary(other.taskData);
+;
     }
     if (other.isSetClassName()) {
       this.className = other.className;
@@ -317,11 +318,21 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
   }
 
-  public String getTaskData() {
-    return this.taskData;
+  public byte[] getTaskData() {
+    setTaskData(org.apache.thrift.TBaseHelper.rightSize(taskData));
+    return taskData == null ? null : taskData.array();
   }
 
-  public Task setTaskData(String taskData) {
+  public ByteBuffer bufferForTaskData() {
+    return taskData;
+  }
+
+  public Task setTaskData(byte[] taskData) {
+    setTaskData(taskData == null ? (ByteBuffer)null : ByteBuffer.wrap(taskData));
+    return this;
+  }
+
+  public Task setTaskData(ByteBuffer taskData) {
     this.taskData = taskData;
     return this;
   }
@@ -467,7 +478,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (value == null) {
         unsetTaskData();
       } else {
-        setTaskData((String)value);
+        setTaskData((ByteBuffer)value);
       }
       break;
 
@@ -826,7 +837,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     if (this.taskData == null) {
       sb.append("null");
     } else {
-      sb.append(this.taskData);
+      org.apache.thrift.TBaseHelper.toString(this.taskData, sb);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -931,7 +942,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
             break;
           case 4: // TASK_DATA
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.taskData = iprot.readString();
+              struct.taskData = iprot.readBinary();
               struct.setTaskDataIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -999,7 +1010,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       }
       if (struct.taskData != null) {
         oprot.writeFieldBegin(TASK_DATA_FIELD_DESC);
-        oprot.writeString(struct.taskData);
+        oprot.writeBinary(struct.taskData);
         oprot.writeFieldEnd();
       }
       if (struct.className != null) {
@@ -1075,7 +1086,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         oprot.writeBinary(struct.taskProgram);
       }
       if (struct.isSetTaskData()) {
-        oprot.writeString(struct.taskData);
+        oprot.writeBinary(struct.taskData);
       }
       if (struct.isSetClassName()) {
         oprot.writeString(struct.className);
@@ -1108,7 +1119,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         struct.setTaskProgramIsSet(true);
       }
       if (incoming.get(3)) {
-        struct.taskData = iprot.readString();
+        struct.taskData = iprot.readBinary();
         struct.setTaskDataIsSet(true);
       }
       if (incoming.get(4)) {

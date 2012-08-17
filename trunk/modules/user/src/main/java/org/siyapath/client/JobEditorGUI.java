@@ -35,7 +35,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
     private javax.swing.JList tasksList;
 
     private DefaultListModel listModel;
-    private Map<String, TaskData> taskFileList = new HashMap<String, TaskData>();
+    private Map<String, TaskData> taskList = new HashMap<String, TaskData>();
     private UserGUI userGUI;
     private UserHandler handler;
     private int counter;
@@ -147,7 +147,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         try {
-            Job job = handler.createJob(taskFileList);
+            Job job = handler.createJob(taskList);
             userGUI.startSubmission(jobNameText.getText(), job);
             this.setVisible(false);
         } catch (IOException e) {
@@ -169,7 +169,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         if (sFile != null) {
             String taskName = "Task-" + counter++ + ": " + sFile.getName();
             listModel.addElement(taskName);
-            taskFileList.put(taskName, new TaskData(taskName, sFile, "0,200000", "Cores:4-Speed:2267Mhz"));  //TODO: update GUI
+            taskList.put(taskName, new TaskData(taskName, sFile, "0,200000".getBytes(), "Cores:4-Speed:2267Mhz"));  //TODO: update GUI
         }
         if (!listModel.isEmpty()) {
             okButton.setEnabled(true);

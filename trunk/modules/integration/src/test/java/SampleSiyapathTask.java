@@ -6,40 +6,39 @@ import java.util.StringTokenizer;
 
 public class SampleSiyapathTask implements SiyapathTask {
 
-    Object inputData, results;
+    byte[] inputData, results;
     long startNumber, endNumber;
 
     @Override
     public void process() {
         if (preProcessData()) {
-            results = "";
+            String resultString = "";
             for (long num = startNumber; num <= endNumber; num++) {
                 if (isPrime(num)) {
-                    results = (String) results + num + ",";
+                    resultString = resultString + num + ",";
                 }
             }
-//            results = (String) results + "EoR";
+            results = resultString.getBytes();
         } else {
-            results = "Invalid or corrupted inputs";
+            results = "Invalid or corrupted inputs".getBytes();
         }
     }
 
 
     @Override
-    public void setData(Object inputData) {
+    public void setData(byte[] inputData) {
         this.inputData = inputData;
     }
 
     @Override
-    public Object getResults() {
+    public byte[] getResults() {
         return results;
     }
 
     private boolean preProcessData() {
         if (inputData == null) return false;
-        if (!(inputData instanceof String)) return false;
 
-        String data = (String) inputData;
+        String data = new String(inputData);
         StringTokenizer tokenizer = new StringTokenizer(data, ",");
         if (tokenizer.countTokens() != 2) return false;
 

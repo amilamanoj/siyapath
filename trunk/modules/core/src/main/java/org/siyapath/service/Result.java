@@ -44,7 +44,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
 
   public int jobID; // required
   public int taskID; // required
-  public String results; // required
+  public ByteBuffer results; // required
   public NodeData processingNode; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -126,7 +126,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     tmpMap.put(_Fields.TASK_ID, new org.apache.thrift.meta_data.FieldMetaData("taskID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     tmpMap.put(_Fields.RESULTS, new org.apache.thrift.meta_data.FieldMetaData("results", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , true)));
     tmpMap.put(_Fields.PROCESSING_NODE, new org.apache.thrift.meta_data.FieldMetaData("processingNode", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -139,7 +139,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   public Result(
     int jobID,
     int taskID,
-    String results,
+    ByteBuffer results,
     NodeData processingNode)
   {
     this();
@@ -160,7 +160,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     this.jobID = other.jobID;
     this.taskID = other.taskID;
     if (other.isSetResults()) {
-      this.results = other.results;
+      this.results = org.apache.thrift.TBaseHelper.copyBinary(other.results);
+;
     }
     if (other.isSetProcessingNode()) {
       this.processingNode = new NodeData(other.processingNode);
@@ -227,11 +228,21 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     __isset_bit_vector.set(__TASKID_ISSET_ID, value);
   }
 
-  public String getResults() {
-    return this.results;
+  public byte[] getResults() {
+    setResults(org.apache.thrift.TBaseHelper.rightSize(results));
+    return results == null ? null : results.array();
   }
 
-  public Result setResults(String results) {
+  public ByteBuffer bufferForResults() {
+    return results;
+  }
+
+  public Result setResults(byte[] results) {
+    setResults(results == null ? (ByteBuffer)null : ByteBuffer.wrap(results));
+    return this;
+  }
+
+  public Result setResults(ByteBuffer results) {
     this.results = results;
     return this;
   }
@@ -297,7 +308,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (value == null) {
         unsetResults();
       } else {
-        setResults((String)value);
+        setResults((ByteBuffer)value);
       }
       break;
 
@@ -508,7 +519,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     if (this.results == null) {
       sb.append("null");
     } else {
-      sb.append(this.results);
+      org.apache.thrift.TBaseHelper.toString(this.results, sb);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -581,7 +592,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
             break;
           case 3: // RESULTS
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.results = iprot.readString();
+              struct.results = iprot.readBinary();
               struct.setResultsIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -619,7 +630,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       oprot.writeFieldEnd();
       if (struct.results != null) {
         oprot.writeFieldBegin(RESULTS_FIELD_DESC);
-        oprot.writeString(struct.results);
+        oprot.writeBinary(struct.results);
         oprot.writeFieldEnd();
       }
       if (struct.processingNode != null) {
@@ -665,7 +676,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         oprot.writeI32(struct.taskID);
       }
       if (struct.isSetResults()) {
-        oprot.writeString(struct.results);
+        oprot.writeBinary(struct.results);
       }
       if (struct.isSetProcessingNode()) {
         struct.processingNode.write(oprot);
@@ -685,7 +696,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         struct.setTaskIDIsSet(true);
       }
       if (incoming.get(2)) {
-        struct.results = iprot.readString();
+        struct.results = iprot.readBinary();
         struct.setResultsIsSet(true);
       }
       if (incoming.get(3)) {

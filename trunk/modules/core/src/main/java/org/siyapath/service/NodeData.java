@@ -50,7 +50,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
   public int port; // required
   /**
    * 
-   * @see org.siyapath.service.NodeStatus
+   * @see NodeStatus
    */
   public NodeStatus nodeStatus; // required
 
@@ -61,7 +61,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
     PORT((short)3, "port"),
     /**
      * 
-     * @see org.siyapath.service.NodeStatus
+     * @see NodeStatus
      */
     NODE_STATUS((short)4, "nodeStatus");
 
@@ -264,7 +264,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
 
   /**
    * 
-   * @see org.siyapath.service.NodeStatus
+   * @see NodeStatus
    */
   public NodeStatus getNodeStatus() {
     return this.nodeStatus;
@@ -272,7 +272,7 @@ public class NodeData implements org.apache.thrift.TBase<NodeData, NodeData._Fie
 
   /**
    * 
-   * @see org.siyapath.service.NodeStatus
+   * @see NodeStatus
    */
   public NodeData setNodeStatus(NodeStatus nodeStatus) {
     this.nodeStatus = nodeStatus;

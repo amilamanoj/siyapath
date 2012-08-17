@@ -703,7 +703,7 @@ public class UserGUI extends JFrame {
                 eachRow = new Vector<String>();
                 eachRow.add(task.getKey().toString());
                 eachRow.add(task.getValue().getStatus().toString());
-                eachRow.add(task.getValue().getResults());
+                eachRow.add(new String(task.getValue().getResults()));
                 allRows.add(eachRow);
             }
         }
