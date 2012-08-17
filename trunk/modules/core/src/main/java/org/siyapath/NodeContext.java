@@ -3,6 +3,7 @@ package org.siyapath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.job.JobProcessor;
+import org.siyapath.service.NodeStatus;
 import org.siyapath.utils.CommonUtils;
 
 import java.util.*;
@@ -37,6 +38,7 @@ public class NodeContext {
     private boolean guiEnabled;
     private boolean listenerEnabled;
     private boolean workerEnabled;
+    private int processingTasksNo;
 
 
     /**
@@ -49,8 +51,40 @@ public class NodeContext {
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
+        processingTasksNo=0;
     }
 
+
+     public  int getProcessingTasksNo() {
+        return processingTasksNo;
+    }
+
+    public synchronized void setProcessingTasksNo(int processingTasksNo) {
+        this.processingTasksNo = processingTasksNo;
+    }
+
+    public synchronized void increaseProTasksNo() {
+        processingTasksNo++;
+        if (this.getProcessingTasksNo() >= SiyapathConstants.PARALLEL_TASKS) {
+            getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_BUSY);
+
+        } else {
+            getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
+        }
+    }
+
+    public synchronized void decreaseProTasksNo() {
+        if (processingTasksNo > 0) {
+            processingTasksNo--;
+            if (this.getProcessingTasksNo() < SiyapathConstants.PARALLEL_TASKS) {
+                getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
+
+            } else if (processingTasksNo == 0) {
+                getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+            }
+        }
+
+    }
 
     public JobProcessor getJobProcessor() {
         if (jobProcessor == null) {

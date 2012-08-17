@@ -10,7 +10,7 @@ public class NodeInfo {
     private boolean bootstrapper;
     private org.siyapath.service.NodeStatus nodeStatus;
 
-    public void setNodeStatus(org.siyapath.service.NodeStatus nodeStatus) {
+    public synchronized void setNodeStatus(org.siyapath.service.NodeStatus nodeStatus) {
         this.nodeStatus = nodeStatus;
     }
 
@@ -35,12 +35,12 @@ public class NodeInfo {
 
     }
 
-    public NodeStatus getNodeStatus() {
+    public synchronized NodeStatus getNodeStatus() {
         return nodeStatus;
     }
 
 
-    public boolean isIdle() {
+    public synchronized boolean isIdle() {
         if (nodeStatus == NodeStatus.IDLE) {
             return true;
         } else {

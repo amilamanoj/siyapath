@@ -9,6 +9,7 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
@@ -47,11 +48,15 @@ public class TaskProcessor extends Thread {
 
     }
 
+    /*public void startProcessing(){
+        context.increaseProTasksNo();
+        this.start();
+        context.decreaseProTasksNo();
+    }*/
+
 
     public void run() {
-        if (context.getNodeInfo().getNodeStatus() == NodeStatus.IDLE) {  //TODO: need to reject tasks if not idle
-            context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
-        }
+        context.increaseProTasksNo();
         log.info("Preparing to start the task: " + task.getTaskID());
         TaskThread taskThread = new TaskThread("task-thread id:" + task.getTaskID());
         taskInstance = getTaskInstance();
@@ -75,9 +80,8 @@ public class TaskProcessor extends Thread {
         log.info("Task processing is completed. ID: " + task.getTaskID());
 //        log.debug("Results: " + taskResult.getResults().substring(0, 8) + "...");
         notifier.stopNotifier();
-
         deliverTaskResult(taskResult);
-
+        context.decreaseProTasksNo();
     }
 
     private void setTaskFinished() {
@@ -115,9 +119,6 @@ public class TaskProcessor extends Thread {
 
         } finally {
             setTaskFinished();
-            if (context.getNodeInfo().getNodeStatus() != NodeStatus.DISTRIBUTING) {  //TODO: need to reject accepting tasks if not idle
-                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
-            }
         }
     }
 

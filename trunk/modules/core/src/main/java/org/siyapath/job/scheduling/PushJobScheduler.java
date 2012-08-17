@@ -43,13 +43,13 @@ public class PushJobScheduler implements JobScheduler {
 
         Iterator<NodeResource> nodeItr = nodes.iterator();
 
-        while (nodeItr.hasNext()) {
+      /*  while (nodeItr.hasNext()) { //TODO: Resource matching optimize
             NodeResource nodeResource = nodeItr.next();
             String resData = nodeResource.getNodeProperties().get(SiyapathConstants.CPU_INFO);
             if (resData.equalsIgnoreCase(reqResources) && nodeResource.getNodeInfo().isIdle()) {
                 return nodeResource.getNodeInfo();
             }
-        }
+        }*/
         return context.getRandomMember();
     }
 }

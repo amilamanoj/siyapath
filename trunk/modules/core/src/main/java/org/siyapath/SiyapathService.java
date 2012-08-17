@@ -92,10 +92,15 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public String submitJob(Job job) throws TException {
+    public boolean submitJob(Job job) throws TException {
         log.info("Received a new job. JobID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
+       if(nodeContext.getNodeInfo().isIdle()||nodeContext.getNodeInfo().getNodeStatus()==NodeStatus.DISTRIBUTING){
         nodeContext.getJobProcessor().addNewJob(job);
-        return "JobHandlerNode:" + nodeContext.getNodeInfo().getNodeId() + " JobID:" + job.getJobID() + ":" + "Accepted";
+           return true;
+       }else {
+           log.info("Rejecting Task-  ID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
+           return false;
+       }
     }
 
     /**
@@ -104,11 +109,16 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public boolean submitTask(Task task) throws TException {
+    public synchronized boolean submitTask(Task task) throws TException {
         log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
+        if (nodeContext.getNodeInfo().isIdle()||nodeContext.getNodeInfo().getNodeStatus()==NodeStatus.PROCESSING_IDLE){
         TaskProcessor taskProcessor = new TaskProcessor("TaskProcessor ID:" + task.getTaskID(), task, nodeContext);
         taskProcessor.start();
-        return true;
+            return true;
+        }else {
+             log.info("Rejecting Task-  ID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
+            return false;
+        }
     }
 
     /**
