@@ -36,7 +36,7 @@ public class TaskProcessor {
 
     public void startProcessing() {
         if(context.getNodeInfo().getNodeStatus()==NodeStatus.IDLE){  //TODO: need to reject tasks if not idle
-        context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING);
+        context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
         }
         log.info("Preparing to start the task: " + task.getTaskID());
         TaskThread taskThread = new TaskThread();

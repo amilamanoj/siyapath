@@ -4,10 +4,11 @@ namespace java org.siyapath.service
 enum NodeStatus {
   CREATED = 1,
   STARTING = 2,
-  PROCESSING = 3,
-  DISTRIBUTING = 4,
-  BUSY = 5,
-  IDLE = 6
+  PROCESSING_IDLE = 3,
+  PROCESSING_BUSY = 4,
+  DISTRIBUTING = 5,
+  BUSY = 6,
+  IDLE = 7
 }
 
 enum TaskStatus {

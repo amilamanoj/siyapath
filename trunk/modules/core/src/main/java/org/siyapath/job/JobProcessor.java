@@ -131,7 +131,7 @@ public class JobProcessor {
                     e.printStackTrace();  //TODO: handle exception
                 }
             }
-            context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING);
+            context.getNodeInfo().setNodeStatus(NodeStatus.DISTRIBUTING);
             log.info("Added " + job.getTasks().size() + " tasks to the queue");
         }
 
