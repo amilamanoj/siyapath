@@ -22,5 +22,6 @@ public final class SiyapathConstants {
     public static final int BOOSTRAPPER_MEMBER_SET_LIMIT = 10;
 
     public static final int TASK_QUEUE_CAPACITY = 50;
+    public static final int PARALLEL_TASKS=3;
 
 }
