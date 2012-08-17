@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -47,7 +46,7 @@ public class Siyapath {
 
     public boolean requestBecomeBackup(int jobID, NodeData node) throws org.apache.thrift.TException;
 
-    public String submitJob(Job job) throws org.apache.thrift.TException;
+    public boolean submitJob(Job job) throws org.apache.thrift.TException;
 
     public boolean submitTask(Task task) throws org.apache.thrift.TException;
 
@@ -255,7 +254,7 @@ public class Siyapath {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "requestBecomeBackup failed: unknown result");
     }
 
-    public String submitJob(Job job) throws org.apache.thrift.TException
+    public boolean submitJob(Job job) throws org.apache.thrift.TException
     {
       send_submitJob(job);
       return recv_submitJob();
@@ -268,7 +267,7 @@ public class Siyapath {
       sendBase("submitJob", args);
     }
 
-    public String recv_submitJob() throws org.apache.thrift.TException
+    public boolean recv_submitJob() throws org.apache.thrift.TException
     {
       submitJob_result result = new submitJob_result();
       receiveBase(result, "submitJob");
@@ -668,7 +667,7 @@ public class Siyapath {
         prot.writeMessageEnd();
       }
 
-      public String getResult() throws org.apache.thrift.TException {
+      public boolean getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -1043,6 +1042,7 @@ public class Siyapath {
       protected submitJob_result getResult(I iface, submitJob_args args) throws org.apache.thrift.TException {
         submitJob_result result = new submitJob_result();
         result.success = iface.submitJob(args.job);
+        result.setSuccessIsSet(true);
         return result;
       }
     }
@@ -1358,14 +1358,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_resourceData = true && (isSetResourceData());
-      builder.append(present_resourceData);
-      if (present_resourceData)
-        builder.append(resourceData);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(resourceGossip_args other) {
@@ -1720,14 +1713,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(resourceGossip_result other) {
@@ -2082,14 +2068,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_nodeData = true && (isSetNodeData());
-      builder.append(present_nodeData);
-      if (present_nodeData)
-        builder.append(nodeData);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyPresence_args other) {
@@ -2447,14 +2426,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyPresence_result other) {
@@ -2880,19 +2852,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_nodeData = true && (isSetNodeData());
-      builder.append(present_nodeData);
-      if (present_nodeData)
-        builder.append(nodeData);
-
-      boolean present_knownNodes = true && (isSetKnownNodes());
-      builder.append(present_knownNodes);
-      if (present_knownNodes)
-        builder.append(knownNodes);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(memberDiscovery_args other) {
@@ -3342,14 +3302,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(memberDiscovery_result other) {
@@ -3671,9 +3624,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getMembers_args other) {
@@ -4003,14 +3954,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getMembers_result other) {
@@ -4332,9 +4276,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(isAlive_args other) {
@@ -4647,14 +4589,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(isAlive_result other) {
@@ -5063,19 +4998,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      boolean present_node = true && (isSetNode());
-      builder.append(present_node);
-      if (present_node)
-        builder.append(node);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(requestBecomeBackup_args other) {
@@ -5470,14 +5393,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(requestBecomeBackup_result other) {
@@ -5824,14 +5740,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_job = true && (isSetJob());
-      builder.append(present_job);
-      if (present_job)
-        builder.append(job);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitJob_args other) {
@@ -5994,7 +5903,7 @@ public class Siyapath {
   public static class submitJob_result implements org.apache.thrift.TBase<submitJob_result, submitJob_result._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("submitJob_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -6002,7 +5911,7 @@ public class Siyapath {
       schemes.put(TupleScheme.class, new submitJob_resultTupleSchemeFactory());
     }
 
-    public String success; // required
+    public boolean success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -6063,11 +5972,13 @@ public class Siyapath {
     }
 
     // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(submitJob_result.class, metaDataMap);
     }
@@ -6076,19 +5987,20 @@ public class Siyapath {
     }
 
     public submitJob_result(
-      String success)
+      boolean success)
     {
       this();
       this.success = success;
+      setSuccessIsSet(true);
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public submitJob_result(submitJob_result other) {
-      if (other.isSetSuccess()) {
-        this.success = other.success;
-      }
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.success = other.success;
     }
 
     public submitJob_result deepCopy() {
@@ -6097,31 +6009,31 @@ public class Siyapath {
 
     @Override
     public void clear() {
-      this.success = null;
+      setSuccessIsSet(false);
+      this.success = false;
     }
 
-    public String getSuccess() {
+    public boolean isSuccess() {
       return this.success;
     }
 
-    public submitJob_result setSuccess(String success) {
+    public submitJob_result setSuccess(boolean success) {
       this.success = success;
+      setSuccessIsSet(true);
       return this;
     }
 
     public void unsetSuccess() {
-      this.success = null;
+      __isset_bit_vector.clear(__SUCCESS_ISSET_ID);
     }
 
     /** Returns true if field success is set (has been assigned a value) and false otherwise */
     public boolean isSetSuccess() {
-      return this.success != null;
+      return __isset_bit_vector.get(__SUCCESS_ISSET_ID);
     }
 
     public void setSuccessIsSet(boolean value) {
-      if (!value) {
-        this.success = null;
-      }
+      __isset_bit_vector.set(__SUCCESS_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
@@ -6130,7 +6042,7 @@ public class Siyapath {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((String)value);
+          setSuccess((Boolean)value);
         }
         break;
 
@@ -6140,7 +6052,7 @@ public class Siyapath {
     public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
-        return getSuccess();
+        return Boolean.valueOf(isSuccess());
 
       }
       throw new IllegalStateException();
@@ -6172,12 +6084,12 @@ public class Siyapath {
       if (that == null)
         return false;
 
-      boolean this_present_success = true && this.isSetSuccess();
-      boolean that_present_success = true && that.isSetSuccess();
+      boolean this_present_success = true;
+      boolean that_present_success = true;
       if (this_present_success || that_present_success) {
         if (!(this_present_success && that_present_success))
           return false;
-        if (!this.success.equals(that.success))
+        if (this.success != that.success)
           return false;
       }
 
@@ -6186,14 +6098,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitJob_result other) {
@@ -6235,11 +6140,7 @@ public class Siyapath {
       boolean first = true;
 
       sb.append("success:");
-      if (this.success == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.success);
-      }
+      sb.append(this.success);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -6284,8 +6185,8 @@ public class Siyapath {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.success = iprot.readString();
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -6306,11 +6207,9 @@ public class Siyapath {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.success != null) {
-          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeString(struct.success);
-          oprot.writeFieldEnd();
-        }
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        oprot.writeBool(struct.success);
+        oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -6334,7 +6233,7 @@ public class Siyapath {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          oprot.writeString(struct.success);
+          oprot.writeBool(struct.success);
         }
       }
 
@@ -6343,7 +6242,7 @@ public class Siyapath {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = iprot.readString();
+          struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
         }
       }
@@ -6546,14 +6445,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_task = true && (isSetTask());
-      builder.append(present_task);
-      if (present_task)
-        builder.append(task);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitTask_args other) {
@@ -6911,14 +6803,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitTask_result other) {
@@ -7268,14 +7153,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobId = true;
-      builder.append(present_jobId);
-      if (present_jobId)
-        builder.append(jobId);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobStatus_args other) {
@@ -7649,14 +7527,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobStatus_result other) {
@@ -8052,14 +7923,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobResult_args other) {
@@ -8433,14 +8297,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobResult_result other) {
@@ -8833,14 +8690,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_result = true && (isSetResult());
-      builder.append(present_result);
-      if (present_result)
-        builder.append(result);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResult_args other) {
@@ -9198,14 +9048,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResult_result other) {
@@ -9555,14 +9398,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_taskID = true;
-      builder.append(present_taskID);
-      if (present_taskID)
-        builder.append(taskID);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyTaskLiveness_args other) {
@@ -9846,9 +9682,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyTaskLiveness_result other) {
@@ -10217,19 +10051,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_username = true && (isSetUsername());
-      builder.append(present_username);
-      if (present_username)
-        builder.append(username);
-
-      boolean present_password = true && (isSetPassword());
-      builder.append(present_password);
-      if (present_password)
-        builder.append(password);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(userLogin_args other) {
@@ -10623,14 +10445,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(userLogin_result other) {
@@ -10918,9 +10733,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getNodeStatus_args other) {
@@ -11246,14 +11059,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success.getValue());
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getNodeStatus_result other) {

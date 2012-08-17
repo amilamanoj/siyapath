@@ -96,7 +96,7 @@ service Siyapath {
     bool requestBecomeBackup(1:i32 jobID, 2:NodeData node ),
 
     //Submitting a job
-    string submitJob(1:Job job),
+    bool submitJob(1:Job job),
 
     //Submitting a task
     bool submitTask(1:Task task),

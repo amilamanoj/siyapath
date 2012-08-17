@@ -185,7 +185,7 @@ public class UserHandler {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.submitJob(job);
+            client.submitJob(job); //TODO: Handle the boolean return (if submission isn't possible)
 //        } catch (TTransportException e) {
 //            if (e.getCause() instanceof ConnectException) {
 //                e.printStackTrace();

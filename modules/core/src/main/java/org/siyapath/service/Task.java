@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -664,49 +663,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
 
   @Override
   public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-
-    boolean present_taskID = true;
-    builder.append(present_taskID);
-    if (present_taskID)
-      builder.append(taskID);
-
-    boolean present_jobID = true;
-    builder.append(present_jobID);
-    if (present_jobID)
-      builder.append(jobID);
-
-    boolean present_taskProgram = true && (isSetTaskProgram());
-    builder.append(present_taskProgram);
-    if (present_taskProgram)
-      builder.append(taskProgram);
-
-    boolean present_taskData = true && (isSetTaskData());
-    builder.append(present_taskData);
-    if (present_taskData)
-      builder.append(taskData);
-
-    boolean present_className = true && (isSetClassName());
-    builder.append(present_className);
-    if (present_className)
-      builder.append(className);
-
-    boolean present_sender = true && (isSetSender());
-    builder.append(present_sender);
-    if (present_sender)
-      builder.append(sender);
-
-    boolean present_backup = true && (isSetBackup());
-    builder.append(present_backup);
-    if (present_backup)
-      builder.append(backup);
-
-    boolean present_requiredResources = true && (isSetRequiredResources());
-    builder.append(present_requiredResources);
-    if (present_requiredResources)
-      builder.append(requiredResources);
-
-    return builder.toHashCode();
+    return 0;
   }
 
   public int compareTo(Task other) {

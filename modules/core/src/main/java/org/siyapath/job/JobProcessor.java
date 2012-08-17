@@ -54,6 +54,9 @@ public class JobProcessor {
 //        taskReplicaMap = new HashMap<Integer, ProcessingTask>();
         taskDispatcherExecutor.submit(new TaskDispatcher());
         new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
+
+        context.getNodeInfo().setNodeStatus(NodeStatus.DISTRIBUTING);
+
     }
 
     public void addNewJob(Job job) {
@@ -134,7 +137,6 @@ public class JobProcessor {
                     e.printStackTrace();  //TODO: handle exception
                 }
             }
-            context.getNodeInfo().setNodeStatus(NodeStatus.DISTRIBUTING);
             log.info("Added " + job.getTasks().size() + " tasks to the queue");
         }
 
