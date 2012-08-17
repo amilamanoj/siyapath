@@ -9,7 +9,6 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
-import org.siyapath.monitor.LimitedCpuUsageMonitor;
 import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
@@ -20,30 +19,76 @@ import java.net.ConnectException;
 * Assumes that a single .class is sent by the JobProcessor node ftm.
 * TODO: extend to use a .zip/jar with multiple .class files
 * */
-public class TaskProcessor {
+public class TaskProcessor extends Thread {
 
     private final Log log = LogFactory.getLog(TaskProcessor.class);
     private Task task;
     private NodeContext context;
+    private LivenessNotifier notifier;
+    private SiyapathTask taskInstance;
+    private SiyapathSecurityManager siyapathSecurityManager;
+    private SecurityManager defaultSecurityManager;
+    private boolean finished;
+    private Result taskResult;
+
 
     /**
      * @param task
      */
-    public TaskProcessor(Task task, NodeContext nodeContext) {
+    public TaskProcessor(String name, Task task, NodeContext nodeContext) {
+        super(name);
         this.task = task;
+        this.finished = false;
         context = nodeContext;
+        notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
+        siyapathSecurityManager = new SiyapathSecurityManager("secpass");
+        defaultSecurityManager = System.getSecurityManager();
+        taskResult = new Result(task.getJobID(), task.getTaskID(), null, CommonUtils.serialize(context.getNodeInfo()));
+
     }
 
-    public void startProcessing() {
-        if(context.getNodeInfo().getNodeStatus()==NodeStatus.IDLE){  //TODO: need to reject tasks if not idle
-        context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
+
+    public void run() {
+        if (context.getNodeInfo().getNodeStatus() == NodeStatus.IDLE) {  //TODO: need to reject tasks if not idle
+            context.getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
         }
         log.info("Preparing to start the task: " + task.getTaskID());
-        TaskThread taskThread = new TaskThread();
+        TaskThread taskThread = new TaskThread("task-thread id:" + task.getTaskID());
+        taskInstance = getTaskInstance();
+        notifier.start();
+
+        // sand-boxing with a custom security manager that denies most permissions
+        System.setSecurityManager(siyapathSecurityManager);
+
+        log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
         taskThread.start();
+
+        while (!finished) {
+            try {
+                Thread.sleep(1000);  // wait until task is finished
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        siyapathSecurityManager.disable("secpass");
+        System.setSecurityManager(defaultSecurityManager);
+        log.info("Task processing is completed. ID: " + task.getTaskID());
+        log.debug("Results: " + taskResult.getResults().substring(0, 8) + "...");
+        notifier.stopNotifier();
+
+        deliverTaskResult(taskResult);
+
+    }
+
+    private void setTaskFinished() {
+        this.finished = true;
     }
 
     private class TaskThread extends Thread {
+
+        private TaskThread(String name) {
+            super(name);
+        }
 
         @Override
         public void run() {
@@ -51,52 +96,28 @@ public class TaskProcessor {
         }
     }
 
-
-//        NodeInfo nodeInfo = context.getNodeInfo();
-//NodeData thisNode = CommonUtils.serialize(nodeInfo);
-
     private void processTask() {
-        Result taskResult = new Result(task.getJobID(), task.getTaskID(), null, CommonUtils.serialize(context.getNodeInfo()));
-        LivenessNotifier notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
-        notifier.start();
 
-        SiyapathTask taskInstance = getTaskInstance();
-
-        if (taskInstance != null) {
-            // MonitorThread monitor = new MonitorThread();
-            SiyapathSecurityManager siyapathSecurityManager = new SiyapathSecurityManager("secpass");
-
-            // sand-boxing with a custom security manager that denies most permissions
-            SecurityManager oldSecurityManager = System.getSecurityManager();
-            System.setSecurityManager(siyapathSecurityManager);
-            try {
+        try {
             taskInstance.setData(task.getTaskData());
-            log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
             taskInstance.process();
 //                monitor.start();
             String finalResult = (String) taskInstance.getResults();
 //                monitor.stopMonitor();
-            log.info("Task processing is completed.");
-
-            siyapathSecurityManager.disable("secpass");
-            System.setSecurityManager(oldSecurityManager);
-
-            log.info("Results: " + finalResult.substring(0, 100));
             taskResult.setResults(finalResult);
-            deliverTaskResult(taskResult);
-            notifier.stopNotifier();
+
+        } catch (SecurityException e) {
+            // TODO: handle illegal operation
+//            siyapathSecurityManager.disable("secpass");
+//            System.setSecurityManager(defaultSecurityManager);
+            log.warn("Task Processing aborted due to an attempt of illegal operation");
+            taskResult.setResults("<Aborted>");
+
+        } finally {
+            setTaskFinished();
+            if (context.getNodeInfo().getNodeStatus() != NodeStatus.DISTRIBUTING) {  //TODO: need to reject accepting tasks if not idle
+                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
             }
-            catch (SecurityException e){
-                // TODO: handle illegal operation
-                siyapathSecurityManager.disable("secpass");
-                System.setSecurityManager(oldSecurityManager);
-                log.info("Task Processing aborted due to an attempt of illegal operation");
-            }
-        } else {
-            // processing failed
-        }
-        if(context.getNodeInfo().getNodeStatus()!=NodeStatus.DISTRIBUTING){  //TODO: need to reject accepting tasks if not idle
-        context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
         }
     }
 
@@ -211,27 +232,27 @@ public class TaskProcessor {
         }
     }
 
-    private class MonitorThread extends Thread {
-
-        public boolean isRunning = false;
-        LimitedCpuUsageMonitor monitor = new LimitedCpuUsageMonitor();
-
-        @Override
-        public void run() {
-
-            isRunning = true;
-            while (isRunning) {
-                System.out.println("Cpu usage: " + monitor.getCpuUsage());
-                try {
-                    sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void stopMonitor() {
-            isRunning = false;
-        }
-    }
+//    private class MonitorThread extends Thread {
+//
+//        public boolean isRunning = false;
+//        LimitedCpuUsageMonitor monitor = new LimitedCpuUsageMonitor();
+//
+//        @Override
+//        public void run() {
+//
+//            isRunning = true;
+//            while (isRunning) {
+//                System.out.println("Cpu usage: " + monitor.getCpuUsage());
+//                try {
+//                    sleep(2);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        public void stopMonitor() {
+//            isRunning = false;
+//        }
+//    }
 }

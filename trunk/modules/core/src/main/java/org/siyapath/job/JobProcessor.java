@@ -193,8 +193,9 @@ public class JobProcessor {
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Submitting to: " + destinationNode);
                 isDispatched = client.submitTask(task);
+                log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Task successfully submitted: " + isDispatched);
+
                 if (isDispatched && !isReplica) {
-                    log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Successfully submitted task to processing node!");
                     ProcessingTask pTask = taskMap.get(task.getTaskID());
                     pTask.setProcessingNode(destinationNode);
                     pTask.setStatus(TaskStatus.PROCESSING);
