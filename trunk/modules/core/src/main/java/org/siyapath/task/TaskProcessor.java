@@ -57,6 +57,8 @@ public class TaskProcessor {
 
     private void processTask() {
         Result taskResult = new Result(task.getJobID(), task.getTaskID(), null, CommonUtils.serialize(context.getNodeInfo()));
+        LivenessNotifier notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
+        notifier.start();
 
         SiyapathTask taskInstance = getTaskInstance();
 
@@ -82,6 +84,7 @@ public class TaskProcessor {
             log.info("Results: " + finalResult.substring(0, 100));
             taskResult.setResults(finalResult);
             deliverTaskResult(taskResult);
+            notifier.stopNotifier();
             }
             catch (SecurityException e){
                 // TODO: handle illegal operation
@@ -163,6 +166,48 @@ public class TaskProcessor {
             e.printStackTrace();
         } catch (TException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class LivenessNotifier extends Thread {
+        private boolean isRunning = false;
+
+        private LivenessNotifier(String name) {
+            super(name);
+        }
+
+        @Override
+        public void run() {
+            isRunning = true;
+            while (isRunning) {
+                sendUpdate();
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        private void sendUpdate() {
+            TTransport transport = new TSocket(task.getSender().getIp(), task.getSender().getPort());
+            try {
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                client.notifyTaskLiveness(task.getTaskID());
+                log.debug("Sending task update to Distributing node. TaskID: " + task.getTaskID());
+            } catch (TTransportException e) {
+                e.printStackTrace();
+            } catch (TException e) {
+                e.printStackTrace();
+            } finally {
+                transport.close();
+            }
+        }
+
+        private void stopNotifier() {
+            isRunning = false;
         }
     }
 

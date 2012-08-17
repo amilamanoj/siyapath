@@ -143,6 +143,12 @@ public class SiyapathService implements Siyapath.Iface {
         return true;
     }
 
+    @Override
+    public void notifyTaskLiveness(int taskID) throws TException {
+        log.debug("Received update from task processor: TaskID: " + taskID);
+        nodeContext.getJobProcessor().taskUpdateReceived(taskID);
+    }
+
     /**
      * @param username
      * @param password

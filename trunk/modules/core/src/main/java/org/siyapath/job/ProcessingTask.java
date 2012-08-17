@@ -11,6 +11,7 @@ public class ProcessingTask {
     private TaskStatus status;
     private String result;
     private ReplicationStatus replicationStatus;
+    private long timeLastUpdated;
 
 
 
@@ -22,6 +23,14 @@ public class ProcessingTask {
         this.jobID = jobID;
         this.taskID = taskID;
         this.status = status;
+    }
+
+    public int getJobID() {
+        return jobID;
+    }
+
+    public int getTaskID() {
+        return taskID;
     }
 
     public String getResult() {
@@ -54,5 +63,13 @@ public class ProcessingTask {
 
     public void setReplicationStatus(ReplicationStatus replicationStatus){
         this.replicationStatus = replicationStatus;
+    }
+
+    public long getTimeLastUpdated() {
+        return timeLastUpdated;
+    }
+
+    public void setTimeLastUpdated(long timeLastUpdated) {
+        this.timeLastUpdated = timeLastUpdated;
     }
 }
