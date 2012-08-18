@@ -51,7 +51,7 @@ public class NodeUIHandler {
                 }
                 ui.setMembers(members.toString());
 
-                ui.setStatus(nodeContext.getNodeInfo().getNodeStatus().name());
+                ui.setStatus(nodeContext.getNodeResource().getNodeStatus().name());
 
                 try {
                     Thread.sleep(1000);

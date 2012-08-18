@@ -103,7 +103,6 @@ public class CommonUtils {
         node.setNodeID(nodeInfo.getNodeId());
         node.setIp(nodeInfo.getIp());
         node.setPort(nodeInfo.getPort());
-        node.setNodeStatus(nodeInfo.getNodeStatus());
         return node;
     }
 
@@ -115,6 +114,7 @@ public class CommonUtils {
         NodeResourceData resourceData = new NodeResourceData();
         resourceData.setNodeProperties(nodeResource.getNodeProperties());
         resourceData.setNodeData(serialize(nodeResource.getNodeInfo()));
+        resourceData.setNodeStatus(nodeResource.getNodeStatus());
         return resourceData;
     }
 
@@ -139,7 +139,6 @@ public class CommonUtils {
         node.setNodeId(nodeData.getNodeID());
         node.setIp(nodeData.getIp());
         node.setPort(nodeData.getPort());
-        node.setNodeStatus(nodeData.getNodeStatus());
         return node;
     }
 
@@ -151,6 +150,7 @@ public class CommonUtils {
         NodeResource nodeResource = new NodeResource();
         nodeResource.setNodeProperties((HashMap<String, String>) nodeResourceData.getNodeProperties());
         nodeResource.setNodeInfo(deSerialize(nodeResourceData.getNodeData()));
+        nodeResource.setNodeStatus(nodeResourceData.getNodeStatus());
         return nodeResource;
     }
 

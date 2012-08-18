@@ -39,9 +39,9 @@ public class PushJobScheduler implements JobScheduler {
      */
 
     private NodeInfo getMatchingNode(String reqResources) {
-        Set<NodeResource> nodes = context.getMemberResourceSet();
+        //Set<NodeResource> nodes = context.getMemberResourceSet();
 
-        Iterator<NodeResource> nodeItr = nodes.iterator();
+        //Iterator<NodeResource> nodeItr = nodes.iterator();
 
       /*  while (nodeItr.hasNext()) { //TODO: Resource matching optimize
             NodeResource nodeResource = nodeItr.next();

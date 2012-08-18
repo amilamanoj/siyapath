@@ -55,14 +55,14 @@ public class JobProcessor {
         taskDispatcherExecutor.submit(new TaskDispatcher());
         new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
 
-        context.getNodeInfo().setNodeStatus(NodeStatus.DISTRIBUTING);
+        context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
 
     }
 
     public void addNewJob(Job job) {
 //        createBackup();
-        if (context.getNodeInfo().getNodeStatus() == NodeStatus.IDLE) {  //TODO: need to reject adding jobs if this node is a processor
-            context.getNodeInfo().setNodeStatus(NodeStatus.DISTRIBUTING);
+        if (context.getNodeResource().getNodeStatus() == NodeStatus.IDLE) {  //TODO: need to reject adding jobs if this node is a processor
+            context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
         }
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
@@ -151,7 +151,7 @@ public class JobProcessor {
             while (active) {
                 try {
                     if (taskQueue.isEmpty() && jobMap.isEmpty()) {
-                        context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+                        context.getNodeResource().setNodeStatus(NodeStatus.IDLE);
                     }
                     Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
                     if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.

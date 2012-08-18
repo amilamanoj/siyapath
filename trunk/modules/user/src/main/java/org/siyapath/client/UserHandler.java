@@ -161,12 +161,14 @@ public class UserHandler {
             transport.close();
         }
 
-        for (NodeInfo nodeInfo : context.getMemberSet()) {
+        /*for (NodeInfo nodeInfo : context.getMemberSet()) {
             if (nodeInfo.isIdle() || nodeInfo.getNodeStatus() == NodeStatus.DISTRIBUTING) {
                 selectedMember = nodeInfo;
                 break;
             }
-        }
+        }*/
+
+        selectedMember=context.getRandomMember();
         log.info("Selected node: " + selectedMember);
 
 

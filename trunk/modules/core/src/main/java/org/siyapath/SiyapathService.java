@@ -94,7 +94,7 @@ public class SiyapathService implements Siyapath.Iface {
     @Override
     public boolean submitJob(Job job) throws TException {
         log.info("Received a new job. JobID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
-       if(nodeContext.getNodeInfo().isIdle()||nodeContext.getNodeInfo().getNodeStatus()==NodeStatus.DISTRIBUTING){
+       if(nodeContext.getNodeResource().isIdle()||nodeContext.getNodeResource().getNodeStatus()==NodeStatus.DISTRIBUTING){
         nodeContext.getJobProcessor().addNewJob(job);
            return true;
        }else {
@@ -111,7 +111,7 @@ public class SiyapathService implements Siyapath.Iface {
     @Override
     public synchronized boolean submitTask(Task task) throws TException {
         log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
-        if (nodeContext.getNodeInfo().isIdle()||nodeContext.getNodeInfo().getNodeStatus()==NodeStatus.PROCESSING_IDLE){
+        if (nodeContext.getNodeResource().isIdle()||nodeContext.getNodeResource().getNodeStatus()==NodeStatus.PROCESSING_IDLE){
         TaskProcessor taskProcessor = new TaskProcessor("TaskProcessor ID:" + task.getTaskID(), task, nodeContext);
         taskProcessor.start();
             return true;
@@ -181,7 +181,7 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public NodeStatus getNodeStatus() throws TException {
-        return nodeContext.getNodeInfo().getNodeStatus();
+        return nodeContext.getNodeResource().getNodeStatus();
     }
 
 

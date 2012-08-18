@@ -117,6 +117,8 @@ public class PeerWorker {
                         gossiper.resourceGossiper();
                     }
                     log.info("Number of known members: " + nodeContext.getMemberCount());
+                     log.info("Number of known membersWithResources: " + nodeContext.getMemberResourceSet().size());
+
                 }
                 try {
                     sleep(5000);
