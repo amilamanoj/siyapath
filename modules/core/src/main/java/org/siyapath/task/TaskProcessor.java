@@ -63,7 +63,7 @@ public class TaskProcessor extends Thread {
         notifier.start();
 
         // sand-boxing with a custom security manager that denies most permissions
-        System.setSecurityManager(siyapathSecurityManager);
+//        System.setSecurityManager(siyapathSecurityManager);
 
         log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
         taskThread.start();
@@ -76,7 +76,7 @@ public class TaskProcessor extends Thread {
             }
         }
         siyapathSecurityManager.disable("secpass");
-        System.setSecurityManager(defaultSecurityManager);
+//        System.setSecurityManager(defaultSecurityManager);
         log.info("Task processing is completed. ID: " + task.getTaskID());
 //        log.debug("Results: " + taskResult.getResults().substring(0, 8) + "...");
         notifier.stopNotifier();
