@@ -31,7 +31,7 @@ public class SiyapathNodeController {
         log.info("Starting node: " + siyapathNode.getNodeContext().getNodeInfo().getNodeId());
         nodeThread.start();
 
-        while (!siyapathNode.getNodeContext().getNodeInfo().isIdle()) {
+        while (!siyapathNode.getNodeContext().getNodeResource().isIdle()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -46,7 +46,7 @@ public class SiyapathNodeController {
     }
 
     public boolean isStarted() {
-        return siyapathNode.getNodeContext().getNodeInfo().isIdle();
+        return siyapathNode.getNodeContext().getNodeResource().isIdle();
     }
 
     class NodeThread extends Thread {

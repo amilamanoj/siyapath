@@ -78,7 +78,7 @@ struct TaskResult {
 service Siyapath {
 
     //Gossiping node resource data
-    NodeResourceData resourceGossip(1:NodeResourceData resourceData),
+    map<i32,NodeResourceData> resourceGossip(1:map<i32,NodeResourceData> knownResourceNodes),
 
     //Called by a node upon joining the network
     bool notifyPresence(1:NodeData nodeData),
