@@ -16,4 +16,29 @@
     <description>Siyapath - Samples</description>
     <version>1.0</version>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.siyapath</groupId>
+            <artifactId>siyapath-core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.siyapath</groupId>
+            <artifactId>siyapath-user</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
 </project>
