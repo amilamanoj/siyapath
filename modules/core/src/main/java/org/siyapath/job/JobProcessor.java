@@ -245,7 +245,12 @@ public class JobProcessor {
             boolean jobComplete = true;
             for (Integer taskId : taskIds) {
                 ProcessingTask processingTask = taskMap.get(taskId);
-                TaskResult taskResult = new TaskResult(processingTask.getStatus(), ByteBuffer.wrap(processingTask.getResult()));
+                if (processingTask == null) {
+                    log.debug("Task map size:" + taskMap.size());
+                    continue;
+                }
+                TaskResult taskResult = new TaskResult(processingTask.getStatus(), null);
+                taskResult.setResults(processingTask.getResult());
                 taskStatusMap.put(taskId, taskResult);
                 if (processingTask.getStatus() != TaskStatus.DONE) {
                     jobComplete = false;
