@@ -130,6 +130,18 @@ public class CommonUtils {
         return nodeDatas;
     }
 
+    public static Map<Integer, NodeResourceData> serialize(Map<Integer, NodeResource> resourceNodes) {
+        Map<Integer, NodeResourceData> resourceNodesData = new HashMap<Integer, NodeResourceData>();
+
+        for (Map.Entry<Integer, NodeResource> entry : resourceNodes.entrySet()) {
+            int key = entry.getKey();
+            NodeResource value = entry.getValue();
+            resourceNodesData.put(key, serialize(value));
+        }
+
+        return resourceNodesData;
+    }
+
     /**
      * @param nodeData
      * @return NodeInfo for given nodeData
@@ -164,6 +176,18 @@ public class CommonUtils {
             nodeInfos.add(deSerialize(nd));
         }
         return nodeInfos;
+    }
+
+    public static Map<Integer, NodeResource> deSerialize(Map<Integer, NodeResourceData> resourceNodesData) {
+        Map<Integer, NodeResource> resourceNodes = new HashMap<Integer, NodeResource>();
+
+        for (Map.Entry<Integer, NodeResourceData> entry : resourceNodesData.entrySet()) {
+            int key = entry.getKey();
+            NodeResourceData value = entry.getValue();
+            resourceNodes.put(key, deSerialize(value));
+        }
+
+        return resourceNodes;
     }
 
     /**

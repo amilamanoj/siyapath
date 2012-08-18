@@ -222,6 +222,32 @@ public class NodeContext {
         return memberResource;
     }
 
+    public Map<Integer, NodeResource> getPartialResourceNodes() {
+        int limit = (int) (SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT * 0.25);
+
+        Map<Integer, NodeResource> members = (HashMap<Integer, NodeResource>)((HashMap<Integer, NodeResource>)getMemberResourceSet()).clone();
+        Map<Integer, NodeResource> newMap = new HashMap<Integer, NodeResource>();
+        if (members.size() < limit) {
+            newMap = members;
+            newMap.put(getNodeInfo().getNodeId(),getNodeResource());
+
+        } else {
+
+            for (Map.Entry<Integer, NodeResource> entry : members.entrySet()) {
+                limit--;
+                Integer key = entry.getKey();
+                NodeResource value = entry.getValue();
+                newMap.put(key, value);
+                if (limit == 1) {
+                    newMap.put(getNodeInfo().getNodeId(),getNodeResource());
+                    break;
+                }
+            }
+
+        }
+        return newMap;
+    }
+
     /**
      * @param memberResource
      */

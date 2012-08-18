@@ -24,13 +24,13 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param resourceData
+     * @param knownResourceNodes
      * @return
      * @throws TException
      */
     @Override
-    public NodeResourceData resourceGossip(NodeResourceData resourceData) throws TException {
-        return CommonUtils.serialize(gossipImpl.resourceGossip(CommonUtils.deSerialize(resourceData)));
+    public Map<Integer, NodeResourceData> resourceGossip(Map<Integer, NodeResourceData> knownResourceNodes) throws TException {
+        return CommonUtils.serialize(gossipImpl.resourceGossip(CommonUtils.deSerialize(knownResourceNodes)));
     }
 
     /**

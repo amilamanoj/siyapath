@@ -78,15 +78,15 @@ public class GossipImpl {
      * Is invoked when a remote node selects this node and gossips its resource.
      * Updates this node's node resource set
      *
-     * @param receivedNodeResource received from remote node
+     * @param receivedResourceNodes received from remote node
      * @return the node resource of this node
      */
-    public NodeResource resourceGossip(NodeResource receivedNodeResource) {
+    public Map<Integer,NodeResource> resourceGossip(Map<Integer,NodeResource> receivedResourceNodes) {
         log.info("Remote node invoked member gossip resource with this node");
         Map<Integer,NodeResource> initialSet = nodeContext.getMemberResourceSet();
-        Map<Integer,NodeResource> newSet = mergeNewNodeResource(initialSet, receivedNodeResource);
+        Map<Integer,NodeResource> newSet = mergeNewNodeResource(initialSet, receivedResourceNodes);
         nodeContext.updateMemberResourceSet(newSet);
-        return nodeContext.getNodeResource();
+        return nodeContext.getPartialResourceNodes();
     }
 
     /**
@@ -145,10 +145,10 @@ public class GossipImpl {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
-                NodeResource discoveredNodeResource = CommonUtils.deSerialize(client.resourceGossip(CommonUtils.serialize(nodeContext.getNodeResource())));
-                Map<Integer,NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodeResource);
+                Map<Integer,NodeResource> discoveredNodesResource = CommonUtils.deSerialize(client.resourceGossip(CommonUtils.serialize(nodeContext.getPartialResourceNodes())));
+                Map<Integer,NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodesResource);
                 nodeContext.updateMemberResourceSet(newSet);
-                log.info("Node Resource Fetched:" + discoveredNodeResource.getNodeInfo().getPort());
+                log.info("Node Resource Fetched:" + discoveredNodesResource.size());
 
             } catch (SecurityException e) {
                 log.error("Could not resource gossip due to Security Exception");
@@ -193,23 +193,32 @@ public class GossipImpl {
 
     /**
      * @param initialSet
-     * @param discoveredNodeResource
+     * @param discoveredResourceNodes
      * @return new merged Set of node resource
      */
-    private Map<Integer,NodeResource> mergeNewNodeResource(Map initialSet, NodeResource discoveredNodeResource) {
+    private synchronized Map<Integer,NodeResource> mergeNewNodeResource(Map initialSet, Map<Integer,NodeResource> discoveredResourceNodes) {
         Map<Integer,NodeResource> newSet = initialSet;
-        int newId=discoveredNodeResource.getNodeInfo().getNodeId();
-        if (newSet.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
-            if (!initialSet.keySet().contains(newId) ) {
-                newSet.put(newId,discoveredNodeResource);
-            }
-       /* } else {
-            if (!initialSet.keySet().contains(newId)) {
-                newSet.remove(newSet.next());
-                newSet.add(discoveredNodeResource);
-            } */
 
-        }
+        for (Map.Entry<Integer, NodeResource> entry : discoveredResourceNodes.entrySet()) {
+                int key = entry.getKey();
+                NodeResource value = entry.getValue();
+
+            if(key!=nodeContext.getNodeInfo().getNodeId()){
+
+                 if (newSet.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
+                     newSet.put(key,value);
+                 }else {
+                     int newKey=0;
+                     for (Map.Entry<Integer, NodeResource> newEntry : newSet.entrySet()) {
+                             newKey= newEntry.getKey();
+                         break;
+                     }
+                     newSet.remove(newKey);
+                         newSet.put(key,value);
+
+                 }
+            }
+                 }
 
         return newSet;
     }
