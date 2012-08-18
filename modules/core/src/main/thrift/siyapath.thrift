@@ -24,7 +24,6 @@ struct NodeData {
     1: i32 nodeID,
     2: string ip,
     3: i32 port,
-    4: NodeStatus nodeStatus
 }
 
 
@@ -34,6 +33,7 @@ struct NodeData {
 struct NodeResourceData {
     1: NodeData nodeData,
     2: map<string,string> nodeProperties
+    3: NodeStatus nodeStatus
 }
 
 /**

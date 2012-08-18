@@ -3,6 +3,7 @@ package org.siyapath;
 import java.util.HashMap;
 
 import org.siyapath.monitor.SigarSystemInformation;
+import org.siyapath.service.NodeStatus;
 
 /**
  * NodeResource retrieves Node's SystemInformation
@@ -10,22 +11,44 @@ import org.siyapath.monitor.SigarSystemInformation;
 public class NodeResource {
     private NodeInfo nodeInfo;
     private HashMap<String, String> nodeProperties;
+    private NodeStatus nodeStatus;
 
     /* public static void main(String[] args) {
       NodeResource r = new NodeResource();
       System.out.print(r.getNodeProperties().get(SiyapathConstants.MEMORY_INFO));
   }  */
 
-    public NodeResource() {
-        nodeProperties = new HashMap<String, String>();
-        initNodeProperties();
-    }
 
     public NodeResource(NodeInfo nodeInfo) {
         nodeProperties = new HashMap<String, String>();
         initNodeProperties();
         this.nodeInfo = nodeInfo;
+        setNodeStatus(NodeStatus.CREATED);
 
+    }
+
+
+    public NodeResource() {
+        nodeProperties = new HashMap<String, String>();
+        initNodeProperties();
+    }
+
+
+    public synchronized void setNodeStatus(org.siyapath.service.NodeStatus nodeStatus) {
+        this.nodeStatus = nodeStatus;
+    }
+
+    public synchronized NodeStatus getNodeStatus() {
+        return nodeStatus;
+    }
+
+
+    public synchronized boolean isIdle() {
+        if (nodeStatus == NodeStatus.IDLE) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void initNodeProperties() {
@@ -83,6 +106,17 @@ public class NodeResource {
      */
     public HashMap<String, String> getNodeProperties() {
         return this.nodeProperties;
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        NodeResource other = (NodeResource) obj;
+        return getNodeInfo().getNodeId() == other.getNodeInfo().getNodeId();
     }
 
 }

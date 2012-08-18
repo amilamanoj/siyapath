@@ -17,6 +17,8 @@ import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -81,8 +83,8 @@ public class GossipImpl {
      */
     public NodeResource resourceGossip(NodeResource receivedNodeResource) {
         log.info("Remote node invoked member gossip resource with this node");
-        HashSet<NodeResource> initialSet = nodeContext.getMemberResourceSet();
-        HashSet<NodeResource> newSet = mergeNewNodeResource(initialSet, receivedNodeResource);
+        Map<Integer,NodeResource> initialSet = nodeContext.getMemberResourceSet();
+        Map<Integer,NodeResource> newSet = mergeNewNodeResource(initialSet, receivedNodeResource);
         nodeContext.updateMemberResourceSet(newSet);
         return nodeContext.getNodeResource();
     }
@@ -144,7 +146,7 @@ public class GossipImpl {
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 NodeResource discoveredNodeResource = CommonUtils.deSerialize(client.resourceGossip(CommonUtils.serialize(nodeContext.getNodeResource())));
-                HashSet<NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodeResource);
+                Map<Integer,NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodeResource);
                 nodeContext.updateMemberResourceSet(newSet);
                 log.info("Node Resource Fetched:" + discoveredNodeResource.getNodeInfo().getPort());
 
@@ -194,17 +196,18 @@ public class GossipImpl {
      * @param discoveredNodeResource
      * @return new merged Set of node resource
      */
-    private HashSet<NodeResource> mergeNewNodeResource(HashSet initialSet, NodeResource discoveredNodeResource) {
-        HashSet<NodeResource> newSet = initialSet;
+    private Map<Integer,NodeResource> mergeNewNodeResource(Map initialSet, NodeResource discoveredNodeResource) {
+        Map<Integer,NodeResource> newSet = initialSet;
+        int newId=discoveredNodeResource.getNodeInfo().getNodeId();
         if (newSet.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
-            if (!discoveredNodeResource.equals(nodeContext.getNodeResource())) {
-                newSet.add(discoveredNodeResource);
+            if (!initialSet.keySet().contains(newId) ) {
+                newSet.put(newId,discoveredNodeResource);
             }
-        } else {
-            if (!discoveredNodeResource.equals(nodeContext.getNodeResource())) {
-                newSet.remove(newSet.iterator().next());
+       /* } else {
+            if (!initialSet.keySet().contains(newId)) {
+                newSet.remove(newSet.next());
                 newSet.add(discoveredNodeResource);
-            }
+            } */
 
         }
 

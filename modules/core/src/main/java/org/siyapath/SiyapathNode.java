@@ -63,7 +63,7 @@ public class SiyapathNode {
     }
 
     public void startSiyapathNode() {
-        nodeContext.getNodeInfo().setNodeStatus(NodeStatus.STARTING);
+        nodeContext.getNodeResource().setNodeStatus(NodeStatus.STARTING);
         log.info("Initializing Siyapath Node: " + nodeContext.getNodeInfo());
 
         if (nodeContext.isBootstrapper()) {
@@ -78,7 +78,7 @@ public class SiyapathNode {
         peerListener = new PeerListener(processor, nodeContext);
         peerListener.start();
         peerWorker = new PeerWorker(nodeContext);
-        nodeContext.getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+        nodeContext.getNodeResource().setNodeStatus(NodeStatus.IDLE);
         peerWorker.start();
     }
 

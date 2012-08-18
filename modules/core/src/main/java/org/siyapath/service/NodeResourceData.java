@@ -35,6 +35,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   private static final org.apache.thrift.protocol.TField NODE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeData", org.apache.thrift.protocol.TType.STRUCT, (short)1);
   private static final org.apache.thrift.protocol.TField NODE_PROPERTIES_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeProperties", org.apache.thrift.protocol.TType.MAP, (short)2);
+  private static final org.apache.thrift.protocol.TField NODE_STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeStatus", org.apache.thrift.protocol.TType.I32, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -44,11 +45,21 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   public NodeData nodeData; // required
   public Map<String,String> nodeProperties; // required
+  /**
+   * 
+   * @see NodeStatus
+   */
+  public NodeStatus nodeStatus; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     NODE_DATA((short)1, "nodeData"),
-    NODE_PROPERTIES((short)2, "nodeProperties");
+    NODE_PROPERTIES((short)2, "nodeProperties"),
+    /**
+     * 
+     * @see NodeStatus
+     */
+    NODE_STATUS((short)3, "nodeStatus");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -67,6 +78,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
           return NODE_DATA;
         case 2: // NODE_PROPERTIES
           return NODE_PROPERTIES;
+        case 3: // NODE_STATUS
+          return NODE_STATUS;
         default:
           return null;
       }
@@ -116,6 +129,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
             new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
             new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+    tmpMap.put(_Fields.NODE_STATUS, new org.apache.thrift.meta_data.FieldMetaData("nodeStatus", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, NodeStatus.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(NodeResourceData.class, metaDataMap);
   }
@@ -125,11 +140,13 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   public NodeResourceData(
     NodeData nodeData,
-    Map<String,String> nodeProperties)
+    Map<String,String> nodeProperties,
+    NodeStatus nodeStatus)
   {
     this();
     this.nodeData = nodeData;
     this.nodeProperties = nodeProperties;
+    this.nodeStatus = nodeStatus;
   }
 
   /**
@@ -154,6 +171,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       }
       this.nodeProperties = __this__nodeProperties;
     }
+    if (other.isSetNodeStatus()) {
+      this.nodeStatus = other.nodeStatus;
+    }
   }
 
   public NodeResourceData deepCopy() {
@@ -164,6 +184,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   public void clear() {
     this.nodeData = null;
     this.nodeProperties = null;
+    this.nodeStatus = null;
   }
 
   public NodeData getNodeData() {
@@ -225,6 +246,38 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     }
   }
 
+  /**
+   * 
+   * @see NodeStatus
+   */
+  public NodeStatus getNodeStatus() {
+    return this.nodeStatus;
+  }
+
+  /**
+   * 
+   * @see NodeStatus
+   */
+  public NodeResourceData setNodeStatus(NodeStatus nodeStatus) {
+    this.nodeStatus = nodeStatus;
+    return this;
+  }
+
+  public void unsetNodeStatus() {
+    this.nodeStatus = null;
+  }
+
+  /** Returns true if field nodeStatus is set (has been assigned a value) and false otherwise */
+  public boolean isSetNodeStatus() {
+    return this.nodeStatus != null;
+  }
+
+  public void setNodeStatusIsSet(boolean value) {
+    if (!value) {
+      this.nodeStatus = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case NODE_DATA:
@@ -243,6 +296,14 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       }
       break;
 
+    case NODE_STATUS:
+      if (value == null) {
+        unsetNodeStatus();
+      } else {
+        setNodeStatus((NodeStatus)value);
+      }
+      break;
+
     }
   }
 
@@ -253,6 +314,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
     case NODE_PROPERTIES:
       return getNodeProperties();
+
+    case NODE_STATUS:
+      return getNodeStatus();
 
     }
     throw new IllegalStateException();
@@ -269,6 +333,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       return isSetNodeData();
     case NODE_PROPERTIES:
       return isSetNodeProperties();
+    case NODE_STATUS:
+      return isSetNodeStatus();
     }
     throw new IllegalStateException();
   }
@@ -301,6 +367,15 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (!(this_present_nodeProperties && that_present_nodeProperties))
         return false;
       if (!this.nodeProperties.equals(that.nodeProperties))
+        return false;
+    }
+
+    boolean this_present_nodeStatus = true && this.isSetNodeStatus();
+    boolean that_present_nodeStatus = true && that.isSetNodeStatus();
+    if (this_present_nodeStatus || that_present_nodeStatus) {
+      if (!(this_present_nodeStatus && that_present_nodeStatus))
+        return false;
+      if (!this.nodeStatus.equals(that.nodeStatus))
         return false;
     }
 
@@ -340,6 +415,16 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetNodeStatus()).compareTo(typedOther.isSetNodeStatus());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetNodeStatus()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.nodeStatus, typedOther.nodeStatus);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -373,6 +458,14 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       sb.append("null");
     } else {
       sb.append(this.nodeProperties);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("nodeStatus:");
+    if (this.nodeStatus == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.nodeStatus);
     }
     first = false;
     sb.append(")");
@@ -446,6 +539,14 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 3: // NODE_STATUS
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.nodeStatus = NodeStatus.findByValue(iprot.readI32());
+              struct.setNodeStatusIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -479,6 +580,11 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         }
         oprot.writeFieldEnd();
       }
+      if (struct.nodeStatus != null) {
+        oprot.writeFieldBegin(NODE_STATUS_FIELD_DESC);
+        oprot.writeI32(struct.nodeStatus.getValue());
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -503,7 +609,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (struct.isSetNodeProperties()) {
         optionals.set(1);
       }
-      oprot.writeBitSet(optionals, 2);
+      if (struct.isSetNodeStatus()) {
+        optionals.set(2);
+      }
+      oprot.writeBitSet(optionals, 3);
       if (struct.isSetNodeData()) {
         struct.nodeData.write(oprot);
       }
@@ -517,12 +626,15 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
           }
         }
       }
+      if (struct.isSetNodeStatus()) {
+        oprot.writeI32(struct.nodeStatus.getValue());
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, NodeResourceData struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(2);
+      BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
         struct.nodeData = new NodeData();
         struct.nodeData.read(iprot);
@@ -542,6 +654,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
           }
         }
         struct.setNodePropertiesIsSet(true);
+      }
+      if (incoming.get(2)) {
+        struct.nodeStatus = NodeStatus.findByValue(iprot.readI32());
+        struct.setNodeStatusIsSet(true);
       }
     }
   }

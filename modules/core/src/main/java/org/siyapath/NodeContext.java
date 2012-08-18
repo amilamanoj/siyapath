@@ -32,7 +32,7 @@ public class NodeContext {
     //    TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
     private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;
     private boolean isBackup;
-    private HashSet<NodeResource> memberResource;
+    private HashMap<Integer, NodeResource> memberResource;
     private NodeResource nodeResource;
     private boolean presenceNotified;
     private boolean guiEnabled;
@@ -46,7 +46,7 @@ public class NodeContext {
      */
     public NodeContext(NodeInfo nodeInfo) {
         this.members = new HashSet<NodeInfo>();
-        this.memberResource = new HashSet<NodeResource>();
+        this.memberResource = new HashMap<Integer, NodeResource>();
 //        this.taskProcessorMap = new HashMap<Integer, TaskProcessor>();
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
@@ -66,10 +66,10 @@ public class NodeContext {
     public synchronized void increaseProTasksNo() {
         processingTasksNo++;
         if (this.getProcessingTasksNo() >= SiyapathConstants.PARALLEL_TASKS) {
-            getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_BUSY);
+            getNodeResource().setNodeStatus(NodeStatus.PROCESSING_BUSY);
 
         } else {
-            getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
+            getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
         }
     }
 
@@ -77,10 +77,10 @@ public class NodeContext {
         if (processingTasksNo > 0) {
             processingTasksNo--;
             if (this.getProcessingTasksNo() < SiyapathConstants.PARALLEL_TASKS) {
-                getNodeInfo().setNodeStatus(NodeStatus.PROCESSING_IDLE);
+                getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
 
             } else if (processingTasksNo == 0) {
-                getNodeInfo().setNodeStatus(NodeStatus.IDLE);
+                getNodeResource().setNodeStatus(NodeStatus.IDLE);
             }
         }
 
@@ -218,15 +218,15 @@ public class NodeContext {
         nodeInfo.setBootstrapper(bootstrapper);
     }
 
-    public HashSet<NodeResource> getMemberResourceSet() {
+    public Map<Integer,NodeResource> getMemberResourceSet() {
         return memberResource;
     }
 
     /**
      * @param memberResource
      */
-    public void updateMemberResourceSet(HashSet<NodeResource> memberResource) {
-        this.memberResource = memberResource;
+    public void updateMemberResourceSet(Map<Integer,NodeResource> memberResource) {
+        this.memberResource = (HashMap<Integer,NodeResource>) memberResource;
     }
 
 //    public JobHandler getJobHandler(int jobId){

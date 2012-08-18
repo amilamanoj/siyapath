@@ -8,11 +8,6 @@ public class NodeInfo {
     private String ip;
     private int port;
     private boolean bootstrapper;
-    private org.siyapath.service.NodeStatus nodeStatus;
-
-    public synchronized void setNodeStatus(org.siyapath.service.NodeStatus nodeStatus) {
-        this.nodeStatus = nodeStatus;
-    }
 
 
     /* public enum NodeStatus {
@@ -31,21 +26,6 @@ public class NodeInfo {
         port = CommonUtils.getRandomPort();
         nodeId = CommonUtils.getRandomNumber(10000); //TODO: make the Id unique
         this.bootstrapper = false;
-        setNodeStatus(NodeStatus.CREATED);
-
-    }
-
-    public synchronized NodeStatus getNodeStatus() {
-        return nodeStatus;
-    }
-
-
-    public synchronized boolean isIdle() {
-        if (nodeStatus == NodeStatus.IDLE) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
