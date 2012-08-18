@@ -105,7 +105,7 @@ public class UserHandler {
         return job.getJobID();
     }
 
-    Job createJob(Map<String, TaskData> taskList) throws IOException {
+    public Job createJob(Map<String, TaskData> taskList) throws IOException {
         String jobIdString = this.generateJobIDString();
         int jobId = Math.abs(jobIdString.hashCode());
         int taskCounter = 0;

@@ -57,6 +57,31 @@ public class SiyapathSecurityManager extends SecurityManager {
     }
 
 //    @Override
+//    public void checkLink(String lib) {
+//        log.debug("allowing link");
+//    }
+//
+//    @Override
+//    public void checkRead(String file) {
+//        log.debug("allowing read");
+//    }
+//
+//    @Override
+//    public void checkAccess(ThreadGroup g) {
+//        log.debug("allowing thread access");
+//    }
+//
+//    @Override
+//    public void checkAccess(Thread t) {
+//        log.debug("allowing thread access");
+//    }
+//
+//    @Override
+//    public void checkMemberAccess(Class<?> clazz, int which) {
+//        log.debug("allowing member access");
+//    }
+//
+//    @Override
 //    public void checkAccept(String host, int port) {
 //        log.debug("allowing Accept");
 //    }
@@ -69,7 +94,6 @@ public class SiyapathSecurityManager extends SecurityManager {
 //    @Override
 //    public void checkPropertyAccess(String key) {
 //        log.debug("allowing PropertiesAccess");
-//
 //    }
 //
 //    @Override
