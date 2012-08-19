@@ -52,6 +52,18 @@
                             <name>nodes</name>
                             <value>${nodes}</value>
                         </property>
+                        <property>
+                            <name>clients</name>
+                            <value>${clients}</value>
+                        </property>
+                        <property>
+                            <name>jobs</name>
+                            <value>${jobs}</value>
+                        </property>
+                        <property>
+                            <name>tasks</name>
+                            <value>${tasks}</value>
+                        </property>
                         <timeStamp>${maven.build.timestamp}</timeStamp>
                         <log4j.configuration>log4j.properties</log4j.configuration>
                     </systemPropertyVariables>

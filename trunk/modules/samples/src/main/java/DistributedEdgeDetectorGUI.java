@@ -4,6 +4,7 @@
 * Created on Aug 17, 2012, 8:43:28 PM
 */
 
+import org.apache.thrift.TException;
 import org.siyapath.client.SubmissionFailedException;
 import org.siyapath.client.TaskData;
 import org.siyapath.client.UserHandler;
@@ -216,7 +217,11 @@ public class DistributedEdgeDetectorGUI extends JDialog {
         public void run() {
             Map<Integer, TaskResult> resMap = null;
             while (!finished) {
-                resMap = handler.pollStatusFromJobProcessor(jobID);
+                try {
+                    resMap = handler.pollStatusFromJobProcessor(jobID);
+                } catch (TException e) {
+                    e.printStackTrace();
+                }
                 finished = true;
                 if (resMap != null) {
                     for (TaskResult res : resMap.values()) {

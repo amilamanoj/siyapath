@@ -8,19 +8,23 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.siyapath.*;
-import org.siyapath.service.*;
+import org.siyapath.NodeContext;
+import org.siyapath.NodeInfo;
+import org.siyapath.service.Job;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
+import org.siyapath.service.TaskResult;
 import org.siyapath.task.SiyapathTask;
 import org.siyapath.utils.CommonUtils;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
@@ -205,7 +209,7 @@ public class UserHandler {
     }
 
 
-    public void getJobResults(int jobId) {
+    public void getJobResults(int jobId) throws TException {
         JobData jobData = jobMap.get(jobId);
         NodeInfo jobHandler = jobData.getDistributorNode();
 
@@ -219,14 +223,14 @@ public class UserHandler {
             Siyapath.Client client = new Siyapath.Client(protocol);
             client.getJobResult(jobId);    // TODO: display results
 
-        } catch (TTransportException e) {
-            if (e.getCause() instanceof ConnectException) {
-                e.printStackTrace();
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+//        } catch (TTransportException e) {
+//            if (e.getCause() instanceof ConnectException) {
+//                e.printStackTrace();
+//            }
+//        } catch (TException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
         } finally {
             transport.close();
         }
@@ -237,7 +241,7 @@ public class UserHandler {
      *
      * @param jobID
      */
-    public Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) {
+    public Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) throws TException {
 
         NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
         TTransport transport = new TSocket(jobHandler.getIp(),
@@ -254,14 +258,14 @@ public class UserHandler {
             //sets vectors to be fed to Status UI
 
 
-        } catch (TTransportException e) {
-            if (e.getCause() instanceof ConnectException) {
-                e.printStackTrace();
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+//        } catch (TTransportException e) {
+//            if (e.getCause() instanceof ConnectException) {
+//                e.printStackTrace();
+//            }
+//        } catch (TException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
         } finally {
             transport.close();
         }
@@ -269,12 +273,18 @@ public class UserHandler {
         return taskCompletionMap;
     }
 
-    public boolean assessJobStatusFromTaskStatuses(Map<Integer, String> statusMap) {
+    /**
+     *
+     * @param taskResultMap
+     * @return true if all task statuses are marked DONE, false otherwise, at a given point of time
+     */
+    public boolean assessJobStatusFromTaskStatuses(Map<Integer, TaskResult> taskResultMap) {
 
         boolean statusCondition = true;
         boolean eachTaskStatus;
-
-        for (String taskStatus : statusMap.values()) {
+//String taskStatus : statusMap.values()
+        for (TaskResult taskResult : taskResultMap.values()) {
+            String taskStatus = taskResult.getStatus().toString();
             if (taskStatus.equalsIgnoreCase("DONE")) {
                 eachTaskStatus = true;
             } else {

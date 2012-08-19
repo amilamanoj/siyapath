@@ -1,5 +1,6 @@
 package org.siyapath.client;
 
+import org.apache.thrift.TException;
 import org.siyapath.service.Job;
 import org.siyapath.service.TaskResult;
 
@@ -498,7 +499,11 @@ public class UserGUI extends JFrame {
     }
 
     private void getResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        handler.getJobResults(jobMap.get(((String) jobComboBox.getSelectedItem())));
+        try {
+            handler.getJobResults(jobMap.get(((String) jobComboBox.getSelectedItem())));
+        } catch (TException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addJobButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -685,7 +690,12 @@ public class UserGUI extends JFrame {
 
         @Override
         public void run() {
-            Map<Integer, TaskResult> statusMap = handler.pollStatusFromJobProcessor(jobId);
+            Map<Integer, TaskResult> statusMap = null;
+            try {
+                statusMap = handler.pollStatusFromJobProcessor(jobId);
+            } catch (TException e) {
+                e.printStackTrace();
+            }
             if (statusMap != null) {
                 updateTableDataVectors(statusMap);
                 DefaultTableModel model = (DefaultTableModel) taskStatusTable.getModel();
