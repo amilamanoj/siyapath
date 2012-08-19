@@ -112,12 +112,12 @@ public class NodeContext {
     public NodeResource getRandomMemberWithResource() {
         NodeResource randomMemberWithResource = null;
         int randomID=0;
-        if (!getMemberResourceSet().isEmpty()) {
-            int memberCount = getMemberResourceSet().size();
+        if (!getMemberResourceMap().isEmpty()) {
+            int memberCount = getMemberResourceMap().size();
             int randomIndex = CommonUtils.getRandomNumber(memberCount);
-            Integer[] keyArray = getMemberResourceSet().keySet().toArray(new Integer[memberCount]);
+            Integer[] keyArray = getMemberResourceMap().keySet().toArray(new Integer[memberCount]);
             randomID=keyArray[randomIndex];
-            randomMemberWithResource = getMemberResourceSet().get(randomID);
+            randomMemberWithResource = getMemberResourceMap().get(randomID);
         }
         return randomMemberWithResource;
     }
@@ -231,14 +231,14 @@ public class NodeContext {
         nodeInfo.setBootstrapper(bootstrapper);
     }
 
-    public Map<Integer,NodeResource> getMemberResourceSet() {
+    public Map<Integer,NodeResource> getMemberResourceMap() {
         return memberResource;
     }
 
     public Map<Integer, NodeResource> getPartialResourceNodes() {
         int limit = (int) (SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT * 0.25);
 
-        Map<Integer, NodeResource> members = (HashMap<Integer, NodeResource>)((HashMap<Integer, NodeResource>)getMemberResourceSet()).clone();
+        Map<Integer, NodeResource> members = (HashMap<Integer, NodeResource>)((HashMap<Integer, NodeResource>) getMemberResourceMap()).clone();
         Map<Integer, NodeResource> newMap = new HashMap<Integer, NodeResource>();
         if (members.size() < limit) {
             newMap = members;

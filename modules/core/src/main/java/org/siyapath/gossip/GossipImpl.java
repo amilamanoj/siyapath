@@ -17,7 +17,6 @@ import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.HashSet;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
@@ -83,7 +82,7 @@ public class GossipImpl {
      */
     public Map<Integer,NodeResource> resourceGossip(Map<Integer,NodeResource> receivedResourceNodes) {
         log.info("Remote node invoked member gossip resource with this node");
-        Map<Integer,NodeResource> initialSet = nodeContext.getMemberResourceSet();
+        Map<Integer,NodeResource> initialSet = nodeContext.getMemberResourceMap();
         Map<Integer,NodeResource> newSet = mergeNewNodeResource(initialSet, receivedResourceNodes);
         nodeContext.updateMemberResourceSet(newSet);
         return nodeContext.getPartialResourceNodes();
@@ -146,7 +145,7 @@ public class GossipImpl {
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 Map<Integer,NodeResource> discoveredNodesResource = CommonUtils.deSerialize(client.resourceGossip(CommonUtils.serialize(nodeContext.getPartialResourceNodes())));
-                Map<Integer,NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceSet(), discoveredNodesResource);
+                Map<Integer,NodeResource> newSet = mergeNewNodeResource(nodeContext.getMemberResourceMap(), discoveredNodesResource);
                 nodeContext.updateMemberResourceSet(newSet);
                 log.info("Node Resource Fetched:" + discoveredNodesResource.size());
 
