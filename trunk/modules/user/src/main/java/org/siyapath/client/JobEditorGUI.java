@@ -169,7 +169,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         if (sFile != null) {
             String taskName = "Task-" + counter++ + ": " + sFile.getName();
             listModel.addElement(taskName);
-            taskList.put(taskName, new TaskData(taskName, sFile, "0,200000".getBytes(), "Cores:4-Speed:2267Mhz"));  //TODO: update GUI
+            taskList.put(taskName, new TaskData(taskName, sFile, "0,200000".getBytes(), "Medium"));  //TODO: update GUI
         }
         if (!listModel.isEmpty()) {
             okButton.setEnabled(true);

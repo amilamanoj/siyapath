@@ -40,7 +40,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   private static final org.apache.thrift.protocol.TField CLASS_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("className", org.apache.thrift.protocol.TType.STRING, (short)5);
   private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.STRUCT, (short)6);
   private static final org.apache.thrift.protocol.TField BACKUP_FIELD_DESC = new org.apache.thrift.protocol.TField("backup", org.apache.thrift.protocol.TType.STRUCT, (short)7);
-  private static final org.apache.thrift.protocol.TField REQUIRED_RESOURCES_FIELD_DESC = new org.apache.thrift.protocol.TField("requiredResources", org.apache.thrift.protocol.TType.STRING, (short)8);
+  private static final org.apache.thrift.protocol.TField REQUIRED_RESOURCE_LEVEL_FIELD_DESC = new org.apache.thrift.protocol.TField("requiredResourceLevel", org.apache.thrift.protocol.TType.STRING, (short)8);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -55,7 +55,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   public String className; // required
   public NodeData sender; // required
   public NodeData backup; // required
-  public String requiredResources; // required
+  public String requiredResourceLevel; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -66,7 +66,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     CLASS_NAME((short)5, "className"),
     SENDER((short)6, "sender"),
     BACKUP((short)7, "backup"),
-    REQUIRED_RESOURCES((short)8, "requiredResources");
+    REQUIRED_RESOURCE_LEVEL((short)8, "requiredResourceLevel");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -95,8 +95,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
           return SENDER;
         case 7: // BACKUP
           return BACKUP;
-        case 8: // REQUIRED_RESOURCES
-          return REQUIRED_RESOURCES;
+        case 8: // REQUIRED_RESOURCE_LEVEL
+          return REQUIRED_RESOURCE_LEVEL;
         default:
           return null;
       }
@@ -157,7 +157,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     tmpMap.put(_Fields.BACKUP, new org.apache.thrift.meta_data.FieldMetaData("backup", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
-    tmpMap.put(_Fields.REQUIRED_RESOURCES, new org.apache.thrift.meta_data.FieldMetaData("requiredResources", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.REQUIRED_RESOURCE_LEVEL, new org.apache.thrift.meta_data.FieldMetaData("requiredResourceLevel", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Task.class, metaDataMap);
@@ -174,7 +174,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     String className,
     NodeData sender,
     NodeData backup,
-    String requiredResources)
+    String requiredResourceLevel)
   {
     this();
     this.taskID = taskID;
@@ -186,7 +186,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.className = className;
     this.sender = sender;
     this.backup = backup;
-    this.requiredResources = requiredResources;
+    this.requiredResourceLevel = requiredResourceLevel;
   }
 
   /**
@@ -214,8 +214,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     if (other.isSetBackup()) {
       this.backup = new NodeData(other.backup);
     }
-    if (other.isSetRequiredResources()) {
-      this.requiredResources = other.requiredResources;
+    if (other.isSetRequiredResourceLevel()) {
+      this.requiredResourceLevel = other.requiredResourceLevel;
     }
   }
 
@@ -234,7 +234,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.className = null;
     this.sender = null;
     this.backup = null;
-    this.requiredResources = null;
+    this.requiredResourceLevel = null;
   }
 
   public int getTaskID() {
@@ -423,27 +423,27 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
   }
 
-  public String getRequiredResources() {
-    return this.requiredResources;
+  public String getRequiredResourceLevel() {
+    return this.requiredResourceLevel;
   }
 
-  public Task setRequiredResources(String requiredResources) {
-    this.requiredResources = requiredResources;
+  public Task setRequiredResourceLevel(String requiredResourceLevel) {
+    this.requiredResourceLevel = requiredResourceLevel;
     return this;
   }
 
-  public void unsetRequiredResources() {
-    this.requiredResources = null;
+  public void unsetRequiredResourceLevel() {
+    this.requiredResourceLevel = null;
   }
 
-  /** Returns true if field requiredResources is set (has been assigned a value) and false otherwise */
-  public boolean isSetRequiredResources() {
-    return this.requiredResources != null;
+  /** Returns true if field requiredResourceLevel is set (has been assigned a value) and false otherwise */
+  public boolean isSetRequiredResourceLevel() {
+    return this.requiredResourceLevel != null;
   }
 
-  public void setRequiredResourcesIsSet(boolean value) {
+  public void setRequiredResourceLevelIsSet(boolean value) {
     if (!value) {
-      this.requiredResources = null;
+      this.requiredResourceLevel = null;
     }
   }
 
@@ -505,11 +505,11 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       }
       break;
 
-    case REQUIRED_RESOURCES:
+    case REQUIRED_RESOURCE_LEVEL:
       if (value == null) {
-        unsetRequiredResources();
+        unsetRequiredResourceLevel();
       } else {
-        setRequiredResources((String)value);
+        setRequiredResourceLevel((String)value);
       }
       break;
 
@@ -539,8 +539,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     case BACKUP:
       return getBackup();
 
-    case REQUIRED_RESOURCES:
-      return getRequiredResources();
+    case REQUIRED_RESOURCE_LEVEL:
+      return getRequiredResourceLevel();
 
     }
     throw new IllegalStateException();
@@ -567,8 +567,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       return isSetSender();
     case BACKUP:
       return isSetBackup();
-    case REQUIRED_RESOURCES:
-      return isSetRequiredResources();
+    case REQUIRED_RESOURCE_LEVEL:
+      return isSetRequiredResourceLevel();
     }
     throw new IllegalStateException();
   }
@@ -649,12 +649,12 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         return false;
     }
 
-    boolean this_present_requiredResources = true && this.isSetRequiredResources();
-    boolean that_present_requiredResources = true && that.isSetRequiredResources();
-    if (this_present_requiredResources || that_present_requiredResources) {
-      if (!(this_present_requiredResources && that_present_requiredResources))
+    boolean this_present_requiredResourceLevel = true && this.isSetRequiredResourceLevel();
+    boolean that_present_requiredResourceLevel = true && that.isSetRequiredResourceLevel();
+    if (this_present_requiredResourceLevel || that_present_requiredResourceLevel) {
+      if (!(this_present_requiredResourceLevel && that_present_requiredResourceLevel))
         return false;
-      if (!this.requiredResources.equals(that.requiredResources))
+      if (!this.requiredResourceLevel.equals(that.requiredResourceLevel))
         return false;
     }
 
@@ -744,12 +744,12 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetRequiredResources()).compareTo(typedOther.isSetRequiredResources());
+    lastComparison = Boolean.valueOf(isSetRequiredResourceLevel()).compareTo(typedOther.isSetRequiredResourceLevel());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetRequiredResources()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.requiredResources, typedOther.requiredResources);
+    if (isSetRequiredResourceLevel()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.requiredResourceLevel, typedOther.requiredResourceLevel);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -822,11 +822,11 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("requiredResources:");
-    if (this.requiredResources == null) {
+    sb.append("requiredResourceLevel:");
+    if (this.requiredResourceLevel == null) {
       sb.append("null");
     } else {
-      sb.append(this.requiredResources);
+      sb.append(this.requiredResourceLevel);
     }
     first = false;
     sb.append(")");
@@ -931,10 +931,10 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // REQUIRED_RESOURCES
+          case 8: // REQUIRED_RESOURCE_LEVEL
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.requiredResources = iprot.readString();
-              struct.setRequiredResourcesIsSet(true);
+              struct.requiredResourceLevel = iprot.readString();
+              struct.setRequiredResourceLevelIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -985,9 +985,9 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         struct.backup.write(oprot);
         oprot.writeFieldEnd();
       }
-      if (struct.requiredResources != null) {
-        oprot.writeFieldBegin(REQUIRED_RESOURCES_FIELD_DESC);
-        oprot.writeString(struct.requiredResources);
+      if (struct.requiredResourceLevel != null) {
+        oprot.writeFieldBegin(REQUIRED_RESOURCE_LEVEL_FIELD_DESC);
+        oprot.writeString(struct.requiredResourceLevel);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -1029,7 +1029,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetBackup()) {
         optionals.set(6);
       }
-      if (struct.isSetRequiredResources()) {
+      if (struct.isSetRequiredResourceLevel()) {
         optionals.set(7);
       }
       oprot.writeBitSet(optionals, 8);
@@ -1054,8 +1054,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetBackup()) {
         struct.backup.write(oprot);
       }
-      if (struct.isSetRequiredResources()) {
-        oprot.writeString(struct.requiredResources);
+      if (struct.isSetRequiredResourceLevel()) {
+        oprot.writeString(struct.requiredResourceLevel);
       }
     }
 
@@ -1094,8 +1094,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         struct.setBackupIsSet(true);
       }
       if (incoming.get(7)) {
-        struct.requiredResources = iprot.readString();
-        struct.setRequiredResourcesIsSet(true);
+        struct.requiredResourceLevel = iprot.readString();
+        struct.setRequiredResourceLevelIsSet(true);
       }
     }
   }

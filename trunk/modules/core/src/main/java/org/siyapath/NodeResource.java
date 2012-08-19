@@ -4,24 +4,28 @@ import java.util.HashMap;
 
 import org.siyapath.monitor.SigarSystemInformation;
 import org.siyapath.service.NodeStatus;
+import org.siyapath.service.ResourceLevel;
+
 
 /**
  * NodeResource retrieves Node's SystemInformation
  */
 public class NodeResource {
     private NodeInfo nodeInfo;
-    private HashMap<String, String> nodeProperties;
+
+    public ResourceLevel getResourceLevel() {
+        return resourceLevel;
+    }
+
+    public void setResourceLevel(ResourceLevel resourceLevel) {
+        this.resourceLevel = resourceLevel;
+    }
+
+    private ResourceLevel resourceLevel;
     private NodeStatus nodeStatus;
 
-    /* public static void main(String[] args) {
-      NodeResource r = new NodeResource();
-      System.out.print(r.getNodeProperties().get(SiyapathConstants.MEMORY_INFO));
-  }  */
-
-
     public NodeResource(NodeInfo nodeInfo) {
-        nodeProperties = new HashMap<String, String>();
-        initNodeProperties();
+        initResourceLevel();
         this.nodeInfo = nodeInfo;
         setNodeStatus(NodeStatus.CREATED);
 
@@ -29,8 +33,7 @@ public class NodeResource {
 
 
     public NodeResource() {
-        nodeProperties = new HashMap<String, String>();
-        initNodeProperties();
+        initResourceLevel();
     }
 
 
@@ -51,39 +54,20 @@ public class NodeResource {
         }
     }
 
-    private void initNodeProperties() {
-        nodeProperties.put(SiyapathConstants.CPU_INFO, getCPUInfo());
-        nodeProperties.put(SiyapathConstants.MEMORY_INFO, getMemoryInfo());
-
-    }
-
-    /**
-     * @return NodeResource
-     */
-    public NodeResource refreshProperties(){
-          this.initNodeProperties();
+    public NodeResource refreshResourceLevel(){
+        this.initResourceLevel();
         return this;
     }
 
-    /**
-     * @return CPUInfo
-     */
-    private String getCPUInfo() {
-        return SigarSystemInformation.getCPUInformation();
-    }
+    private void initResourceLevel() {
+        if (SigarSystemInformation.getFreeMemoryInfo() < 2048) {
+            setResourceLevel(ResourceLevel.LOW);
+        } else if (2048 < SigarSystemInformation.getFreeMemoryInfo() && SigarSystemInformation.getFreeMemoryInfo() < 6144) {
+            setResourceLevel(ResourceLevel.MEDIUM);
+        } else if (6144 < SigarSystemInformation.getFreeMemoryInfo()) {
+            setResourceLevel(ResourceLevel.HIGH);
+        }
 
-    /**
-     * @return MemoryInfo
-     */
-    private String getMemoryInfo() {
-        return SigarSystemInformation.getMemoryInformation();
-    }
-
-    /**
-     * @param nodeProperties
-     */
-    public void setNodeProperties(HashMap<String, String> nodeProperties) {
-        this.nodeProperties = nodeProperties;
     }
 
     /**
@@ -101,12 +85,7 @@ public class NodeResource {
         return this.nodeInfo;
     }
 
-    /**
-     * @return nodeProperties
-     */
-    public HashMap<String, String> getNodeProperties() {
-        return this.nodeProperties;
-    }
+
 
     public boolean equals(Object obj) {
         if (obj == this) {

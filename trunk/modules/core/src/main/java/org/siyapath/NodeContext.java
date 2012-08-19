@@ -109,6 +109,19 @@ public class NodeContext {
         return randomMember;
     }
 
+    public NodeResource getRandomMemberWithResource() {
+        NodeResource randomMemberWithResource = null;
+        int randomID=0;
+        if (!getMemberResourceSet().isEmpty()) {
+            int memberCount = getMemberResourceSet().size();
+            int randomIndex = CommonUtils.getRandomNumber(memberCount);
+            Integer[] keyArray = getMemberResourceSet().keySet().toArray(new Integer[memberCount]);
+            randomID=keyArray[randomIndex];
+            randomMemberWithResource = getMemberResourceSet().get(randomID);
+        }
+        return randomMemberWithResource;
+    }
+
     /**
      * Adds a new member
      *
@@ -186,7 +199,7 @@ public class NodeContext {
     }
 
     public NodeResource getNodeResource() {
-        return nodeResource.refreshProperties();
+        return nodeResource.refreshResourceLevel();
     }
 
     public void setNodeResource(NodeResource nodeResource) {

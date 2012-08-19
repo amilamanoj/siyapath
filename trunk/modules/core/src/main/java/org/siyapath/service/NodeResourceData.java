@@ -34,7 +34,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("NodeResourceData");
 
   private static final org.apache.thrift.protocol.TField NODE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeData", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-  private static final org.apache.thrift.protocol.TField NODE_PROPERTIES_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeProperties", org.apache.thrift.protocol.TType.MAP, (short)2);
+  private static final org.apache.thrift.protocol.TField RESOURCE_LEVEL_FIELD_DESC = new org.apache.thrift.protocol.TField("resourceLevel", org.apache.thrift.protocol.TType.I32, (short)2);
   private static final org.apache.thrift.protocol.TField NODE_STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeStatus", org.apache.thrift.protocol.TType.I32, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
@@ -44,7 +44,11 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   }
 
   public NodeData nodeData; // required
-  public Map<String,String> nodeProperties; // required
+  /**
+   * 
+   * @see ResourceLevel
+   */
+  public ResourceLevel resourceLevel; // required
   /**
    * 
    * @see NodeStatus
@@ -54,7 +58,11 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     NODE_DATA((short)1, "nodeData"),
-    NODE_PROPERTIES((short)2, "nodeProperties"),
+    /**
+     * 
+     * @see ResourceLevel
+     */
+    RESOURCE_LEVEL((short)2, "resourceLevel"),
     /**
      * 
      * @see NodeStatus
@@ -76,8 +84,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       switch(fieldId) {
         case 1: // NODE_DATA
           return NODE_DATA;
-        case 2: // NODE_PROPERTIES
-          return NODE_PROPERTIES;
+        case 2: // RESOURCE_LEVEL
+          return RESOURCE_LEVEL;
         case 3: // NODE_STATUS
           return NODE_STATUS;
         default:
@@ -125,10 +133,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.NODE_DATA, new org.apache.thrift.meta_data.FieldMetaData("nodeData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
-    tmpMap.put(_Fields.NODE_PROPERTIES, new org.apache.thrift.meta_data.FieldMetaData("nodeProperties", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
-            new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
-            new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+    tmpMap.put(_Fields.RESOURCE_LEVEL, new org.apache.thrift.meta_data.FieldMetaData("resourceLevel", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, ResourceLevel.class)));
     tmpMap.put(_Fields.NODE_STATUS, new org.apache.thrift.meta_data.FieldMetaData("nodeStatus", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, NodeStatus.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -140,12 +146,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   public NodeResourceData(
     NodeData nodeData,
-    Map<String,String> nodeProperties,
+    ResourceLevel resourceLevel,
     NodeStatus nodeStatus)
   {
     this();
     this.nodeData = nodeData;
-    this.nodeProperties = nodeProperties;
+    this.resourceLevel = resourceLevel;
     this.nodeStatus = nodeStatus;
   }
 
@@ -156,20 +162,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     if (other.isSetNodeData()) {
       this.nodeData = new NodeData(other.nodeData);
     }
-    if (other.isSetNodeProperties()) {
-      Map<String,String> __this__nodeProperties = new HashMap<String,String>();
-      for (Map.Entry<String, String> other_element : other.nodeProperties.entrySet()) {
-
-        String other_element_key = other_element.getKey();
-        String other_element_value = other_element.getValue();
-
-        String __this__nodeProperties_copy_key = other_element_key;
-
-        String __this__nodeProperties_copy_value = other_element_value;
-
-        __this__nodeProperties.put(__this__nodeProperties_copy_key, __this__nodeProperties_copy_value);
-      }
-      this.nodeProperties = __this__nodeProperties;
+    if (other.isSetResourceLevel()) {
+      this.resourceLevel = other.resourceLevel;
     }
     if (other.isSetNodeStatus()) {
       this.nodeStatus = other.nodeStatus;
@@ -183,7 +177,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   @Override
   public void clear() {
     this.nodeData = null;
-    this.nodeProperties = null;
+    this.resourceLevel = null;
     this.nodeStatus = null;
   }
 
@@ -211,38 +205,35 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     }
   }
 
-  public int getNodePropertiesSize() {
-    return (this.nodeProperties == null) ? 0 : this.nodeProperties.size();
+  /**
+   * 
+   * @see ResourceLevel
+   */
+  public ResourceLevel getResourceLevel() {
+    return this.resourceLevel;
   }
 
-  public void putToNodeProperties(String key, String val) {
-    if (this.nodeProperties == null) {
-      this.nodeProperties = new HashMap<String,String>();
-    }
-    this.nodeProperties.put(key, val);
-  }
-
-  public Map<String,String> getNodeProperties() {
-    return this.nodeProperties;
-  }
-
-  public NodeResourceData setNodeProperties(Map<String,String> nodeProperties) {
-    this.nodeProperties = nodeProperties;
+  /**
+   * 
+   * @see ResourceLevel
+   */
+  public NodeResourceData setResourceLevel(ResourceLevel resourceLevel) {
+    this.resourceLevel = resourceLevel;
     return this;
   }
 
-  public void unsetNodeProperties() {
-    this.nodeProperties = null;
+  public void unsetResourceLevel() {
+    this.resourceLevel = null;
   }
 
-  /** Returns true if field nodeProperties is set (has been assigned a value) and false otherwise */
-  public boolean isSetNodeProperties() {
-    return this.nodeProperties != null;
+  /** Returns true if field resourceLevel is set (has been assigned a value) and false otherwise */
+  public boolean isSetResourceLevel() {
+    return this.resourceLevel != null;
   }
 
-  public void setNodePropertiesIsSet(boolean value) {
+  public void setResourceLevelIsSet(boolean value) {
     if (!value) {
-      this.nodeProperties = null;
+      this.resourceLevel = null;
     }
   }
 
@@ -288,11 +279,11 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       }
       break;
 
-    case NODE_PROPERTIES:
+    case RESOURCE_LEVEL:
       if (value == null) {
-        unsetNodeProperties();
+        unsetResourceLevel();
       } else {
-        setNodeProperties((Map<String,String>)value);
+        setResourceLevel((ResourceLevel)value);
       }
       break;
 
@@ -312,8 +303,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     case NODE_DATA:
       return getNodeData();
 
-    case NODE_PROPERTIES:
-      return getNodeProperties();
+    case RESOURCE_LEVEL:
+      return getResourceLevel();
 
     case NODE_STATUS:
       return getNodeStatus();
@@ -331,8 +322,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     switch (field) {
     case NODE_DATA:
       return isSetNodeData();
-    case NODE_PROPERTIES:
-      return isSetNodeProperties();
+    case RESOURCE_LEVEL:
+      return isSetResourceLevel();
     case NODE_STATUS:
       return isSetNodeStatus();
     }
@@ -361,12 +352,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         return false;
     }
 
-    boolean this_present_nodeProperties = true && this.isSetNodeProperties();
-    boolean that_present_nodeProperties = true && that.isSetNodeProperties();
-    if (this_present_nodeProperties || that_present_nodeProperties) {
-      if (!(this_present_nodeProperties && that_present_nodeProperties))
+    boolean this_present_resourceLevel = true && this.isSetResourceLevel();
+    boolean that_present_resourceLevel = true && that.isSetResourceLevel();
+    if (this_present_resourceLevel || that_present_resourceLevel) {
+      if (!(this_present_resourceLevel && that_present_resourceLevel))
         return false;
-      if (!this.nodeProperties.equals(that.nodeProperties))
+      if (!this.resourceLevel.equals(that.resourceLevel))
         return false;
     }
 
@@ -405,12 +396,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetNodeProperties()).compareTo(typedOther.isSetNodeProperties());
+    lastComparison = Boolean.valueOf(isSetResourceLevel()).compareTo(typedOther.isSetResourceLevel());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetNodeProperties()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.nodeProperties, typedOther.nodeProperties);
+    if (isSetResourceLevel()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.resourceLevel, typedOther.resourceLevel);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -453,11 +444,11 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("nodeProperties:");
-    if (this.nodeProperties == null) {
+    sb.append("resourceLevel:");
+    if (this.resourceLevel == null) {
       sb.append("null");
     } else {
-      sb.append(this.nodeProperties);
+      sb.append(this.resourceLevel);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -519,22 +510,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // NODE_PROPERTIES
-            if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
-              {
-                org.apache.thrift.protocol.TMap _map0 = iprot.readMapBegin();
-                struct.nodeProperties = new HashMap<String,String>(2*_map0.size);
-                for (int _i1 = 0; _i1 < _map0.size; ++_i1)
-                {
-                  String _key2; // required
-                  String _val3; // required
-                  _key2 = iprot.readString();
-                  _val3 = iprot.readString();
-                  struct.nodeProperties.put(_key2, _val3);
-                }
-                iprot.readMapEnd();
-              }
-              struct.setNodePropertiesIsSet(true);
+          case 2: // RESOURCE_LEVEL
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.resourceLevel = ResourceLevel.findByValue(iprot.readI32());
+              struct.setResourceLevelIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -567,17 +546,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         struct.nodeData.write(oprot);
         oprot.writeFieldEnd();
       }
-      if (struct.nodeProperties != null) {
-        oprot.writeFieldBegin(NODE_PROPERTIES_FIELD_DESC);
-        {
-          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, struct.nodeProperties.size()));
-          for (Map.Entry<String, String> _iter4 : struct.nodeProperties.entrySet())
-          {
-            oprot.writeString(_iter4.getKey());
-            oprot.writeString(_iter4.getValue());
-          }
-          oprot.writeMapEnd();
-        }
+      if (struct.resourceLevel != null) {
+        oprot.writeFieldBegin(RESOURCE_LEVEL_FIELD_DESC);
+        oprot.writeI32(struct.resourceLevel.getValue());
         oprot.writeFieldEnd();
       }
       if (struct.nodeStatus != null) {
@@ -606,7 +577,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (struct.isSetNodeData()) {
         optionals.set(0);
       }
-      if (struct.isSetNodeProperties()) {
+      if (struct.isSetResourceLevel()) {
         optionals.set(1);
       }
       if (struct.isSetNodeStatus()) {
@@ -616,15 +587,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (struct.isSetNodeData()) {
         struct.nodeData.write(oprot);
       }
-      if (struct.isSetNodeProperties()) {
-        {
-          oprot.writeI32(struct.nodeProperties.size());
-          for (Map.Entry<String, String> _iter5 : struct.nodeProperties.entrySet())
-          {
-            oprot.writeString(_iter5.getKey());
-            oprot.writeString(_iter5.getValue());
-          }
-        }
+      if (struct.isSetResourceLevel()) {
+        oprot.writeI32(struct.resourceLevel.getValue());
       }
       if (struct.isSetNodeStatus()) {
         oprot.writeI32(struct.nodeStatus.getValue());
@@ -641,19 +605,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         struct.setNodeDataIsSet(true);
       }
       if (incoming.get(1)) {
-        {
-          org.apache.thrift.protocol.TMap _map6 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, iprot.readI32());
-          struct.nodeProperties = new HashMap<String,String>(2*_map6.size);
-          for (int _i7 = 0; _i7 < _map6.size; ++_i7)
-          {
-            String _key8; // required
-            String _val9; // required
-            _key8 = iprot.readString();
-            _val9 = iprot.readString();
-            struct.nodeProperties.put(_key8, _val9);
-          }
-        }
-        struct.setNodePropertiesIsSet(true);
+        struct.resourceLevel = ResourceLevel.findByValue(iprot.readI32());
+        struct.setResourceLevelIsSet(true);
       }
       if (incoming.get(2)) {
         struct.nodeStatus = NodeStatus.findByValue(iprot.readI32());
