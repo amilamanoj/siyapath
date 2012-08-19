@@ -18,6 +18,7 @@ public class TestSiyapathSimulation extends TestCase {
 
     private static final Log log = LogFactory.getLog(TestSiyapathSimulation.class);
     private int nodeCount;
+    private int clientCount;
     private ArrayList<SiyapathNodeController> controllerList;
     private UserHandler userHandler;
     private Map<String,TaskData> taskFileList;
@@ -39,15 +40,18 @@ public class TestSiyapathSimulation extends TestCase {
     public void testSimulation() throws Exception {
         log.info("Running simulation");
         String nodes = System.getProperty("nodes");
+        String clients = System.getProperty("clients");
+
         try {
             nodeCount = Integer.parseInt(nodes);
+            clientCount = Integer.parseInt(clients); // n number of clients will start by running this test
 
             startBootStrapper();
             startNodes();
             waitForGossip();
-            prepareJob();
-            submitJobs();
-            waitForProcessing();
+            prepareJob();   // :P
+            submitJobs();   // :P
+            waitForProcessing();  // :P
 
             log.info("Total nodes: " + nodeCount);
             Assert.assertEquals("a", "a");
