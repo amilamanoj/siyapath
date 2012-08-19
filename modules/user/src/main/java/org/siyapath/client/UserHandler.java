@@ -113,7 +113,7 @@ public class UserHandler {
 
         for (TaskData taskData : taskList.values()) {
             int taskId = Math.abs((jobIdString + "::" + taskCounter++).hashCode());
-            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResources());
+            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResourceLevel());
             taskMap.put(taskId, task);
         }
 

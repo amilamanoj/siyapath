@@ -7,6 +7,7 @@ import org.siyapath.NodeResource;
 import org.siyapath.SiyapathConstants;
 import org.siyapath.job.JobScheduler;
 import org.siyapath.service.Task;
+import sun.audio.NativeAudioStream;
 
 import javax.xml.bind.SchemaOutputResolver;
 import java.util.Iterator;
@@ -24,8 +25,7 @@ public class PushJobScheduler implements JobScheduler {
     @Override
     public NodeInfo selectTaskProcessorNode(Task task) {
 
-        String requiredResources = task.getRequiredResources().trim();
-
+        String requiredResources = task.getRequiredResourceLevel().trim();
         return getMatchingNode(requiredResources);
     }
 
@@ -50,6 +50,8 @@ public class PushJobScheduler implements JobScheduler {
                 return nodeResource.getNodeInfo();
             }
         }*/
-        return context.getRandomMember();
+
+
+        return context.getRandomMemberWithResource().getNodeInfo();
     }
 }

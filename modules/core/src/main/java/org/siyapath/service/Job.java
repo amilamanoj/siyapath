@@ -515,16 +515,16 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
           case 3: // TASKS
             if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
               {
-                org.apache.thrift.protocol.TMap _map10 = iprot.readMapBegin();
-                struct.tasks = new HashMap<Integer,Task>(2*_map10.size);
-                for (int _i11 = 0; _i11 < _map10.size; ++_i11)
+                org.apache.thrift.protocol.TMap _map0 = iprot.readMapBegin();
+                struct.tasks = new HashMap<Integer,Task>(2*_map0.size);
+                for (int _i1 = 0; _i1 < _map0.size; ++_i1)
                 {
-                  int _key12; // required
-                  Task _val13; // required
-                  _key12 = iprot.readI32();
-                  _val13 = new Task();
-                  _val13.read(iprot);
-                  struct.tasks.put(_key12, _val13);
+                  int _key2; // required
+                  Task _val3; // required
+                  _key2 = iprot.readI32();
+                  _val3 = new Task();
+                  _val3.read(iprot);
+                  struct.tasks.put(_key2, _val3);
                 }
                 iprot.readMapEnd();
               }
@@ -560,10 +560,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         oprot.writeFieldBegin(TASKS_FIELD_DESC);
         {
           oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.tasks.size()));
-          for (Map.Entry<Integer, Task> _iter14 : struct.tasks.entrySet())
+          for (Map.Entry<Integer, Task> _iter4 : struct.tasks.entrySet())
           {
-            oprot.writeI32(_iter14.getKey());
-            _iter14.getValue().write(oprot);
+            oprot.writeI32(_iter4.getKey());
+            _iter4.getValue().write(oprot);
           }
           oprot.writeMapEnd();
         }
@@ -606,10 +606,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       if (struct.isSetTasks()) {
         {
           oprot.writeI32(struct.tasks.size());
-          for (Map.Entry<Integer, Task> _iter15 : struct.tasks.entrySet())
+          for (Map.Entry<Integer, Task> _iter5 : struct.tasks.entrySet())
           {
-            oprot.writeI32(_iter15.getKey());
-            _iter15.getValue().write(oprot);
+            oprot.writeI32(_iter5.getKey());
+            _iter5.getValue().write(oprot);
           }
         }
       }
@@ -630,16 +630,16 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       }
       if (incoming.get(2)) {
         {
-          org.apache.thrift.protocol.TMap _map16 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-          struct.tasks = new HashMap<Integer,Task>(2*_map16.size);
-          for (int _i17 = 0; _i17 < _map16.size; ++_i17)
+          org.apache.thrift.protocol.TMap _map6 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+          struct.tasks = new HashMap<Integer,Task>(2*_map6.size);
+          for (int _i7 = 0; _i7 < _map6.size; ++_i7)
           {
-            int _key18; // required
-            Task _val19; // required
-            _key18 = iprot.readI32();
-            _val19 = new Task();
-            _val19.read(iprot);
-            struct.tasks.put(_key18, _val19);
+            int _key8; // required
+            Task _val9; // required
+            _key8 = iprot.readI32();
+            _val9 = new Task();
+            _val9.read(iprot);
+            struct.tasks.put(_key8, _val9);
           }
         }
         struct.setTasksIsSet(true);

@@ -19,25 +19,28 @@ public class SigarSystemInformation {
         return "Cores:" + cpuInfo.length + "-Speed:" + cpuInfo[0].getMhz() + "Mhz";
     }
 
-
-    public static String getCPUInformationD() {
+    public static int getNoOfCores() {
         CpuInfo[] cpuInfo = null;
-        String cpuStat = "";
         try {
             cpuInfo = sigar.getCpuInfoList();
+
         } catch (SigarException se) {
             se.printStackTrace();
         }
-        cpuStat = "CPU Information";
-        cpuStat += "Found " + cpuInfo.length + " CPU(s)";
-
-        for (int i = 0; i < cpuInfo.length; i++) {
-            Map map = cpuInfo[i].toMap();
-            cpuStat += "\n" + "CPU " + i + ": " + map;
-        }
-
-        return cpuStat;
+        return cpuInfo.length ;
     }
+
+    public static int getCPUSpeed() {
+        CpuInfo[] cpuInfo = null;
+        try {
+            cpuInfo = sigar.getCpuInfoList();
+
+        } catch (SigarException se) {
+            se.printStackTrace();
+        }
+        return (cpuInfo[0].getMhz()/1024) ;
+    }
+
 
 
     public static String getMemoryInformation() {
@@ -59,6 +62,20 @@ public class SigarSystemInformation {
         memoryStat += "\n" + "Total used system memory.......: " + memoryInfo.getUsed() / (1024 * 1024) + " MB";
 
         return memoryStat;
+    }
+
+
+    public static int getFreeMemoryInfo() {
+
+        Mem memoryInfo = null;
+        String memoryStat = "";
+        try {
+            memoryInfo = sigar.getMem();
+        } catch (SigarException se) {
+            se.printStackTrace();
+        }
+
+        return (int) (memoryInfo.getActualFree() / (1024 * 1024));
     }
 
     public static void getFileSystemInformation() {

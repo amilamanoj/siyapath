@@ -11,6 +11,14 @@ enum NodeStatus {
   IDLE = 7
 }
 
+
+enum ResourceLevel {
+        LOW = 1,
+        MEDIUM = 2,
+        HIGH = 3
+}
+
+
 enum TaskStatus {
   RECEIVED = 1,
   PROCESSING = 2,
@@ -32,7 +40,7 @@ struct NodeData {
  */
 struct NodeResourceData {
     1: NodeData nodeData,
-    2: map<string,string> nodeProperties
+    2: ResourceLevel resourceLevel,
     3: NodeStatus nodeStatus
 }
 
@@ -47,7 +55,7 @@ struct Task {
     5: string className,
     6: NodeData sender,
     7: NodeData backup,
-    8: string requiredResources
+    8: string requiredResourceLevel
 }
 
 /**

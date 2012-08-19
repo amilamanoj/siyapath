@@ -112,7 +112,7 @@ public class CommonUtils {
      */
     public static NodeResourceData serialize(NodeResource nodeResource) {
         NodeResourceData resourceData = new NodeResourceData();
-        resourceData.setNodeProperties(nodeResource.getNodeProperties());
+        resourceData.setResourceLevel(nodeResource.getResourceLevel());
         resourceData.setNodeData(serialize(nodeResource.getNodeInfo()));
         resourceData.setNodeStatus(nodeResource.getNodeStatus());
         return resourceData;
@@ -160,7 +160,7 @@ public class CommonUtils {
      */
     public static NodeResource deSerialize(NodeResourceData nodeResourceData) {
         NodeResource nodeResource = new NodeResource();
-        nodeResource.setNodeProperties((HashMap<String, String>) nodeResourceData.getNodeProperties());
+        nodeResource.setResourceLevel((nodeResourceData.getResourceLevel()));
         nodeResource.setNodeInfo(deSerialize(nodeResourceData.getNodeData()));
         nodeResource.setNodeStatus(nodeResourceData.getNodeStatus());
         return nodeResource;

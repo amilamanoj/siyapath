@@ -1476,16 +1476,16 @@ public class Siyapath {
             case 1: // KNOWN_RESOURCE_NODES
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
-                  org.apache.thrift.protocol.TMap _map20 = iprot.readMapBegin();
-                  struct.knownResourceNodes = new HashMap<Integer,NodeResourceData>(2*_map20.size);
-                  for (int _i21 = 0; _i21 < _map20.size; ++_i21)
+                  org.apache.thrift.protocol.TMap _map10 = iprot.readMapBegin();
+                  struct.knownResourceNodes = new HashMap<Integer,NodeResourceData>(2*_map10.size);
+                  for (int _i11 = 0; _i11 < _map10.size; ++_i11)
                   {
-                    int _key22; // required
-                    NodeResourceData _val23; // required
-                    _key22 = iprot.readI32();
-                    _val23 = new NodeResourceData();
-                    _val23.read(iprot);
-                    struct.knownResourceNodes.put(_key22, _val23);
+                    int _key12; // required
+                    NodeResourceData _val13; // required
+                    _key12 = iprot.readI32();
+                    _val13 = new NodeResourceData();
+                    _val13.read(iprot);
+                    struct.knownResourceNodes.put(_key12, _val13);
                   }
                   iprot.readMapEnd();
                 }
@@ -1513,10 +1513,10 @@ public class Siyapath {
           oprot.writeFieldBegin(KNOWN_RESOURCE_NODES_FIELD_DESC);
           {
             oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.knownResourceNodes.size()));
-            for (Map.Entry<Integer, NodeResourceData> _iter24 : struct.knownResourceNodes.entrySet())
+            for (Map.Entry<Integer, NodeResourceData> _iter14 : struct.knownResourceNodes.entrySet())
             {
-              oprot.writeI32(_iter24.getKey());
-              _iter24.getValue().write(oprot);
+              oprot.writeI32(_iter14.getKey());
+              _iter14.getValue().write(oprot);
             }
             oprot.writeMapEnd();
           }
@@ -1547,10 +1547,10 @@ public class Siyapath {
         if (struct.isSetKnownResourceNodes()) {
           {
             oprot.writeI32(struct.knownResourceNodes.size());
-            for (Map.Entry<Integer, NodeResourceData> _iter25 : struct.knownResourceNodes.entrySet())
+            for (Map.Entry<Integer, NodeResourceData> _iter15 : struct.knownResourceNodes.entrySet())
             {
-              oprot.writeI32(_iter25.getKey());
-              _iter25.getValue().write(oprot);
+              oprot.writeI32(_iter15.getKey());
+              _iter15.getValue().write(oprot);
             }
           }
         }
@@ -1562,16 +1562,16 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TMap _map26 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.knownResourceNodes = new HashMap<Integer,NodeResourceData>(2*_map26.size);
-            for (int _i27 = 0; _i27 < _map26.size; ++_i27)
+            org.apache.thrift.protocol.TMap _map16 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.knownResourceNodes = new HashMap<Integer,NodeResourceData>(2*_map16.size);
+            for (int _i17 = 0; _i17 < _map16.size; ++_i17)
             {
-              int _key28; // required
-              NodeResourceData _val29; // required
-              _key28 = iprot.readI32();
-              _val29 = new NodeResourceData();
-              _val29.read(iprot);
-              struct.knownResourceNodes.put(_key28, _val29);
+              int _key18; // required
+              NodeResourceData _val19; // required
+              _key18 = iprot.readI32();
+              _val19 = new NodeResourceData();
+              _val19.read(iprot);
+              struct.knownResourceNodes.put(_key18, _val19);
             }
           }
           struct.setKnownResourceNodesIsSet(true);
@@ -1894,16 +1894,16 @@ public class Siyapath {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
-                  org.apache.thrift.protocol.TMap _map30 = iprot.readMapBegin();
-                  struct.success = new HashMap<Integer,NodeResourceData>(2*_map30.size);
-                  for (int _i31 = 0; _i31 < _map30.size; ++_i31)
+                  org.apache.thrift.protocol.TMap _map20 = iprot.readMapBegin();
+                  struct.success = new HashMap<Integer,NodeResourceData>(2*_map20.size);
+                  for (int _i21 = 0; _i21 < _map20.size; ++_i21)
                   {
-                    int _key32; // required
-                    NodeResourceData _val33; // required
-                    _key32 = iprot.readI32();
-                    _val33 = new NodeResourceData();
-                    _val33.read(iprot);
-                    struct.success.put(_key32, _val33);
+                    int _key22; // required
+                    NodeResourceData _val23; // required
+                    _key22 = iprot.readI32();
+                    _val23 = new NodeResourceData();
+                    _val23.read(iprot);
+                    struct.success.put(_key22, _val23);
                   }
                   iprot.readMapEnd();
                 }
@@ -1931,10 +1931,10 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Map.Entry<Integer, NodeResourceData> _iter34 : struct.success.entrySet())
+            for (Map.Entry<Integer, NodeResourceData> _iter24 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter34.getKey());
-              _iter34.getValue().write(oprot);
+              oprot.writeI32(_iter24.getKey());
+              _iter24.getValue().write(oprot);
             }
             oprot.writeMapEnd();
           }
@@ -1965,10 +1965,10 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Map.Entry<Integer, NodeResourceData> _iter35 : struct.success.entrySet())
+            for (Map.Entry<Integer, NodeResourceData> _iter25 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter35.getKey());
-              _iter35.getValue().write(oprot);
+              oprot.writeI32(_iter25.getKey());
+              _iter25.getValue().write(oprot);
             }
           }
         }
@@ -1980,16 +1980,16 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TMap _map36 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashMap<Integer,NodeResourceData>(2*_map36.size);
-            for (int _i37 = 0; _i37 < _map36.size; ++_i37)
+            org.apache.thrift.protocol.TMap _map26 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashMap<Integer,NodeResourceData>(2*_map26.size);
+            for (int _i27 = 0; _i27 < _map26.size; ++_i27)
             {
-              int _key38; // required
-              NodeResourceData _val39; // required
-              _key38 = iprot.readI32();
-              _val39 = new NodeResourceData();
-              _val39.read(iprot);
-              struct.success.put(_key38, _val39);
+              int _key28; // required
+              NodeResourceData _val29; // required
+              _key28 = iprot.readI32();
+              _val29 = new NodeResourceData();
+              _val29.read(iprot);
+              struct.success.put(_key28, _val29);
             }
           }
           struct.setSuccessIsSet(true);
@@ -3098,14 +3098,14 @@ public class Siyapath {
             case 2: // KNOWN_NODES
               if (schemeField.type == org.apache.thrift.protocol.TType.SET) {
                 {
-                  org.apache.thrift.protocol.TSet _set40 = iprot.readSetBegin();
-                  struct.knownNodes = new HashSet<NodeData>(2*_set40.size);
-                  for (int _i41 = 0; _i41 < _set40.size; ++_i41)
+                  org.apache.thrift.protocol.TSet _set30 = iprot.readSetBegin();
+                  struct.knownNodes = new HashSet<NodeData>(2*_set30.size);
+                  for (int _i31 = 0; _i31 < _set30.size; ++_i31)
                   {
-                    NodeData _elem42; // required
-                    _elem42 = new NodeData();
-                    _elem42.read(iprot);
-                    struct.knownNodes.add(_elem42);
+                    NodeData _elem32; // required
+                    _elem32 = new NodeData();
+                    _elem32.read(iprot);
+                    struct.knownNodes.add(_elem32);
                   }
                   iprot.readSetEnd();
                 }
@@ -3138,9 +3138,9 @@ public class Siyapath {
           oprot.writeFieldBegin(KNOWN_NODES_FIELD_DESC);
           {
             oprot.writeSetBegin(new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, struct.knownNodes.size()));
-            for (NodeData _iter43 : struct.knownNodes)
+            for (NodeData _iter33 : struct.knownNodes)
             {
-              _iter43.write(oprot);
+              _iter33.write(oprot);
             }
             oprot.writeSetEnd();
           }
@@ -3177,9 +3177,9 @@ public class Siyapath {
         if (struct.isSetKnownNodes()) {
           {
             oprot.writeI32(struct.knownNodes.size());
-            for (NodeData _iter44 : struct.knownNodes)
+            for (NodeData _iter34 : struct.knownNodes)
             {
-              _iter44.write(oprot);
+              _iter34.write(oprot);
             }
           }
         }
@@ -3196,14 +3196,14 @@ public class Siyapath {
         }
         if (incoming.get(1)) {
           {
-            org.apache.thrift.protocol.TSet _set45 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.knownNodes = new HashSet<NodeData>(2*_set45.size);
-            for (int _i46 = 0; _i46 < _set45.size; ++_i46)
+            org.apache.thrift.protocol.TSet _set35 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.knownNodes = new HashSet<NodeData>(2*_set35.size);
+            for (int _i36 = 0; _i36 < _set35.size; ++_i36)
             {
-              NodeData _elem47; // required
-              _elem47 = new NodeData();
-              _elem47.read(iprot);
-              struct.knownNodes.add(_elem47);
+              NodeData _elem37; // required
+              _elem37 = new NodeData();
+              _elem37.read(iprot);
+              struct.knownNodes.add(_elem37);
             }
           }
           struct.setKnownNodesIsSet(true);
@@ -3521,14 +3521,14 @@ public class Siyapath {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.SET) {
                 {
-                  org.apache.thrift.protocol.TSet _set48 = iprot.readSetBegin();
-                  struct.success = new HashSet<NodeData>(2*_set48.size);
-                  for (int _i49 = 0; _i49 < _set48.size; ++_i49)
+                  org.apache.thrift.protocol.TSet _set38 = iprot.readSetBegin();
+                  struct.success = new HashSet<NodeData>(2*_set38.size);
+                  for (int _i39 = 0; _i39 < _set38.size; ++_i39)
                   {
-                    NodeData _elem50; // required
-                    _elem50 = new NodeData();
-                    _elem50.read(iprot);
-                    struct.success.add(_elem50);
+                    NodeData _elem40; // required
+                    _elem40 = new NodeData();
+                    _elem40.read(iprot);
+                    struct.success.add(_elem40);
                   }
                   iprot.readSetEnd();
                 }
@@ -3556,9 +3556,9 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeSetBegin(new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (NodeData _iter51 : struct.success)
+            for (NodeData _iter41 : struct.success)
             {
-              _iter51.write(oprot);
+              _iter41.write(oprot);
             }
             oprot.writeSetEnd();
           }
@@ -3589,9 +3589,9 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (NodeData _iter52 : struct.success)
+            for (NodeData _iter42 : struct.success)
             {
-              _iter52.write(oprot);
+              _iter42.write(oprot);
             }
           }
         }
@@ -3603,14 +3603,14 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TSet _set53 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashSet<NodeData>(2*_set53.size);
-            for (int _i54 = 0; _i54 < _set53.size; ++_i54)
+            org.apache.thrift.protocol.TSet _set43 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashSet<NodeData>(2*_set43.size);
+            for (int _i44 = 0; _i44 < _set43.size; ++_i44)
             {
-              NodeData _elem55; // required
-              _elem55 = new NodeData();
-              _elem55.read(iprot);
-              struct.success.add(_elem55);
+              NodeData _elem45; // required
+              _elem45 = new NodeData();
+              _elem45.read(iprot);
+              struct.success.add(_elem45);
             }
           }
           struct.setSuccessIsSet(true);
@@ -4173,14 +4173,14 @@ public class Siyapath {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.SET) {
                 {
-                  org.apache.thrift.protocol.TSet _set56 = iprot.readSetBegin();
-                  struct.success = new HashSet<NodeData>(2*_set56.size);
-                  for (int _i57 = 0; _i57 < _set56.size; ++_i57)
+                  org.apache.thrift.protocol.TSet _set46 = iprot.readSetBegin();
+                  struct.success = new HashSet<NodeData>(2*_set46.size);
+                  for (int _i47 = 0; _i47 < _set46.size; ++_i47)
                   {
-                    NodeData _elem58; // required
-                    _elem58 = new NodeData();
-                    _elem58.read(iprot);
-                    struct.success.add(_elem58);
+                    NodeData _elem48; // required
+                    _elem48 = new NodeData();
+                    _elem48.read(iprot);
+                    struct.success.add(_elem48);
                   }
                   iprot.readSetEnd();
                 }
@@ -4208,9 +4208,9 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeSetBegin(new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (NodeData _iter59 : struct.success)
+            for (NodeData _iter49 : struct.success)
             {
-              _iter59.write(oprot);
+              _iter49.write(oprot);
             }
             oprot.writeSetEnd();
           }
@@ -4241,9 +4241,9 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (NodeData _iter60 : struct.success)
+            for (NodeData _iter50 : struct.success)
             {
-              _iter60.write(oprot);
+              _iter50.write(oprot);
             }
           }
         }
@@ -4255,14 +4255,14 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TSet _set61 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashSet<NodeData>(2*_set61.size);
-            for (int _i62 = 0; _i62 < _set61.size; ++_i62)
+            org.apache.thrift.protocol.TSet _set51 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashSet<NodeData>(2*_set51.size);
+            for (int _i52 = 0; _i52 < _set51.size; ++_i52)
             {
-              NodeData _elem63; // required
-              _elem63 = new NodeData();
-              _elem63.read(iprot);
-              struct.success.add(_elem63);
+              NodeData _elem53; // required
+              _elem53 = new NodeData();
+              _elem53.read(iprot);
+              struct.success.add(_elem53);
             }
           }
           struct.setSuccessIsSet(true);
@@ -7746,16 +7746,16 @@ public class Siyapath {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
-                  org.apache.thrift.protocol.TMap _map64 = iprot.readMapBegin();
-                  struct.success = new HashMap<Integer,TaskResult>(2*_map64.size);
-                  for (int _i65 = 0; _i65 < _map64.size; ++_i65)
+                  org.apache.thrift.protocol.TMap _map54 = iprot.readMapBegin();
+                  struct.success = new HashMap<Integer,TaskResult>(2*_map54.size);
+                  for (int _i55 = 0; _i55 < _map54.size; ++_i55)
                   {
-                    int _key66; // required
-                    TaskResult _val67; // required
-                    _key66 = iprot.readI32();
-                    _val67 = new TaskResult();
-                    _val67.read(iprot);
-                    struct.success.put(_key66, _val67);
+                    int _key56; // required
+                    TaskResult _val57; // required
+                    _key56 = iprot.readI32();
+                    _val57 = new TaskResult();
+                    _val57.read(iprot);
+                    struct.success.put(_key56, _val57);
                   }
                   iprot.readMapEnd();
                 }
@@ -7783,10 +7783,10 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Map.Entry<Integer, TaskResult> _iter68 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter58 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter68.getKey());
-              _iter68.getValue().write(oprot);
+              oprot.writeI32(_iter58.getKey());
+              _iter58.getValue().write(oprot);
             }
             oprot.writeMapEnd();
           }
@@ -7817,10 +7817,10 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Map.Entry<Integer, TaskResult> _iter69 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter59 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter69.getKey());
-              _iter69.getValue().write(oprot);
+              oprot.writeI32(_iter59.getKey());
+              _iter59.getValue().write(oprot);
             }
           }
         }
@@ -7832,16 +7832,16 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TMap _map70 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashMap<Integer,TaskResult>(2*_map70.size);
-            for (int _i71 = 0; _i71 < _map70.size; ++_i71)
+            org.apache.thrift.protocol.TMap _map60 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashMap<Integer,TaskResult>(2*_map60.size);
+            for (int _i61 = 0; _i61 < _map60.size; ++_i61)
             {
-              int _key72; // required
-              TaskResult _val73; // required
-              _key72 = iprot.readI32();
-              _val73 = new TaskResult();
-              _val73.read(iprot);
-              struct.success.put(_key72, _val73);
+              int _key62; // required
+              TaskResult _val63; // required
+              _key62 = iprot.readI32();
+              _val63 = new TaskResult();
+              _val63.read(iprot);
+              struct.success.put(_key62, _val63);
             }
           }
           struct.setSuccessIsSet(true);
@@ -8516,16 +8516,16 @@ public class Siyapath {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
                 {
-                  org.apache.thrift.protocol.TMap _map74 = iprot.readMapBegin();
-                  struct.success = new HashMap<Integer,TaskResult>(2*_map74.size);
-                  for (int _i75 = 0; _i75 < _map74.size; ++_i75)
+                  org.apache.thrift.protocol.TMap _map64 = iprot.readMapBegin();
+                  struct.success = new HashMap<Integer,TaskResult>(2*_map64.size);
+                  for (int _i65 = 0; _i65 < _map64.size; ++_i65)
                   {
-                    int _key76; // required
-                    TaskResult _val77; // required
-                    _key76 = iprot.readI32();
-                    _val77 = new TaskResult();
-                    _val77.read(iprot);
-                    struct.success.put(_key76, _val77);
+                    int _key66; // required
+                    TaskResult _val67; // required
+                    _key66 = iprot.readI32();
+                    _val67 = new TaskResult();
+                    _val67.read(iprot);
+                    struct.success.put(_key66, _val67);
                   }
                   iprot.readMapEnd();
                 }
@@ -8553,10 +8553,10 @@ public class Siyapath {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Map.Entry<Integer, TaskResult> _iter78 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter68 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter78.getKey());
-              _iter78.getValue().write(oprot);
+              oprot.writeI32(_iter68.getKey());
+              _iter68.getValue().write(oprot);
             }
             oprot.writeMapEnd();
           }
@@ -8587,10 +8587,10 @@ public class Siyapath {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Map.Entry<Integer, TaskResult> _iter79 : struct.success.entrySet())
+            for (Map.Entry<Integer, TaskResult> _iter69 : struct.success.entrySet())
             {
-              oprot.writeI32(_iter79.getKey());
-              _iter79.getValue().write(oprot);
+              oprot.writeI32(_iter69.getKey());
+              _iter69.getValue().write(oprot);
             }
           }
         }
@@ -8602,16 +8602,16 @@ public class Siyapath {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TMap _map80 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new HashMap<Integer,TaskResult>(2*_map80.size);
-            for (int _i81 = 0; _i81 < _map80.size; ++_i81)
+            org.apache.thrift.protocol.TMap _map70 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.I32, org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new HashMap<Integer,TaskResult>(2*_map70.size);
+            for (int _i71 = 0; _i71 < _map70.size; ++_i71)
             {
-              int _key82; // required
-              TaskResult _val83; // required
-              _key82 = iprot.readI32();
-              _val83 = new TaskResult();
-              _val83.read(iprot);
-              struct.success.put(_key82, _val83);
+              int _key72; // required
+              TaskResult _val73; // required
+              _key72 = iprot.readI32();
+              _val73 = new TaskResult();
+              _val73.read(iprot);
+              struct.success.put(_key72, _val73);
             }
           }
           struct.setSuccessIsSet(true);
