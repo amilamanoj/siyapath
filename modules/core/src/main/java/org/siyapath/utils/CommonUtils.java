@@ -60,20 +60,18 @@ public class CommonUtils {
         } catch (SocketException e1) {
             e1.printStackTrace();
         }
-        if (ipAddresses.isEmpty()) {
-            return null;
-        } else {
+        if (!ipAddresses.isEmpty()) {
             for (InetAddress ip : ipAddresses) {
                 if (ip instanceof Inet4Address) {
                     ipAddress = ip.getHostAddress();
                     break;
                 }
             }
+            if (ipAddress == null) {
+                ipAddress = ipAddresses.get(0).getHostAddress();
+            }
         }
 
-        if (ipAddress == null) {
-            ipAddress = ipAddresses.get(0).getHostAddress();
-        }
 
         return "localhost";//ipAddress;  //TODO: only for testing
     }
