@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -375,7 +376,24 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_nodeData = true && (isSetNodeData());
+    builder.append(present_nodeData);
+    if (present_nodeData)
+      builder.append(nodeData);
+
+    boolean present_resourceLevel = true && (isSetResourceLevel());
+    builder.append(present_resourceLevel);
+    if (present_resourceLevel)
+      builder.append(resourceLevel.getValue());
+
+    boolean present_nodeStatus = true && (isSetNodeStatus());
+    builder.append(present_nodeStatus);
+    if (present_nodeStatus)
+      builder.append(nodeStatus.getValue());
+
+    return builder.toHashCode();
   }
 
   public int compareTo(NodeResourceData other) {

@@ -14,7 +14,7 @@ public class ProcessingTask {
     private byte[] result;
     private ReplicationStatus replicationStatus;
     private long timeLastUpdated;
-
+    private NodeInfo backupNode;
 
 
     public enum ReplicationStatus {
@@ -74,5 +74,13 @@ public class ProcessingTask {
 
     public void setTimeLastUpdated(long timeLastUpdated) {
         this.timeLastUpdated = timeLastUpdated;
+    }
+
+    public NodeInfo getBackupNode() {
+        return backupNode;
+    }
+
+    public void setBackupNode(NodeInfo backupNode) {
+        this.backupNode = backupNode;
     }
 }

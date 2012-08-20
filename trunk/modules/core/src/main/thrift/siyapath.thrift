@@ -101,7 +101,10 @@ service Siyapath {
     bool isAlive(),
 
     //request a member to become a backup node for given job
-    bool requestBecomeBackup(1:i32 jobID, 2:NodeData node ),
+    bool requestBecomeBackup(1:Job job, 2:NodeData node ),
+
+    //Stop backing-up when job is complete
+    void endBackup(),
 
     //Submitting a job
     bool submitJob(1:Job job),
@@ -117,6 +120,9 @@ service Siyapath {
 
     //Sending task result to job-distributing node
     bool sendTaskResult (1:Result result),
+
+    //Sending task result to backup node by job-distributing node
+    bool sendTaskResultToBackup (1:Result result),
 
     //Notify job-distributing node that the task processor is alive
     void notifyTaskLiveness (1:i32 taskID),

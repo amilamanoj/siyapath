@@ -156,12 +156,12 @@ public class TaskProcessor extends Thread {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            if (client.isAlive()) {
+            if (client.isAlive()) {  //TODO: handle exception if false
                 log.info("Sending computed result back to Distributing node." + task.getSender());
                 client.sendTaskResult(result);
             } else {
-                log.warn("Task Distributor is no longer available on port: " + task.getSender());
-                sendResultToBackupNode(result);
+//                log.warn("Task Distributor is no longer available on port: " + task.getSender());
+//                sendResultToBackupNode(result);
             }
 
         } catch (TTransportException e) {
@@ -176,20 +176,20 @@ public class TaskProcessor extends Thread {
         }
     }
 
-    private void sendResultToBackupNode(Result result) {
-        TTransport transport = new TSocket(task.getBackup().getIp(), task.getBackup().getPort());
-        try {
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            log.info("Sending computed result to the backup node." + task.getBackup());
-            client.sendTaskResult(result);
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void sendResultToBackupNode(Result result) {
+//        TTransport transport = new TSocket(task.getBackup().getIp(), task.getBackup().getPort());
+//        try {
+//            transport.open();
+//            TProtocol protocol = new TBinaryProtocol(transport);
+//            Siyapath.Client client = new Siyapath.Client(protocol);
+//            log.info("Sending computed result to the backup node." + task.getBackup());
+//            client.sendTaskResult(result);
+//        } catch (TTransportException e) {
+//            e.printStackTrace();
+//        } catch (TException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private class LivenessNotifier extends Thread {
         private boolean isRunning = false;
