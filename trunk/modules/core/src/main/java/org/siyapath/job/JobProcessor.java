@@ -132,6 +132,9 @@ public class JobProcessor {
             NodeInfo backup = createBackup(job);
             for (Task task : job.getTasks().values()) {
                 try {
+                    while (taskQueue.remainingCapacity() == 1) {
+                        Thread.sleep(100);
+                    }
                     task.setBackup(CommonUtils.serialize(backup));
                     if (!taskMap.containsKey(task.getTaskID())) {
                         taskQueue.put(task);
