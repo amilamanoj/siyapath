@@ -78,11 +78,10 @@ public class NodeContext {
     public synchronized void decreaseProTasksNo() {
         if (processingTasksNo > 0) {
             processingTasksNo--;
-            if (this.getProcessingTasksNo() < SiyapathConstants.PARALLEL_TASKS) {
-                getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
-
-            } else if (processingTasksNo == 0) {
+            if (processingTasksNo == 0) {
                 getNodeResource().setNodeStatus(NodeStatus.IDLE);
+            } else if (this.getProcessingTasksNo() < SiyapathConstants.PARALLEL_TASKS) {
+                getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
             }
         }
 

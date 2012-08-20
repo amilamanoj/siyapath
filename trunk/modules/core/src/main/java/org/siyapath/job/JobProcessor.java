@@ -251,13 +251,14 @@ public class JobProcessor {
         if (requestedJob != null) {
             Set<Integer> taskIds = requestedJob.getTasks().keySet(); // task ids of the requested job: should be there tasks:P
             taskStatusMap = new HashMap<Integer, TaskResult>();
-            ProcessingTask processingTask = null;
+            NodeInfo backupNode = null;
             boolean jobComplete = true;
             for (Integer taskId : taskIds) {
-                processingTask = taskMap.get(taskId);
+                ProcessingTask processingTask = taskMap.get(taskId);
                 if (processingTask == null) {
                     log.debug("Task map size:" + taskMap.size());
                     jobComplete = false;
+                    taskStatusMap.put(taskId, new TaskResult(null, null));
                     continue;
                 }
                 TaskResult taskResult = new TaskResult(processingTask.getStatus(), null);
@@ -266,10 +267,11 @@ public class JobProcessor {
                 if (processingTask.getStatus() != TaskStatus.DONE) {
                     jobComplete = false;
                 }
+                backupNode = processingTask.getBackupNode();
             }
             if (jobComplete) {
                 log.info("The job: " + jobId + " is complete.");
-                final NodeInfo backup = processingTask.getBackupNode();
+                final NodeInfo backup = backupNode;
                 new Thread() {    //TODO: use pooling
                     @Override
                     public void run() {

@@ -102,7 +102,7 @@ public class SiyapathService implements Siyapath.Iface {
         nodeContext.getJobProcessor().addNewJob(job);
            return true;
        }else {
-           log.info("Rejecting Task-  ID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
+           log.info("Rejecting Job-  ID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
            return false;
        }
     }
