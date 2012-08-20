@@ -3,7 +3,6 @@ package org.siyapath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.TException;
-import org.siyapath.common.BackupHandler;
 import org.siyapath.gossip.GossipImpl;
 import org.siyapath.task.TaskProcessor;
 import org.siyapath.service.*;
@@ -73,17 +72,22 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param jobID
+     * @param job
      * @param node
      * @return true if node becomes backup node for processing job, false otherwise
      * @throws TException
      */
     @Override
-    public boolean requestBecomeBackup(int jobID, NodeData node) throws TException {
-        log.info("Received backup request. JobID:" + jobID + " from:" + CommonUtils.deSerialize
+    public boolean requestBecomeBackup(Job job, NodeData node) throws TException {
+        log.info("Received backup request. JobID:" + job.getJobID() + " from:" + CommonUtils.deSerialize
                 (node));
-        BackupHandler backupHandler = new BackupHandler(nodeContext);
-        return backupHandler.requestBecomeBackup(jobID, CommonUtils.deSerialize(node));
+        return nodeContext.getBackupHandler().requestBecomeBackup(job, CommonUtils.deSerialize(node));
+    }
+
+    @Override
+    public void endBackup() throws TException {
+        log.info("Job is complete. Ending backup.");
+        nodeContext.getBackupHandler().endBackup();
     }
 
     /**
@@ -150,6 +154,14 @@ public class SiyapathService implements Siyapath.Iface {
     public boolean sendTaskResult(Result result) {
         log.info("Received results: JobID:" + result.getJobID() + " TaskID: " + result.getTaskID());
         nodeContext.getJobProcessor().resultsReceived(result);
+        return true;
+    }
+
+    @Override
+    public boolean sendTaskResultToBackup(Result result) throws TException {
+        log.info("Received results to backup: JobID:" + result.getJobID() + " TaskID: " + result
+                .getTaskID());
+        nodeContext.getBackupHandler().updateTaskResult(result);
         return true;
     }
 

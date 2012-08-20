@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -308,7 +309,19 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_status = true && (isSetStatus());
+    builder.append(present_status);
+    if (present_status)
+      builder.append(status.getValue());
+
+    boolean present_results = true && (isSetResults());
+    builder.append(present_results);
+    if (present_results)
+      builder.append(results);
+
+    return builder.toHashCode();
   }
 
   public int compareTo(TaskResult other) {

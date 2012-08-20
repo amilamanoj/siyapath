@@ -33,8 +33,6 @@ public class JobProcessor {
     //    private Map<NodeInfo, Task> taskProcessingNodes = null;
     private NodeContext context;
 
-    private NodeInfo backupNode;
-
     private BlockingQueue<Task> taskQueue;     // or Deque? i.e. double ended queue
 
     private Map<Integer, Job> jobMap;               // jobID mapped to Job
@@ -50,7 +48,7 @@ public class JobProcessor {
 //        taskReplicaQueue = new LinkedBlockingDeque<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
 
         jobMap = new HashMap<Integer, Job>();
-        taskMap = new HashMap<Integer, ProcessingTask>();
+        taskMap = new ConcurrentHashMap<Integer, ProcessingTask>();
 //        taskReplicaMap = new HashMap<Integer, ProcessingTask>();
         taskDispatcherExecutor.submit(new TaskDispatcher());
         new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
@@ -60,7 +58,6 @@ public class JobProcessor {
     }
 
     public void addNewJob(Job job) {
-//        createBackup();
         if (context.getNodeResource().getNodeStatus() == NodeStatus.IDLE) {  //TODO: need to reject adding jobs if this node is a processor
             context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
         }
@@ -69,15 +66,22 @@ public class JobProcessor {
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
     }
 
-    public void resultsReceived(Result result) {
+    public void resultsReceived(final Result result) {
         log.debug("Task results received. ID:" + result.getTaskID());
-        ProcessingTask originalTask = taskMap.get(result.getTaskID());
+        ProcessingTask pTask = taskMap.get(result.getTaskID());
 //        ProcessingTask replicatedTask = taskReplicaMap.get(result.getTaskID());
 
 //        if (!isResultOfReplicaTask(result)) {
-        originalTask.setResult(result.getResults());
-        originalTask.setStatus(TaskStatus.DONE);
-        taskMap.put(result.getTaskID(), originalTask);
+        pTask.setResult(result.getResults());
+        pTask.setStatus(TaskStatus.DONE);
+        taskMap.put(result.getTaskID(), pTask);
+
+        new Thread() {  //TODO: use pooling
+            @Override
+            public void run() {
+                sendTaskResultToBackup(result);
+            }
+        }.start();
 
 //        } else {
 //            replicatedTask.setResult(result.getResults());
@@ -125,13 +129,18 @@ public class JobProcessor {
 
         @Override
         public void run() {
+            NodeInfo backup = createBackup(job);
             for (Task task : job.getTasks().values()) {
                 try {
-                    taskQueue.put(task);
-                    ProcessingTask processingTask = new ProcessingTask(job.getJobID(),
-                            task.getTaskID(), TaskStatus.RECEIVED);
+                    task.setBackup(CommonUtils.serialize(backup));
+                    if (!taskMap.containsKey(task.getTaskID())) {
+                        taskQueue.put(task);
+                        ProcessingTask processingTask = new ProcessingTask(job.getJobID(),
+                                task.getTaskID(), TaskStatus.RECEIVED);
+                        processingTask.setBackupNode(backup);
 //                    processingTask.setReplicationStatus(ProcessingTask.ReplicationStatus.ORIGINAL);
-                    taskMap.put(task.getTaskID(), processingTask);
+                        taskMap.put(task.getTaskID(), processingTask);
+                    }
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //TODO: handle exception
@@ -235,18 +244,20 @@ public class JobProcessor {
      * @param jobId
      * @return task status map for the given JobId, with the mapping taskID to task completion status
      */
-    public Map<Integer, TaskResult> getTaskStatusesForJob(int jobId) {
+    public Map<Integer, TaskResult> getTaskStatusesForJob(final int jobId) {
 
         Map<Integer, TaskResult> taskStatusMap = null;
         Job requestedJob = jobMap.get(jobId);
         if (requestedJob != null) {
             Set<Integer> taskIds = requestedJob.getTasks().keySet(); // task ids of the requested job: should be there tasks:P
             taskStatusMap = new HashMap<Integer, TaskResult>();
+            ProcessingTask processingTask = null;
             boolean jobComplete = true;
             for (Integer taskId : taskIds) {
-                ProcessingTask processingTask = taskMap.get(taskId);
+                processingTask = taskMap.get(taskId);
                 if (processingTask == null) {
                     log.debug("Task map size:" + taskMap.size());
+                    jobComplete = false;
                     continue;
                 }
                 TaskResult taskResult = new TaskResult(processingTask.getStatus(), null);
@@ -257,11 +268,40 @@ public class JobProcessor {
                 }
             }
             if (jobComplete) {
-                log.info("The job: " + jobId + " is complete. Removing it from job map");
-                jobMap.remove(jobId);
+                log.info("The job: " + jobId + " is complete.");
+                final NodeInfo backup = processingTask.getBackupNode();
+                new Thread() {    //TODO: use pooling
+                    @Override
+                    public void run() {
+                        clearCompletedJob(jobId, backup);
+                    }
+                }.start();
             }
         }
         return taskStatusMap;
+    }
+
+    private void clearCompletedJob(int jobID, NodeInfo backup) {
+        log.info("The job: " + jobID + " is complete. Removing it from task map and job map");
+        for (Integer taskID : jobMap.get(jobID).getTasks().keySet()) {
+            taskMap.remove(taskID);
+        }
+        jobMap.remove(jobID);
+        TTransport transport = new TSocket(backup.getIp(), backup.getPort());
+        try {
+            log.info("Connecting to backup node to end backup. JobID: " + jobID);
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            client.endBackup();
+        } catch (TTransportException e) {
+            e.printStackTrace();
+            log.warn("Cannot connect to backup node.");
+        } catch (TException e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
     }
 
     public void taskUpdateReceived(int taskID) {
@@ -312,13 +352,23 @@ public class JobProcessor {
 //        return null;
 //    }
 
-    /*
-    private void createBackup() {
+    /**
+     * Adds a map of tasks to taskMap of job processor.
+     * Used by backup node when taking over job processing.
+     * @param mapOfTasks A map mapping taskID to ProcessingTask
+     */
+    void addTasksToTaskMap(Map<Integer, ProcessingTask> mapOfTasks) {
+        taskMap.putAll(mapOfTasks);
+    }
+
+
+    private NodeInfo createBackup(Job job) {
         NodeData thisNode = CommonUtils.serialize(context.getNodeInfo());
 
-        boolean isBackupAccepted = false;
-        int jobId = currentJob.getJobID();
-        do {
+        boolean isBackupAccepted;
+        NodeInfo backupNode = null;
+        int jobId = job.getJobID();
+        //do {
             NodeInfo selectedNode = context.getRandomMember(); //TODO: improve selection
             TTransport transport = new TSocket("localhost", selectedNode.getPort());
 
@@ -327,7 +377,7 @@ public class JobProcessor {
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 log.info("JobID:" + jobId + "-Requesting backup from" + selectedNode);
-                isBackupAccepted = client.requestBecomeBackup(jobId, thisNode);
+                isBackupAccepted = client.requestBecomeBackup(job, thisNode);
                 if (isBackupAccepted) {
                     log.info("JobID:" + jobId + "-Backup request accepted by" + selectedNode);
                     backupNode = selectedNode;
@@ -339,9 +389,31 @@ public class JobProcessor {
             } catch (TException e) {
                 e.printStackTrace();
             }
-        } while (!isBackupAccepted);    //TODO: improve handling denials
+        //} while (!isBackupAccepted);    //TODO: improve handling denials
+        return backupNode;
     }
-    */
+
+    private void sendTaskResultToBackup(Result result) {
+        NodeInfo backupNode = taskMap.get(result.getTaskID()).getBackupNode();
+        TTransport transport = new TSocket(backupNode.getIp(), backupNode.getPort());
+        try {
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            log.info("Sending received task result to backup node." + backupNode);
+            client.sendTaskResultToBackup(result);
+
+        } catch (TTransportException e) {
+            e.printStackTrace();
+            if (e.getCause() instanceof ConnectException) {
+                log.warn("Backup Node is no longer available on port: " + backupNode);
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        } finally {
+            transport.close();
+        }
+    }
 
     //The arg jobID is to be used once multiple jobs are handled by same JobProcessor node
 //    public void acquireJobProcessingStatus(int jobID) {

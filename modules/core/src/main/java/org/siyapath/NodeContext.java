@@ -2,6 +2,7 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.siyapath.job.BackupHandler;
 import org.siyapath.job.JobProcessor;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.utils.CommonUtils;
@@ -39,6 +40,7 @@ public class NodeContext {
     private boolean listenerEnabled;
     private boolean workerEnabled;
     private int processingTasksNo;
+    private BackupHandler backupHandler;
 
 
     /**
@@ -91,6 +93,13 @@ public class NodeContext {
             jobProcessor = new JobProcessor(this); //lazy loading
         }
         return jobProcessor;
+    }
+
+    public BackupHandler getBackupHandler() {
+        if (backupHandler == null) {
+            backupHandler = new BackupHandler(this);
+        }
+        return backupHandler;
     }
 
     /**
