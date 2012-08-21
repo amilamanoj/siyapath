@@ -139,10 +139,18 @@ public class NodeContext {
         members.add(member);
     }
 
+    public void removeMember(NodeInfo member) {
+        members.remove(member);
+    }
+
     public void addMemNodeSet(NodeInfo member, Set<NodeInfo> nodeSet) {
         if (members.contains(member)) {
             this.memWithNodeSet.put(member, (HashSet<NodeInfo>) nodeSet);
         }
+    }
+
+    public void removeMemNodeSet(NodeInfo member){
+          memWithNodeSet.remove(member);
     }
 
     public void updateMemNodeSet() {  //TODO:uses concurrent Hashmap, Synchronized block?
@@ -241,6 +249,10 @@ public class NodeContext {
 
     public Map<Integer,NodeResource> getMemberResourceMap() {
         return memberResource;
+    }
+
+    public void removeFromMemResourceMap(int nodeID) {
+        memberResource.remove(nodeID);
     }
 
     public Map<Integer, NodeResource> getPartialResourceNodes() {

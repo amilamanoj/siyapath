@@ -116,6 +116,8 @@ public class GossipImpl {
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
                     log.error("Could not connect to the member node for member gossiping");
+                    nodeContext.removeMember(randomMember);
+                    nodeContext.removeMemNodeSet(randomMember);
                 } else {
                     e.printStackTrace();
                 }
@@ -154,6 +156,8 @@ public class GossipImpl {
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
                     log.error("Could not connect to the member node for resource gossiping");
+                    nodeContext.removeMember(randomMember);
+                    nodeContext.removeFromMemResourceMap(randomMember.getNodeId());
                 } else {
                     e.printStackTrace();
                 }
@@ -183,7 +187,7 @@ public class GossipImpl {
                 tempSet.add(member);
             }
         }
-        while (newSet.size() > 0.5 * SiyapathConstants.MEMBER_SET_LIMIT) {
+        for (int i = tempSet.size(); i > 0 && newSet.size() > 0.5 * SiyapathConstants.MEMBER_SET_LIMIT; i--) {
             newSet.remove(newSet.iterator().next());
         }
         newSet.addAll(tempSet);
