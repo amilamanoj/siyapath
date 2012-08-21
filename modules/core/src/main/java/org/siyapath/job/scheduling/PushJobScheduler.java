@@ -25,11 +25,11 @@ public class PushJobScheduler implements JobScheduler {
     @Override
     public NodeInfo selectTaskProcessorNode(Task task) {
 
-       // return getWithoutResourceMatching();
+        //return getWithoutResourceMatching();
 
-       // resource matching option
+        //resource matching option
         String requiredResources = task.getRequiredResourceLevel().trim();
-         return getResourceMatching(requiredResources);
+        return getResourceMatching(requiredResources);
     }
 
 
@@ -42,7 +42,6 @@ public class PushJobScheduler implements JobScheduler {
      */
 
     private NodeInfo getResourceMatching(String reqResources) {
-        Map<Integer, NodeResource> nodes = context.getMemberResourceMap();
         ResourceLevel reqResLevel;
         NodeInfo selectedNode = null;
 
@@ -57,16 +56,24 @@ public class PushJobScheduler implements JobScheduler {
             reqResLevel = ResourceLevel.MEDIUM;
         }
 
-        for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
+        /*for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
             NodeResource node = newEntry.getValue();
             if (reqResLevel == node.getResourceLevel() && (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE)) {
                 selectedNode = node.getNodeInfo();
                 break;
             }
+        } */
+
+        for(int i=0;i<context.getMemberResourceMap().size();i++) {
+              NodeResource node = context.getRandomMemberWithResource();
+           if (reqResLevel == node.getResourceLevel() && (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE)) {
+                selectedNode = node.getNodeInfo();
+                break;
+            }
         }
 
-        if (selectedNode == null) {
-            selectedNode = context.getRandomMemberWithResource().getNodeInfo();
+         if (selectedNode == null) {
+           selectedNode=getWithoutResourceMatching();
         }
         log.info("Selected Node: " + selectedNode.getNodeId());
         return selectedNode;
@@ -76,17 +83,30 @@ public class PushJobScheduler implements JobScheduler {
         Map<Integer, NodeResource> nodes = context.getMemberResourceMap();
         NodeInfo selectedNode = null;
 
-        for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
+        /*for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
             NodeResource node = newEntry.getValue();
             if (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE) {
                 selectedNode = node.getNodeInfo();
                 break;
             }
 
+        }*/
+
+        for (int i = 0; i < context.getMemberResourceMap().size(); i++) {
+            NodeResource node = context.getRandomMemberWithResource();
+            if (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE) {
+                selectedNode = node.getNodeInfo();
+                break;
+            }
         }
 
         if (selectedNode == null) {
-            selectedNode = context.getRandomMemberWithResource().getNodeInfo();
+           NodeInfo randomMember=context.getRandomMemberWithResource().getNodeInfo();
+            if(randomMember!=null){
+               selectedNode=randomMember;
+            }else{
+               randomMember=context.getRandomMember();
+            }
         }
         log.info("Selected Node: " + selectedNode.getNodeId());
         return selectedNode;
