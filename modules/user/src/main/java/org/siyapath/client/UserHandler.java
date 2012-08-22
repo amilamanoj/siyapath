@@ -10,10 +10,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
-import org.siyapath.service.Job;
-import org.siyapath.service.Siyapath;
-import org.siyapath.service.Task;
-import org.siyapath.service.TaskResult;
+import org.siyapath.service.*;
 import org.siyapath.task.SiyapathTask;
 import org.siyapath.utils.CommonUtils;
 
@@ -284,8 +281,8 @@ public class UserHandler {
         boolean eachTaskStatus;
 //String taskStatus : statusMap.values()
         for (TaskResult taskResult : taskResultMap.values()) {
-            String taskStatus = taskResult.getStatus().toString();
-            if (taskStatus.equalsIgnoreCase("DONE")) {
+//            String taskStatus = taskResult.getStatus().toString();
+            if (taskResult.getStatus() == TaskStatus.DONE) {
                 eachTaskStatus = true;
             } else {
                 eachTaskStatus = false;
