@@ -97,13 +97,16 @@ public class UserHandler {
                 throw new SubmissionFailedException("Could not select a job processor node", null);
             }
             JobData jobData = new JobData(job.getJobID(), name, job, selectedNode);
-            sendJob(job, selectedNode);
+            boolean isSubmitted=sendJob(job, selectedNode);
             jobMap.put(jobData.getId(), jobData);
+            if (isSubmitted){
+                return job.getJobID();
+            }
         } catch (TException e) {
             e.printStackTrace();
             throw new SubmissionFailedException("Could not submit the job", e);
         }
-        return job.getJobID();
+        return -1;
     }
 
     public Job createJob(Map<String, TaskData> taskList) throws IOException {
@@ -181,14 +184,14 @@ public class UserHandler {
      *
      * @param node destination node
      */
-    private void sendJob(Job job, NodeInfo node) throws TException {
+    private boolean sendJob(Job job, NodeInfo node) throws TException {
         TTransport transport = new TSocket(node.getIp(), node.getPort());
         log.info("Sending new job to node: " + node);
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            client.submitJob(job); //TODO: Handle the boolean return (if submission isn't possible)
+            return client.submitJob(job); //TODO: Handle the boolean return (if submission isn't possible)
 //        } catch (TTransportException e) {
 //            if (e.getCause() instanceof ConnectException) {
 //                e.printStackTrace();
@@ -197,7 +200,9 @@ public class UserHandler {
 //            e.printStackTrace();
         } finally {
             transport.close();
+            return false;
         }
+        
     }
 
 

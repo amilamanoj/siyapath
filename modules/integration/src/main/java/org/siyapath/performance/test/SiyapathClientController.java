@@ -12,9 +12,7 @@ import org.siyapath.service.TaskResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SiyapathClientController {
 
@@ -26,6 +24,9 @@ public class SiyapathClientController {
         int clients = Integer.parseInt(System.getProperty("clients")); //clients per physical device
         int jobs = Integer.parseInt(System.getProperty("jobs"));       //jobs per client
         int tasks = Integer.parseInt(System.getProperty("tasks"));     //tasks per job
+
+
+
 
 
         ImageData imageData = new ImageData();
@@ -48,48 +49,68 @@ public class SiyapathClientController {
         long endTime;
         int jobsPerClient, tasksPerJob;
         UserHandler userHandler;
-        ArrayList<Job> jobs;
+        Queue<Job> jobQueue;
+//        ArrayList<Job> jobs;
         byte[] imageBytes;
+        ArrayList<Job> submittedJobs;
 
         ClientThread (int jobsPerClient, int tasksPerJob, byte[] imageBytes){
             this.jobsPerClient = jobsPerClient;
             this.tasksPerJob = tasksPerJob;
             this.imageBytes = imageBytes;
             userHandler = new UserHandler();
-            jobs = new ArrayList<Job>(jobsPerClient);
+//            jobs = new ArrayList<Job>(jobsPerClient);
+            jobQueue = new LinkedList<Job>();
+            submittedJobs = new ArrayList<Job>();
+
         }
 
         public void run(){
+            Job job = null;
 
             try {
-                //create multiple jobs of one client
                 makeJobs(imageBytes);
+                //create multiple jobs of one client
                 /**
                  * multiple jobs of one client submitted sequentially
                  * requires multiple threads if more jobs are submitted
                  */
             startTime = System.nanoTime();
-                for (Job job : jobs){
+                for (int i=0; i<jobQueue.size(); i++){
+                    job = jobQueue.poll();
+
+                    if(userHandler.submitJob(job.getJobID()+"", job)<0){
+                        jobQueue.add(job);
+                    }else {
+                        submittedJobs.add(job);
+                    }
+
                     userHandler.submitJob(job.getJobID()+"", job);
                 }
+                
+//                for (Job job : jobs){
+//                    userHandler.submitJob(job.getJobID()+"", job);
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (SubmissionFailedException e) {
                 e.printStackTrace();
+                jobQueue.add(job);
+
             }
 
-            if(!jobs.isEmpty()){
+            if(!submittedJobs.isEmpty()){
                 /**
                  * sequential polling assuming user submits 1 or min jobs at a time,
                  * requires multiple threads if more jobs are submitted
                  * Will exit only when all tasks of all jobs are marked DONE.
                  * Flow to be decided.
                  */
-                for(Job job : jobs){
+                for(Job submittedJob : submittedJobs){
                     Map<Integer, TaskResult> taskCompletionMap;
                     try{
                         do{
-                            taskCompletionMap = userHandler.pollStatusFromJobProcessor(job.getJobID());
+                            taskCompletionMap = userHandler.pollStatusFromJobProcessor(submittedJob.getJobID());
                         }while (!userHandler.assessJobStatusFromTaskStatuses(taskCompletionMap));
                     }catch (TException e){
                         e.printStackTrace();
@@ -123,8 +144,8 @@ public class SiyapathClientController {
         
             Map<String, TaskData> taskDataMap = new HashMap<String, TaskData>();
 
-            File taskFile = new File("modules/integration/EdgeDetectorTask.class");
-            TaskData taskData = new TaskData("Performance-test Task", taskFile, imageBytes, "Cores:4-Speed:2267Mhz");
+            File taskFile = new File("./EdgeDetectorTask.class");
+            TaskData taskData = new TaskData("Performance-test Task", taskFile, imageBytes, "medium");
 
 
             for (int i=0; i<jobsPerClient; i++){
@@ -134,7 +155,7 @@ public class SiyapathClientController {
 
                 try {
                     Job job = userHandler.createJob(taskDataMap);
-                    jobs.add(job);
+                    jobQueue.add(job);
                     log.info("Created Job:" + job.getJobID() + " with " + tasksPerJob + " tasks");
 //                return job;
                 } catch (IOException e) {
