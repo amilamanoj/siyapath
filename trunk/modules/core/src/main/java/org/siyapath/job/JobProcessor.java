@@ -16,7 +16,6 @@ import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -76,12 +75,12 @@ public class JobProcessor {
         pTask.setStatus(TaskStatus.DONE);
         taskMap.put(result.getTaskID(), pTask);
 
-        new Thread() {  //TODO: use pooling
-            @Override
-            public void run() {
-                sendTaskResultToBackup(result);
-            }
-        }.start();
+//        new Thread() {  //TODO: use pooling
+//            @Override
+//            public void run() {
+//                sendTaskResultToBackup(result);
+//            }
+//        }.start();
 
 //        } else {
 //            replicatedTask.setResult(result.getResults());
@@ -129,18 +128,18 @@ public class JobProcessor {
 
         @Override
         public void run() {
-            NodeInfo backup = createBackup(job);
+//            NodeInfo backup = createBackup(job);
             for (Task task : job.getTasks().values()) {
                 try {
                     while (taskQueue.remainingCapacity() == 1) {
                         Thread.sleep(100);
                     }
-                    task.setBackup(CommonUtils.serialize(backup));
+//                    task.setBackup(CommonUtils.serialize(backup));
                     if (!taskMap.containsKey(task.getTaskID())) {
                         taskQueue.put(task);
                         ProcessingTask processingTask = new ProcessingTask(job.getJobID(),
                                 task.getTaskID(), TaskStatus.RECEIVED);
-                        processingTask.setBackupNode(backup);
+//                        processingTask.setBackupNode(backup);
 //                    processingTask.setReplicationStatus(ProcessingTask.ReplicationStatus.ORIGINAL);
                         taskMap.put(task.getTaskID(), processingTask);
                     }
@@ -292,21 +291,21 @@ public class JobProcessor {
             taskMap.remove(taskID);
         }
         jobMap.remove(jobID);
-        TTransport transport = new TSocket(backup.getIp(), backup.getPort());
-        try {
-            log.info("Connecting to backup node to end backup. JobID: " + jobID);
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            client.endBackup();
-        } catch (TTransportException e) {
-            e.printStackTrace();
-            log.warn("Cannot connect to backup node.");
-        } catch (TException e) {
-            e.printStackTrace();
-        } finally {
-            transport.close();
-        }
+//        TTransport transport = new TSocket(backup.getIp(), backup.getPort());
+//        try {
+//            log.info("Connecting to backup node to end backup. JobID: " + jobID);
+//            transport.open();
+//            TProtocol protocol = new TBinaryProtocol(transport);
+//            Siyapath.Client client = new Siyapath.Client(protocol);
+//            client.endBackup();
+//        } catch (TTransportException e) {
+//            e.printStackTrace();
+//            log.warn("Cannot connect to backup node.");
+//        } catch (TException e) {
+//            e.printStackTrace();
+//        } finally {
+//            transport.close();
+//        }
     }
 
     public void taskUpdateReceived(int taskID) {

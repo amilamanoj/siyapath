@@ -11,15 +11,20 @@ public class ImageData {
     public byte[] getImageData(){
 
         BufferedImage source;
-        byte[] imageBytes = new byte[1];
+        byte[] binImage;
+        byte[] inputData;
+
         try {
             source = ImageIO.read(ImageData.class.getResource("/demo_car.jpg"));
-            imageBytes = imageToBinary(source);
+            binImage = imageToBinary(source);
+            inputData = new byte[binImage.length + 2];
+            System.arraycopy(binImage, 0, inputData, 2, binImage.length);
+            return inputData;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return imageBytes;
-
+       return null;
     }
 
     public byte[] imageToBinary(BufferedImage image) {
