@@ -16,10 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Measures throughput: Time to submit, process, get results of one job
- * Set property 'jobs' to 1
- */
 public class SiyapathClientController {
 
     private static final Log log = LogFactory.getLog(SiyapathClientController.class);
@@ -30,13 +26,18 @@ public class SiyapathClientController {
         int clients = Integer.parseInt(System.getProperty("clients")); //clients per physical device
         int jobs = Integer.parseInt(System.getProperty("jobs"));       //jobs per client
         int tasks = Integer.parseInt(System.getProperty("tasks"));     //tasks per job
-        controller.createClients(clients, jobs, tasks);
+
+
+        ImageData imageData = new ImageData();
+        byte[] imageBytes = imageData.getImageData();
+
+        controller.createClients(clients, jobs, tasks, imageBytes);
     }
 
-    public void createClients(int clients, int jobs, int tasks){
+    public void createClients(int clients, int jobs, int tasks, byte[] imageBytes){
 
         for (int i=0; i<clients; i++){
-            ClientThread clientThread = new ClientThread(jobs, tasks);
+            ClientThread clientThread = new ClientThread(jobs, tasks, imageBytes);
             clientThread.start();
         }
     }
@@ -48,10 +49,12 @@ public class SiyapathClientController {
         int jobsPerClient, tasksPerJob;
         UserHandler userHandler;
         ArrayList<Job> jobs;
+        byte[] imageBytes;
 
-        ClientThread (int jobsPerClient, int tasksPerJob){
+        ClientThread (int jobsPerClient, int tasksPerJob, byte[] imageBytes){
             this.jobsPerClient = jobsPerClient;
             this.tasksPerJob = tasksPerJob;
+            this.imageBytes = imageBytes;
             userHandler = new UserHandler();
             jobs = new ArrayList<Job>(jobsPerClient);
         }
@@ -60,7 +63,7 @@ public class SiyapathClientController {
 
             try {
                 //create multiple jobs of one client
-                makeJobs();
+                makeJobs(imageBytes);
                 /**
                  * multiple jobs of one client submitted sequentially
                  * requires multiple threads if more jobs are submitted
@@ -98,14 +101,14 @@ public class SiyapathClientController {
                  * Flow to be decided
                  * get result service method tbd
                  */
-                for (Job job : jobs){
-                    try {
-                        userHandler.getJobResults(job.getJobID());
-                        log.info("Results retrieved from Job Processor for job:" + job.getJobID());
-                    } catch (TException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                for (Job job : jobs){
+//                    try {
+//                        userHandler.getJobResults(job.getJobID());
+//                        log.info("Results retrieved from Job Processor for job:" + job.getJobID());
+//                    } catch (TException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
             endTime = System.nanoTime();
             log.info("Total elapsed time for " + jobsPerClient + " jobs with " + tasksPerJob + " tasks: "
@@ -116,11 +119,13 @@ public class SiyapathClientController {
         /**
          * creates one job with system property defined number of tasks
          */
-        public void makeJobs() throws IOException {
+        public void makeJobs(byte[] imageBytes) throws IOException {
         
             Map<String, TaskData> taskDataMap = new HashMap<String, TaskData>();
-            File taskFile = new File("modules/integration/target/test-classes/SampleSiyapathTask.class");
-            TaskData taskData = new TaskData("Performance-test Task", taskFile,"1,100000".getBytes(), "Cores:4-Speed:2267Mhz");
+
+            File taskFile = new File("modules/integration/EdgeDetectorTask.class");
+            TaskData taskData = new TaskData("Performance-test Task", taskFile, imageBytes, "Cores:4-Speed:2267Mhz");
+
 
             for (int i=0; i<jobsPerClient; i++){
                 for (int j=0; j<tasksPerJob; j++){
@@ -138,5 +143,11 @@ public class SiyapathClientController {
                 }
             }
         }
+
+
+
+
+
+
     }
 }
