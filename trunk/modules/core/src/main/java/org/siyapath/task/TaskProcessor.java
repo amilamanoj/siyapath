@@ -29,7 +29,6 @@ public class TaskProcessor extends Thread {
     private SiyapathTask taskInstance;
     private SiyapathSecurityManager siyapathSecurityManager;
     private SecurityManager defaultSecurityManager;
-    private boolean finished;
     private Result taskResult;
 
 
@@ -39,13 +38,12 @@ public class TaskProcessor extends Thread {
     public TaskProcessor(String name, Task task, NodeContext nodeContext) {
         super(name);
         this.task = task;
-        this.finished = false;
         context = nodeContext;
+        context.increaseProTasksNo();
         notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
         siyapathSecurityManager = new SiyapathSecurityManager("secpass");
         defaultSecurityManager = System.getSecurityManager();
         taskResult = new Result(task.getJobID(), task.getTaskID(), null, CommonUtils.serialize(context.getNodeInfo()));
-
     }
 
     /*public void startProcessing(){
@@ -56,36 +54,31 @@ public class TaskProcessor extends Thread {
 
 
     public void run() {
-        context.increaseProTasksNo();
-        log.info("Preparing to start the task: " + task.getTaskID());
-        TaskThread taskThread = new TaskThread("task-thread id:" + task.getTaskID());
-        taskInstance = getTaskInstance();
-        notifier.start();
+        log.debug("Preparing to start the task: " + task.getTaskID());
+        try {
+            taskInstance = getTaskInstance();
+            TaskThread taskThread = new TaskThread("task-thread id:" + task.getTaskID());
+            notifier.start();
 
-        // sand-boxing with a custom security manager that denies most permissions
+            // sand-boxing with a custom security manager that denies most permissions
 //        System.setSecurityManager(siyapathSecurityManager);
-
-        log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
-        taskThread.start();
-
-        while (!finished) {
+            log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
+            taskThread.start();
             try {
-                Thread.sleep(1000);  // wait until task is finished
+                taskThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            siyapathSecurityManager.disable("secpass");
+//          System.setSecurityManager(defaultSecurityManager);
+            log.info("Task processing is finished. ID: " + task.getTaskID());
+            notifier.stopNotifier();
+        } catch (Exception e) {
+            log.error("Task program instantiation failed. Aborting task: " + task.getTaskID());
+            taskResult.setResults("<aborted>".getBytes());
         }
-        siyapathSecurityManager.disable("secpass");
-//        System.setSecurityManager(defaultSecurityManager);
-        log.info("Task processing is completed. ID: " + task.getTaskID());
-//        log.debug("Results: " + taskResult.getResults().substring(0, 8) + "...");
-        notifier.stopNotifier();
         deliverTaskResult(taskResult);
         context.decreaseProTasksNo();
-    }
-
-    private void setTaskFinished() {
-        this.finished = true;
     }
 
     private class TaskThread extends Thread {
@@ -101,48 +94,31 @@ public class TaskProcessor extends Thread {
     }
 
     private void processTask() {
-
         try {
             taskInstance.setData(task.getTaskData());
             taskInstance.process();
-//                monitor.start();
             byte[] finalResult = taskInstance.getResults();
-//                monitor.stopMonitor();
             taskResult.setResults(finalResult);
+            log.debug("Task processing is successful. ID: " + task.getTaskID());
 
         } catch (SecurityException e) {
-            // TODO: handle illegal operation
 //            siyapathSecurityManager.disable("secpass");
 //            System.setSecurityManager(defaultSecurityManager);
-            log.warn("Task Processing aborted due to an attempt of illegal operation");
-            taskResult.setResults("<Aborted>".getBytes());
-
-        } finally {
-            setTaskFinished();
+            log.error("Task Processing aborted due to an attempt of illegal operation");
+            taskResult.setResults("<aborted>".getBytes());
         }
     }
 
-    private SiyapathTask getTaskInstance() {
+    private SiyapathTask getTaskInstance() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         TaskClassLoader taskClassLoader;
         taskClassLoader = new TaskClassLoader();
         // TODO: verify if expected name is necessary
-
         Class theLoadedClass = null;
-        try {
-            theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
+        theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
 
-            Object object = theLoadedClass.newInstance();
-
-            if (object instanceof SiyapathTask) {
-                return (SiyapathTask) object;
-            }
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        Object object = theLoadedClass.newInstance();
+        if (object instanceof SiyapathTask) {
+            return (SiyapathTask) object;
         }
         return null;
     }
@@ -151,7 +127,6 @@ public class TaskProcessor extends Thread {
     private void deliverTaskResult(Result result) {
 
         TTransport transport = new TSocket(task.getSender().getIp(), task.getSender().getPort());
-
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
