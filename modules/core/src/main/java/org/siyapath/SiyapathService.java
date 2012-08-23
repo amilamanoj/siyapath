@@ -102,7 +102,7 @@ public class SiyapathService implements Siyapath.Iface {
         nodeContext.getJobProcessor().addNewJob(job);
            return true;
        }else {
-           log.info("Rejecting Job-  ID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
+           log.debug("Rejecting Job-  ID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
            return false;
        }
     }
@@ -120,7 +120,7 @@ public class SiyapathService implements Siyapath.Iface {
         taskProcessor.start();
             return true;
         }else {
-             log.info("Rejecting Task-  ID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
+             log.debug("Rejecting Task-  ID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
             return false;
         }
     }

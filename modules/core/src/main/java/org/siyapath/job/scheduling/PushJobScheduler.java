@@ -75,7 +75,7 @@ public class PushJobScheduler implements JobScheduler {
          if (selectedNode == null) {
            selectedNode=getWithoutResourceMatching();
         }
-        log.info("Selected Node: " + selectedNode.getNodeId());
+        log.debug("Selected Node: " + selectedNode.getNodeId());
         return selectedNode;
     }
 
@@ -105,10 +105,10 @@ public class PushJobScheduler implements JobScheduler {
             if(randomMember!=null){
                selectedNode=randomMember;
             }else{
-               randomMember=context.getRandomMember();
+               selectedNode=context.getRandomMember();
             }
         }
-        log.info("Selected Node: " + selectedNode.getNodeId());
+        log.debug("Selected Node: " + selectedNode.getNodeId());
         return selectedNode;
     }
 }
