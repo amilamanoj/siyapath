@@ -21,7 +21,10 @@ public final class SiyapathConstants {
     public static final int RESOURCE_MEMBER_SET_LIMIT = 20;
     public static final int BOOSTRAPPER_MEMBER_SET_LIMIT = 10;
 
-    public static final int TASK_QUEUE_CAPACITY = 50;
+    public static final int TASK_QUEUE_CAPACITY = 500;
+    public static final int TASK_COLLECTOR_POOL_SIZE = 200;
+    public static final int TASK_DISPATCHER_POOL_SIZE = 100;
+
     public static final int PARALLEL_TASKS=3;
 
     public static final int MAX_TASK_UPDATE_INTERVAL_MILLIS = 30000;
