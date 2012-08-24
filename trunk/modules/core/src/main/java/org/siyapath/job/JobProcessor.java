@@ -41,8 +41,8 @@ public class JobProcessor {
     public JobProcessor(NodeContext nodeContext) {
         //uses the default constructor at the sender non-requisition
         context = nodeContext;
-        taskDispatcherExecutor = Executors.newFixedThreadPool(10);
-        taskCollectorExecutor = Executors.newFixedThreadPool(10);
+        taskDispatcherExecutor = Executors.newFixedThreadPool(SiyapathConstants.TASK_DISPATCHER_POOL_SIZE);
+        taskCollectorExecutor = Executors.newCachedThreadPool();
         taskQueue = new LinkedBlockingQueue<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
 //        taskReplicaQueue = new LinkedBlockingDeque<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
 
@@ -131,17 +131,17 @@ public class JobProcessor {
 //            NodeInfo backup = createBackup(job);
             for (Task task : job.getTasks().values()) {
                 try {
-                    while (taskQueue.remainingCapacity() == 1) {
+                    while (taskQueue.remainingCapacity() <= 1) {
                         Thread.sleep(100);
                     }
 //                    task.setBackup(CommonUtils.serialize(backup));
                     if (!taskMap.containsKey(task.getTaskID())) {
-                        taskQueue.put(task);
                         ProcessingTask processingTask = new ProcessingTask(job.getJobID(),
                                 task.getTaskID(), TaskStatus.RECEIVED);
+                        taskMap.put(task.getTaskID(), processingTask);
+                        taskQueue.put(task);
 //                        processingTask.setBackupNode(backup);
 //                    processingTask.setReplicationStatus(ProcessingTask.ReplicationStatus.ORIGINAL);
-                        taskMap.put(task.getTaskID(), processingTask);
                     }
 
                 } catch (InterruptedException e) {
