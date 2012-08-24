@@ -244,7 +244,7 @@ public class UserHandler {
      *
      * @param jobID
      */
-    public Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) throws TException {
+    public synchronized Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) throws TException {
 
         NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
         TTransport transport = new TSocket(jobHandler.getIp(),
