@@ -84,6 +84,12 @@ public class PeerWorker {
         }
     }
 
+    /**
+     * Remove this node from retrieved node set
+     *
+     * @param nodes
+     * @return nodes
+     */
     private Set<NodeInfo> removeSelf(Set<NodeInfo> nodes) {
         if (nodes.contains(nodeContext.getNodeInfo())) {
             nodes.remove(nodeContext.getNodeInfo());
@@ -113,7 +119,9 @@ public class PeerWorker {
                         log.debug("No known members. Contacting the bootstrapper to get some nodes");
                         initiateMembers();
                     } else {
+                        /**Member Gossip*/
                         gossiper.memberGossiper();
+                        /**Resource Gossip*/
                         gossiper.resourceGossiper();
                     }
                     log.info("Number of known members: " + nodeContext.getMemberCount());

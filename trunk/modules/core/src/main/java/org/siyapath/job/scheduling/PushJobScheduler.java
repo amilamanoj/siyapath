@@ -10,32 +10,37 @@ import org.siyapath.service.NodeStatus;
 import org.siyapath.service.ResourceLevel;
 import org.siyapath.service.Task;
 
-import java.util.Map;
-
-
+/**
+ *
+ * This class provides optimal task processing node selection options for the Job Processor
+ */
 public class PushJobScheduler implements JobScheduler {
     private final org.apache.commons.logging.Log log = LogFactory.getLog(PushJobScheduler.class);
-    private NodeContext context;
 
+    private NodeContext context;
 
     public PushJobScheduler(NodeContext nodeContext) {
         context = nodeContext;
     }
 
+    /**
+     * Invoked when task distributor needs to find a task processor
+     *
+     * @param task
+     * @return matchingNode
+     */
     @Override
     public NodeInfo selectTaskProcessorNode(Task task) {
 
-        //return getWithoutResourceMatching();
-
         //resource matching option
         String requiredResources = task.getRequiredResourceLevel().trim();
-        return getResourceMatching(requiredResources);
+        NodeInfo matchingNode = getResourceMatching(requiredResources);
+        return matchingNode;
     }
 
 
     /**
-     * Invoked when task distributor needs to find a optimal node to
-     * push the task depend on the required resources defined by user
+     * Find an optimal node to push the task depend on the required resources defined by user
      *
      * @param reqResources the required resources defined by user
      * @return the optimal node to push the task
@@ -56,40 +61,29 @@ public class PushJobScheduler implements JobScheduler {
             reqResLevel = ResourceLevel.MEDIUM;
         }
 
-        /*for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
-            NodeResource node = newEntry.getValue();
+        for (int i = 0; i < context.getMemberResourceMap().size(); i++) {
+            NodeResource node = context.getRandomMemberWithResource();
             if (reqResLevel == node.getResourceLevel() && (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE)) {
-                selectedNode = node.getNodeInfo();
-                break;
-            }
-        } */
-
-        for(int i=0;i<context.getMemberResourceMap().size();i++) {
-              NodeResource node = context.getRandomMemberWithResource();
-           if (reqResLevel == node.getResourceLevel() && (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE)) {
                 selectedNode = node.getNodeInfo();
                 break;
             }
         }
 
-         if (selectedNode == null) {
-           selectedNode=getWithoutResourceMatching();
+        if (selectedNode == null) {
+            selectedNode = getWithoutResourceMatching();
         }
         log.debug("Selected Node: " + selectedNode.getNodeId());
         return selectedNode;
     }
 
+    /**
+     * Finds a node to push the task without matching required resources
+     *
+     * @return selectedNode without matching resources
+     */
+
     private NodeInfo getWithoutResourceMatching() {
         NodeInfo selectedNode = null;
-
-//        Map<Integer, NodeResource> nodes = context.getMemberResourceMap();
-        /*for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
-            NodeResource node = newEntry.getValue();
-            if (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE) {
-                selectedNode = node.getNodeInfo();
-                break;
-            }
-        }*/
 
         for (int i = 0; i < context.getMemberResourceMap().size(); i++) {
             NodeResource node = context.getRandomMemberWithResource();
@@ -100,11 +94,11 @@ public class PushJobScheduler implements JobScheduler {
         }
 
         if (selectedNode == null) {
-           NodeInfo randomMember=context.getRandomMemberWithResource().getNodeInfo();
-            if(randomMember!=null){
-               selectedNode=randomMember;
-            }else{
-               selectedNode=context.getRandomMember();
+            NodeInfo randomMember = context.getRandomMemberWithResource().getNodeInfo();
+            if (randomMember != null) {
+                selectedNode = randomMember;
+            } else {
+                selectedNode = context.getRandomMember();
             }
         }
         log.debug("Selected Node: " + selectedNode.getNodeId());

@@ -31,6 +31,7 @@ public class PeerListener {
     }
 
     /**
+     * Creates a Thrift server instance
      * @param processor
      */
     private void initializeThriftServer(Siyapath.Processor processor) {

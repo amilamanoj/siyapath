@@ -10,17 +10,6 @@ public class NodeInfo {
     private boolean bootstrapper;
 
 
-    /* public enum NodeStatus {
-       CREATED(1) ,
-       STARTING (2),
-       BUSY (3),
-       IDLE(4);
-        int ind;
-       NodeStatus(int i) {
-           ind=i;
-       }
-   } */
-
     public NodeInfo() {
         ip = CommonUtils.getIPAddress();
         port = CommonUtils.getRandomPort();
