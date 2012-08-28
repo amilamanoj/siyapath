@@ -36,6 +36,7 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
   private static final org.apache.thrift.protocol.TField USER_FIELD_DESC = new org.apache.thrift.protocol.TField("user", org.apache.thrift.protocol.TType.STRUCT, (short)2);
   private static final org.apache.thrift.protocol.TField TASKS_FIELD_DESC = new org.apache.thrift.protocol.TField("tasks", org.apache.thrift.protocol.TType.MAP, (short)3);
+  private static final org.apache.thrift.protocol.TField REPLICA_COUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("replicaCount", org.apache.thrift.protocol.TType.I32, (short)4);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -46,12 +47,14 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   public int jobID; // required
   public NodeData user; // required
   public Map<Integer,Task> tasks; // required
+  public int replicaCount; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     JOB_ID((short)1, "jobID"),
     USER((short)2, "user"),
-    TASKS((short)3, "tasks");
+    TASKS((short)3, "tasks"),
+    REPLICA_COUNT((short)4, "replicaCount");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -72,6 +75,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
           return USER;
         case 3: // TASKS
           return TASKS;
+        case 4: // REPLICA_COUNT
+          return REPLICA_COUNT;
         default:
           return null;
       }
@@ -113,7 +118,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
   // isset id assignments
   private static final int __JOBID_ISSET_ID = 0;
-  private BitSet __isset_bit_vector = new BitSet(1);
+  private static final int __REPLICACOUNT_ISSET_ID = 1;
+  private BitSet __isset_bit_vector = new BitSet(2);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -125,6 +131,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
             new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32), 
             new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Task.class))));
+    tmpMap.put(_Fields.REPLICA_COUNT, new org.apache.thrift.meta_data.FieldMetaData("replicaCount", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Job.class, metaDataMap);
   }
@@ -135,13 +143,16 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
   public Job(
     int jobID,
     NodeData user,
-    Map<Integer,Task> tasks)
+    Map<Integer,Task> tasks,
+    int replicaCount)
   {
     this();
     this.jobID = jobID;
     setJobIDIsSet(true);
     this.user = user;
     this.tasks = tasks;
+    this.replicaCount = replicaCount;
+    setReplicaCountIsSet(true);
   }
 
   /**
@@ -169,6 +180,7 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       }
       this.tasks = __this__tasks;
     }
+    this.replicaCount = other.replicaCount;
   }
 
   public Job deepCopy() {
@@ -181,6 +193,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     this.jobID = 0;
     this.user = null;
     this.tasks = null;
+    setReplicaCountIsSet(false);
+    this.replicaCount = 0;
   }
 
   public int getJobID() {
@@ -265,6 +279,29 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     }
   }
 
+  public int getReplicaCount() {
+    return this.replicaCount;
+  }
+
+  public Job setReplicaCount(int replicaCount) {
+    this.replicaCount = replicaCount;
+    setReplicaCountIsSet(true);
+    return this;
+  }
+
+  public void unsetReplicaCount() {
+    __isset_bit_vector.clear(__REPLICACOUNT_ISSET_ID);
+  }
+
+  /** Returns true if field replicaCount is set (has been assigned a value) and false otherwise */
+  public boolean isSetReplicaCount() {
+    return __isset_bit_vector.get(__REPLICACOUNT_ISSET_ID);
+  }
+
+  public void setReplicaCountIsSet(boolean value) {
+    __isset_bit_vector.set(__REPLICACOUNT_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case JOB_ID:
@@ -291,6 +328,14 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       }
       break;
 
+    case REPLICA_COUNT:
+      if (value == null) {
+        unsetReplicaCount();
+      } else {
+        setReplicaCount((Integer)value);
+      }
+      break;
+
     }
   }
 
@@ -304,6 +349,9 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
 
     case TASKS:
       return getTasks();
+
+    case REPLICA_COUNT:
+      return Integer.valueOf(getReplicaCount());
 
     }
     throw new IllegalStateException();
@@ -322,6 +370,8 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       return isSetUser();
     case TASKS:
       return isSetTasks();
+    case REPLICA_COUNT:
+      return isSetReplicaCount();
     }
     throw new IllegalStateException();
   }
@@ -363,6 +413,15 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       if (!(this_present_tasks && that_present_tasks))
         return false;
       if (!this.tasks.equals(that.tasks))
+        return false;
+    }
+
+    boolean this_present_replicaCount = true;
+    boolean that_present_replicaCount = true;
+    if (this_present_replicaCount || that_present_replicaCount) {
+      if (!(this_present_replicaCount && that_present_replicaCount))
+        return false;
+      if (this.replicaCount != that.replicaCount)
         return false;
     }
 
@@ -412,6 +471,16 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetReplicaCount()).compareTo(typedOther.isSetReplicaCount());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetReplicaCount()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.replicaCount, typedOther.replicaCount);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -450,6 +519,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
     } else {
       sb.append(this.tasks);
     }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("replicaCount:");
+    sb.append(this.replicaCount);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -533,6 +606,14 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 4: // REPLICA_COUNT
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.replicaCount = iprot.readI32();
+              struct.setReplicaCountIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -569,6 +650,9 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
         }
         oprot.writeFieldEnd();
       }
+      oprot.writeFieldBegin(REPLICA_COUNT_FIELD_DESC);
+      oprot.writeI32(struct.replicaCount);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -596,7 +680,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
       if (struct.isSetTasks()) {
         optionals.set(2);
       }
-      oprot.writeBitSet(optionals, 3);
+      if (struct.isSetReplicaCount()) {
+        optionals.set(3);
+      }
+      oprot.writeBitSet(optionals, 4);
       if (struct.isSetJobID()) {
         oprot.writeI32(struct.jobID);
       }
@@ -613,12 +700,15 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
           }
         }
       }
+      if (struct.isSetReplicaCount()) {
+        oprot.writeI32(struct.replicaCount);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Job struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(3);
+      BitSet incoming = iprot.readBitSet(4);
       if (incoming.get(0)) {
         struct.jobID = iprot.readI32();
         struct.setJobIDIsSet(true);
@@ -643,6 +733,10 @@ public class Job implements org.apache.thrift.TBase<Job, Job._Fields>, java.io.S
           }
         }
         struct.setTasksIsSet(true);
+      }
+      if (incoming.get(3)) {
+        struct.replicaCount = iprot.readI32();
+        struct.setReplicaCountIsSet(true);
       }
     }
   }

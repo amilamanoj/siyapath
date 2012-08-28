@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Contains information about a Task
+ * optional value is set at task collector for each task a job belongs to
  */
 public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Task");
@@ -41,6 +42,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   private static final org.apache.thrift.protocol.TField SENDER_FIELD_DESC = new org.apache.thrift.protocol.TField("sender", org.apache.thrift.protocol.TType.STRUCT, (short)6);
   private static final org.apache.thrift.protocol.TField BACKUP_FIELD_DESC = new org.apache.thrift.protocol.TField("backup", org.apache.thrift.protocol.TType.STRUCT, (short)7);
   private static final org.apache.thrift.protocol.TField REQUIRED_RESOURCE_LEVEL_FIELD_DESC = new org.apache.thrift.protocol.TField("requiredResourceLevel", org.apache.thrift.protocol.TType.STRING, (short)8);
+  private static final org.apache.thrift.protocol.TField TASK_REPLICA_COUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("taskReplicaCount", org.apache.thrift.protocol.TType.I32, (short)9);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -56,6 +58,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   public NodeData sender; // required
   public NodeData backup; // required
   public String requiredResourceLevel; // required
+  public int taskReplicaCount; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -66,7 +69,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     CLASS_NAME((short)5, "className"),
     SENDER((short)6, "sender"),
     BACKUP((short)7, "backup"),
-    REQUIRED_RESOURCE_LEVEL((short)8, "requiredResourceLevel");
+    REQUIRED_RESOURCE_LEVEL((short)8, "requiredResourceLevel"),
+    TASK_REPLICA_COUNT((short)9, "taskReplicaCount");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -97,6 +101,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
           return BACKUP;
         case 8: // REQUIRED_RESOURCE_LEVEL
           return REQUIRED_RESOURCE_LEVEL;
+        case 9: // TASK_REPLICA_COUNT
+          return TASK_REPLICA_COUNT;
         default:
           return null;
       }
@@ -139,7 +145,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
   // isset id assignments
   private static final int __TASKID_ISSET_ID = 0;
   private static final int __JOBID_ISSET_ID = 1;
-  private BitSet __isset_bit_vector = new BitSet(2);
+  private static final int __TASKREPLICACOUNT_ISSET_ID = 2;
+  private BitSet __isset_bit_vector = new BitSet(3);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -159,6 +166,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
     tmpMap.put(_Fields.REQUIRED_RESOURCE_LEVEL, new org.apache.thrift.meta_data.FieldMetaData("requiredResourceLevel", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.TASK_REPLICA_COUNT, new org.apache.thrift.meta_data.FieldMetaData("taskReplicaCount", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Task.class, metaDataMap);
   }
@@ -174,7 +183,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     String className,
     NodeData sender,
     NodeData backup,
-    String requiredResourceLevel)
+    String requiredResourceLevel,
+    int taskReplicaCount)
   {
     this();
     this.taskID = taskID;
@@ -187,6 +197,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.sender = sender;
     this.backup = backup;
     this.requiredResourceLevel = requiredResourceLevel;
+    this.taskReplicaCount = taskReplicaCount;
+    setTaskReplicaCountIsSet(true);
   }
 
   /**
@@ -217,6 +229,7 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     if (other.isSetRequiredResourceLevel()) {
       this.requiredResourceLevel = other.requiredResourceLevel;
     }
+    this.taskReplicaCount = other.taskReplicaCount;
   }
 
   public Task deepCopy() {
@@ -235,6 +248,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     this.sender = null;
     this.backup = null;
     this.requiredResourceLevel = null;
+    setTaskReplicaCountIsSet(false);
+    this.taskReplicaCount = 0;
   }
 
   public int getTaskID() {
@@ -447,6 +462,29 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     }
   }
 
+  public int getTaskReplicaCount() {
+    return this.taskReplicaCount;
+  }
+
+  public Task setTaskReplicaCount(int taskReplicaCount) {
+    this.taskReplicaCount = taskReplicaCount;
+    setTaskReplicaCountIsSet(true);
+    return this;
+  }
+
+  public void unsetTaskReplicaCount() {
+    __isset_bit_vector.clear(__TASKREPLICACOUNT_ISSET_ID);
+  }
+
+  /** Returns true if field taskReplicaCount is set (has been assigned a value) and false otherwise */
+  public boolean isSetTaskReplicaCount() {
+    return __isset_bit_vector.get(__TASKREPLICACOUNT_ISSET_ID);
+  }
+
+  public void setTaskReplicaCountIsSet(boolean value) {
+    __isset_bit_vector.set(__TASKREPLICACOUNT_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case TASK_ID:
@@ -513,6 +551,14 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       }
       break;
 
+    case TASK_REPLICA_COUNT:
+      if (value == null) {
+        unsetTaskReplicaCount();
+      } else {
+        setTaskReplicaCount((Integer)value);
+      }
+      break;
+
     }
   }
 
@@ -542,6 +588,9 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     case REQUIRED_RESOURCE_LEVEL:
       return getRequiredResourceLevel();
 
+    case TASK_REPLICA_COUNT:
+      return Integer.valueOf(getTaskReplicaCount());
+
     }
     throw new IllegalStateException();
   }
@@ -569,6 +618,8 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       return isSetBackup();
     case REQUIRED_RESOURCE_LEVEL:
       return isSetRequiredResourceLevel();
+    case TASK_REPLICA_COUNT:
+      return isSetTaskReplicaCount();
     }
     throw new IllegalStateException();
   }
@@ -655,6 +706,15 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (!(this_present_requiredResourceLevel && that_present_requiredResourceLevel))
         return false;
       if (!this.requiredResourceLevel.equals(that.requiredResourceLevel))
+        return false;
+    }
+
+    boolean this_present_taskReplicaCount = true;
+    boolean that_present_taskReplicaCount = true;
+    if (this_present_taskReplicaCount || that_present_taskReplicaCount) {
+      if (!(this_present_taskReplicaCount && that_present_taskReplicaCount))
+        return false;
+      if (this.taskReplicaCount != that.taskReplicaCount)
         return false;
     }
 
@@ -754,6 +814,16 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetTaskReplicaCount()).compareTo(typedOther.isSetTaskReplicaCount());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetTaskReplicaCount()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskReplicaCount, typedOther.taskReplicaCount);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -828,6 +898,10 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
     } else {
       sb.append(this.requiredResourceLevel);
     }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("taskReplicaCount:");
+    sb.append(this.taskReplicaCount);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -939,6 +1013,14 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 9: // TASK_REPLICA_COUNT
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.taskReplicaCount = iprot.readI32();
+              struct.setTaskReplicaCountIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -990,6 +1072,9 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
         oprot.writeString(struct.requiredResourceLevel);
         oprot.writeFieldEnd();
       }
+      oprot.writeFieldBegin(TASK_REPLICA_COUNT_FIELD_DESC);
+      oprot.writeI32(struct.taskReplicaCount);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1032,7 +1117,10 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetRequiredResourceLevel()) {
         optionals.set(7);
       }
-      oprot.writeBitSet(optionals, 8);
+      if (struct.isSetTaskReplicaCount()) {
+        optionals.set(8);
+      }
+      oprot.writeBitSet(optionals, 9);
       if (struct.isSetTaskID()) {
         oprot.writeI32(struct.taskID);
       }
@@ -1057,12 +1145,15 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (struct.isSetRequiredResourceLevel()) {
         oprot.writeString(struct.requiredResourceLevel);
       }
+      if (struct.isSetTaskReplicaCount()) {
+        oprot.writeI32(struct.taskReplicaCount);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Task struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(8);
+      BitSet incoming = iprot.readBitSet(9);
       if (incoming.get(0)) {
         struct.taskID = iprot.readI32();
         struct.setTaskIDIsSet(true);
@@ -1096,6 +1187,10 @@ public class Task implements org.apache.thrift.TBase<Task, Task._Fields>, java.i
       if (incoming.get(7)) {
         struct.requiredResourceLevel = iprot.readString();
         struct.setRequiredResourceLevelIsSet(true);
+      }
+      if (incoming.get(8)) {
+        struct.taskReplicaCount = iprot.readI32();
+        struct.setTaskReplicaCountIsSet(true);
       }
     }
   }

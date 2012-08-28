@@ -1,31 +1,48 @@
 package org.siyapath.job;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
 import org.siyapath.service.TaskStatus;
 
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProcessingTask {
 
+    private static final Log log = LogFactory.getLog(ProcessingTask.class);
+
     private int jobID;
     private int taskID;
-    private NodeInfo processingNode;
-    private TaskStatus status;
-    private byte[] result;
-    private ReplicationStatus replicationStatus;
     private long timeLastUpdated;
     private NodeInfo backupNode;
 
+    private HashMap<Integer,TaskStatus> taskStatusMap;
+    private ArrayList<byte[]> resultList;
 
-    public enum ReplicationStatus {
-        ORIGINAL, REPLICA
-    }
+    private byte[] validatedResult;
+    private int resultReceivedCount=0;
+    private int replicaCount;
 
-    public ProcessingTask(int jobID, int taskID, TaskStatus status) {
+
+    public ProcessingTask(int jobID, int taskID, int replicaCount) {
         this.jobID = jobID;
         this.taskID = taskID;
-        this.status = status;
-        this.result = new byte[1];
+        this.replicaCount = replicaCount;
+
+        this.resultList = new ArrayList<byte[]>();
+        this.taskStatusMap = new HashMap<Integer, TaskStatus>();     // maps processing node of task, to task status
+        validatedResult = new byte[1];
+
+    }
+
+    public int getResultReceivedCount(){
+        return resultReceivedCount;
+    }
+
+    public void incrementResultReceivedCount(){
+        this.resultReceivedCount++;
     }
 
     public int getJobID() {
@@ -36,36 +53,28 @@ public class ProcessingTask {
         return taskID;
     }
 
-    public byte[] getResult() {
-        return result;
+    public boolean addResult(byte[] result){
+        return this.resultList.add(result);
     }
 
-    public void setResult(byte[] result) {
-        this.result = result;
+    public ArrayList<byte[]> getResultList(){
+        return this.resultList;
     }
 
-    public NodeInfo getProcessingNode() {
-        return processingNode;
+    public Map<Integer, TaskStatus> getTaskStatusMap() {
+        return taskStatusMap;
     }
 
-    public void setProcessingNode(NodeInfo processingNode) {
-        this.processingNode = processingNode;
+    public void setStatus(Integer processingNodeID, TaskStatus status) {
+        taskStatusMap.put(processingNodeID, status);
     }
 
-    public TaskStatus getStatus() {
-        return status;
+    public byte[] getValidatedResult() {
+        return validatedResult;
     }
 
-    public void setStatus(TaskStatus status) {
-        this.status = status;
-    }
-
-    public ReplicationStatus getReplicationStatus(){
-        return replicationStatus;
-    }
-
-    public void setReplicationStatus(ReplicationStatus replicationStatus){
-        this.replicationStatus = replicationStatus;
+    public void setValidatedResult(byte[] validatedResult) {
+        this.validatedResult = validatedResult;
     }
 
     public long getTimeLastUpdated() {
@@ -83,4 +92,61 @@ public class ProcessingTask {
     public void setBackupNode(NodeInfo backupNode) {
         this.backupNode = backupNode;
     }
+
+    public int getReplicaCount() {
+        return replicaCount;
+    }
+
+    public void setReplicaCount(int replicaCount) {
+        this.replicaCount = replicaCount;
+    }
+
+    //    public byte[] getResult() {
+//        return result;
+//    }
+//
+//    public void setResult(byte[] result) {
+//        this.result = result;
+//    }
+
+//    public NodeInfo getProcessingNode() {
+//        return processingNode;
+//    }
+
+//    public void setProcessingNode(NodeInfo processingNode) {
+//        this.processingNode = processingNode;
+//    }
+
+//    public TaskStatus getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(TaskStatus status) {
+//        this.status = status;
+//    }
+
+//    public ReplicationStatus getReplicationStatus(){
+//        return replicationStatus;
+//    }
+//
+//    public void setReplicationStatus(ReplicationStatus replicationStatus){
+//        this.replicationStatus = replicationStatus;
+//    }
+
+//    public ConcurrentHashMap<Integer, ReplicaTask> getReplicaTaskMap() {
+//        return replicaTaskMap;
+//    }
+//
+//    public void setReplicaTaskMap(ConcurrentHashMap<Integer, ReplicaTask> replicaTaskMap) {
+//        this.replicaTaskMap = replicaTaskMap;
+//    }
+
+//    public TaskStatus getStatusForAllReplicas() {
+//        return statusForAllReplicas;
+//    }
+//
+//    public void setStatusForAllReplicas(TaskStatus statusForAllReplicas) {
+//        this.statusForAllReplicas = statusForAllReplicas;
+//    }
+
 }

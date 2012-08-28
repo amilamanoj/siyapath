@@ -13,8 +13,6 @@ import org.siyapath.NodeInfo;
 import org.siyapath.service.Job;
 import org.siyapath.service.Result;
 import org.siyapath.service.Siyapath;
-import org.siyapath.service.TaskStatus;
-import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.HashMap;
@@ -53,12 +51,12 @@ public class BackupHandler {
         return true;
     }
 
-    public void updateTaskResult(Result result) {
-        ProcessingTask task = new ProcessingTask(result.getJobID(), result.getTaskID(),
-                TaskStatus.DONE);
-        task.setResult(result.getResults());
-        task.setProcessingNode(CommonUtils.deSerialize(result.getProcessingNode()));
-        taskMap.put(result.getTaskID(), task);
+    public void updateTaskResult(Result result) {                   //changed
+//        ProcessingTask task = new ProcessingTask(result.getJobID(), result.getTaskID(),
+//                TaskStatus.DONE);
+//        task.setResult(result.getResults());
+       // task.setProcessingNode(CommonUtils.deSerialize(result.getProcessingNode()));
+//        taskMap.put(result.getTaskID(), task);
     }
 
     private class StatusThread extends Thread {

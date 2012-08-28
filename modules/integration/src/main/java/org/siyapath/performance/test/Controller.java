@@ -131,7 +131,7 @@ public class Controller {
 
             Job job = null;
             try {
-                job = userHandler.createJob(taskDataMap);
+                job = userHandler.createJob(taskDataMap, 1);  //todo: default replicas is set to 1
                 if (job != null) {
 
 

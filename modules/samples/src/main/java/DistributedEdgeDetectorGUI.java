@@ -194,7 +194,7 @@ public class DistributedEdgeDetectorGUI extends JDialog {
                 }
             }
 
-            Job job = handler.createJob(taskList);
+            Job job = handler.createJob(taskList, 1); //3        //todo: read from ui
             handler.submitJob("MyJob", job);
             jobID = job.getJobID();
 

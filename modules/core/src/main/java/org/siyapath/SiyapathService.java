@@ -158,7 +158,7 @@ public class SiyapathService implements Siyapath.Iface {
     @Override
     public boolean sendTaskResult(Result result) {
         log.info("Received results: JobID:" + result.getJobID() + " TaskID: " + result.getTaskID());
-        nodeContext.getJobProcessor().resultsReceived(result);
+        nodeContext.getJobProcessor().taskResultReceived(result);
         return true;
     }
 
