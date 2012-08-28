@@ -44,7 +44,7 @@ public class GossipImpl {
      */
     public Set<NodeInfo> memberDiscovery(NodeInfo nodeInfo, Set<NodeInfo> receivedMemberSet) {
         log.info("Remote node invoked member gossip with this node");
-        Set<NodeInfo> initialSet = nodeContext.getMemberSet();
+        Set<NodeInfo> initialSet = (Set<NodeInfo>) ((HashSet<NodeInfo>) nodeContext.getMemberSet()).clone();
         Set<NodeInfo> newSet = mergeSets(initialSet, receivedMemberSet);
         nodeContext.updateMemberSet(newSet);
         nodeContext.addMemNodeSet(nodeInfo, receivedMemberSet);
@@ -61,11 +61,11 @@ public class GossipImpl {
     public Set<NodeInfo> getMembers() {
         Set<NodeInfo> members = nodeContext.getMemberSet();
         Set<NodeInfo> newSet = new HashSet<NodeInfo>();
-        if (members.size() < SiyapathConstants.BOOSTRAPPER_MEMBER_SET_LIMIT) {
+        if (members.size() <= SiyapathConstants.MEMBER_SET_LIMIT) {
             return members;
         } else {
             Iterator memIter = members.iterator();
-            while (memIter.hasNext() && newSet.size() < SiyapathConstants.BOOSTRAPPER_MEMBER_SET_LIMIT) {
+            while (memIter.hasNext() && newSet.size() < SiyapathConstants.MEMBER_SET_LIMIT) {
                 NodeInfo member = (NodeInfo) memIter.next();
                 newSet.add(member);
             }

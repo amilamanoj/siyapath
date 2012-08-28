@@ -77,7 +77,12 @@ public class TaskProcessor extends Thread {
             log.error("Task program instantiation failed. Aborting task: " + task.getTaskID());
             taskResult.setResults("<aborted>".getBytes());
         }
-        deliverTaskResult(taskResult);
+        for (int i = 0; i < 3; i++) {
+            if (deliverTaskResult(taskResult)) {
+                break;
+            }
+            log.warn("Couldn't send result to distributor. task: " + task.getTaskID());
+        }
         context.decreaseProTasksNo();
     }
 
@@ -124,31 +129,30 @@ public class TaskProcessor extends Thread {
     }
 
 
-    private void deliverTaskResult(Result result) {
+    private boolean deliverTaskResult(Result result) {
+
+        boolean success=false;
 
         TTransport transport = new TSocket(task.getSender().getIp(), task.getSender().getPort());
         try {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            if (client.isAlive()) {  //TODO: handle exception if false
-                log.info("Sending computed result back to Distributing node." + task.getSender());
-                client.sendTaskResult(result);
-            } else {
-//                log.warn("Task Distributor is no longer available on port: " + task.getSender());
-//                sendResultToBackupNode(result);
-            }
-
+            log.info("Sending computed result back to Distributing node." + task.getSender());
+            client.sendTaskResult(result);
+            success = true;
         } catch (TTransportException e) {
-            e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {
                 log.warn("Task Distributor is no longer available on port: " + task.getSender());
+            } else {
+                log.warn(e.getMessage());
             }
         } catch (TException e) {
             e.printStackTrace();
         } finally {
             transport.close();
         }
+        return success;
     }
 
 //    private void sendResultToBackupNode(Result result) {

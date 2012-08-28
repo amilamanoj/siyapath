@@ -28,6 +28,7 @@ public class JobProcessor {
 
     private ExecutorService taskDispatcherExecutor;
     private ExecutorService taskCollectorExecutor;
+    private ExecutorService generalExecutor;
 
     //    private Map<NodeInfo, Task> taskProcessingNodes = null;
     private NodeContext context;
@@ -41,15 +42,16 @@ public class JobProcessor {
     public JobProcessor(NodeContext nodeContext) {
         //uses the default constructor at the sender non-requisition
         context = nodeContext;
-        taskDispatcherExecutor = Executors.newFixedThreadPool(SiyapathConstants.TASK_DISPATCHER_POOL_SIZE);
+        taskDispatcherExecutor = Executors.newCachedThreadPool();
         taskCollectorExecutor = Executors.newCachedThreadPool();
+        generalExecutor = Executors.newCachedThreadPool();
+
         taskQueue = new LinkedBlockingQueue<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
 //        taskReplicaQueue = new LinkedBlockingDeque<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
 
-        jobMap = new HashMap<Integer, Job>();
+        jobMap = new ConcurrentHashMap<Integer, Job>();
         taskMap = new ConcurrentHashMap<Integer, ProcessingTask>();
 //        taskReplicaMap = new HashMap<Integer, ProcessingTask>();
-        taskDispatcherExecutor.submit(new TaskDispatcher());
         new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
 
         context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
@@ -63,9 +65,10 @@ public class JobProcessor {
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
+        taskDispatcherExecutor.submit(new TaskDispatcher());
     }
 
-    public void resultsReceived(final Result result) {
+    public synchronized void resultsReceived(final Result result) {
         log.debug("Task results received. ID:" + result.getTaskID());
         ProcessingTask pTask = taskMap.get(result.getTaskID());
 //        ProcessingTask replicatedTask = taskReplicaMap.get(result.getTaskID());
@@ -153,6 +156,22 @@ public class JobProcessor {
 
     }
 
+    class TaskRecollector implements Runnable {
+        Task task;
+
+        TaskRecollector(Task task) {
+            this.task = task;
+        }
+
+        public void run() {
+            try {
+                taskQueue.put(task);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     class TaskDispatcher implements Runnable {
 
         private boolean active = true;
@@ -167,11 +186,12 @@ public class JobProcessor {
                     Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
                     if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.
 
-                        log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
+                        log.info("Preparing to dispatch task: " + task.getTaskID() + " JobID: "
+                                + task.getJobID());
                         //dispatches original task
                         boolean dispatched = dispatchTask(task, getJobScheduler().selectTaskProcessorNode(task), false);
                         if (!dispatched) {
-                            taskQueue.put(task);  // add the task back to the queue to be dispatched later
+                            generalExecutor.submit(new TaskRecollector(task));  // add the task back to the queue to be dispatched later
                         }
 //                        log.info("Dispatching replica of task: " + task.getTaskID() + " JobID: " + task.getJobID());
                         /*dispatches task's replica, assuming it wont be directed to the same node to which the original
@@ -191,14 +211,15 @@ public class JobProcessor {
          * @param destinationNode node to submit to
          * @param isReplica       if this task is a replication of some other task
          */
-        public boolean dispatchTask(Task task, NodeInfo destinationNode, boolean isReplica) {
+        public synchronized boolean dispatchTask(Task task, NodeInfo destinationNode, boolean isReplica) {
 
             NodeInfo nodeInfo = context.getNodeInfo();
             NodeData thisNode = CommonUtils.serialize(nodeInfo);
             task.setSender(thisNode);
             int jobId = task.getJobID();
 
-            log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect to selected task-processor: " + destinationNode);
+            log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect " +
+                    "to selected task-processor: " + destinationNode);
             TTransport transport = new TSocket(destinationNode.getIp(), destinationNode.getPort());
 
             boolean isDispatched = false;
@@ -208,7 +229,8 @@ public class JobProcessor {
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Submitting to: " + destinationNode);
                 isDispatched = client.submitTask(task);
-                log.debug("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Task successfully submitted: " + isDispatched);
+                log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Task successfully " +
+                        "submitted: " + isDispatched);
 
                 if (isDispatched && !isReplica) {
                     ProcessingTask pTask = taskMap.get(task.getTaskID());
@@ -222,13 +244,17 @@ public class JobProcessor {
 //                    taskReplicaMap.put(task.getTaskID(), replicatedTask);
 //                }
             } catch (TTransportException e) {
-                e.printStackTrace();
+
                 if (e.getCause() instanceof ConnectException) {
                     log.warn("Could not connect to " + destinationNode + ",assign task to another.");
+                } else {
+                    log.warn(e.getMessage());
                 }
                 //TODO: handle exception to pick other node
             } catch (TException e) {
                 e.printStackTrace();
+            } finally {
+                transport.close();
             }
             return isDispatched;
 

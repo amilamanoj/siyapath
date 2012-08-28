@@ -145,11 +145,7 @@ public class CommonUtils {
      * @return NodeInfo for given nodeData
      */
     public static NodeInfo deSerialize(NodeData nodeData) {
-        NodeInfo node = new NodeInfo();
-        node.setNodeId(nodeData.getNodeID());
-        node.setIp(nodeData.getIp());
-        node.setPort(nodeData.getPort());
-        return node;
+        return new NodeInfo(nodeData.getNodeID(), nodeData.getIp(), nodeData.getPort());
     }
 
     /**
