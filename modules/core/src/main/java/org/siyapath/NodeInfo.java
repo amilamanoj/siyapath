@@ -28,6 +28,12 @@ public class NodeInfo {
         this.bootstrapper = false;
     }
 
+    public NodeInfo(int nodeId, String ip, int port) {
+        this.nodeId = nodeId;
+        this.ip = ip;
+        this.port = port;
+    }
+
     /**
      * @return port number
      */

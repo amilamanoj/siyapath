@@ -39,7 +39,12 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public boolean notifyPresence(NodeData nodeData) throws TException {
-        nodeContext.addMember((CommonUtils.deSerialize(nodeData)));
+        if (nodeContext.getMemberCount() < SiyapathConstants.BOOSTRAPPER_MEMBER_SET_LIMIT) {
+            nodeContext.addMember((CommonUtils.deSerialize(nodeData)));
+        } else {
+            nodeContext.removeMember(nodeContext.getRandomMember());
+            nodeContext.addMember((CommonUtils.deSerialize(nodeData)));
+        }
         return true;
     }
 
@@ -96,10 +101,10 @@ public class SiyapathService implements Siyapath.Iface {
      * @throws TException
      */
     @Override
-    public boolean submitJob(Job job) throws TException {
-        log.info("Received a new job. JobID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
-       if(nodeContext.getNodeResource().isIdle()||nodeContext.getNodeResource().getNodeStatus()==NodeStatus.DISTRIBUTING){
-        nodeContext.getJobProcessor().addNewJob(job);
+    public synchronized boolean submitJob(Job job) throws TException {
+        if (nodeContext.getNodeResource().isIdle() || nodeContext.getNodeResource().getNodeStatus() == NodeStatus.DISTRIBUTING) {
+            log.info("Received a new job. JobID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
+            nodeContext.getJobProcessor().addNewJob(job);
            return true;
        }else {
            log.debug("Rejecting Job-  ID:" + job.getJobID() + " from: " + CommonUtils.deSerialize(job.getUser()));
@@ -114,10 +119,10 @@ public class SiyapathService implements Siyapath.Iface {
      */
     @Override
     public synchronized boolean submitTask(Task task) throws TException {
-        log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
-        if (nodeContext.getNodeResource().isIdle()||nodeContext.getNodeResource().getNodeStatus()==NodeStatus.PROCESSING_IDLE){
-        TaskProcessor taskProcessor = new TaskProcessor("TaskProcessor ID:" + task.getTaskID(), task, nodeContext);
-        taskProcessor.start();
+        if (nodeContext.getNodeResource().isIdle() || nodeContext.getNodeResource().getNodeStatus() == NodeStatus.PROCESSING_IDLE) {
+            log.info("Received a new task. TaskID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
+            TaskProcessor taskProcessor = new TaskProcessor("TaskProcessor ID:" + task.getTaskID(), task, nodeContext);
+            taskProcessor.start();
             return true;
         }else {
              log.debug("Rejecting Task-  ID:" + task.getTaskID() + " from: " + CommonUtils.deSerialize(task.getSender()));
