@@ -331,10 +331,6 @@ public class NodeGUI extends JFrame {
         exit();
     }
 
-    private void aboutOkButtonActionPerformed(ActionEvent evt) {
-        // add your handling code here:
-    }
-
     private void gossipButtonMouseClicked(java.awt.event.MouseEvent evt) {
         gossipPanel.setVisible(true);
         taskPanel.setVisible(false);

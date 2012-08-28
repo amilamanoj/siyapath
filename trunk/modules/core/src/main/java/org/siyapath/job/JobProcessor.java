@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.concurrent.*;
 
 
-public class JobProcessor {
+public final class JobProcessor {
 
     private static final Log log = LogFactory.getLog(JobProcessor.class);
 
@@ -156,10 +156,10 @@ public class JobProcessor {
 
     }
 
-    class TaskRecollector implements Runnable {
-        Task task;
+    class TaskReCollector implements Runnable {
+        private Task task;
 
-        TaskRecollector(Task task) {
+        TaskReCollector(Task task) {
             this.task = task;
         }
 
@@ -191,7 +191,7 @@ public class JobProcessor {
                         //dispatches original task
                         boolean dispatched = dispatchTask(task, getJobScheduler().selectTaskProcessorNode(task), false);
                         if (!dispatched) {
-                            generalExecutor.submit(new TaskRecollector(task));  // add the task back to the queue to be dispatched later
+                            generalExecutor.submit(new TaskReCollector(task));  // add the task back to the queue to be dispatched later
                         }
 //                        log.info("Dispatching replica of task: " + task.getTaskID() + " JobID: " + task.getJobID());
                         /*dispatches task's replica, assuming it wont be directed to the same node to which the original
@@ -340,7 +340,7 @@ public class JobProcessor {
 
     private class TaskTracker extends Thread {
 
-        boolean isRunning = false;
+        private boolean isRunning = false;
 
         private TaskTracker(String name) {
             super(name);

@@ -18,7 +18,6 @@ public class PeerListener {
 
     private TServerTransport serverTransport;
     private TServer server;
-    private CountDownLatch cdLatch;
     private NodeContext nodeContext;
 
 

@@ -93,7 +93,7 @@ public class PeerWorker {
 
     private class WorkerThread extends Thread {
 
-        public boolean isRunning = false;
+        private boolean isRunning = false;
 
         private WorkerThread(String name) {
             super(name);

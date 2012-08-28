@@ -104,7 +104,7 @@ public class GossipImpl {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
-                HashSet<NodeInfo> nodesToGossip = getDiff(randomMember);
+                Set<NodeInfo> nodesToGossip = getDiff(randomMember);
                 Set<NodeInfo> discoveredNodes = CommonUtils.deSerialize(client.memberDiscovery(CommonUtils.serialize(nodeContext.getNodeInfo()), CommonUtils.serialize(nodesToGossip)));
                 Set<NodeInfo> newSet = mergeSets(nodeContext.getMemberSet(), discoveredNodes);
                 nodeContext.updateMemberSet(newSet);
@@ -226,7 +226,7 @@ public class GossipImpl {
         return newSet;
     }
 
-    private HashSet<NodeInfo> getDiff(NodeInfo gossipMember) {
+    private Set<NodeInfo> getDiff(NodeInfo gossipMember) {
         HashSet<NodeInfo> tempSet = new HashSet<NodeInfo>();
         HashSet<NodeInfo> initialSet = (HashSet<NodeInfo>) ((HashSet<NodeInfo>) nodeContext.getMemberSet()).clone();
         initialSet.add(nodeContext.getNodeInfo());

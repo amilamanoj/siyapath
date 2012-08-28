@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NodeContext {
 
-    private static final Log log = LogFactory.getLog(NodeContext.class);
+    //    private static final Log log = LogFactory.getLog(NodeContext.class);
     private JobProcessor jobProcessor;
 
 
@@ -29,11 +29,11 @@ public class NodeContext {
     /**
      * List of known member nodes
      */
-    private HashSet<NodeInfo> members;
+    private Set<NodeInfo> members;
+    private Map<Integer, NodeResource> memberResource;
     //    TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
     private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;
     private boolean isBackup;
-    private HashMap<Integer, NodeResource> memberResource;
     private NodeResource nodeResource;
     private boolean presenceNotified;
     private boolean guiEnabled;
@@ -53,11 +53,11 @@ public class NodeContext {
         this.memWithNodeSet = new ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>>();
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
-        processingTasksNo=0;
+        processingTasksNo = 0;
     }
 
 
-     public  int getProcessingTasksNo() {
+    public synchronized int getProcessingTasksNo() {
         return processingTasksNo;
     }
 
@@ -119,12 +119,12 @@ public class NodeContext {
 
     public NodeResource getRandomMemberWithResource() {
         NodeResource randomMemberWithResource = null;
-        int randomID=0;
+        int randomID = 0;
         if (!getMemberResourceMap().isEmpty()) {
             int memberCount = getMemberResourceMap().size();
             int randomIndex = CommonUtils.getRandomNumber(memberCount);
             Integer[] keyArray = getMemberResourceMap().keySet().toArray(new Integer[memberCount]);
-            randomID=keyArray[randomIndex];
+            randomID = keyArray[randomIndex];
             randomMemberWithResource = getMemberResourceMap().get(randomID);
         }
         return randomMemberWithResource;
@@ -149,8 +149,8 @@ public class NodeContext {
         }
     }
 
-    public void removeMemNodeSet(NodeInfo member){
-          memWithNodeSet.remove(member);
+    public void removeMemNodeSet(NodeInfo member) {
+        memWithNodeSet.remove(member);
     }
 
     public void updateMemNodeSet() {  //TODO:uses concurrent Hashmap, Synchronized block?
@@ -247,7 +247,7 @@ public class NodeContext {
         nodeInfo.setBootstrapper(bootstrapper);
     }
 
-    public Map<Integer,NodeResource> getMemberResourceMap() {
+    public Map<Integer, NodeResource> getMemberResourceMap() {
         return memberResource;
     }
 
@@ -258,11 +258,11 @@ public class NodeContext {
     public Map<Integer, NodeResource> getPartialResourceNodes() {
         int limit = (int) (SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT * 0.25);
 
-        Map<Integer, NodeResource> members = (HashMap<Integer, NodeResource>)((HashMap<Integer, NodeResource>) getMemberResourceMap()).clone();
+        Map<Integer, NodeResource> members = (HashMap<Integer, NodeResource>) ((HashMap<Integer, NodeResource>) getMemberResourceMap()).clone();
         Map<Integer, NodeResource> newMap = new HashMap<Integer, NodeResource>();
         if (members.size() < limit) {
             newMap = members;
-            newMap.put(getNodeInfo().getNodeId(),getNodeResource());
+            newMap.put(getNodeInfo().getNodeId(), getNodeResource());
 
         } else {
 
@@ -272,7 +272,7 @@ public class NodeContext {
                 NodeResource value = entry.getValue();
                 newMap.put(key, value);
                 if (limit == 1) {
-                    newMap.put(getNodeInfo().getNodeId(),getNodeResource());
+                    newMap.put(getNodeInfo().getNodeId(), getNodeResource());
                     break;
                 }
             }
@@ -284,8 +284,8 @@ public class NodeContext {
     /**
      * @param memberResource
      */
-    public void updateMemberResourceSet(Map<Integer,NodeResource> memberResource) {
-        this.memberResource = (HashMap<Integer,NodeResource>) memberResource;
+    public void updateMemberResourceSet(Map<Integer, NodeResource> memberResource) {
+        this.memberResource = (HashMap<Integer, NodeResource>) memberResource;
     }
 
 //    public JobHandler getJobHandler(int jobId){

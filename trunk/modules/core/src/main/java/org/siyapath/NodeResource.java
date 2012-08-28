@@ -1,7 +1,8 @@
 package org.siyapath;
 
-import java.util.HashMap;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hyperic.sigar.SigarException;
 import org.siyapath.monitor.SigarSystemInformation;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.service.ResourceLevel;
@@ -10,7 +11,9 @@ import org.siyapath.service.ResourceLevel;
 /**
  * NodeResource retrieves Node's SystemInformation
  */
-public class NodeResource {
+public final class NodeResource {
+    private final Log log = LogFactory.getLog(NodeResource.class);
+
     private NodeInfo nodeInfo;
 
     public ResourceLevel getResourceLevel() {
@@ -47,24 +50,26 @@ public class NodeResource {
 
 
     public synchronized boolean isIdle() {
-        if (nodeStatus == NodeStatus.IDLE) {
-            return true;
-        } else {
-            return false;
-        }
+        return nodeStatus == NodeStatus.IDLE;
     }
 
-    public NodeResource refreshResourceLevel(){
+    public NodeResource refreshResourceLevel() {
         this.initResourceLevel();
         return this;
     }
 
     private void initResourceLevel() {
-        if (SigarSystemInformation.getFreeMemoryInfo() < 2048) {
+        int freeMemory = 0;
+        try {
+            freeMemory = SigarSystemInformation.getFreeMemoryInfo();
+        } catch (SigarException e) {
+            log.error("Error retrieving memory info: " + e.getMessage());
+        }
+        if (freeMemory < 2048) {
             setResourceLevel(ResourceLevel.LOW);
-        } else if (2048 < SigarSystemInformation.getFreeMemoryInfo() && SigarSystemInformation.getFreeMemoryInfo() < 6144) {
+        } else if (2048 < freeMemory && freeMemory < 6144) {
             setResourceLevel(ResourceLevel.MEDIUM);
-        } else if (6144 < SigarSystemInformation.getFreeMemoryInfo()) {
+        } else if (6144 < freeMemory) {
             setResourceLevel(ResourceLevel.HIGH);
         }
 
@@ -86,7 +91,7 @@ public class NodeResource {
     }
 
 
-
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -98,4 +103,8 @@ public class NodeResource {
         return getNodeInfo().getNodeId() == other.getNodeInfo().getNodeId();
     }
 
+    @Override
+    public int hashCode() {
+        return this.getNodeInfo().getNodeId();
+    }
 }

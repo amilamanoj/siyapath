@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class PushJobScheduler implements JobScheduler {
     private final org.apache.commons.logging.Log log = LogFactory.getLog(PushJobScheduler.class);
-    NodeContext context;
+    private NodeContext context;
 
 
     public PushJobScheduler(NodeContext nodeContext) {
@@ -80,16 +80,15 @@ public class PushJobScheduler implements JobScheduler {
     }
 
     private NodeInfo getWithoutResourceMatching() {
-        Map<Integer, NodeResource> nodes = context.getMemberResourceMap();
         NodeInfo selectedNode = null;
 
+//        Map<Integer, NodeResource> nodes = context.getMemberResourceMap();
         /*for (Map.Entry<Integer, NodeResource> newEntry : nodes.entrySet()) {
             NodeResource node = newEntry.getValue();
             if (node.isIdle() || node.getNodeStatus() == NodeStatus.PROCESSING_IDLE) {
                 selectedNode = node.getNodeInfo();
                 break;
             }
-
         }*/
 
         for (int i = 0; i < context.getMemberResourceMap().size(); i++) {
