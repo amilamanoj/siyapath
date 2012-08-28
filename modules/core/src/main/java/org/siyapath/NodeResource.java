@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 /**
- * NodeResource retrieves Node's SystemInformation
+ * NodeResource class holds system monitoring information, current node status and timestamp
  */
 public final class NodeResource {
     private final Log log = LogFactory.getLog(NodeResource.class);
@@ -22,28 +22,8 @@ public final class NodeResource {
     private NodeStatus nodeStatus;
     private long timeStamp;
 
-    public Long getTimeStamp() {
-        return timeStamp;
+     public NodeResource() {
     }
-
-    private void updateTimeStamp(){
-        Date date= new Date();
-        timeStamp=date.getTime();
-    }
-
-    public void setTimeStamp(Long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-
-    public ResourceLevel getResourceLevel() {
-        return resourceLevel;
-    }
-
-    public void setResourceLevel(ResourceLevel resourceLevel) {
-        this.resourceLevel = resourceLevel;
-    }
-
 
     public NodeResource(NodeInfo nodeInfo) {
         initResourceLevel();
@@ -53,30 +33,89 @@ public final class NodeResource {
 
     }
 
-
-    public NodeResource() {
+    /**
+     *
+     * @return timeStamp
+     */
+    public Long getTimeStamp() {
+        return timeStamp;
     }
 
+    /**
+     * Update the timeStamp instance
+     */
+    private void updateTimeStamp(){
+        Date date= new Date();
+        timeStamp=date.getTime();
+    }
 
-    public synchronized void setNodeStatus(org.siyapath.service.NodeStatus nodeStatus) {
+    /**
+     * set the timeStamp
+     *
+     * @param timeStamp
+     */
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    /**
+     * get current resource level
+     *
+     * @return  resourceLevel, a ResourceLevel enum value
+     */
+    public ResourceLevel getResourceLevel() {
+        return resourceLevel;
+    }
+
+    /**
+     * set resource level
+     *
+     * @param resourceLevel
+     */
+    public void setResourceLevel(ResourceLevel resourceLevel) {
+        this.resourceLevel = resourceLevel;
+    }
+
+    /**
+     *  set node status
+     *
+     * @param nodeStatus
+     */
+    public synchronized void setNodeStatus(NodeStatus nodeStatus) {
         this.nodeStatus = nodeStatus;
     }
 
-    public synchronized NodeStatus getNodeStatus() {
+    /**
+     *
+     * @return nodeStatus
+     */
+    public NodeStatus getNodeStatus() {
         return nodeStatus;
     }
 
-
-    public synchronized boolean isIdle() {
+    /**
+     *
+     * @return boolean , whether node is idle
+     */
+    public boolean isIdle() {
         return nodeStatus == NodeStatus.IDLE;
     }
 
+    /**
+     * update nodeResource information
+     *
+     * @return NodeResource instance
+     */
     public NodeResource refreshNodeResource() {
         this.initResourceLevel();
         this.updateTimeStamp();
         return this;
     }
 
+    /**
+     *
+     * initializes system resource level
+     */
     private void initResourceLevel() {
         int freeMemory = 0;
         try {

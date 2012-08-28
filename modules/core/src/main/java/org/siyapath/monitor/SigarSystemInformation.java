@@ -1,10 +1,10 @@
 package org.siyapath.monitor;
 
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.*;
+
+/**
+ * Monitor the System and resources
+ */
 
 public final class SigarSystemInformation {
 
@@ -13,23 +13,45 @@ public final class SigarSystemInformation {
     private SigarSystemInformation(){
     }
 
+    /**
+     * Get System CPU info
+     *
+     * @return CPU Info
+     * @throws SigarException
+     */
     public static String getCPUInformation() throws SigarException {
         CpuInfo[] cpuInfo = sigar.getCpuInfoList();
         return "Cores:" + cpuInfo.length + "-Speed:" + cpuInfo[0].getMhz() + "Mhz";
     }
 
+    /**
+     * Get no of Cores
+     * @return no of cores
+     * @throws SigarException
+     */
     public static int getNoOfCores() throws SigarException {
         CpuInfo[] cpuInfo = null;
         cpuInfo = sigar.getCpuInfoList();
         return cpuInfo.length;
     }
 
+    /**
+     * Get system CPU speed
+     *
+     * @return CPU Speed
+     * @throws SigarException
+     */
     public static int getCPUSpeed() throws SigarException {
         CpuInfo[] cpuInfo = null;
         cpuInfo = sigar.getCpuInfoList();
         return (cpuInfo[0].getMhz() / 1024);
     }
 
+    /**
+     * Get full system memory info
+     * @return
+     * @throws SigarException
+     */
     public static String getMemoryInformation() throws SigarException {
         String memoryStat = "";
         Mem memoryInfo = sigar.getMem();
@@ -43,20 +65,15 @@ public final class SigarSystemInformation {
         return memoryStat;
     }
 
-
+    /**
+     * Get system free memory
+     *
+     * @return system free memory
+     * @throws SigarException
+     */
     public static int getFreeMemoryInfo() throws SigarException {
             Mem memoryInfo = sigar.getMem();
             return (int) (memoryInfo.getActualFree() / (1024 * 1024));
-    }
-
-    public static void getFileSystemInformation() throws SigarException {
-        FileSystem[] filesystem = null;
-        filesystem = sigar.getFileSystemList();
-        System.out.println("Sigar found " + filesystem.length + " drives");
-        for (int i = 0; i < filesystem.length; i++) {
-            Map map = filesystem[i].toMap();
-            System.out.println("drive " + i + ": " + map);
-        }
     }
 
 }

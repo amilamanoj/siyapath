@@ -135,6 +135,11 @@ public final class CommonUtils {
         return nodeDatas;
     }
 
+    /**
+     *
+     * @param resourceNodes
+     * @return resourceNodesData
+     */
     public static Map<Integer, NodeResourceData> serialize(Map<Integer, NodeResource> resourceNodes) {
         Map<Integer, NodeResourceData> resourceNodesData = new HashMap<Integer, NodeResourceData>();
 
@@ -180,6 +185,10 @@ public final class CommonUtils {
         return nodeInfos;
     }
 
+    /**
+     * @param resourceNodesData
+     * @return
+     */
     public static Map<Integer, NodeResource> deSerialize(Map<Integer, NodeResourceData> resourceNodesData) {
         Map<Integer, NodeResource> resourceNodes = new HashMap<Integer, NodeResource>();
 

@@ -23,8 +23,10 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param knownResourceNodes
-     * @return
+     * Gets a nodeResource Map from a remote node and return the initial nodeResource Map of this node
+     *
+     * @param knownResourceNodes of remote node
+     * @return knownResourceNodes of this node
      * @throws TException
      */
     @Override
@@ -49,8 +51,10 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @param knownNodes
-     * @return
+     * Gets a nodeSet from a remote node and return the initial node set of this node
+     *
+     * @param knownNodes of sender
+     * @return knownNodes of receiver
      * @throws TException
      */
     @Override
@@ -59,7 +63,9 @@ public class SiyapathService implements Siyapath.Iface {
     }
 
     /**
-     * @return
+     * returns the node set known to the node
+     *
+     * @return set of known nodes
      * @throws TException
      */
     @Override
@@ -97,7 +103,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     /**
      * @param job received job
-     * @return String success if job is accepted
+     * @return true if job successfully accepted, false otherwise
      * @throws TException
      */
     @Override

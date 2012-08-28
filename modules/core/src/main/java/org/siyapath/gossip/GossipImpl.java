@@ -16,7 +16,6 @@ import org.siyapath.service.Siyapath;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -198,19 +197,25 @@ public class GossipImpl {
     }
 
     /**
+     * Merge a given set of discoveredResourceNodes with existing nodeResource Map up
+     * to a given limit and by comparing timestamps
+     *
      * @param initialMap
      * @param discoveredResourceNodes
      * @return new merged Set of node resource
      */
-    private synchronized Map<Integer, NodeResource> mergeNewNodeResource(Map initialMap, Map<Integer, NodeResource> discoveredResourceNodes) {
+    private Map<Integer, NodeResource> mergeNewNodeResource(Map initialMap, Map<Integer, NodeResource> discoveredResourceNodes) {
         Map<Integer, NodeResource> newMap = initialMap;
 
+        //Iterate through the discoveredResourceNodes
         for (Map.Entry<Integer, NodeResource> entry : discoveredResourceNodes.entrySet()) {
             int key = entry.getKey();
             NodeResource value = entry.getValue();
             if (key != nodeContext.getNodeInfo().getNodeId()) {
+                //Check for MemberResource Map limit
                 if (newMap.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
                     if (initialMap.containsKey(key)) {
+                        //Compare timestamps
                         NodeResource initialResource = (NodeResource) initialMap.get(key);
                         Timestamp initialStamp = new Timestamp(initialResource.getTimeStamp());
                         Timestamp newStamp = new Timestamp(value.getTimeStamp());
@@ -222,8 +227,10 @@ public class GossipImpl {
                     }
 
                 } else {
+                    //select a random node to remove
                     int newKey = newMap.entrySet().iterator().next().getKey();
                     if (initialMap.containsKey(key)) {
+                        //Compare timestamps
                         NodeResource initialResource = (NodeResource) initialMap.get(key);
                         Timestamp initialStamp = new Timestamp(initialResource.getTimeStamp());
                         Timestamp newStamp = new Timestamp(value.getTimeStamp());
@@ -242,6 +249,12 @@ public class GossipImpl {
         return newMap;
     }
 
+    /**
+     * Selects a Diff of nodeSet to Gossip by comparing past nodeSet with current nodeSet
+     *
+     * @param gossipMember
+     * @return diff of nodeSet
+     */
     private Set<NodeInfo> getDiff(NodeInfo gossipMember) {
         HashSet<NodeInfo> tempSet = new HashSet<NodeInfo>();
         HashSet<NodeInfo> initialSet = (HashSet<NodeInfo>) ((HashSet<NodeInfo>) nodeContext.getMemberSet()).clone();

@@ -26,12 +26,12 @@ public class NodeContext {
     private NodeInfo nodeInfo;
 //    private Map<Integer,JobHandler> jobHandlerMap;
 //    private Map<Integer,TaskProcessor> taskProcessorMap;
-    /**
-     * List of known member nodes
-     */
+
+    /**List of known member nodes*/
     private Set<NodeInfo> members;
+    /**Map of nodeResources*/
     private Map<Integer, NodeResource> memberResource;
-    //    TODO: as of now uses concurrentHashmap ,also can provide synchronized block ,which is better?
+    /**Map of members with nodeInfo set*/
     private ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet;
     private boolean isBackup;
     private NodeResource nodeResource;
@@ -39,13 +39,11 @@ public class NodeContext {
     private boolean guiEnabled;
     private boolean listenerEnabled;
     private boolean workerEnabled;
+    /** Number of currently tasks processing tasks*/
     private int processingTasksNo;
     private BackupHandler backupHandler;
 
 
-    /**
-     *
-     */
     public NodeContext(NodeInfo nodeInfo) {
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashMap<Integer, NodeResource>();
@@ -56,15 +54,26 @@ public class NodeContext {
         processingTasksNo = 0;
     }
 
-
-    public synchronized int getProcessingTasksNo() {
+    /**
+     *
+     * @return processingTasksNo
+     */
+    public int getProcessingTasksNo() {
         return processingTasksNo;
     }
 
+    /**
+     * set processingTasksNo
+     *
+     * @param processingTasksNo
+     */
     public synchronized void setProcessingTasksNo(int processingTasksNo) {
         this.processingTasksNo = processingTasksNo;
     }
 
+    /**
+     * Increase the number of  currently processing tasks
+     */
     public synchronized void increaseProTasksNo() {
         processingTasksNo++;
         if (this.getProcessingTasksNo() >= SiyapathConstants.PARALLEL_TASKS) {
@@ -75,6 +84,9 @@ public class NodeContext {
         }
     }
 
+    /**
+     * Decrease the number of currently processing tasks
+     */
     public synchronized void decreaseProTasksNo() {
         if (processingTasksNo > 0) {
             processingTasksNo--;
@@ -117,6 +129,11 @@ public class NodeContext {
         return randomMember;
     }
 
+    /**
+     * Returns a random member from list of known members
+     *
+     * @return randomMemberWithResource
+     */
     public NodeResource getRandomMemberWithResource() {
         NodeResource randomMemberWithResource = null;
         int randomID = 0;
@@ -139,20 +156,37 @@ public class NodeContext {
         members.add(member);
     }
 
+    /**
+     * Remove a member from known members
+     * @param member
+     */
     public void removeMember(NodeInfo member) {
         members.remove(member);
     }
 
+    /**
+     * Add a new entry to the members with node set
+     *
+     * @param member
+     * @param nodeSet
+     */
     public void addMemNodeSet(NodeInfo member, Set<NodeInfo> nodeSet) {
         if (members.contains(member)) {
             this.memWithNodeSet.put(member, (HashSet<NodeInfo>) nodeSet);
         }
     }
 
+    /**
+     * Remove a entry from members with node set
+     * @param member
+     */
     public void removeMemNodeSet(NodeInfo member) {
         memWithNodeSet.remove(member);
     }
 
+    /**
+     * Update members with node set by removing members not known
+     */
     public void updateMemNodeSet() {
         Iterator nodes = memWithNodeSet.keySet().iterator();
         while (nodes.hasNext()) {
@@ -164,6 +198,12 @@ public class NodeContext {
 
     }
 
+    /**
+     * Get a member set of a given node
+     *
+     * @param member
+     * @return
+     */
     public Set<NodeInfo> getMemNodeSet(NodeInfo member) {
         return this.memWithNodeSet.get(member);
     }
@@ -201,8 +241,8 @@ public class NodeContext {
      * @param newSet the set to be replaced by
      */
     public void updateMemberSet(Set<NodeInfo> newSet) {
-        members = (HashSet<NodeInfo>) newSet;
-        updateMemNodeSet();  //TODO:Concurrency Control
+        members = newSet;
+        updateMemNodeSet();
     }
 
     /**
@@ -214,10 +254,20 @@ public class NodeContext {
         return nodeInfo.isBootstrapper();
     }
 
+    /**
+     * Get NodeResource instance
+     *
+     * @return nodeResource
+     */
     public NodeResource getNodeResource() {
         return nodeResource.refreshNodeResource();
     }
 
+    /**
+     * Set nodeResource
+     *
+     * @param nodeResource
+     */
     public void setNodeResource(NodeResource nodeResource) {
         this.nodeResource = nodeResource;
     }
@@ -247,14 +297,28 @@ public class NodeContext {
         nodeInfo.setBootstrapper(bootstrapper);
     }
 
+    /**
+     * Get memberResource Map
+     *
+     * @return memberResource
+     */
     public Map<Integer, NodeResource> getMemberResourceMap() {
         return memberResource;
     }
 
+    /**
+     * remove a entry from resource Map
+     * @param nodeID
+     */
     public void removeFromMemResourceMap(int nodeID) {
         memberResource.remove(nodeID);
     }
 
+    /**
+     * Iterate though the nodeResource Map and selects a partial Map
+     *
+     * @return partial Map of nodeResource
+     */
     public Map<Integer, NodeResource> getPartialResourceNodes() {
         int limit = (int) (SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT * 0.25);
 
@@ -330,10 +394,19 @@ public class NodeContext {
 //        taskProcessorMap.put(taskId, taskProcessor);
 //    }
 
+    /**
+     * Get members with nodeSet
+     *
+     * @return memWithNodeSet
+     */
     public ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> getMemWithNodeSet() {
         return memWithNodeSet;
     }
 
+    /**
+     * Set members with nodeSet
+     * @param memWithNodeSet
+     */
     public void setMemWithNodeSet(ConcurrentHashMap<NodeInfo, HashSet<NodeInfo>> memWithNodeSet) {
         this.memWithNodeSet = memWithNodeSet;
     }
