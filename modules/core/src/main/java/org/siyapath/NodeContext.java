@@ -153,7 +153,7 @@ public class NodeContext {
         memWithNodeSet.remove(member);
     }
 
-    public void updateMemNodeSet() {  //TODO:uses concurrent Hashmap, Synchronized block?
+    public void updateMemNodeSet() {
         Iterator nodes = memWithNodeSet.keySet().iterator();
         while (nodes.hasNext()) {
             NodeInfo newNode = (NodeInfo) nodes.next();
@@ -215,7 +215,7 @@ public class NodeContext {
     }
 
     public NodeResource getNodeResource() {
-        return nodeResource.refreshResourceLevel();
+        return nodeResource.refreshNodeResource();
     }
 
     public void setNodeResource(NodeResource nodeResource) {

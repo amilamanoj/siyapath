@@ -41,7 +41,8 @@ struct NodeData {
 struct NodeResourceData {
     1: NodeData nodeData,
     2: ResourceLevel resourceLevel,
-    3: NodeStatus nodeStatus
+    3: NodeStatus nodeStatus,
+    4: i64 timeStamp
 }
 
 /**

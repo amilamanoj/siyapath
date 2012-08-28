@@ -16,7 +16,10 @@ import org.siyapath.service.Siyapath;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
@@ -82,7 +85,7 @@ public class GossipImpl {
      */
     public Map<Integer,NodeResource> resourceGossip(Map<Integer,NodeResource> receivedResourceNodes) {
         log.info("Remote node invoked member gossip resource with this node");
-        Map<Integer,NodeResource> initialSet = nodeContext.getMemberResourceMap();
+        Map<Integer,NodeResource> initialSet =(Map<Integer,NodeResource>)((HashMap<Integer,NodeResource>)nodeContext.getMemberResourceMap()).clone();
         Map<Integer,NodeResource> newSet = mergeNewNodeResource(initialSet, receivedResourceNodes);
         nodeContext.updateMemberResourceSet(newSet);
         return nodeContext.getPartialResourceNodes();
@@ -195,35 +198,48 @@ public class GossipImpl {
     }
 
     /**
-     * @param initialSet
+     * @param initialMap
      * @param discoveredResourceNodes
      * @return new merged Set of node resource
      */
-    private synchronized Map<Integer,NodeResource> mergeNewNodeResource(Map initialSet, Map<Integer,NodeResource> discoveredResourceNodes) {
-        Map<Integer,NodeResource> newSet = initialSet;
+    private synchronized Map<Integer, NodeResource> mergeNewNodeResource(Map initialMap, Map<Integer, NodeResource> discoveredResourceNodes) {
+        Map<Integer, NodeResource> newMap = initialMap;
 
         for (Map.Entry<Integer, NodeResource> entry : discoveredResourceNodes.entrySet()) {
-                int key = entry.getKey();
-                NodeResource value = entry.getValue();
+            int key = entry.getKey();
+            NodeResource value = entry.getValue();
+            if (key != nodeContext.getNodeInfo().getNodeId()) {
+                if (newMap.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
+                    if (initialMap.containsKey(key)) {
+                        NodeResource initialResource = (NodeResource) initialMap.get(key);
+                        Timestamp initialStamp = new Timestamp(initialResource.getTimeStamp());
+                        Timestamp newStamp = new Timestamp(value.getTimeStamp());
+                        if (initialStamp.before(newStamp)) {
+                            newMap.put(key, value);
+                        }
+                    } else {
+                        newMap.put(key, value);
+                    }
 
-            if(key!=nodeContext.getNodeInfo().getNodeId()){
+                } else {
+                    int newKey = newMap.entrySet().iterator().next().getKey();
+                    if (initialMap.containsKey(key)) {
+                        NodeResource initialResource = (NodeResource) initialMap.get(key);
+                        Timestamp initialStamp = new Timestamp(initialResource.getTimeStamp());
+                        Timestamp newStamp = new Timestamp(value.getTimeStamp());
+                        if (initialStamp.before(newStamp)) {
+                            newMap.put(key, value);
+                        }
+                    } else {
+                        newMap.remove(newKey);
+                        newMap.put(key, value);
 
-                 if (newSet.size() < SiyapathConstants.RESOURCE_MEMBER_SET_LIMIT) {
-                     newSet.put(key,value);
-                 }else {
-                     int newKey=0;
-                     for (Map.Entry<Integer, NodeResource> newEntry : newSet.entrySet()) {
-                             newKey= newEntry.getKey();
-                         break;
-                     }
-                     newSet.remove(newKey);
-                         newSet.put(key,value);
-
-                 }
+                    }
+                }
             }
-                 }
+        }
 
-        return newSet;
+        return newMap;
     }
 
     private Set<NodeInfo> getDiff(NodeInfo gossipMember) {

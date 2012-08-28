@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -1530,14 +1529,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_knownResourceNodes = true && (isSetKnownResourceNodes());
-      builder.append(present_knownResourceNodes);
-      if (present_knownResourceNodes)
-        builder.append(knownResourceNodes);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(resourceGossip_args other) {
@@ -1955,14 +1947,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(resourceGossip_result other) {
@@ -2355,14 +2340,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_nodeData = true && (isSetNodeData());
-      builder.append(present_nodeData);
-      if (present_nodeData)
-        builder.append(nodeData);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyPresence_args other) {
@@ -2720,14 +2698,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyPresence_result other) {
@@ -3153,19 +3124,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_nodeData = true && (isSetNodeData());
-      builder.append(present_nodeData);
-      if (present_nodeData)
-        builder.append(nodeData);
-
-      boolean present_knownNodes = true && (isSetKnownNodes());
-      builder.append(present_knownNodes);
-      if (present_knownNodes)
-        builder.append(knownNodes);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(memberDiscovery_args other) {
@@ -3615,14 +3574,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(memberDiscovery_result other) {
@@ -3944,9 +3896,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getMembers_args other) {
@@ -4276,14 +4226,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getMembers_result other) {
@@ -4605,9 +4548,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(isAlive_args other) {
@@ -4920,14 +4861,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(isAlive_result other) {
@@ -5333,19 +5267,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_job = true && (isSetJob());
-      builder.append(present_job);
-      if (present_job)
-        builder.append(job);
-
-      boolean present_node = true && (isSetNode());
-      builder.append(present_node);
-      if (present_node)
-        builder.append(node);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(requestBecomeBackup_args other) {
@@ -5746,14 +5668,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(requestBecomeBackup_result other) {
@@ -6035,9 +5950,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(endBackup_args other) {
@@ -6282,9 +6195,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(endBackup_result other) {
@@ -6594,14 +6505,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_job = true && (isSetJob());
-      builder.append(present_job);
-      if (present_job)
-        builder.append(job);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitJob_args other) {
@@ -6959,14 +6863,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitJob_result other) {
@@ -7313,14 +7210,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_task = true && (isSetTask());
-      builder.append(present_task);
-      if (present_task)
-        builder.append(task);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitTask_args other) {
@@ -7678,14 +7568,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(submitTask_result other) {
@@ -8035,14 +7918,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobId = true;
-      builder.append(present_jobId);
-      if (present_jobId)
-        builder.append(jobId);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobStatus_args other) {
@@ -8416,14 +8292,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobStatus_result other) {
@@ -8819,14 +8688,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_jobID = true;
-      builder.append(present_jobID);
-      if (present_jobID)
-        builder.append(jobID);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobResult_args other) {
@@ -9200,14 +9062,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getJobResult_result other) {
@@ -9600,14 +9455,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_result = true && (isSetResult());
-      builder.append(present_result);
-      if (present_result)
-        builder.append(result);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResult_args other) {
@@ -9965,14 +9813,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResult_result other) {
@@ -10319,14 +10160,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_result = true && (isSetResult());
-      builder.append(present_result);
-      if (present_result)
-        builder.append(result);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResultToBackup_args other) {
@@ -10684,14 +10518,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true;
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(sendTaskResultToBackup_result other) {
@@ -11041,14 +10868,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_taskID = true;
-      builder.append(present_taskID);
-      if (present_taskID)
-        builder.append(taskID);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyTaskLiveness_args other) {
@@ -11332,9 +11152,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(notifyTaskLiveness_result other) {
@@ -11703,19 +11521,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_username = true && (isSetUsername());
-      builder.append(present_username);
-      if (present_username)
-        builder.append(username);
-
-      boolean present_password = true && (isSetPassword());
-      builder.append(present_password);
-      if (present_password)
-        builder.append(password);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(userLogin_args other) {
@@ -12109,14 +11915,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success);
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(userLogin_result other) {
@@ -12404,9 +12203,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getNodeStatus_args other) {
@@ -12732,14 +12529,7 @@ public class Siyapath {
 
     @Override
     public int hashCode() {
-      HashCodeBuilder builder = new HashCodeBuilder();
-
-      boolean present_success = true && (isSetSuccess());
-      builder.append(present_success);
-      if (present_success)
-        builder.append(success.getValue());
-
-      return builder.toHashCode();
+      return 0;
     }
 
     public int compareTo(getNodeStatus_result other) {
