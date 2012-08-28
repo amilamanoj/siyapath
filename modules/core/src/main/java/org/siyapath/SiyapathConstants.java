@@ -5,6 +5,9 @@ package org.siyapath;
  */
 public final class SiyapathConstants {
 
+    private SiyapathConstants(){
+    }
+
     /**
      * Keyword siyapath *
      */
@@ -28,5 +31,11 @@ public final class SiyapathConstants {
     public static final int PARALLEL_TASKS=3;
 
     public static final int MAX_TASK_UPDATE_INTERVAL_MILLIS = 30000;
+
+    public static final boolean LOCAL_TEST = true;
+
+    public static final String BOOTSRAPPER_IP = "127.0.0.1";
+    public static final int BOOTSRAPPER_PORT = 9020;
+
 
 }

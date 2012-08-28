@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
 import org.siyapath.NodeResource;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.service.NodeData;
 import org.siyapath.service.NodeResourceData;
 
@@ -12,11 +13,12 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-public class CommonUtils {
+public final class CommonUtils {
 
     private static Log log = LogFactory.getLog(CommonUtils.class);
 
-    //temporary testing purposes
+    private CommonUtils() {
+    }
 
     /**
      * @return InetSocketAddress for given host and port
@@ -26,8 +28,7 @@ public class CommonUtils {
         String host = "10.1.";
         host = host + new Random().nextInt(255) + ".";
         host = host + new Random().nextInt(255);
-        InetSocketAddress address = new InetSocketAddress(host, port);
-        return address;
+        return new InetSocketAddress(host, port);
     }
 
     /**
@@ -41,6 +42,9 @@ public class CommonUtils {
      * @return ip address
      */
     public static String getIPAddress() {
+
+        if (SiyapathConstants.LOCAL_TEST) return "localhost";
+
         List<InetAddress> ipAddresses = new ArrayList<InetAddress>();
         String ipAddress = null;
 
@@ -60,6 +64,7 @@ public class CommonUtils {
         } catch (SocketException e1) {
             e1.printStackTrace();
         }
+
         if (!ipAddresses.isEmpty()) {
             for (InetAddress ip : ipAddresses) {
                 if (ip instanceof Inet4Address) {
@@ -72,16 +77,17 @@ public class CommonUtils {
             }
         }
 
-
-        return "localhost";//ipAddress;  //TODO: only for testing
+        return ipAddress;
     }
 
-    public static String getBootstrapperIP(){
-        return "localhost";        //TODO
+    public static String getBootstrapperIP() {
+        if (SiyapathConstants.LOCAL_TEST) return "localhost";
+        return SiyapathConstants.BOOTSRAPPER_IP;
     }
 
-    public static int getBootstrapperPort(){
-        return 9020;               //TODO
+    public static int getBootstrapperPort() {
+        if (SiyapathConstants.LOCAL_TEST) return 9020;
+        return SiyapathConstants.BOOTSRAPPER_PORT;
     }
 
     /**

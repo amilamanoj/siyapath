@@ -62,7 +62,6 @@ public class TaskProcessor extends Thread {
 
             // sand-boxing with a custom security manager that denies most permissions
 //        System.setSecurityManager(siyapathSecurityManager);
-            log.info("Starting the task: " + task.getTaskID() + " , Input: " + task.getTaskData());
             taskThread.start();
             try {
                 taskThread.join();
@@ -100,6 +99,7 @@ public class TaskProcessor extends Thread {
 
     private void processTask() {
         try {
+            log.info("Starting the task: " + task.getTaskID());
             taskInstance.setData(task.getTaskData());
             taskInstance.process();
             byte[] finalResult = taskInstance.getResults();
@@ -131,7 +131,7 @@ public class TaskProcessor extends Thread {
 
     private boolean deliverTaskResult(Result result) {
 
-        boolean success=false;
+        boolean success = false;
 
         TTransport transport = new TSocket(task.getSender().getIp(), task.getSender().getPort());
         try {

@@ -27,13 +27,7 @@ public class SiyapathSecurityManager extends SecurityManager {
 
 //    @Override
 
-    /**
-     * Does not permit the code to stop JVM
-     */
-//    public void checkExit(int status) {
-//        throw new SecurityException();
-//    }
-    //TODO: override other checkXXX methods
+
     // the manager denies everything by default
     public boolean disable(String password) {
         if (this.password.equalsIgnoreCase(password)) {
@@ -45,16 +39,24 @@ public class SiyapathSecurityManager extends SecurityManager {
 
     @Override
     public void checkPermission(Permission perm) {
-        if (active == true) {
+        if (active) {
             String threadName = Thread.currentThread().getName();
             if (threadName.startsWith("task-thread")) {
                 log.debug("Blocking an operation for task thread");
                 throw new SecurityException();
-            } else {
+//            } else {
 //                log.debug("Allowing an operation for non task thread");
             }
         }
     }
+
+//    /**
+//     * Does not permit the code to stop JVM
+//     */
+//    @Override
+//    public void checkExit(int status) {
+//        throw new SecurityException();
+//    }
 
 //    @Override
 //    public void checkLink(String lib) {
