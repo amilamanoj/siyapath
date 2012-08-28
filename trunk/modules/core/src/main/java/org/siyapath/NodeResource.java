@@ -3,9 +3,12 @@ package org.siyapath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperic.sigar.SigarException;
+
 import org.siyapath.monitor.SigarSystemInformation;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.service.ResourceLevel;
+
+import java.util.Date;
 
 
 /**
@@ -15,6 +18,23 @@ public final class NodeResource {
     private final Log log = LogFactory.getLog(NodeResource.class);
 
     private NodeInfo nodeInfo;
+    private ResourceLevel resourceLevel;
+    private NodeStatus nodeStatus;
+    private long timeStamp;
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    private void updateTimeStamp(){
+        Date date= new Date();
+        timeStamp=date.getTime();
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
 
     public ResourceLevel getResourceLevel() {
         return resourceLevel;
@@ -24,11 +44,10 @@ public final class NodeResource {
         this.resourceLevel = resourceLevel;
     }
 
-    private ResourceLevel resourceLevel;
-    private NodeStatus nodeStatus;
 
     public NodeResource(NodeInfo nodeInfo) {
         initResourceLevel();
+        updateTimeStamp();
         this.nodeInfo = nodeInfo;
         setNodeStatus(NodeStatus.CREATED);
 
@@ -36,7 +55,6 @@ public final class NodeResource {
 
 
     public NodeResource() {
-        initResourceLevel();
     }
 
 
@@ -53,8 +71,9 @@ public final class NodeResource {
         return nodeStatus == NodeStatus.IDLE;
     }
 
-    public NodeResource refreshResourceLevel() {
+    public NodeResource refreshNodeResource() {
         this.initResourceLevel();
+        this.updateTimeStamp();
         return this;
     }
 

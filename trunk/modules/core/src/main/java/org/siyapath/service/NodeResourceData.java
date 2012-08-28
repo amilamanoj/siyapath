@@ -6,7 +6,6 @@
  */
 package org.siyapath.service;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -37,6 +36,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   private static final org.apache.thrift.protocol.TField NODE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeData", org.apache.thrift.protocol.TType.STRUCT, (short)1);
   private static final org.apache.thrift.protocol.TField RESOURCE_LEVEL_FIELD_DESC = new org.apache.thrift.protocol.TField("resourceLevel", org.apache.thrift.protocol.TType.I32, (short)2);
   private static final org.apache.thrift.protocol.TField NODE_STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("nodeStatus", org.apache.thrift.protocol.TType.I32, (short)3);
+  private static final org.apache.thrift.protocol.TField TIME_STAMP_FIELD_DESC = new org.apache.thrift.protocol.TField("timeStamp", org.apache.thrift.protocol.TType.I64, (short)4);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -55,6 +55,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
    * @see NodeStatus
    */
   public NodeStatus nodeStatus; // required
+  public long timeStamp; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -68,7 +69,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
      * 
      * @see NodeStatus
      */
-    NODE_STATUS((short)3, "nodeStatus");
+    NODE_STATUS((short)3, "nodeStatus"),
+    TIME_STAMP((short)4, "timeStamp");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -89,6 +91,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
           return RESOURCE_LEVEL;
         case 3: // NODE_STATUS
           return NODE_STATUS;
+        case 4: // TIME_STAMP
+          return TIME_STAMP;
         default:
           return null;
       }
@@ -129,6 +133,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   }
 
   // isset id assignments
+  private static final int __TIMESTAMP_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -138,6 +144,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, ResourceLevel.class)));
     tmpMap.put(_Fields.NODE_STATUS, new org.apache.thrift.meta_data.FieldMetaData("nodeStatus", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, NodeStatus.class)));
+    tmpMap.put(_Fields.TIME_STAMP, new org.apache.thrift.meta_data.FieldMetaData("timeStamp", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(NodeResourceData.class, metaDataMap);
   }
@@ -148,18 +156,23 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   public NodeResourceData(
     NodeData nodeData,
     ResourceLevel resourceLevel,
-    NodeStatus nodeStatus)
+    NodeStatus nodeStatus,
+    long timeStamp)
   {
     this();
     this.nodeData = nodeData;
     this.resourceLevel = resourceLevel;
     this.nodeStatus = nodeStatus;
+    this.timeStamp = timeStamp;
+    setTimeStampIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
   public NodeResourceData(NodeResourceData other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetNodeData()) {
       this.nodeData = new NodeData(other.nodeData);
     }
@@ -169,6 +182,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     if (other.isSetNodeStatus()) {
       this.nodeStatus = other.nodeStatus;
     }
+    this.timeStamp = other.timeStamp;
   }
 
   public NodeResourceData deepCopy() {
@@ -180,6 +194,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     this.nodeData = null;
     this.resourceLevel = null;
     this.nodeStatus = null;
+    setTimeStampIsSet(false);
+    this.timeStamp = 0;
   }
 
   public NodeData getNodeData() {
@@ -270,6 +286,29 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     }
   }
 
+  public long getTimeStamp() {
+    return this.timeStamp;
+  }
+
+  public NodeResourceData setTimeStamp(long timeStamp) {
+    this.timeStamp = timeStamp;
+    setTimeStampIsSet(true);
+    return this;
+  }
+
+  public void unsetTimeStamp() {
+    __isset_bit_vector.clear(__TIMESTAMP_ISSET_ID);
+  }
+
+  /** Returns true if field timeStamp is set (has been assigned a value) and false otherwise */
+  public boolean isSetTimeStamp() {
+    return __isset_bit_vector.get(__TIMESTAMP_ISSET_ID);
+  }
+
+  public void setTimeStampIsSet(boolean value) {
+    __isset_bit_vector.set(__TIMESTAMP_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case NODE_DATA:
@@ -296,6 +335,14 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       }
       break;
 
+    case TIME_STAMP:
+      if (value == null) {
+        unsetTimeStamp();
+      } else {
+        setTimeStamp((Long)value);
+      }
+      break;
+
     }
   }
 
@@ -309,6 +356,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
     case NODE_STATUS:
       return getNodeStatus();
+
+    case TIME_STAMP:
+      return Long.valueOf(getTimeStamp());
 
     }
     throw new IllegalStateException();
@@ -327,6 +377,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       return isSetResourceLevel();
     case NODE_STATUS:
       return isSetNodeStatus();
+    case TIME_STAMP:
+      return isSetTimeStamp();
     }
     throw new IllegalStateException();
   }
@@ -371,29 +423,21 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         return false;
     }
 
+    boolean this_present_timeStamp = true;
+    boolean that_present_timeStamp = true;
+    if (this_present_timeStamp || that_present_timeStamp) {
+      if (!(this_present_timeStamp && that_present_timeStamp))
+        return false;
+      if (this.timeStamp != that.timeStamp)
+        return false;
+    }
+
     return true;
   }
 
   @Override
   public int hashCode() {
-    HashCodeBuilder builder = new HashCodeBuilder();
-
-    boolean present_nodeData = true && (isSetNodeData());
-    builder.append(present_nodeData);
-    if (present_nodeData)
-      builder.append(nodeData);
-
-    boolean present_resourceLevel = true && (isSetResourceLevel());
-    builder.append(present_resourceLevel);
-    if (present_resourceLevel)
-      builder.append(resourceLevel.getValue());
-
-    boolean present_nodeStatus = true && (isSetNodeStatus());
-    builder.append(present_nodeStatus);
-    if (present_nodeStatus)
-      builder.append(nodeStatus.getValue());
-
-    return builder.toHashCode();
+    return 0;
   }
 
   public int compareTo(NodeResourceData other) {
@@ -430,6 +474,16 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     }
     if (isSetNodeStatus()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.nodeStatus, typedOther.nodeStatus);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetTimeStamp()).compareTo(typedOther.isSetTimeStamp());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetTimeStamp()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.timeStamp, typedOther.timeStamp);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -477,6 +531,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       sb.append(this.nodeStatus);
     }
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("timeStamp:");
+    sb.append(this.timeStamp);
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -495,6 +553,8 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
+      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+      __isset_bit_vector = new BitSet(1);
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te);
@@ -544,6 +604,14 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 4: // TIME_STAMP
+            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              struct.timeStamp = iprot.readI64();
+              struct.setTimeStampIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -574,6 +642,9 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
         oprot.writeI32(struct.nodeStatus.getValue());
         oprot.writeFieldEnd();
       }
+      oprot.writeFieldBegin(TIME_STAMP_FIELD_DESC);
+      oprot.writeI64(struct.timeStamp);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -601,7 +672,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (struct.isSetNodeStatus()) {
         optionals.set(2);
       }
-      oprot.writeBitSet(optionals, 3);
+      if (struct.isSetTimeStamp()) {
+        optionals.set(3);
+      }
+      oprot.writeBitSet(optionals, 4);
       if (struct.isSetNodeData()) {
         struct.nodeData.write(oprot);
       }
@@ -611,12 +685,15 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (struct.isSetNodeStatus()) {
         oprot.writeI32(struct.nodeStatus.getValue());
       }
+      if (struct.isSetTimeStamp()) {
+        oprot.writeI64(struct.timeStamp);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, NodeResourceData struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(3);
+      BitSet incoming = iprot.readBitSet(4);
       if (incoming.get(0)) {
         struct.nodeData = new NodeData();
         struct.nodeData.read(iprot);
@@ -629,6 +706,10 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
       if (incoming.get(2)) {
         struct.nodeStatus = NodeStatus.findByValue(iprot.readI32());
         struct.setNodeStatusIsSet(true);
+      }
+      if (incoming.get(3)) {
+        struct.timeStamp = iprot.readI64();
+        struct.setTimeStampIsSet(true);
       }
     }
   }

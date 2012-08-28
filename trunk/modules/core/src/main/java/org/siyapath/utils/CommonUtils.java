@@ -119,6 +119,7 @@ public final class CommonUtils {
         resourceData.setResourceLevel(nodeResource.getResourceLevel());
         resourceData.setNodeData(serialize(nodeResource.getNodeInfo()));
         resourceData.setNodeStatus(nodeResource.getNodeStatus());
+        resourceData.setTimeStamp(nodeResource.getTimeStamp());
         return resourceData;
     }
 
@@ -163,6 +164,7 @@ public final class CommonUtils {
         nodeResource.setResourceLevel((nodeResourceData.getResourceLevel()));
         nodeResource.setNodeInfo(deSerialize(nodeResourceData.getNodeData()));
         nodeResource.setNodeStatus(nodeResourceData.getNodeStatus());
+        nodeResource.setTimeStamp(nodeResourceData.getTimeStamp());
         return nodeResource;
     }
 
