@@ -12,7 +12,7 @@ import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
 public enum TaskStatus implements org.apache.thrift.TEnum {
-  RECEIVED(1),
+  DISPATCHING(1),
   PROCESSING(2),
   DONE(3);
 
@@ -36,7 +36,7 @@ public enum TaskStatus implements org.apache.thrift.TEnum {
   public static TaskStatus findByValue(int value) { 
     switch (value) {
       case 1:
-        return RECEIVED;
+        return DISPATCHING;
       case 2:
         return PROCESSING;
       case 3:

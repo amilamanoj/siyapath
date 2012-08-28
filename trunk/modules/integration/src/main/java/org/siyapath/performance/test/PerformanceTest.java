@@ -127,7 +127,7 @@ class ClientThread extends Thread {
             Job job = null;
 
             try {
-                job = userHandler.createJob(taskDataMap);
+                job = userHandler.createJob(taskDataMap, 1);      //todo: default replicas is set to 1
             } catch (IOException e) {
                 e.printStackTrace();
             }

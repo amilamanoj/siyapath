@@ -109,7 +109,7 @@ public class UserHandler {
         return -1;
     }
 
-    public Job createJob(Map<String, TaskData> taskList) throws IOException {
+    public Job createJob(Map<String, TaskData> taskList, int replicaCount) throws IOException {
         String jobIdString = this.generateJobIDString();
         int jobId = Math.abs(jobIdString.hashCode());
         int taskCounter = 0;
@@ -117,11 +117,11 @@ public class UserHandler {
 
         for (TaskData taskData : taskList.values()) {
             int taskId = Math.abs((jobIdString + "::" + taskCounter++).hashCode());
-            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResourceLevel());
+            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResourceLevel(),replicaCount );
             taskMap.put(taskId, task);
         }
 
-        return new Job(jobId, CommonUtils.serialize(context.getNodeInfo()), taskMap);
+        return new Job(jobId, CommonUtils.serialize(context.getNodeInfo()), taskMap, replicaCount);
     }
 
     /**
@@ -131,10 +131,10 @@ public class UserHandler {
      * @param inputData       input data
      */
     private Task createTask(int jobId, int taskId, File taskProgramFile, byte[] inputData,
-                            String requiredResources) throws IOException {
+                            String requiredResources, int replicaCount) throws IOException {
         Task task = new Task(taskId, jobId, CommonUtils.convertFileToByteBuffer
                 (taskProgramFile.getAbsolutePath()), ByteBuffer.wrap(inputData), getJobInterfaceName(),
-                CommonUtils.serialize(context.getNodeInfo()), null, requiredResources);
+                CommonUtils.serialize(context.getNodeInfo()), null, requiredResources, replicaCount);
         return task;
 
     }

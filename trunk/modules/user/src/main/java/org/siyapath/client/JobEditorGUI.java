@@ -1,7 +1,6 @@
 package org.siyapath.client;
 
 import org.siyapath.service.Job;
-import org.siyapath.service.Task;
 
 import javax.swing.*;
 import java.io.File;
@@ -28,9 +27,12 @@ public class JobEditorGUI extends javax.swing.JDialog {
     private javax.swing.JLabel JobNameLabel;
     private javax.swing.JButton addTaskButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jobNameText;
     private javax.swing.JButton okButton;
+    private javax.swing.JLabel replicaCountLabel;
+    private javax.swing.JTextField replicaCountTextField;
     private javax.swing.JLabel tasksLabel;
     private javax.swing.JList tasksList;
 
@@ -63,8 +65,11 @@ public class JobEditorGUI extends javax.swing.JDialog {
         tasksLabel = new javax.swing.JLabel();
         cancelButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
+        replicaCountLabel = new javax.swing.JLabel();
+        replicaCountTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tasksList.setModel(listModel);
         jScrollPane1.setViewportView(tasksList);
@@ -85,7 +90,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         tasksLabel.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
         tasksLabel.setText("Tasks");
 
-        cancelButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        cancelButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,13 +98,24 @@ public class JobEditorGUI extends javax.swing.JDialog {
             }
         });
 
-        okButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        okButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         okButton.setText("Submit");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
         });
+
+        replicaCountLabel.setText("No. of replicas to run :");
+
+        replicaCountTextField.setText("1");
+//        replicaCountTextField.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                replicaCountTextFieldActionPerformed(evt);
+//            }
+//        });
+
+        jLabel2.setText("Do you need to run the same task on multiple nodes?");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,32 +124,45 @@ public class JobEditorGUI extends javax.swing.JDialog {
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
-                                        .addComponent(jobNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(tasksLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 224, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 292, Short.MAX_VALUE)
                                                 .addComponent(addTaskButton))
-                                        .addComponent(JobNameLabel)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(JobNameLabel)
+                                                .addGap(28, 28, 28)
+                                                .addComponent(jobNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(okButton)
+                                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(cancelButton)))
+                                                .addComponent(cancelButton))
+                                        .addComponent(jLabel2)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(replicaCountLabel)
+                                                .addGap(102, 102, 102)
+                                                .addComponent(replicaCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(JobNameLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jobNameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(JobNameLabel)
+                                        .addComponent(jobNameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(replicaCountLabel)
+                                        .addComponent(replicaCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(tasksLabel)
                                         .addComponent(addTaskButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
@@ -142,12 +171,13 @@ public class JobEditorGUI extends javax.swing.JDialog {
         );
 
         pack();
-    }
+    }// </editor-fold>
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         try {
-            Job job = handler.createJob(taskList);
+            int replicaCount = Integer.parseInt(replicaCountTextField.getText());
+            Job job = handler.createJob(taskList,replicaCount);
             userGUI.startSubmission(jobNameText.getText(), job);
             this.setVisible(false);
         } catch (IOException e) {

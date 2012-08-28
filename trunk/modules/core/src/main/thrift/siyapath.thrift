@@ -20,7 +20,7 @@ enum ResourceLevel {
 
 
 enum TaskStatus {
-  RECEIVED = 1,
+  DISPATCHING = 1,
   PROCESSING = 2,
   DONE = 3
 }
@@ -47,6 +47,7 @@ struct NodeResourceData {
 
 /**
  * Contains information about a Task
+ * optional value is set at task collector for each task a job belongs to
  */
 struct Task {
     1: i32 taskID,
@@ -56,7 +57,8 @@ struct Task {
     5: string className,
     6: NodeData sender,
     7: NodeData backup,
-    8: string requiredResourceLevel
+    8: string requiredResourceLevel,
+    9: i32 taskReplicaCount
 }
 
 /**
@@ -65,7 +67,8 @@ struct Task {
 struct Job {
     1: i32 jobID,
     2: NodeData user,
-    3: map<i32,Task> tasks
+    3: map<i32,Task> tasks,
+    4: i32 replicaCount
 }
 
 
