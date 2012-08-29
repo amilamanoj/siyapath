@@ -20,12 +20,13 @@ import java.util.*;
 import java.util.concurrent.*;
 
 
-public class JobProcessor {
+public final class JobProcessor {
 
     private static final Log log = LogFactory.getLog(JobProcessor.class);
 
     private ExecutorService taskDispatcherExecutor;
     private ExecutorService taskCollectorExecutor;
+    private ExecutorService generalExecutor;
 
     private NodeContext context;
     private BlockingQueue<Task> taskQueue;     // or Deque? i.e. double ended queue
@@ -37,14 +38,13 @@ public class JobProcessor {
     public JobProcessor(NodeContext nodeContext) {
         //uses the default constructor at the sender non-requisition
         context = nodeContext;
-        taskDispatcherExecutor = Executors.newFixedThreadPool(SiyapathConstants.TASK_DISPATCHER_POOL_SIZE);
+        taskDispatcherExecutor = Executors.newCachedThreadPool();
         taskCollectorExecutor = Executors.newCachedThreadPool();
+        generalExecutor = Executors.newCachedThreadPool();
+
         taskQueue = new LinkedBlockingQueue<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
-
-        jobMap = new HashMap<Integer, Job>();
+        jobMap = new ConcurrentHashMap<Integer, Job>();
         taskMap = new ConcurrentHashMap<Integer, ProcessingTask>();
-        taskDispatcherExecutor.submit(new TaskDispatcher());
-
         dispatchedTasks = new ConcurrentHashMap<Integer, Task>();
 
 //        new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
@@ -60,6 +60,7 @@ public class JobProcessor {
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
         taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
+        taskDispatcherExecutor.submit(new TaskDispatcher());
     }
 
     /**
@@ -164,6 +165,22 @@ public class JobProcessor {
 
     }
 
+    class TaskReCollector implements Runnable {
+        private Task task;
+
+        TaskReCollector(Task task) {
+            this.task = task;
+        }
+
+        public void run() {
+            try {
+                taskQueue.put(task);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     class TaskDispatcher implements Runnable {
 
         private boolean active = true;
@@ -183,7 +200,7 @@ public class JobProcessor {
 
                         //dispatches tasks for user-specified number of replicas
                         for (int i=0; i<replicaCount; i++){
-                            log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
+                            log.info("Preparing to dispatch task: " + task.getTaskID() + " JobID: " + task.getJobID());
 
                             NodeInfo targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
                             if(i>0){
@@ -204,7 +221,7 @@ public class JobProcessor {
                             //todo: verify: even if one replicated task fails being dispatched, task will be back on end
                             //todo: of queue. may starve
                             if (!dispatched) {
-                                taskQueue.put(task);  // add the task back to the queue to be dispatched later
+                                generalExecutor.submit(new TaskReCollector(task));  // add the task back to the queue to be dispatched later
                             } else {
                                 dispatchedTasks.put(task.getTaskID(), task);    // if task was dispatched successfully
                             }
@@ -222,7 +239,7 @@ public class JobProcessor {
          * @param task            task to submit
          * @param destinationNode node to submit to
          */
-        public boolean dispatchTask(Task task, NodeInfo destinationNode) {
+        public synchronized boolean dispatchTask(Task task, NodeInfo destinationNode) {
 
             NodeInfo nodeInfo = context.getNodeInfo();
             NodeData thisNode = CommonUtils.serialize(nodeInfo);
@@ -247,16 +264,19 @@ public class JobProcessor {
                     pTask.setTimeLastUpdated(System.currentTimeMillis());
                 }
             } catch (TTransportException e) {
-                e.printStackTrace();
+
                 if (e.getCause() instanceof ConnectException) {
                     log.warn("Could not connect to " + destinationNode + ",assign task to another.");
+                } else{
+                    log.warn(e.getMessage());
                 }
                 //TODO: handle exception to pick other node
             } catch (TException e) {
                 e.printStackTrace();
+            } finally {
+                transport.close();
             }
             return isDispatched;
-
         }
     }
 
@@ -374,7 +394,7 @@ public class JobProcessor {
 
 //    private class TaskTracker extends Thread {
 //
-//        boolean isRunning = false;
+//        private boolean isRunning = false;
 //
 //        private TaskTracker(String name) {
 //            super(name);
