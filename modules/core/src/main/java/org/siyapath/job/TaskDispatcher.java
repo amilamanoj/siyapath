@@ -15,7 +15,6 @@ import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -51,33 +50,20 @@ final class TaskDispatcher implements Runnable {
                 Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
                 if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.
 
-                    int replicaCount = task.getTaskReplicaCount();
-                    ArrayList<Integer> dispatchedNodes = new ArrayList<Integer>();
+                    log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
 
-                    //dispatches tasks for user-specified number of replicas
-                    for (int i = 0; i < replicaCount; i++) {
-                        log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
+                    NodeInfo targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
+                    while (taskMap.get(task.getTaskID()).getTaskStatusMap().containsKey
+                            (targetTaskProcessor.getNodeId())) {
+                        targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
+                    }
+                    boolean dispatched = dispatchTask(task, targetTaskProcessor);
 
-                        NodeInfo targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
-                        if (i > 0) {
-                            while (dispatchedNodes.contains(targetTaskProcessor.getNodeId())) {
-                                targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
-                            }
-                        }
-                        log.info("replicating round i:" + i + ", Task ID: " + task.getTaskID() +
-                                ", dispatched Node ID:" + targetTaskProcessor.getNodeId());
-                        dispatchedNodes.add(targetTaskProcessor.getNodeId());
-
-                        ProcessingTask modifiedTask = taskMap.get(task.getTaskID());
-                        modifiedTask.setStatus(targetTaskProcessor.getNodeId(), TaskStatus.DISPATCHING);
-
-                        boolean dispatched = dispatchTask(task, targetTaskProcessor);
-
-                        //todo: verify: even if one replicated task fails being dispatched, task will be back on end
-                        //todo: of queue. may starve
-                        if (!dispatched) {
-                            generalExecutor.submit(new TaskReCollector(taskQueue, task));  // add the task back to the queue to be dispatched later
-                        }
+                    if (!dispatched) {
+                        generalExecutor.submit(new TaskReCollector(taskQueue, task));  // add the task back to the queue to be dispatched later
+                    } else {
+                        ProcessingTask pTask = taskMap.get(task.getTaskID());
+                        pTask.addToStatusMap(targetTaskProcessor.getNodeId(), TaskStatus.DISPATCHING);
                     }
                 }
             } catch (InterruptedException e) {
@@ -113,7 +99,7 @@ final class TaskDispatcher implements Runnable {
 
             if (isDispatched) {
                 ProcessingTask pTask = taskMap.get(task.getTaskID());
-                pTask.setStatus(destinationNode.getNodeId(), TaskStatus.PROCESSING);
+                pTask.addToStatusMap(destinationNode.getNodeId(), TaskStatus.PROCESSING);
                 pTask.setTimeLastUpdated(System.currentTimeMillis());
             }
         } catch (TTransportException e) {
