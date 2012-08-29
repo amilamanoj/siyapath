@@ -23,17 +23,29 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages job submission to the volunteer computing network
+ */
 public class UserHandler {
     private static final Log log = LogFactory.getLog(UserHandler.class);
 
     private NodeContext context;
-    private NodeInfo clientEnd;
     private Map<Integer, JobData> jobMap = new HashMap<Integer, JobData>();
 
-
+    /**
+     * Create a UserHandler with a random port and id
+     */
     public UserHandler() {
-        this.clientEnd = new NodeInfo();
-        this.context = new NodeContext(clientEnd);
+        this(new NodeInfo());
+    }
+
+    /**
+     * Creates a UserHandler with a given ip, port and id
+     *
+     * @param nodeInfo NodeInfo with the specified data
+     */
+    public UserHandler(NodeInfo nodeInfo) {
+        this.context = new NodeContext(nodeInfo);
     }
 
     public JobData getJobData(int jobId) {
@@ -45,7 +57,7 @@ public class UserHandler {
      *
      * @return the created jobID
      */
-    public String generateJobIDString() {
+    private String generateJobIDString() {
         String ip = context.getNodeInfo().getIp();
         String timestamp = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss.S").format(new Date());
         int random = CommonUtils.getRandomNumber(1000);
@@ -54,8 +66,8 @@ public class UserHandler {
     }
 
     /**
-     * @param username
-     * @param password
+     * @param username user name
+     * @param password password
      * @return String success if user can be authenticated, failure otherwise, or exception string
      */
     public String authenticate(String username, String password) {
@@ -80,14 +92,13 @@ public class UserHandler {
         return res;
     }
 
-//    public void addJob(Map<String, TaskData> taskList){
-//        int jobId = this.generateJobID();
-//    }
-
     /**
-     * Prepares the new job, selects a distributor nodes and sends the job
+     * Selects a distributor nodes and sends the job
      *
-     * @param job job
+     * @param name name of the job
+     * @param job  job to be sub
+     * @return jobID if success. -1 if failed
+     * @throws SubmissionFailedException
      */
     public int submitJob(String name, Job job) throws SubmissionFailedException {
         NodeInfo selectedNode = null;
@@ -97,9 +108,9 @@ public class UserHandler {
                 throw new SubmissionFailedException("Could not select a job processor node", null);
             }
             JobData jobData = new JobData(job.getJobID(), name, job, selectedNode);
-            boolean isSubmitted=sendJob(job, selectedNode);
+            boolean isSubmitted = sendJob(job, selectedNode);
             jobMap.put(jobData.getId(), jobData);
-            if (isSubmitted){
+            if (isSubmitted) {
                 return job.getJobID();
             }
         } catch (TException e) {
@@ -109,6 +120,14 @@ public class UserHandler {
         return -1;
     }
 
+    /**
+     * Creates a job object for a given list of tasks
+     *
+     * @param taskList     task data to be used for the job
+     * @param replicaCount number of replicas
+     * @return a new job
+     * @throws IOException
+     */
     public Job createJob(Map<String, TaskData> taskList, int replicaCount) throws IOException {
         String jobIdString = this.generateJobIDString();
         int jobId = Math.abs(jobIdString.hashCode());
@@ -117,7 +136,7 @@ public class UserHandler {
 
         for (TaskData taskData : taskList.values()) {
             int taskId = Math.abs((jobIdString + "::" + taskCounter++).hashCode());
-            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResourceLevel(),replicaCount );
+            Task task = createTask(jobId, taskId, taskData.getClassFile(), taskData.getInputData(), taskData.getRequiredResourceLevel(), replicaCount);
             taskMap.put(taskId, task);
         }
 
@@ -155,16 +174,9 @@ public class UserHandler {
             Siyapath.Client client = new Siyapath.Client(protocol);
             context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
             log.info("Number of members from bootstrapper: " + context.getMemberCount());
-//        } catch (TTransportException e) {
-//            if (e.getCause() instanceof ConnectException) {
-//                e.printStackTrace();
-//            }
-//        } catch (TException e) {
-//            e.printStackTrace();
         } finally {
             transport.close();
         }
-
         /*for (NodeInfo nodeInfo : context.getMemberSet()) {
             if (nodeInfo.isIdle() || nodeInfo.getNodeStatus() == NodeStatus.DISTRIBUTING) {
                 selectedMember = nodeInfo;
@@ -172,9 +184,8 @@ public class UserHandler {
             }
         }*/
 
-        selectedMember=context.getRandomMember();
+        selectedMember = context.getRandomMember();
         log.info("Selected node: " + selectedMember);
-
 
         return selectedMember;
     }
@@ -191,19 +202,12 @@ public class UserHandler {
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
-            boolean  submitted  = client.submitJob(job); //TODO: Handle the boolean return (if submission isn't possible)
+            boolean submitted = client.submitJob(job); //TODO: Handle the boolean return (if submission isn't possible)
             return submitted;
-//        } catch (TTransportException e) {
-//            if (e.getCause() instanceof ConnectException) {
-//                e.printStackTrace();
-//            }
-//        } catch (TException e) {
-//            e.printStackTrace();
         } finally {
             transport.close();
-
         }
-        
+
     }
 
 
@@ -225,15 +229,6 @@ public class UserHandler {
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             client.getJobResult(jobId);    // TODO: display results
-
-//        } catch (TTransportException e) {
-//            if (e.getCause() instanceof ConnectException) {
-//                e.printStackTrace();
-//            }
-//        } catch (TException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
         } finally {
             transport.close();
         }
@@ -258,26 +253,13 @@ public class UserHandler {
             //gets the map of task statuses from JobProcessor
             //Maps each taskId to its processing status <Integer,String>
             taskCompletionMap = client.getJobStatus(jobID);
-            //sets vectors to be fed to Status UI
-
-
-//        } catch (TTransportException e) {
-//            if (e.getCause() instanceof ConnectException) {
-//                e.printStackTrace();
-//            }
-//        } catch (TException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
         } finally {
             transport.close();
         }
-
         return taskCompletionMap;
     }
 
     /**
-     *
      * @param taskResultMap
      * @return true if all task statuses are marked DONE, false otherwise, at a given point of time
      */
@@ -285,15 +267,12 @@ public class UserHandler {
 
         boolean statusCondition = true;
         boolean eachTaskStatus;
-//String taskStatus : statusMap.values()
         for (TaskResult taskResult : taskResultMap.values()) {
-//            String taskStatus = taskResult.getStatus().toString();
             if (taskResult.getStatus() == TaskStatus.DONE) {
                 eachTaskStatus = true;
             } else {
                 eachTaskStatus = false;
             }
-
             if (statusCondition && eachTaskStatus) statusCondition = true;
             else statusCondition = false;
         }
