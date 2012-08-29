@@ -3,6 +3,9 @@ package org.siyapath;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.utils.CommonUtils;
 
+/**
+ * Holds node information id, ip address and port
+ */
 public class NodeInfo {
     private int nodeId;
     private String ip;

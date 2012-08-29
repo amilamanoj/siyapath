@@ -49,7 +49,7 @@ public final class SigarSystemInformation {
 
     /**
      * Get full system memory info
-     * @return
+     * @return String representation of memory information
      * @throws SigarException
      */
     public static String getMemoryInformation() throws SigarException {

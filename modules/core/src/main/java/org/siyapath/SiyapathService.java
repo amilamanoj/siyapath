@@ -11,7 +11,10 @@ import org.siyapath.utils.CommonUtils;
 import java.util.Map;
 import java.util.Set;
 
-public class SiyapathService implements Siyapath.Iface {
+/**
+ * Interface operations implementations.
+ */
+public final class SiyapathService implements Siyapath.Iface {
     private static final Log log = LogFactory.getLog(PeerListener.class);
 
     private NodeContext nodeContext;
@@ -36,7 +39,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     /**
      * @param nodeData
-     * @return
+     * @return success value of notifying presence
      * @throws TException
      */
     @Override
@@ -149,7 +152,7 @@ public class SiyapathService implements Siyapath.Iface {
 
     /**
      * @param jobID
-     * @return
+     * @return job result
      * @throws TException
      */
     @Override

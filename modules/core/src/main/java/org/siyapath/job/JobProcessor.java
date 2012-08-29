@@ -157,7 +157,7 @@ public final class JobProcessor {
         if (counter == pTask.getReplicaCount()) {     //if all statues are DONE
 //            log.debug("All replicated tasks completed for task-" + taskId);
             overallTaskStatus = TaskStatus.DONE;
-        }  else {
+        } else {
             log.debug("All replicated tasks not completed for task-" + taskId);
 
         }
@@ -392,74 +392,6 @@ public final class JobProcessor {
 //        return taskStatus;
 //    }
 
-    /*
-    private class TaskStatusPollThread extends Thread {
-
-        public boolean isRunning = false;
-        private int jobID;
-
-        @Override
-        public void run() {
-
-            isRunning = true;
-            while (isRunning) {
-                acquireJobProcessingStatus(this.getJobID());
-                try {
-                    sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void stopPolling() {
-            isRunning = false;
-        }
-
-        public int getJobID() {
-            return jobID;
-        }
-
-        public void setJobID(int jobID) {
-            this.jobID = jobID;
-        }
-    }
-
-    public void thriftCall(int jobID) {
-        TaskStatusPollThread taskStatusPollThread = new TaskStatusPollThread();
-        taskStatusPollThread.setJobID(jobID);
-        taskStatusPollThread.start();
-    }
-
-//    private NodeInfo getProcessingNode() {
-//        String res = null;
-//    NodeInfo selectedMember = null;
-//        TTransport transport = new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT);
-//        try {
-//            log.info("Getting list of members from bootstrap");
-//            transport.open();
-//            TProtocol protocol = new TBinaryProtocol(transport);
-//            Siyapath.Client client = new Siyapath.Client(protocol);
-//            context.updateMemberSet(CommonUtils.deSerialize(client.getMembers()));
-//            log.info("Number of members from bootstrapper: " + context.getMemberCount());
-//            selectedMember = context.getRandomMember();
-//        } catch (TTransportException e) {
-//            if (e.getCause() instanceof ConnectException) {
-//                res = "connecEx";
-//                e.printStackTrace();
-//            }
-//        } catch (TException e) {
-//            res = "tEx";
-//            e.printStackTrace();
-//        } finally {
-//            transport.close();
-//        }
-//        log.info("Selected node: " + selectedMember);
-//
-//        return selectedMember;
-//    }
-
-//    }
 
 //    public void sendResultToUserNode(){
 //
@@ -480,5 +412,4 @@ public final class JobProcessor {
 //        } catch (TException e) {
 //            e.printStackTrace();
 //        }
-*/
 }

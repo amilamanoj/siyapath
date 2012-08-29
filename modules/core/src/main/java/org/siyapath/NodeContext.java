@@ -210,7 +210,7 @@ public class NodeContext {
      * Get a member set of a given node
      *
      * @param member
-     * @return
+     * @return member set
      */
     public Set<NodeInfo> getMemNodeSet(NodeInfo member) {
         return this.memWithNodeSet.get(member);

@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 /**
- * NodeResource class holds system monitoring information, current node status and timestamp
+ * Holds system monitoring information, current node status and timestamp
  */
 public final class NodeResource {
     private final Log log = LogFactory.getLog(NodeResource.class);

@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * This class provides overall gossip related operation implementation
  */
-public class GossipImpl {
+public final class GossipImpl {
 
     private static final Log log = LogFactory.getLog(GossipImpl.class);
     private NodeContext nodeContext;

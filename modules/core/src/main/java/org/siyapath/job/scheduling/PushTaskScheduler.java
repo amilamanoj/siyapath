@@ -5,21 +5,19 @@ import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.NodeResource;
-import org.siyapath.job.JobScheduler;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.service.ResourceLevel;
 import org.siyapath.service.Task;
 
 /**
- *
- * This class provides optimal task processing node selection options for the Job Processor
+ * Provides optimal task processing node selection options for the Job Processor
  */
-public class PushJobScheduler implements JobScheduler {
-    private final org.apache.commons.logging.Log log = LogFactory.getLog(PushJobScheduler.class);
+public class PushTaskScheduler implements TaskScheduler {
+    private final org.apache.commons.logging.Log log = LogFactory.getLog(PushTaskScheduler.class);
 
     private NodeContext context;
 
-    public PushJobScheduler(NodeContext nodeContext) {
+    public PushTaskScheduler(NodeContext nodeContext) {
         context = nodeContext;
     }
 
