@@ -83,7 +83,7 @@ public class GossipImpl {
      * @return the node resource of this node
      */
     public Map<Integer,NodeResource> resourceGossip(Map<Integer,NodeResource> receivedResourceNodes) {
-        log.info("Remote node invoked member gossip resource with this node");
+        log.info("Remote node invoked resource gossip with this node");
         Map<Integer,NodeResource> initialSet =(Map<Integer,NodeResource>)((HashMap<Integer,NodeResource>)nodeContext.getMemberResourceMap()).clone();
         Map<Integer,NodeResource> newSet = mergeNewNodeResource(initialSet, receivedResourceNodes);
         nodeContext.updateMemberResourceSet(newSet);

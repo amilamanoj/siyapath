@@ -33,6 +33,7 @@ public class ProcessingTask {
         this.jobID = jobID;
         this.taskID = taskID;
         this.replicaCount = replicaCount;
+        this.task = task;
 
         this.resultList = new ArrayList<byte[]>();
         this.taskStatusMap = new HashMap<Integer, TaskStatus>();     // maps processing node of task, to task status
@@ -72,7 +73,7 @@ public class ProcessingTask {
         return taskStatusMap;
     }
 
-    public void setStatus(Integer processingNodeID, TaskStatus status) {
+    public void addToStatusMap(Integer processingNodeID, TaskStatus status) {
         taskStatusMap.put(processingNodeID, status);
     }
 
@@ -128,7 +129,7 @@ public class ProcessingTask {
 //        return status;
 //    }
 //
-//    public void setStatus(TaskStatus status) {
+//    public void addToStatusMap(TaskStatus status) {
 //        this.status = status;
 //    }
 

@@ -35,7 +35,12 @@ class TaskCollector implements Runnable {
 
                     task.setTaskReplicaCount(job.getReplicaCount());      //required to set
                     taskMap.put(task.getTaskID(), processingTask);
-                    taskQueue.put(task);
+
+                    int replicaCount = job.getReplicaCount();
+                    for (int i = 0; i < replicaCount; i++) {
+                        taskQueue.put(task);
+                    }
+
                     log.debug("Added " + task.getTaskID() + " to queue.");
 //                        processingTask.setBackupNode(backup);
                 }

@@ -11,7 +11,6 @@ import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathConstants;
-import org.siyapath.job.scheduling.PushJobScheduler;
 import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
@@ -72,7 +71,7 @@ public final class JobProcessor {
         ProcessingTask pTask = taskMap.get(result.getTaskID());
 
         pTask.addResult(result.getResults());
-        pTask.setStatus(result.getProcessingNode().getNodeID(), TaskStatus.DONE);
+        pTask.addToStatusMap(result.getProcessingNode().getNodeID(), TaskStatus.DONE);
         pTask.incrementResultReceivedCount();
         taskMap.put(result.getTaskID(), pTask);
 
@@ -201,12 +200,12 @@ public final class JobProcessor {
             if (jobComplete) {
                 log.info("The job: " + jobId + " is complete.");
                 final NodeInfo backup = backupNode;
-                new Thread() {    //TODO: use pooling
+                generalExecutor.submit(new Thread() {
                     @Override
                     public void run() {
                         clearCompletedJob(jobId, backup);
                     }
-                }.start();
+                });
             }
         }
         return taskStatusMap;
