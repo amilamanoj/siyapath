@@ -1,6 +1,9 @@
-package org.siyapath.client;
+package org.siyapath.client.ui;
 
 import org.apache.thrift.TException;
+import org.siyapath.client.JobData;
+import org.siyapath.client.SubmissionFailedException;
+import org.siyapath.client.UserHandler;
 import org.siyapath.service.Job;
 import org.siyapath.service.TaskResult;
 

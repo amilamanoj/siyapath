@@ -19,7 +19,6 @@ public class NodeGUI extends JFrame {
 //                busyTimerActionPerformed(e);
 //            }
 //        });
-        taskPanel.setVisible(false);
         userMenu.setVisible(false);
         gossipLabel.setVisible(false);
         gossipProgressLabel.setVisible(false);
@@ -32,9 +31,7 @@ public class NodeGUI extends JFrame {
         exitButton = new javax.swing.JButton();
         aboutButton = new javax.swing.JButton();
         controlPane = new javax.swing.JLayeredPane();
-        taskPanel = new javax.swing.JPanel();
-        stateLabel1 = new javax.swing.JLabel();
-        gossipPanel = new javax.swing.JPanel();
+        infoPanel = new javax.swing.JPanel();
         listenerLabel = new javax.swing.JLabel();
         listenerStatLabel = new javax.swing.JLabel();
         workerLabel = new javax.swing.JLabel();
@@ -45,8 +42,8 @@ public class NodeGUI extends JFrame {
         mLabel = new javax.swing.JLabel();
         gossipLabel = new javax.swing.JLabel();
         gossipProgressLabel = new javax.swing.JLabel();
-        taskButton = new javax.swing.JLabel();
-        gossipButton = new javax.swing.JLabel();
+        stateLabel1 = new javax.swing.JLabel();
+        processingInfoLabel = new javax.swing.JLabel();
         stateLabel = new javax.swing.JLabel();
         siyapathLogo = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
@@ -72,7 +69,7 @@ public class NodeGUI extends JFrame {
         nameLabel.setText("Siyapath - Volunteer Computing");
         nameLabel.setPreferredSize(new java.awt.Dimension(800, 40));
 
-        exitButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        exitButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         exitButton.setText("Exit");
         exitButton.setIconTextGap(10);
         exitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -81,7 +78,7 @@ public class NodeGUI extends JFrame {
             }
         });
 
-        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        aboutButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         aboutButton.setText("About");
         aboutButton.setIconTextGap(10);
         aboutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -93,51 +90,27 @@ public class NodeGUI extends JFrame {
         controlPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         controlPane.setOpaque(true);
 
-        stateLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        stateLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        stateLabel1.setText("Waiting for a task...");
-
-        javax.swing.GroupLayout taskPanelLayout = new javax.swing.GroupLayout(taskPanel);
-        taskPanel.setLayout(taskPanelLayout);
-        taskPanelLayout.setHorizontalGroup(
-                taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(taskPanelLayout.createSequentialGroup()
-                                .addGap(193, 193, 193)
-                                .addComponent(stateLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(201, Short.MAX_VALUE))
-        );
-        taskPanelLayout.setVerticalGroup(
-                taskPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(taskPanelLayout.createSequentialGroup()
-                                .addGap(107, 107, 107)
-                                .addComponent(stateLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(108, Short.MAX_VALUE))
-        );
-
-        taskPanel.setBounds(10, 60, 590, 240);
-        controlPane.add(taskPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         listenerLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         listenerLabel.setText("Peer Listner:");
 
-        listenerStatLabel.setFont(new java.awt.Font("BankGothic Lt BT", 0, 18)); // NOI18N
+        listenerStatLabel.setFont(new java.awt.Font("BankGothic Lt BT", 0, 18));
         listenerStatLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         listenerStatLabel.setText("OFF");
 
-        workerLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
+        workerLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         workerLabel.setText("Peer Worker:");
 
-        workerStatLabel.setFont(new java.awt.Font("BankGothic Lt BT", 0, 18)); // NOI18N
+        workerStatLabel.setFont(new java.awt.Font("BankGothic Lt BT", 0, 18));
         workerStatLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         workerStatLabel.setText("OFF");
 
-        membersLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        membersLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         membersLabel.setText("Member count:");
 
-        membersLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
+        membersLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         membersLabel1.setText("Members:");
 
-        mCountLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        mCountLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
         mCountLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         mCountLabel.setText("0");
 
@@ -148,87 +121,78 @@ public class NodeGUI extends JFrame {
         gossipLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         gossipLabel.setText("Gossip in progress...");
 
-        javax.swing.GroupLayout gossipPanelLayout = new javax.swing.GroupLayout(gossipPanel);
-        gossipPanel.setLayout(gossipPanelLayout);
-        gossipPanelLayout.setHorizontalGroup(
-                gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(gossipPanelLayout.createSequentialGroup()
+        stateLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        stateLabel1.setText("Waiting for work...");
+
+        processingInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        processingInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+
+        javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
+        infoPanel.setLayout(infoPanelLayout);
+        infoPanelLayout.setHorizontalGroup(
+                infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(infoPanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(membersLabel1)
-                                        .addGroup(gossipPanelLayout.createSequentialGroup()
-                                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(infoPanelLayout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(mLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(infoPanelLayout.createSequentialGroup()
+                                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(listenerLabel)
                                                         .addComponent(membersLabel))
                                                 .addGap(28, 28, 28)
-                                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                         .addComponent(mCountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(listenerStatLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGap(143, 143, 143)
-                                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(workerLabel)
-                                                        .addComponent(gossipLabel))
-                                                .addGap(45, 45, 45)
-                                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(listenerStatLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(infoPanelLayout.createSequentialGroup()
+                                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(gossipLabel)
+                                                        .addComponent(workerLabel))
+                                                .addGap(57, 57, 57)
+                                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(gossipProgressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(workerStatLabel)))
-                                        .addGroup(gossipPanelLayout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addComponent(mLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(97, Short.MAX_VALUE))
+                                        .addComponent(processingInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                                        .addComponent(stateLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap())
         );
-        gossipPanelLayout.setVerticalGroup(
-                gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(gossipPanelLayout.createSequentialGroup()
+        infoPanelLayout.setVerticalGroup(
+                infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(infoPanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(listenerLabel)
                                         .addComponent(listenerStatLabel)
                                         .addComponent(workerStatLabel)
                                         .addComponent(workerLabel))
                                 .addGap(18, 18, 18)
-                                .addGroup(gossipPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(membersLabel)
                                         .addComponent(mCountLabel)
-                                        .addComponent(gossipLabel)
-                                        .addComponent(gossipProgressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(gossipProgressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(gossipLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(membersLabel1)
+                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(stateLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(membersLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(mLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                                        .addComponent(processingInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
                                 .addContainerGap())
         );
 
-        gossipPanel.setBounds(10, 60, 590, 240);
-        controlPane.add(gossipPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        taskButton.setFont(new java.awt.Font("Tahoma", 0, 12));
-        taskButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        taskButton.setText("Task");
-        taskButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        taskButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                taskButtonMouseClicked(evt);
-            }
-        });
-        taskButton.setBounds(310, 10, 290, 30);
-        controlPane.add(taskButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        gossipButton.setFont(new java.awt.Font("Tahoma", 0, 12));
-        gossipButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        gossipButton.setText("Gossip");
-        gossipButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        gossipButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                gossipButtonMouseClicked(evt);
-            }
-        });
-        gossipButton.setBounds(10, 10, 290, 30);
-        controlPane.add(gossipButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        infoPanel.setBounds(10, 20, 590, 280);
+        controlPane.add(infoPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         stateLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         stateLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        stateLabel.setBounds(250, 310, 100, 25);
+        stateLabel.setText("----");
+        stateLabel.setBounds(200, 300, 190, 25);
         controlPane.add(stateLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         systemMenu.setText("System");
@@ -305,7 +269,7 @@ public class NodeGUI extends JFrame {
         );
 
         pack();
-    }// </editor-fold>
+    }
 
     private void exitButtonActionPerformed(ActionEvent evt) {
         exit();
@@ -329,20 +293,6 @@ public class NodeGUI extends JFrame {
 
     private void formWindowClosing(WindowEvent evt) {
         exit();
-    }
-
-    private void gossipButtonMouseClicked(java.awt.event.MouseEvent evt) {
-        gossipPanel.setVisible(true);
-        taskPanel.setVisible(false);
-        gossipButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        taskButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-    }
-
-    private void taskButtonMouseClicked(java.awt.event.MouseEvent evt) {
-        taskPanel.setVisible(true);
-        gossipPanel.setVisible(false);
-        taskButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        gossipButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
     }
 
 //    private void busyTimerActionPerformed(ActionEvent e) {
@@ -373,9 +323,8 @@ public class NodeGUI extends JFrame {
     private javax.swing.JLayeredPane controlPane;
     private javax.swing.JButton exitButton;
     private javax.swing.JMenuItem exitMenu;
-    private javax.swing.JLabel gossipButton;
     private javax.swing.JLabel gossipLabel;
-    private javax.swing.JPanel gossipPanel;
+    private javax.swing.JPanel infoPanel;
     private javax.swing.JLabel gossipProgressLabel;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel listenerLabel;
@@ -390,12 +339,11 @@ public class NodeGUI extends JFrame {
     private javax.swing.JLabel stateLabel;
     private javax.swing.JLabel stateLabel1;
     private javax.swing.JMenu systemMenu;
-    private javax.swing.JLabel taskButton;
-    private javax.swing.JPanel taskPanel;
     private javax.swing.JMenu userMenu;
     private javax.swing.JMenuItem userProfileMenu;
     private javax.swing.JLabel workerLabel;
     private javax.swing.JLabel workerStatLabel;
+    private javax.swing.JLabel processingInfoLabel;
 
 
     public void setListenerStat(String stat) {
@@ -421,7 +369,17 @@ public class NodeGUI extends JFrame {
         mLabel.setText(members);
     }
 
-    public void setStatus(String status) {
+    public void setNodeStatus(String status) {
         stateLabel.setText(status);
     }
+
+    public void setProcessStatus(String status) {
+        stateLabel1.setText(status);
+    }
+
+    public void setProcessingInfo(String status) {
+        processingInfoLabel.setText(status);
+    }
+
+
 }

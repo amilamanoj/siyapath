@@ -1,8 +1,6 @@
-package org.siyapath.client;
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+package org.siyapath.client.ui;
+
+import org.siyapath.client.UserHandler;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Vector;
@@ -13,7 +11,7 @@ public class JobStatusUI extends javax.swing.JFrame {
     DefaultTableModel model=null;
     Vector<String> headers;
 
-    /** Creates new form JobStatusUI */
+    /** Creates new form org.siyapath.client.ui.JobStatusUI */
     public JobStatusUI(UserHandler handler) {
         headers = new Vector<String>();
         headers.add("Task ID");

@@ -1,5 +1,7 @@
-package org.siyapath.client;
+package org.siyapath.client.ui;
 
+import org.siyapath.client.TaskData;
+import org.siyapath.client.UserHandler;
 import org.siyapath.service.Job;
 
 import javax.swing.*;
@@ -7,11 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /*
  * JobEditor.java
@@ -120,7 +117,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
 
         jLabel3.setText("Required resource level:");
 
-        resourceCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Low", "Medium", "High" }));
+        resourceCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Low", "Medium", "High"}));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -199,7 +196,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
 
         try {
             int replicaCount = Integer.parseInt(replicaCountTextField.getText());
-            Job job = handler.createJob(taskList,replicaCount);
+            Job job = handler.createJob(taskList, replicaCount);
             userGUI.startSubmission(jobNameText.getText(), job);
             this.setVisible(false);
         } catch (IOException e) {

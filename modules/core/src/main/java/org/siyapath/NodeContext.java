@@ -42,9 +42,11 @@ public class NodeContext {
     /** Number of currently tasks processing tasks*/
     private int processingTasksNo;
     private BackupHandler backupHandler;
+    private Set taskIds;
 
 
     public NodeContext(NodeInfo nodeInfo) {
+        this.taskIds = new HashSet();
         this.members = new HashSet<NodeInfo>();
         this.memberResource = new HashMap<Integer, NodeResource>();
 //        this.taskProcessorMap = new HashMap<Integer, TaskProcessor>();
@@ -52,6 +54,7 @@ public class NodeContext {
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
         processingTasksNo = 0;
+
     }
 
     /**
@@ -74,7 +77,7 @@ public class NodeContext {
     /**
      * Increase the number of  currently processing tasks
      */
-    public synchronized void increaseProTasksNo() {
+    public synchronized void increaseProTasksNo(int taskId) {
         processingTasksNo++;
         if (this.getProcessingTasksNo() >= SiyapathConstants.PARALLEL_TASKS) {
             getNodeResource().setNodeStatus(NodeStatus.PROCESSING_BUSY);
@@ -82,12 +85,13 @@ public class NodeContext {
         } else {
             getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
         }
+        taskIds.add(taskId);
     }
 
     /**
      * Decrease the number of currently processing tasks
      */
-    public synchronized void decreaseProTasksNo() {
+    public synchronized void decreaseProTasksNo(int taskID) {
         if (processingTasksNo > 0) {
             processingTasksNo--;
             if (processingTasksNo == 0) {
@@ -95,8 +99,12 @@ public class NodeContext {
             } else if (this.getProcessingTasksNo() < SiyapathConstants.PARALLEL_TASKS) {
                 getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
             }
+            taskIds.remove(taskID);
         }
+    }
 
+    public Set<Integer> getTaskIds() {
+        return taskIds;
     }
 
     public JobProcessor getJobProcessor() {
