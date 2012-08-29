@@ -3,6 +3,7 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.thrift.TException;
 import org.siyapath.service.*;
 import org.siyapath.service.NodeStatus;
 import org.siyapath.ui.NodeGUI;
@@ -70,16 +71,16 @@ public class SiyapathNode {
             log.info("Starting Bootstrapper Node...");
 
         }
-//      else if (!connectToBootStrapper()) {
-//            log.info("OK, I'm gonna be the bootstrapper");
-//            nodeContext.getNodeInfo().setPort(FrameworkInformation.BOOTSTRAP_PORT);
-//        }
 
-        peerListener = new PeerListener(processor, nodeContext);
-        peerListener.start();
-        peerWorker = new PeerWorker(nodeContext);
-        nodeContext.getNodeResource().setNodeStatus(NodeStatus.IDLE);
-        peerWorker.start();
+        try {
+            peerListener = new PeerListener(processor, nodeContext);
+            peerListener.start();
+            peerWorker = new PeerWorker(nodeContext);
+            nodeContext.getNodeResource().setNodeStatus(NodeStatus.IDLE);
+            peerWorker.start();
+        } catch (TException e) {
+            log.fatal("Error starting Siyapath Node. Check the configuration " + e.getMessage());
+        }
     }
 
 

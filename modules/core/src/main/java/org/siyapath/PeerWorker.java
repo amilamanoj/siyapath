@@ -41,21 +41,22 @@ public class PeerWorker {
         log.debug("Trying to connect to a bootstrapper node");
         //TTransport transport = new TFramedTransport(new TSocket("localhost", FrameworkInformation.BOOTSTRAP_PORT));
         TTransport transport = new TSocket(CommonUtils.getBootstrapperIP(), CommonUtils.getBootstrapperPort());
+        TProtocol protocol = new TBinaryProtocol(transport);
+        Siyapath.Client client = new Siyapath.Client(protocol);
+
         try {
             transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
             presenceNotified = client.notifyPresence(CommonUtils.serialize(nodeContext.getNodeInfo()));
         } catch (TTransportException e) {
-            if (e.getCause() instanceof ConnectException) {
-                log.error("Could not connect to the bootstrapper to notify presense");
-            } else {
-                e.printStackTrace();
-            }
+            log.error(e.getMessage());
         } catch (TException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         } finally {
             transport.close();
+        }
+        if (!presenceNotified)
+        {
+            log.error("Could not connect to the bootstrapper to notify presense");
         }
         return presenceNotified;
     }
@@ -70,14 +71,8 @@ public class PeerWorker {
             Set<NodeInfo> newNodes = CommonUtils.deSerialize(client.getMembers());
             nodeContext.updateMemberSet(removeSelf(newNodes));
 
-        } catch (TTransportException e) {
-            if (e.getCause() instanceof ConnectException) {
-                log.error("Could not connect to the bootstrapper to fetch nodes");
-            } else {
-                e.printStackTrace();
-            }
         } catch (TException e) {
-            e.printStackTrace();
+            log.error("Could not connect to the bootstrapper to fetch nodes. " + e.getMessage());
 
         } finally {
             transport.close();
@@ -125,13 +120,12 @@ public class PeerWorker {
                         gossiper.resourceGossiper();
                     }
                     log.info("Number of known members: " + nodeContext.getMemberCount());
-                     log.info("Number of known membersWithResources: " + nodeContext.getMemberResourceMap().size());
+                    log.info("Number of known membersWithResources: " + nodeContext.getMemberResourceMap().size());
 
                 }
                 try {
                     sleep(5000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }
