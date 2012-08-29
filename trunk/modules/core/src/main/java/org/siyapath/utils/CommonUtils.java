@@ -187,7 +187,7 @@ public final class CommonUtils {
 
     /**
      * @param resourceNodesData
-     * @return
+     * @return map of NodeResource for given Map of NodeResourceData
      */
     public static Map<Integer, NodeResource> deSerialize(Map<Integer, NodeResourceData> resourceNodesData) {
         Map<Integer, NodeResource> resourceNodes = new HashMap<Integer, NodeResource>();

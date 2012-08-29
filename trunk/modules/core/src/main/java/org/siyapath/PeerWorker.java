@@ -16,7 +16,9 @@ import org.siyapath.service.*;
 import java.net.ConnectException;
 import java.util.Set;
 
-
+/**
+ * Worker component of the peer. Performs periodic communications.
+ */
 public class PeerWorker {
 
     private static final Log log = LogFactory.getLog(PeerWorker.class);

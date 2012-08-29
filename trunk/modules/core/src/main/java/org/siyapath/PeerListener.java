@@ -10,7 +10,9 @@ import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.service.Siyapath;
 
-
+/**
+ * Listener component of the peer. Listens for incoming connections.
+ */
 public class PeerListener {
 
     private static final Log log = LogFactory.getLog(PeerListener.class);

@@ -11,7 +11,8 @@ import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathConstants;
-import org.siyapath.job.scheduling.PushJobScheduler;
+import org.siyapath.job.scheduling.PushTaskScheduler;
+import org.siyapath.job.scheduling.TaskScheduler;
 import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
@@ -118,7 +119,7 @@ final class TaskDispatcher implements Runnable {
 
     }
 
-    private JobScheduler getJobScheduler() {
-        return new PushJobScheduler(context);
+    private TaskScheduler getJobScheduler() {
+        return new PushTaskScheduler(context);
     }
 }

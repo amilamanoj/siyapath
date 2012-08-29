@@ -12,6 +12,9 @@ import org.siyapath.utils.CommonUtils;
 
 import javax.swing.*;
 
+/**
+ * The starting point for a node
+ */
 public class SiyapathNode {
 
     private static final Log log = LogFactory.getLog(SiyapathNode.class);

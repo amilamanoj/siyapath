@@ -40,7 +40,7 @@ public final class SiyapathConstants {
     public static final int TASK_DISPATCH_FREQUENCY_MILLIS = 500;
 
 
-    public static final boolean LOCAL_TEST = true;
+    public static final boolean LOCAL_TEST = false;
 
     public static final String BOOTSRAPPER_IP = "127.0.0.1";
     public static final int BOOTSRAPPER_PORT = 9020;
