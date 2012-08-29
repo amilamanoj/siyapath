@@ -2,14 +2,13 @@ package org.siyapath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.service.Siyapath;
-
-import java.util.concurrent.CountDownLatch;
 
 
 public class PeerListener {
@@ -25,7 +24,7 @@ public class PeerListener {
      * @param processor
      * @param nodeContext
      */
-    public PeerListener(Siyapath.Processor processor, NodeContext nodeContext) {
+    public PeerListener(Siyapath.Processor processor, NodeContext nodeContext) throws TException {
         this.nodeContext = nodeContext;
         initializeThriftServer(processor);
     }
@@ -34,25 +33,20 @@ public class PeerListener {
      * Creates a Thrift server instance
      * @param processor
      */
-    private void initializeThriftServer(Siyapath.Processor processor) {
-        try {
-            log.debug("Initializing thrift server with the port:" + nodeContext.getNodeInfo().getPort());
-            serverTransport = new TServerSocket(nodeContext.getNodeInfo().getPort());
-            //simple server
-            // server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
-            // Thread Pool Server
-            server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            //Threaded Selector Server
-            //TNonblockingServerTransport serverTransport1 = new TNonblockingServerSocket(nodeContext.getNodeInfo().getPort());
-            // server = new TThreadedSelectorServer(new TThreadedSelectorServer.Args(serverTransport1).processor(processor));
-            //Half Sync/Half Async  Server
-            // server = new THsHaServer(new THsHaServer.Args(serverTransport1).processor(processor));
-            //Non blocking Server
-            // server = new TNonblockingServer(new TNonblockingServer.Args(serverTransport1).processor(processor));
-
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        }
+    private void initializeThriftServer(Siyapath.Processor processor) throws TTransportException {
+        log.debug("Initializing thrift server with the port:" + nodeContext.getNodeInfo().getPort());
+        serverTransport = new TServerSocket(nodeContext.getNodeInfo().getPort());
+        //simple server
+        // server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
+        // Thread Pool Server
+        server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
+        //Threaded Selector Server
+        //TNonblockingServerTransport serverTransport1 = new TNonblockingServerSocket(nodeContext.getNodeInfo().getPort());
+        // server = new TThreadedSelectorServer(new TThreadedSelectorServer.Args(serverTransport1).processor(processor));
+        //Half Sync/Half Async  Server
+        // server = new THsHaServer(new THsHaServer.Args(serverTransport1).processor(processor));
+        //Non blocking Server
+        // server = new TNonblockingServer(new TNonblockingServer.Args(serverTransport1).processor(processor));
     }
 
     public void start() {

@@ -3,6 +3,7 @@ package org.siyapath.job;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
+import org.siyapath.service.Task;
 import org.siyapath.service.TaskStatus;
 
 import java.util.ArrayList;
@@ -15,18 +16,20 @@ public class ProcessingTask {
 
     private int jobID;
     private int taskID;
+    private Task task;
+
     private long timeLastUpdated;
     private NodeInfo backupNode;
 
-    private HashMap<Integer,TaskStatus> taskStatusMap;
+    private HashMap<Integer, TaskStatus> taskStatusMap;
     private ArrayList<byte[]> resultList;
 
     private byte[] validatedResult;
-    private int resultReceivedCount=0;
+    private int resultReceivedCount = 0;
     private int replicaCount;
 
 
-    public ProcessingTask(int jobID, int taskID, int replicaCount) {
+    public ProcessingTask(int jobID, int taskID, int replicaCount, Task task) {
         this.jobID = jobID;
         this.taskID = taskID;
         this.replicaCount = replicaCount;
@@ -37,11 +40,11 @@ public class ProcessingTask {
 
     }
 
-    public int getResultReceivedCount(){
+    public int getResultReceivedCount() {
         return resultReceivedCount;
     }
 
-    public void incrementResultReceivedCount(){
+    public void incrementResultReceivedCount() {
         this.resultReceivedCount++;
     }
 
@@ -53,11 +56,15 @@ public class ProcessingTask {
         return taskID;
     }
 
-    public boolean addResult(byte[] result){
+    public Task getTask() {
+        return task;
+    }
+
+    public boolean addResult(byte[] result) {
         return this.resultList.add(result);
     }
 
-    public ArrayList<byte[]> getResultList(){
+    public ArrayList<byte[]> getResultList() {
         return this.resultList;
     }
 

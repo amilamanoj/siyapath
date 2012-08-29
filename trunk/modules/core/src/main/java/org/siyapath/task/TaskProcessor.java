@@ -66,7 +66,7 @@ public class TaskProcessor extends Thread {
             try {
                 taskThread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.warn("Thread was interrupted while waiting for task thread to complete. " + e.getMessage());
             }
             siyapathSecurityManager.disable("secpass");
 //          System.setSecurityManager(defaultSecurityManager);

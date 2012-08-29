@@ -33,7 +33,6 @@ public final class JobProcessor {
     private Map<Integer, Job> jobMap;               // jobID mapped to Job
     private Map<Integer, ProcessingTask> taskMap;   // taskID mapped to ProcessingTask
 
-    private Map<Integer, Task> dispatchedTasks;  //keeps dispatched tasks since they are removed from queue's head
 
     public JobProcessor(NodeContext nodeContext) {
         //uses the default constructor at the sender non-requisition
@@ -43,9 +42,10 @@ public final class JobProcessor {
         generalExecutor = Executors.newCachedThreadPool();
 
         taskQueue = new LinkedBlockingQueue<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
-        jobMap = new ConcurrentHashMap<Integer, Job>();
+        jobMap = new HashMap<Integer, Job>();
         taskMap = new ConcurrentHashMap<Integer, ProcessingTask>();
-        dispatchedTasks = new ConcurrentHashMap<Integer, Task>();
+        taskDispatcherExecutor.submit(new TaskDispatcher(nodeContext, taskQueue, jobMap, taskMap, generalExecutor));
+
 
 //        new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
 
@@ -59,12 +59,12 @@ public final class JobProcessor {
         }
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
-        taskCollectorExecutor.submit(new TaskCollector(job)); //TODO: handle future (return value)
-        taskDispatcherExecutor.submit(new TaskDispatcher());
+        taskCollectorExecutor.submit(new TaskCollector(taskQueue, taskMap, job)); //TODO: handle future (return value)
     }
 
     /**
      * Gets triggered when a result arrives from a task processor. (any replica)
+     *
      * @param result
      */
     public synchronized void taskResultReceived(final Result result) {
@@ -86,7 +86,7 @@ public final class JobProcessor {
         int resultReceivedCount = pTask.getResultReceivedCount();
         int taskReplicaCount = pTask.getReplicaCount();
         log.info("Task result received for " + resultReceivedCount + " replicas of same task");
-        if(resultReceivedCount==taskReplicaCount){
+        if (resultReceivedCount == taskReplicaCount) {
             try {
                 boolean validated = validateResults(result.getTaskID());  //use
             } catch (InterruptedException e) {
@@ -97,7 +97,6 @@ public final class JobProcessor {
     }
 
     /**
-     *
      * @param taskId
      * @return true if all results of replicas are equal, false otherwise
      */
@@ -106,198 +105,41 @@ public final class JobProcessor {
         ArrayList<byte[]> resultList = pTask.getResultList();
         boolean isValid = false;
 
-        if(!resultList.isEmpty()){
+        if (!resultList.isEmpty()) {
             byte[] firstResult = resultList.get(0);
-            validate: for(byte[] resultArray : resultList){
+            validate:
+            for (byte[] resultArray : resultList) {
                 isValid = Arrays.equals(firstResult, resultArray);
-                if(!isValid){
+                if (!isValid) {
                     break validate;
                 }
             }
-            if(isValid){
+            if (isValid) {
                 pTask.setValidatedResult(firstResult);
                 taskMap.put(taskId, pTask);
                 log.info("Result validated for Task:" + taskId);
-            }else {
-                taskQueue.put(dispatchedTasks.get(taskId));
-                log.info("Result not validated, adding task back to queue. Task:" + taskId);
+            } else {
+                log.info("Result validation failed, adding task back to queue. Task:" + taskId);
+                generalExecutor.submit(new TaskReCollector(taskQueue, pTask.getTask()));  // add the task back to the queue to be dispatched later
             }
         }
         return isValid;
     }
 
     /**
-     * Splits tasks for submitted job, puts tasks in queue to be sent to TaskProcessors
-     */
-    class TaskCollector implements Runnable {
-
-        private Job job;
-
-        TaskCollector(Job job) {
-            this.job = job;
-        }
-
-        @Override
-        public void run() {
-//            NodeInfo backup = createBackup(job);
-            for (Task task : job.getTasks().values()) {
-                try {
-                    while (taskQueue.remainingCapacity() <= 1) {
-                        Thread.sleep(100);
-                    }
-//                    task.setBackup(CommonUtils.serialize(backup));
-                    if (!taskMap.containsKey(task.getTaskID())) {
-                        ProcessingTask processingTask = new ProcessingTask(job.getJobID(),task.getTaskID(),job.getReplicaCount());
-
-                        task.setTaskReplicaCount(job.getReplicaCount());      //required to set
-                        taskMap.put(task.getTaskID(), processingTask);
-                        taskQueue.put(task);
-                        log.debug("Added " + task.getTaskID() + " to queue.");
-//                        processingTask.setBackupNode(backup);
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //TODO: handle exception
-                }
-            }
-            log.info("Added " + job.getTasks().size() + " tasks to the queue");
-        }
-
-    }
-
-    class TaskReCollector implements Runnable {
-        private Task task;
-
-        TaskReCollector(Task task) {
-            this.task = task;
-        }
-
-        public void run() {
-            try {
-                taskQueue.put(task);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    class TaskDispatcher implements Runnable {
-
-        private boolean active = true;
-
-        @Override
-        public void run() {
-            while (active) {
-                try {
-                    if (taskQueue.isEmpty() && jobMap.isEmpty()) {
-                        context.getNodeResource().setNodeStatus(NodeStatus.IDLE);
-                    }
-                    Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
-                    if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.
-
-                        int replicaCount = task.getTaskReplicaCount();
-                        ArrayList<Integer> dispatchedNodes = new ArrayList<Integer>();
-
-                        //dispatches tasks for user-specified number of replicas
-                        for (int i=0; i<replicaCount; i++){
-                            log.info("Preparing to dispatch task: " + task.getTaskID() + " JobID: " + task.getJobID());
-
-                            NodeInfo targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
-                            if(i>0){
-                                while (dispatchedNodes.contains(targetTaskProcessor.getNodeId())){
-                                    targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
-                                }
-                            }
-                            log.info("replicating round i:" + i + ", Task ID: "+ task.getTaskID() +
-                                    ", dispatched Node ID:" + targetTaskProcessor.getNodeId());
-                            dispatchedNodes.add(targetTaskProcessor.getNodeId());
-
-                            ProcessingTask modifiedTask = taskMap.get(task.getTaskID());
-                            modifiedTask.setStatus(targetTaskProcessor.getNodeId(), TaskStatus.DISPATCHING);
-                            taskMap.put(task.getTaskID(), modifiedTask);
-
-                            boolean dispatched = dispatchTask(task, targetTaskProcessor);
-
-                            //todo: verify: even if one replicated task fails being dispatched, task will be back on end
-                            //todo: of queue. may starve
-                            if (!dispatched) {
-                                generalExecutor.submit(new TaskReCollector(task));  // add the task back to the queue to be dispatched later
-                            } else {
-                                dispatchedTasks.put(task.getTaskID(), task);    // if task was dispatched successfully
-                            }
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //TODO: handle exception
-                }
-            }
-        }
-
-        /**
-         * Submits a task to a specified node
-         *
-         * @param task            task to submit
-         * @param destinationNode node to submit to
-         */
-        public synchronized boolean dispatchTask(Task task, NodeInfo destinationNode) {
-
-            NodeInfo nodeInfo = context.getNodeInfo();
-            NodeData thisNode = CommonUtils.serialize(nodeInfo);
-            task.setSender(thisNode);
-            int jobId = task.getJobID();
-
-            log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Attempting to connect to selected task-processor: " + destinationNode);
-            TTransport transport = new TSocket(destinationNode.getIp(), destinationNode.getPort());
-
-            boolean isDispatched = false;
-            try {
-                transport.open();
-                TProtocol protocol = new TBinaryProtocol(transport);
-                Siyapath.Client client = new Siyapath.Client(protocol);
-                log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Submitting to: " + destinationNode);
-                isDispatched = client.submitTask(task);
-                log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Task successfully submitted: " + isDispatched);
-
-                if (isDispatched) {
-                    ProcessingTask pTask = taskMap.get(task.getTaskID());
-                    pTask.setStatus(destinationNode.getNodeId(),TaskStatus.PROCESSING);
-                    pTask.setTimeLastUpdated(System.currentTimeMillis());
-                }
-            } catch (TTransportException e) {
-
-                if (e.getCause() instanceof ConnectException) {
-                    log.warn("Could not connect to " + destinationNode + ",assign task to another.");
-                } else{
-                    log.warn(e.getMessage());
-                }
-                //TODO: handle exception to pick other node
-            } catch (TException e) {
-                e.printStackTrace();
-            } finally {
-                transport.close();
-            }
-            return isDispatched;
-        }
-    }
-
-    private JobScheduler getJobScheduler() {
-        return new PushJobScheduler(context);
-    }
-
-    /**
-     *
      * @param taskId
      * @return one status for a task, after assessing statuses of all replicated tasks
-     * For one task ID there will be many replicas with multiple statuses
+     *         For one task ID there will be many replicas with multiple statuses
      */
-    public synchronized TaskStatus getTaskStatusOfAllReplicas(int taskId){
+    public synchronized TaskStatus getTaskStatusOfAllReplicas(int taskId) {
 
         TaskStatus overallTaskStatus = null;
         int counter = 0;
         ProcessingTask pTask = taskMap.get(taskId);
         Map<Integer, TaskStatus> taskStatusMap = pTask.getTaskStatusMap();
 
-        label: for (TaskStatus taskStatus : taskStatusMap.values()){
+        label:
+        for (TaskStatus taskStatus : taskStatusMap.values()) {
             switch (taskStatus) {
                 case DISPATCHING:
                     overallTaskStatus = TaskStatus.DISPATCHING;
@@ -306,14 +148,19 @@ public final class JobProcessor {
                     overallTaskStatus = TaskStatus.PROCESSING;
                     break label;         // if at least one replica is at PROCESSING state, overall state is PROCESSING
                 case DONE:
-                    counter ++;
+                    counter++;
                     break;
             }
+            log.debug("Task status: " + taskId + " is: " + taskStatus);
+            log.debug("status map size: " + taskStatusMap.size());
         }
 
-        if (counter==pTask.getReplicaCount()){     //if all statues are DONE
-            log.debug("All replicated tasks completed for task-" + taskId);
+        if (counter == pTask.getReplicaCount()) {     //if all statues are DONE
+//            log.debug("All replicated tasks completed for task-" + taskId);
             overallTaskStatus = TaskStatus.DONE;
+        }  else {
+            log.debug("All replicated tasks not completed for task-" + taskId);
+
         }
         return overallTaskStatus;
     }
@@ -394,7 +241,7 @@ public final class JobProcessor {
 
 //    private class TaskTracker extends Thread {
 //
-//        private boolean isRunning = false;
+//        boolean isRunning = false;
 //
 //        private TaskTracker(String name) {
 //            super(name);
@@ -439,6 +286,7 @@ public final class JobProcessor {
     /**
      * Adds a map of tasks to taskMap of job processor.
      * Used by backup node when taking over job processing.
+     *
      * @param mapOfTasks A map mapping taskID to ProcessingTask
      */
     void addTasksToTaskMap(Map<Integer, ProcessingTask> mapOfTasks) {
@@ -453,26 +301,26 @@ public final class JobProcessor {
         NodeInfo backupNode = null;
         int jobId = job.getJobID();
         //do {
-            NodeInfo selectedNode = context.getRandomMember(); //TODO: improve selection
-            TTransport transport = new TSocket("localhost", selectedNode.getPort());
+        NodeInfo selectedNode = context.getRandomMember(); //TODO: improve selection
+        TTransport transport = new TSocket("localhost", selectedNode.getPort());
 
-            try {
-                transport.open();
-                TProtocol protocol = new TBinaryProtocol(transport);
-                Siyapath.Client client = new Siyapath.Client(protocol);
-                log.info("JobID:" + jobId + "-Requesting backup from" + selectedNode);
-                isBackupAccepted = client.requestBecomeBackup(job, thisNode);
-                if (isBackupAccepted) {
-                    log.info("JobID:" + jobId + "-Backup request accepted by" + selectedNode);
-                    backupNode = selectedNode;
-                } else {
-                    log.info("JobID:" + jobId + "-Backup request denied by" + selectedNode);
-                }
-            } catch (TTransportException e) {
-                e.printStackTrace();
-            } catch (TException e) {
-                e.printStackTrace();
+        try {
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            log.info("JobID:" + jobId + "-Requesting backup from" + selectedNode);
+            isBackupAccepted = client.requestBecomeBackup(job, thisNode);
+            if (isBackupAccepted) {
+                log.info("JobID:" + jobId + "-Backup request accepted by" + selectedNode);
+                backupNode = selectedNode;
+            } else {
+                log.info("JobID:" + jobId + "-Backup request denied by" + selectedNode);
             }
+        } catch (TTransportException e) {
+            e.printStackTrace();
+        } catch (TException e) {
+            e.printStackTrace();
+        }
         //} while (!isBackupAccepted);    //TODO: improve handling denials
         return backupNode;
     }

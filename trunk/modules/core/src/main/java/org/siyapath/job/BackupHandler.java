@@ -75,7 +75,6 @@ public class BackupHandler {
                 try {
                     Thread.sleep(20000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -91,17 +90,12 @@ public class BackupHandler {
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
                 return client.isAlive();
-            } catch (TTransportException e) {
-                e.printStackTrace();
-                if (e.getCause() instanceof ConnectException) {
-                    return false;
-                }
             } catch (TException e) {
-                e.printStackTrace();
+                log.error("Error contacting job processor to check liveness" + e.getMessage());
             } finally {
                 transport.close();
             }
-            return true;
+            return false;
         }
     }
 
