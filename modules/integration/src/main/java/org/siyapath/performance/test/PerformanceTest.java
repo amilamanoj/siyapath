@@ -17,6 +17,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Creates multiple jobs per client, multiple clients, multiple tasks
+ * submits jobs to Siyapath volunteer nodes and keeps polling
+ * to know result
+ */
 public class PerformanceTest {
 
     private static final Log log = LogFactory.getLog(PerformanceTest.class);
@@ -31,13 +36,6 @@ public class PerformanceTest {
         int tasks = Integer.parseInt(System.getProperty("tasks"));     //tasks per job
 
         CountDownLatch endLatch = new CountDownLatch(clients);
-
-//        ImageData imageData = new ImageData();
-//        byte[] imageBytes = imageData.getImageData();
-//        Map<String, TaskData> taskDataMap = new HashMap<String, TaskData>();
-//        File taskFile = new File("./EdgeDetectorTask.class");
-//        TaskData taskData = new TaskData("Performance-test Task", taskFile, imageBytes, "medium");
-
         long allClientStartTime = System.currentTimeMillis();
 
         for (int i = 0; i < clients; i++) {
@@ -70,10 +68,15 @@ public class PerformanceTest {
         } catch (IOException e) {
             log.info("Error while writing " + e.getMessage());
         }
-
-
     }
 
+    /**
+     *
+     * @param jobs
+     * @param tasks
+     * @param endLatch
+     * @param num
+     */
     public void createClients(int jobs, int tasks, CountDownLatch endLatch, int num) {
         ClientThread testThread = new ClientThread(jobs, tasks, endLatch, num);
         testThread.start();
@@ -88,12 +91,19 @@ class ClientThread extends Thread {
     UserHandler userHandler;
     int jobs, tasks;
     int clientNumber;
-    long allJobsStart, jobFinish;                         // get finish time
+    long allJobsStart;
     ArrayList<Job> jobList;
     HashMap<Integer, Long> jobTimeMap;
     CountDownLatch endLatch;
     CountDownLatch jobLatch;
 
+    /**
+     *
+     * @param jobs
+     * @param tasks
+     * @param endLatch
+     * @param num
+     */
     ClientThread(int jobs, int tasks, CountDownLatch endLatch, int num) {
         userHandler = new UserHandler();
         this.jobs = jobs;
@@ -105,6 +115,11 @@ class ClientThread extends Thread {
         jobLatch = new CountDownLatch(jobs);
     }
 
+    /**
+     *
+     * @param tasks
+     * @return
+     */
     private Map<String, TaskData> createTasks(int tasks) {
         Map<String, TaskData> taskDataMap = new HashMap<String, TaskData>();
         for (int i = 0; i < tasks; i++) {
@@ -127,7 +142,7 @@ class ClientThread extends Thread {
             Job job = null;
 
             try {
-                job = userHandler.createJob(taskDataMap, 1);      //todo: default replicas is set to 1
+                job = userHandler.createJob(taskDataMap, 1);      //default replicas is set to 1
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -161,11 +176,11 @@ class ClientThread extends Thread {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else {                //if submitted, sets start value on map, else none
+                } else {
                     allJobsStart = System.currentTimeMillis();
                     jobTimeMap.put(job.getJobID(), allJobsStart);
                 }
-            } while (submittedJobId < 0);    //while exits only after the job was submitted successfully
+            } while (submittedJobId < 0);
 
         }
         long allJobsSubmitFinish = System.currentTimeMillis();                //submitted jobs
@@ -224,7 +239,13 @@ class StatusPollThread extends Thread {
     Job job;
     HashMap<Integer, Long> jobTimeMap;
 
-
+    /**
+     *
+     * @param latch
+     * @param handler
+     * @param job
+     * @param jobTimeMap
+     */
     StatusPollThread(CountDownLatch latch, UserHandler handler, Job job, HashMap<Integer, Long> jobTimeMap) {
         this.latch = latch;
         this.handler = handler;
@@ -256,12 +277,5 @@ class StatusPollThread extends Thread {
     }
 }
 
-
-//results are received
-//    jobElapsedTimeMap.put(job.getJobID(),(jobFinish-jobStart));
-
-//    log.info("Finishing job : "+job.getJobID());
-
-//    log.info("Thread run count : "+endLatch.getCount());
 
 

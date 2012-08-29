@@ -3,17 +3,18 @@ package org.siyapath.task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.security.ProtectionDomain;
-import java.util.PropertyPermission;
-
+/**
+ * Is responsible for loading classes given the bytes that make up the class
+ * data sent by user
+ */
 public class TaskClassLoader extends ClassLoader{
 
     private final Log log = LogFactory.getLog(TaskClassLoader.class);
 
     /**
      *
-     * @param byteArray
-     * @param name
+     * @param byteArray The bytes that make up the class data.
+     * @param name class name
      * @return Class instance specified by byteArray and binary name of the class sent
      * @throws ClassNotFoundException
      */

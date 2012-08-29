@@ -32,9 +32,12 @@ public final class JobProcessor {
     private Map<Integer, Job> jobMap;               // jobID mapped to Job
     private Map<Integer, ProcessingTask> taskMap;   // taskID mapped to ProcessingTask
 
-
+    /**
+     *
+     * @param nodeContext
+     */
     public JobProcessor(NodeContext nodeContext) {
-        //uses the default constructor at the sender non-requisition
+
         context = nodeContext;
         taskDispatcherExecutor = Executors.newCachedThreadPool();
         taskCollectorExecutor = Executors.newCachedThreadPool();
@@ -52,6 +55,10 @@ public final class JobProcessor {
 
     }
 
+    /**
+     *
+     * @param job
+     */
     public void addNewJob(Job job) {
 
         context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
@@ -126,9 +133,10 @@ public final class JobProcessor {
     }
 
     /**
+     * For one task ID there may be many replicas with multiple statuses
+     *
      * @param taskId
-     * @return one status for a task, after assessing statuses of all replicated tasks
-     *         For one task ID there will be many replicas with multiple statuses
+     * @return overall status for a task, after assessing statuses of all replicated tasks
      */
     public synchronized TaskStatus getTaskStatusOfAllReplicas(int taskId) {
 
@@ -155,11 +163,10 @@ public final class JobProcessor {
         }
 
         if (counter == pTask.getReplicaCount()) {     //if all statues are DONE
-//            log.debug("All replicated tasks completed for task-" + taskId);
+            log.debug("All replicated tasks completed for task-" + taskId);
             overallTaskStatus = TaskStatus.DONE;
         } else {
             log.debug("All replicated tasks not completed for task-" + taskId);
-
         }
         return overallTaskStatus;
     }
@@ -173,7 +180,7 @@ public final class JobProcessor {
         Map<Integer, TaskResult> taskStatusMap = null;
         Job requestedJob = jobMap.get(jobId);
         if (requestedJob != null) {
-            Set<Integer> taskIds = requestedJob.getTasks().keySet(); // task ids of the requested job: should be there tasks
+            Set<Integer> taskIds = requestedJob.getTasks().keySet();
             taskStatusMap = new HashMap<Integer, TaskResult>();
             NodeInfo backupNode = null;
             boolean jobComplete = true;
@@ -194,7 +201,7 @@ public final class JobProcessor {
                 if (overallTaskStatus != TaskStatus.DONE) {
                     jobComplete = false;
                 }
-                backupNode = processingTask.getBackupNode();          //no prob for me
+                backupNode = processingTask.getBackupNode();
             }
 
             if (jobComplete) {
@@ -211,6 +218,11 @@ public final class JobProcessor {
         return taskStatusMap;
     }
 
+    /**
+     *
+     * @param jobID
+     * @param backup
+     */
     private void clearCompletedJob(int jobID, NodeInfo backup) {
         log.info("The job: " + jobID + " is complete. Removing it from task map and job map");
         for (Integer taskID : jobMap.get(jobID).getTasks().keySet()) {
@@ -234,6 +246,10 @@ public final class JobProcessor {
 //        }
     }
 
+    /**
+     *
+     * @param taskID
+     */
     public void taskUpdateReceived(int taskID) {
         taskMap.get(taskID).setTimeLastUpdated(System.currentTimeMillis());
     }
@@ -345,52 +361,6 @@ public final class JobProcessor {
             transport.close();
         }
     }
-
-    //The arg jobID is to be used once multiple jobs are handled by same JobProcessor node
-//    public void acquireJobProcessingStatus(int jobID) {
-//
-//        boolean jobStatus = false;
-//        int port;
-//        int taskID;
-//
-//        Set<Map.Entry<NodeInfo, Task>> entrySet = taskProcessingNodes.entrySet();
-//
-//        for (Map.Entry<NodeInfo, Task> entry : entrySet) {
-//            port = entry.getKey().getPort();
-//            taskID = entry.getValue().getTaskID();
-//            acquireTaskProcessingStatus(port, taskID);
-//        }
-////
-////        Set<NodeInfo> nodes = taskProcessingNodes.keySet();
-////        for (NodeInfo nodeInfo : nodes){
-////
-////        }
-//
-//    }
-
-//    public boolean acquireTaskProcessingStatus(int port, int taskID) {
-//
-//        TTransport transport = new TSocket("localhost", port);
-//        boolean taskStatus = false;
-//        try {
-//            log.info("Polling status of task through JobProcessor node " + context.getNodeInfo().getNodeId() +
-//                    " for processing node on port: " + port + ". TaskID is " + taskID);
-//            transport.open();
-//            TProtocol protocol = new TBinaryProtocol(transport);
-//            Siyapath.Client client = new Siyapath.Client(protocol);
-//            taskStatus = client.getTaskStatusFromTaskProcessor(taskID);
-////            log.info?
-//        } catch (TTransportException e) {
-//            if (e.getCause() instanceof ConnectException) {
-//                e.printStackTrace();
-//            }
-//        } catch (TException e) {
-//            e.printStackTrace();
-//        } finally {
-//            transport.close();
-//        }
-//        return taskStatus;
-//    }
 
 
 //    public void sendResultToUserNode(){

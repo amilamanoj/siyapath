@@ -33,7 +33,7 @@ class TaskCollector implements Runnable {
                 if (!taskMap.containsKey(task.getTaskID())) {
                     ProcessingTask processingTask = new ProcessingTask(job.getJobID(), task.getTaskID(), job.getReplicaCount(), task);
 
-                    task.setTaskReplicaCount(job.getReplicaCount());      //required to set
+                    //task.setTaskReplicaCount(job.getReplicaCount());      //required to set
                     taskMap.put(task.getTaskID(), processingTask);
 
                     int replicaCount = job.getReplicaCount();

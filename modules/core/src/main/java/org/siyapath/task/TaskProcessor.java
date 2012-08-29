@@ -9,17 +9,18 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
-import org.siyapath.SiyapathConstants;
-import org.siyapath.service.*;
+import org.siyapath.service.Result;
+import org.siyapath.service.Siyapath;
+import org.siyapath.service.Task;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 
-/*
-* Required implementation for the submit task operation on IDL, at the recipient's end.
-* Assumes that a single .class is sent by the JobProcessor node ftm.
-* TODO: extend to use a .zip/jar with multiple .class files
-* */
+/**
+ * Instantiates
+ * Required implementation for the submit task operation on IDL, at the recipient's end.
+ * Assumes that a single .class is sent by the JobProcessor node ftm.
+ */
 public class TaskProcessor extends Thread {
 
     private final Log log = LogFactory.getLog(TaskProcessor.class);
@@ -97,6 +98,9 @@ public class TaskProcessor extends Thread {
         }
     }
 
+    /**
+     * Process the task using instantiated java class generated through reflection
+     */
     private void processTask() {
         try {
             log.info("Starting the task: " + task.getTaskID());
@@ -114,10 +118,16 @@ public class TaskProcessor extends Thread {
         }
     }
 
+    /**
+     *
+     * @return Instance of java class implementing SiyapathTask interface, generated through reflection
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
     private SiyapathTask getTaskInstance() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         TaskClassLoader taskClassLoader;
         taskClassLoader = new TaskClassLoader();
-        // TODO: verify if expected name is necessary
         Class theLoadedClass = null;
         theLoadedClass = taskClassLoader.loadClassToProcess(task.getTaskProgram(), null);
 
@@ -128,7 +138,11 @@ public class TaskProcessor extends Thread {
         return null;
     }
 
-
+    /**
+     *
+     * @param result
+     * @return true if result delivered to job processing node, false otherwise
+     */
     private boolean deliverTaskResult(Result result) {
 
         boolean success = false;

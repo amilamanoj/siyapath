@@ -5,9 +5,15 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-
+/**
+ * Contains specific methods for using an image edge detection as the task for performance test
+ */
 public class ImageData {
 
+    /**
+     *
+     * @return inputData
+     */
     public byte[] getImageData(){
 
         BufferedImage source;
@@ -27,6 +33,11 @@ public class ImageData {
        return null;
     }
 
+    /**
+     *
+     * @param image
+     * @return byte array after converting given image
+     */
     public byte[] imageToBinary(BufferedImage image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
