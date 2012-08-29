@@ -53,9 +53,9 @@ public final class JobProcessor {
     }
 
     public void addNewJob(Job job) {
-        if (context.getNodeResource().getNodeStatus() == NodeStatus.IDLE) {  //TODO: need to reject adding jobs if this node is a processor
-            context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
-        }
+
+        context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
+
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
         taskCollectorExecutor.submit(new TaskCollector(taskQueue, taskMap, job)); //TODO: handle future (return value)

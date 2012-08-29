@@ -32,6 +32,14 @@ public final class SiyapathConstants {
 
     public static final int MAX_TASK_UPDATE_INTERVAL_MILLIS = 30000;
 
+    /**
+     * Gossip frequency in milliseconds
+     */
+    public static final int GOSSIP_FREQUENCY_MILLIS = 3000;
+
+    public static final int TASK_DISPATCH_FREQUENCY_MILLIS = 500;
+
+
     public static final boolean LOCAL_TEST = true;
 
     public static final String BOOTSRAPPER_IP = "127.0.0.1";

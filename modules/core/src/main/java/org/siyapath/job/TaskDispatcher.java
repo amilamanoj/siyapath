@@ -10,6 +10,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.job.scheduling.PushJobScheduler;
 import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
@@ -66,9 +67,11 @@ final class TaskDispatcher implements Runnable {
                         pTask.addToStatusMap(targetTaskProcessor.getNodeId(), TaskStatus.DISPATCHING);
                     }
                 }
+                Thread.sleep(SiyapathConstants.TASK_DISPATCH_FREQUENCY_MILLIS);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //TODO: handle exception
             }
+
         }
     }
 

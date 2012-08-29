@@ -114,18 +114,16 @@ public class GossipImpl {
                 log.info("Members fetched " + discoveredNodes.size());
             } catch (SecurityException e) {
                 log.error("Could not member gossip due to Security Exception");
-                e.printStackTrace();
             } catch (TTransportException e) {
                 if (e.getCause() instanceof ConnectException) {
                     log.error("Could not connect to the member node for member gossiping");
                     nodeContext.removeMember(randomMember);
                     nodeContext.removeMemNodeSet(randomMember);
                 } else {
-                    e.printStackTrace();
+                    log.error("Member Gossip failed :" + randomMember.getNodeId()  + e.getMessage());
                 }
             } catch (TException e) {
-                e.printStackTrace();
-
+                    log.error("Member Gossip failed :" + randomMember.getNodeId() + e.getMessage());
             } finally {
                 transport.close();
             }
@@ -161,10 +159,10 @@ public class GossipImpl {
                     nodeContext.removeMember(randomMember);
                     nodeContext.removeFromMemResourceMap(randomMember.getNodeId());
                 } else {
-                    e.printStackTrace();
+                    log.error("Resource Gossip failed with :" + randomMember.getNodeId() + e.getMessage());
                 }
             } catch (TException e) {
-                e.printStackTrace();
+                    log.error("Resource Gossip failed with :" + randomMember.getNodeId() + e.getMessage());
 
             } finally {
                 transport.close();

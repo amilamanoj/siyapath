@@ -268,7 +268,7 @@ public class NodeContext {
      * @return nodeResource
      */
     public NodeResource getNodeResource() {
-        return nodeResource.refreshNodeResource();
+        return nodeResource;
     }
 
     /**
@@ -334,7 +334,7 @@ public class NodeContext {
         Map<Integer, NodeResource> newMap = new HashMap<Integer, NodeResource>();
         if (members.size() < limit) {
             newMap = members;
-            newMap.put(getNodeInfo().getNodeId(), getNodeResource());
+            newMap.put(getNodeInfo().getNodeId(), getNodeResource().refreshNodeResource());
 
         } else {
 
@@ -344,7 +344,7 @@ public class NodeContext {
                 NodeResource value = entry.getValue();
                 newMap.put(key, value);
                 if (limit == 1) {
-                    newMap.put(getNodeInfo().getNodeId(), getNodeResource());
+                    newMap.put(getNodeInfo().getNodeId(), getNodeResource().refreshNodeResource());
                     break;
                 }
             }

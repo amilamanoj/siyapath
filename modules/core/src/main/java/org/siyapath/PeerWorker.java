@@ -124,7 +124,7 @@ public class PeerWorker {
 
                 }
                 try {
-                    sleep(5000);
+                    sleep(SiyapathConstants.GOSSIP_FREQUENCY_MILLIS);
                 } catch (InterruptedException e) {
                 }
             }

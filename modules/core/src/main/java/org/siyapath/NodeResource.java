@@ -22,9 +22,17 @@ public final class NodeResource {
     private NodeStatus nodeStatus;
     private long timeStamp;
 
+    /**
+     * Default Constructor for NodeResource instance
+     */
      public NodeResource() {
     }
 
+    /**
+     * Constructor for NodeResource instance with parameter initialization
+     *
+     * @param nodeInfo
+     */
     public NodeResource(NodeInfo nodeInfo) {
         initResourceLevel();
         updateTimeStamp();
@@ -130,7 +138,6 @@ public final class NodeResource {
         } else if (6144 < freeMemory) {
             setResourceLevel(ResourceLevel.HIGH);
         }
-
     }
 
     /**
