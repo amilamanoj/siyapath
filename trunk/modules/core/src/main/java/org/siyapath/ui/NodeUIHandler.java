@@ -51,10 +51,32 @@ public class NodeUIHandler {
                 }
                 ui.setMembers(members.toString());
 
-                ui.setStatus(nodeContext.getNodeResource().getNodeStatus().name());
+                ui.setNodeStatus(nodeContext.getNodeResource().getNodeStatus().name());
+
+                switch (nodeContext.getNodeResource().getNodeStatus()) {
+                    case DISTRIBUTING:
+                        ui.setProcessStatus("Jobs are being processed...");
+                        ui.setProcessingInfo("");
+                        break;
+                    case PROCESSING_IDLE:
+                    case PROCESSING_BUSY:
+                        ui.setProcessStatus("Tasks are being processed...");
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("<html>Task List:\n");
+                        for (Integer taskId : nodeContext.getTaskIds()) {
+                            sb.append(taskId);
+                            sb.append("<br>");
+                        }
+                        ui.setProcessingInfo(sb.toString());
+                        break;
+                    case IDLE:
+                        ui.setProcessStatus("Waiting for work...");
+                        ui.setProcessingInfo("");
+                        break;
+                }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -1,13 +1,15 @@
-package org.siyapath.client;
+package org.siyapath.client.ui;
 
+
+import org.siyapath.client.UserHandler;
 
 import javax.swing.*;
 import java.io.File;
 
-public class SiyapathClient {
+public class SiyapathUI {
 private UserGUI gui;
 
-    public SiyapathClient() {
+    public SiyapathUI() {
 
         this.gui = new UserGUI(new UserHandler());
     }
@@ -24,8 +26,8 @@ private UserGUI gui;
         } catch (InstantiationException e) {
         } catch (IllegalAccessException e) {
         }
-        SiyapathClient client = new SiyapathClient();
-        client.start();
+        SiyapathUI UI = new SiyapathUI();
+        UI.start();
         System.out.println(new File(".").getAbsolutePath());
     }
 

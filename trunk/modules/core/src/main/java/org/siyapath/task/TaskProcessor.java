@@ -39,7 +39,7 @@ public class TaskProcessor extends Thread {
         super(name);
         this.task = task;
         context = nodeContext;
-        context.increaseProTasksNo();
+        context.increaseProTasksNo(task.getTaskID());
         notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
         siyapathSecurityManager = new SiyapathSecurityManager("secpass");
         defaultSecurityManager = System.getSecurityManager();
@@ -82,7 +82,7 @@ public class TaskProcessor extends Thread {
             }
             log.warn("Couldn't send result to distributor. task: " + task.getTaskID());
         }
-        context.decreaseProTasksNo();
+        context.decreaseProTasksNo(task.getTaskID());
     }
 
     private class TaskThread extends Thread {
