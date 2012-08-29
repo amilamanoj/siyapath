@@ -34,6 +34,14 @@ final class TaskDispatcher implements Runnable {
     private Map<Integer, ProcessingTask> taskMap;   // taskID mapped to ProcessingTask
     private ExecutorService generalExecutor;
 
+    /**
+     * Constructor
+     * @param context
+     * @param taskQueue
+     * @param jobMap
+     * @param taskMap
+     * @param generalExecutor
+     */
     TaskDispatcher(NodeContext context, BlockingQueue<Task> taskQueue, Map<Integer, Job> jobMap, Map<Integer, ProcessingTask> taskMap, ExecutorService generalExecutor) {
         this.context = context;
         this.taskQueue = taskQueue;
@@ -49,8 +57,8 @@ final class TaskDispatcher implements Runnable {
                 if (taskQueue.isEmpty() && jobMap.isEmpty()) {
                     context.getNodeResource().setNodeStatus(NodeStatus.IDLE);
                 }
-                Task task = taskQueue.poll(10, TimeUnit.SECONDS);  // thread waits if the queue is empty.
-                if (task != null) { // BlockingQueue.poll returns null if the queue is empty after the timeout.
+                Task task = taskQueue.poll(10, TimeUnit.SECONDS);
+                if (task != null) {
 
                     log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
 

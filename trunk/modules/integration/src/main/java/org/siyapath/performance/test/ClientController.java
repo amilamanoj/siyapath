@@ -19,27 +19,24 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-public class Controller {
+/**
+ * Creates 1 job per client, multiple clients, multiple tasks
+ * submits jobs to Siyapath volunteer nodes and keeps polling
+ * to know result
+ */
+public class ClientController {
 
-    private static final Log log = LogFactory.getLog(Controller.class);
+    private static final Log log = LogFactory.getLog(ClientController.class);
     ConcurrentHashMap<Integer, Long> jobElapsedTimeMap = new ConcurrentHashMap<Integer, Long>();
 
     public static void main(String[] args) {
 
-        Controller controller = new Controller();
-
-
+        ClientController controller = new ClientController();
         int clients = Integer.parseInt(System.getProperty("clients")); //clients per physical device
         int jobs = Integer.parseInt(System.getProperty("jobs"));       //jobs per client
         int tasks = Integer.parseInt(System.getProperty("tasks"));     //tasks per job
 
         CountDownLatch endLatch = new CountDownLatch(clients * jobs);
-
-//        ImageData imageData = new ImageData();
-//        byte[] imageBytes = imageData.getImageData();
-//        Map<String, TaskData> taskDataMap = new HashMap<String, TaskData>();
-//        File taskFile = new File("./EdgeDetectorTask.class");
-//        TaskData taskData = new TaskData("Performance-test Task", taskFile, imageBytes, "medium");
 
         long allJobStartTime = System.currentTimeMillis();
 
@@ -63,9 +60,6 @@ public class Controller {
 
     public void printTimes() {
         log.info("All threads finished!");
-//        for (Map.Entry<Integer,Long> elapsedTime : jobElapsedTimeMap.entrySet()){
-//            log.info(elapsedTime.getKey() + " for job: " + elapsedTime.getValue());
-//        }
 
         String newLine = System.getProperty("line.separator");
         String printLine = "";
@@ -95,6 +89,11 @@ public class Controller {
 
     }
 
+    /**
+     *
+     * @param tasksPerJob
+     * @param endLatch
+     */
     public void createClientJobs(int tasksPerJob, CountDownLatch endLatch) {
 
         TestThread testThread = new TestThread(tasksPerJob, endLatch);
@@ -105,14 +104,17 @@ public class Controller {
 
         UserHandler userHandler;
         int tasksPerJob;
-        long jobStart, jobFinish;                         // get finish time
-        //        HashMap<Integer, Long> jobTimeMap;
+        long jobStart, jobFinish;
         CountDownLatch endLatch;
 
+        /**
+         *
+         * @param tasksPerJob
+         * @param endLatch
+         */
         TestThread(int tasksPerJob, CountDownLatch endLatch) {
             userHandler = new UserHandler();
             this.tasksPerJob = tasksPerJob;
-//            jobTimeMap = new HashMap<Integer, Long>();
             this.endLatch = endLatch;
         }
 
@@ -131,13 +133,8 @@ public class Controller {
 
             Job job = null;
             try {
-                job = userHandler.createJob(taskDataMap, 1);  //todo: default replicas is set to 1
+                job = userHandler.createJob(taskDataMap, 1);  //default replicas is set to 1
                 if (job != null) {
-
-
-//                    if(userHandler.submitJob(job.getJobID()+"", job)<0){    //if not submitted
-//
-//                    }
 
                     int submittedJobId = -1;
                     do {
@@ -154,17 +151,12 @@ public class Controller {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        } else {                //if submitted, sets start value on map, else none
-//                            jobStart = System.currentTimeMillis();
-//                            jobTimeMap.put(job.getJobID(), jobStart);
                         }
-                    } while (submittedJobId < 0);    //while exits only after the job was submitted successfully
-
-
+                    } while (submittedJobId < 0);
                 } else {
-                    log.info("Job was null");
+                    log.debug("Job was null");
                 }
-            } catch (IOException e) {   //uh.createJob()
+            } catch (IOException e) {
                 log.error("IOException" + e.getMessage());
             }
 
@@ -181,17 +173,11 @@ public class Controller {
             } while (!userHandler.assessJobStatusFromTaskStatuses(taskCompletionMap));
 
             log.info("job finished. updating map " + job.getJobID());
-            //results are received
             jobFinish = System.currentTimeMillis();
             jobElapsedTimeMap.put(job.getJobID(), (jobFinish - jobStart));
-
             log.info("Finishing job : " + job.getJobID());
-
             endLatch.countDown();
             log.info("Thread run count : " + endLatch.getCount());
-
         }
-
     }
-
 }

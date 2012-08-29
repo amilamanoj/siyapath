@@ -124,7 +124,7 @@ public class UserHandler {
      * Creates a job object for a given list of tasks
      *
      * @param taskList     task data to be used for the job
-     * @param replicaCount number of replicas
+     * @param replicaCount number of replicas to run a task on
      * @return a new job
      * @throws IOException
      */
