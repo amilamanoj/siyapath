@@ -64,7 +64,8 @@ public class TaskProcessor extends Thread {
             notifier.start();
 
             // sand-boxing with a custom security manager that denies most permissions
-//        System.setSecurityManager(siyapathSecurityManager);
+        System.setSecurityManager(siyapathSecurityManager);
+            siyapathSecurityManager.disable("secpass");
             taskThread.start();
             try {
                 taskThread.join();
@@ -72,7 +73,7 @@ public class TaskProcessor extends Thread {
                 log.warn("Thread was interrupted while waiting for task thread to complete. " + e.getMessage());
             }
             siyapathSecurityManager.disable("secpass");
-//          System.setSecurityManager(defaultSecurityManager);
+          System.setSecurityManager(defaultSecurityManager);
             log.info("Task processing is finished. ID: " + task.getTaskID());
             notifier.stopNotifier();
         } catch (Exception e) {
@@ -108,13 +109,14 @@ public class TaskProcessor extends Thread {
             log.info("Starting the task: " + task.getTaskID());
             taskInstance.setData(task.getTaskData());
             taskInstance.process();
+            taskInstance.setMetaData(String.valueOf(context.getNodeResource().getNodeInfo().getNodeId()));
             byte[] finalResult = taskInstance.getResults();
             taskResult.setResults(finalResult);
             log.debug("Task processing is successful. ID: " + task.getTaskID());
 
         } catch (SecurityException e) {
-//            siyapathSecurityManager.disable("secpass");
-//            System.setSecurityManager(defaultSecurityManager);
+            siyapathSecurityManager.disable("secpass");
+            System.setSecurityManager(defaultSecurityManager);
             log.error("Task Processing aborted due to an attempt of illegal operation");
             taskResult.setResults("<aborted>".getBytes());
         }
