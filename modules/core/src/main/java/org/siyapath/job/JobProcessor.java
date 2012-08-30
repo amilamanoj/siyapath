@@ -64,7 +64,7 @@ public final class JobProcessor {
 
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
-        taskCollectorExecutor.submit(new TaskCollector(taskQueue, taskMap, job)); //TODO: handle future (return value)
+        taskCollectorExecutor.submit(new TaskCollector(taskQueue, taskMap, job, context)); //TODO: handle future (return value)
     }
 
     /**
@@ -81,12 +81,12 @@ public final class JobProcessor {
         pTask.incrementResultReceivedCount();
         taskMap.put(result.getTaskID(), pTask);
 
-//        new Thread() {  //TODO: use pooling
-//            @Override
-//            public void run() {
-//                sendTaskResultToBackup(result);
-//            }
-//        }.start();
+        generalExecutor.submit(new Thread() {
+            @Override
+            public void run() {
+                sendTaskResultToBackup(result);
+            }
+        });
 
         int resultReceivedCount = pTask.getResultReceivedCount();
         int taskReplicaCount = pTask.getReplicaCount();
@@ -232,21 +232,21 @@ public final class JobProcessor {
             taskMap.remove(taskID);
         }
         jobMap.remove(jobID);
-//        TTransport transport = new TSocket(backup.getIp(), backup.getPort());
-//        try {
-//            log.info("Connecting to backup node to end backup. JobID: " + jobID);
-//            transport.open();
-//            TProtocol protocol = new TBinaryProtocol(transport);
-//            Siyapath.Client client = new Siyapath.Client(protocol);
-//            client.endBackup();
-//        } catch (TTransportException e) {
-//            e.printStackTrace();
-//            log.warn("Cannot connect to backup node.");
-//        } catch (TException e) {
-//            e.printStackTrace();
-//        } finally {
-//            transport.close();
-//        }
+        TTransport transport = new TSocket(backup.getIp(), backup.getPort());
+        try {
+            log.info("Connecting to backup node to end backup. JobID: " + jobID);
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            Siyapath.Client client = new Siyapath.Client(protocol);
+            client.endBackup();
+        } catch (TTransportException e) {
+            log.warn(e.getMessage());
+            log.warn("Cannot connect to backup node.");
+        } catch (TException e) {
+            log.warn(e.getMessage());
+        } finally {
+            transport.close();
+        }
     }
 
     /**
@@ -279,56 +279,27 @@ public final class JobProcessor {
     }
 
 
-    private NodeInfo createBackup(Job job) {
-        NodeData thisNode = CommonUtils.serialize(context.getNodeInfo());
-
-        boolean isBackupAccepted;
-        NodeInfo backupNode = null;
-        int jobId = job.getJobID();
-        //do {
-        NodeInfo selectedNode = context.getRandomMember(); //TODO: improve selection
-        TTransport transport = new TSocket("localhost", selectedNode.getPort());
-
-        try {
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            log.info("JobID:" + jobId + "-Requesting backup from" + selectedNode);
-            isBackupAccepted = client.requestBecomeBackup(job, thisNode);
-            if (isBackupAccepted) {
-                log.info("JobID:" + jobId + "-Backup request accepted by" + selectedNode);
-                backupNode = selectedNode;
-            } else {
-                log.info("JobID:" + jobId + "-Backup request denied by" + selectedNode);
-            }
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        //} while (!isBackupAccepted);    //TODO: improve handling denials
-        return backupNode;
-    }
-
     private void sendTaskResultToBackup(Result result) {
         NodeInfo backupNode = taskMap.get(result.getTaskID()).getBackupNode();
-        TTransport transport = new TSocket(backupNode.getIp(), backupNode.getPort());
-        try {
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            log.info("Sending received task result to backup node." + backupNode);
-            client.sendTaskResultToBackup(result);
+        if (backupNode != null) {
+            TTransport transport = new TSocket(backupNode.getIp(), backupNode.getPort());
+            try {
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                log.info("Sending received task result to backup node." + backupNode);
+                client.sendTaskResultToBackup(result);
 
-        } catch (TTransportException e) {
-            e.printStackTrace();
-            if (e.getCause() instanceof ConnectException) {
-                log.warn("Backup Node is no longer available on port: " + backupNode);
+            } catch (TTransportException e) {
+                log.warn(e.getMessage());
+                if (e.getCause() instanceof ConnectException) {
+                    log.warn("Backup Node is no longer available on port: " + backupNode);
+                }
+            } catch (TException e) {
+                log.warn(e.getMessage());
+            } finally {
+                transport.close();
             }
-        } catch (TException e) {
-            e.printStackTrace();
-        } finally {
-            transport.close();
         }
     }
 

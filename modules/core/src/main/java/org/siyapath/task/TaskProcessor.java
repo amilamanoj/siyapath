@@ -9,6 +9,7 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.service.Result;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
