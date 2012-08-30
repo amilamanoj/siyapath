@@ -31,10 +31,6 @@ public class SampleSiyapathTask implements SiyapathTask {
     }
 
     @Override
-    public void setMetaData(String data) {
-    }
-
-    @Override
     public byte[] getResults() {
         return results;
     }
