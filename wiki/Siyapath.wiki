@@ -2,4 +2,4 @@
 
 = Introduction =
 
-Siyapath is a volunteer computing framework
+The proposed project, Siyapath, is a volunteer computing framework which can be used to perform high throughput computing by utilizing computational power volunteered by the general public. Having a distributed peer-to-peer architecture, Siyapath is also highly scalable. The framework is platform independent and is fault tolerant. Gossip protocol introduced for communication  adds robustness and scalability to Siyapath. 
