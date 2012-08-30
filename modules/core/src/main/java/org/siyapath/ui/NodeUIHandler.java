@@ -52,7 +52,7 @@ public class NodeUIHandler {
                 ui.setMembers(members.toString());
 
                 ui.setNodeStatus(nodeContext.getNodeResource().getNodeStatus().name());
-
+                ui.setTotalTasks(String.valueOf(nodeContext.getTotalTasks()));
                 switch (nodeContext.getNodeResource().getNodeStatus()) {
                     case DISTRIBUTING:
                         ui.setProcessStatus("Jobs are being processed...");
