@@ -58,6 +58,7 @@ class TaskCollector implements Runnable {
     @Override
     public void run() {
         NodeInfo backup = createBackup(job);
+        context.getJobProcessor().addBackupNode(job.getJobID(), backup);
         for (Task task : job.getTasks().values()) {
             try {
 //                    task.setBackup(CommonUtils.serialize(backup));

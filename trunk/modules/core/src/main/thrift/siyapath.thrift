@@ -123,6 +123,9 @@ service Siyapath {
     //Getting the computation result of a job
     map<i32,TaskResult> getJobResult (1:i32 jobID),
 
+    //Get the backup node for a job
+    NodeData getBackupNode (1:i32 jobID),
+
     //Sending task result to job-distributing node
     bool sendTaskResult (1:Result result),
 

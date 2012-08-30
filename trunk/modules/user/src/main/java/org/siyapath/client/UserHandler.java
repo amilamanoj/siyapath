@@ -29,6 +29,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.service.*;
 import org.siyapath.task.SiyapathTask;
 import org.siyapath.utils.CommonUtils;
@@ -130,10 +131,10 @@ public class UserHandler {
             boolean isSubmitted = sendJob(job, selectedNode);
             jobMap.put(jobData.getId(), jobData);
             if (isSubmitted) {
+                new Thread(new BackupNodePoller(job.getJobID())).start();
                 return job.getJobID();
             }
         } catch (TException e) {
-            e.printStackTrace();
             throw new SubmissionFailedException("Could not submit the job", e);
         }
         return -1;
@@ -259,19 +260,55 @@ public class UserHandler {
      * @param jobID
      */
     public synchronized Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) throws TException {
+        if (jobMap.get(jobID).getDistributorFailureCount() > SiyapathConstants.JOB_DISTRIBUTOR_FAILURE_LIMIT) {
+            return pollStatusFromBackup(jobID);
+        } else {
+            NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
+            TTransport transport = new TSocket(jobHandler.getIp(),
+                    jobHandler.getPort());
+            Map<Integer, TaskResult> taskCompletionMap = null;
+            try {
+                log.info("Polling status of job: " + jobID);
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                //gets the map of task statuses from JobProcessor
+                //Maps each taskId to its processing status <Integer,String>
+                taskCompletionMap = client.getJobStatus(jobID);
+            } catch (TTransportException e) {
+                log.warn("Cannot connect to job distributor. JobID: " + jobID + "Node: " + jobHandler);
+                jobMap.get(jobID).incrementDistributorFailureCount();
+            } finally {
+                transport.close();
+            }
+            return taskCompletionMap;
+        }
+    }
 
-        NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
-        TTransport transport = new TSocket(jobHandler.getIp(),
-                jobHandler.getPort());
+    private synchronized Map<Integer, TaskResult> pollStatusFromBackup(int jobID) throws TException {
+        if (!jobMap.get(jobID).isPollingFromBackup()) {
+            log.info("Job distributor unavailable. Polling from backup.");
+            try {
+                Thread.sleep(SiyapathConstants.BACKUP_STATUS_CHECK_INTERVAL);
+                jobMap.get(jobID).setPollingFromBackup(true);
+            } catch (InterruptedException e) {
+                log.warn(e.getMessage());
+            }
+        }
+        NodeInfo backupNode = jobMap.get(jobID).getBackupNode();
+        TTransport transport = new TSocket(backupNode.getIp(), backupNode.getPort());
         Map<Integer, TaskResult> taskCompletionMap = null;
         try {
-            log.info("Polling status of job: " + jobID);
+            log.info("Polling status of job from backup: " + jobID);
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
             Siyapath.Client client = new Siyapath.Client(protocol);
             //gets the map of task statuses from JobProcessor
             //Maps each taskId to its processing status <Integer,String>
             taskCompletionMap = client.getJobStatus(jobID);
+        } catch (TTransportException e) {
+            log.warn("Cannot connect to backup node. JobID: " + jobID + "Node: " + backupNode);
+            jobMap.get(jobID).incrementDistributorFailureCount();
         } finally {
             transport.close();
         }
@@ -296,6 +333,50 @@ public class UserHandler {
             else statusCondition = false;
         }
         return statusCondition;
+    }
+
+    private class BackupNodePoller implements Runnable {
+
+        private int jobID;
+
+        private BackupNodePoller(int jobID) {
+            this.jobID = jobID;
+        }
+
+        @Override
+        public void run() {
+            NodeInfo backupNode = null;
+            for (int i = 0; backupNode == null && i < 5; i++) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    log.warn(e.getMessage());
+                }
+                backupNode = getBackup();
+            }
+            jobMap.get(jobID).setBackupNode(backupNode);
+        }
+
+        private NodeInfo getBackup() {
+            NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
+            NodeInfo backupNode = null;
+            TTransport transport = new TSocket(jobHandler.getIp(), jobHandler.getPort());
+            try {
+                log.info("Getting the backup node of job: " + jobID);
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                NodeData reply = client.getBackupNode(jobID);
+                backupNode = (reply == null ? null : CommonUtils.deSerialize(reply));
+            } catch (TTransportException e) {
+                log.warn("Cannot get backup: " + e.getMessage());
+            } catch (TException e) {
+                log.warn(e.getMessage());
+            } finally {
+                transport.close();
+            }
+            return backupNode;
+        }
     }
 
 }
