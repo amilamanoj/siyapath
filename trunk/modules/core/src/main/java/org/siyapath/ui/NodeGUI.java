@@ -25,6 +25,7 @@ public class NodeGUI extends JFrame {
         this.setLocationRelativeTo(null);
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
         nameLabel = new javax.swing.JLabel();
@@ -44,6 +45,8 @@ public class NodeGUI extends JFrame {
         gossipProgressLabel = new javax.swing.JLabel();
         stateLabel1 = new javax.swing.JLabel();
         processingInfoLabel = new javax.swing.JLabel();
+        label3 = new javax.swing.JLabel();
+        totalTasks = new javax.swing.JLabel();
         stateLabel = new javax.swing.JLabel();
         siyapathLogo = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
@@ -97,7 +100,7 @@ public class NodeGUI extends JFrame {
         listenerStatLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         listenerStatLabel.setText("OFF");
 
-        workerLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        workerLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         workerLabel.setText("Peer Worker:");
 
         workerStatLabel.setFont(new java.awt.Font("BankGothic Lt BT", 0, 18));
@@ -107,14 +110,14 @@ public class NodeGUI extends JFrame {
         membersLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         membersLabel.setText("Member count:");
 
-        membersLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        membersLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
         membersLabel1.setText("Members:");
 
         mCountLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
         mCountLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         mCountLabel.setText("0");
 
-        mLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        mLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         mLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         mLabel.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
 
@@ -125,7 +128,12 @@ public class NodeGUI extends JFrame {
         stateLabel1.setText("Waiting for work...");
 
         processingInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        processingInfoLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+
+        label3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        label3.setText("Total tasks processed:");
+
+        totalTasks.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        totalTasks.setText("0");
 
         javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
         infoPanel.setLayout(infoPanelLayout);
@@ -156,8 +164,12 @@ public class NodeGUI extends JFrame {
                                                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(gossipProgressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(workerStatLabel)))
-                                        .addComponent(processingInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                                        .addComponent(stateLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(stateLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(infoPanelLayout.createSequentialGroup()
+                                                .addComponent(label3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(totalTasks, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(processingInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
                                 .addContainerGap())
         );
         infoPanelLayout.setVerticalGroup(
@@ -182,7 +194,12 @@ public class NodeGUI extends JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(mLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                                        .addComponent(processingInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
+                                                .addComponent(processingInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(label3)
+                                                        .addComponent(totalTasks, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addContainerGap())
         );
 
@@ -269,7 +286,7 @@ public class NodeGUI extends JFrame {
         );
 
         pack();
-    }
+    }// </editor-fold>
 
     private void exitButtonActionPerformed(ActionEvent evt) {
         exit();
@@ -324,9 +341,10 @@ public class NodeGUI extends JFrame {
     private javax.swing.JButton exitButton;
     private javax.swing.JMenuItem exitMenu;
     private javax.swing.JLabel gossipLabel;
-    private javax.swing.JPanel infoPanel;
     private javax.swing.JLabel gossipProgressLabel;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JPanel infoPanel;
+    private javax.swing.JLabel label3;
     private javax.swing.JLabel listenerLabel;
     private javax.swing.JLabel listenerStatLabel;
     private javax.swing.JLabel mCountLabel;
@@ -335,15 +353,16 @@ public class NodeGUI extends JFrame {
     private javax.swing.JLabel membersLabel;
     private javax.swing.JLabel membersLabel1;
     private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel processingInfoLabel;
     private javax.swing.JLabel siyapathLogo;
     private javax.swing.JLabel stateLabel;
     private javax.swing.JLabel stateLabel1;
     private javax.swing.JMenu systemMenu;
+    private javax.swing.JLabel totalTasks;
     private javax.swing.JMenu userMenu;
     private javax.swing.JMenuItem userProfileMenu;
     private javax.swing.JLabel workerLabel;
     private javax.swing.JLabel workerStatLabel;
-    private javax.swing.JLabel processingInfoLabel;
 
 
     public void setListenerStat(String stat) {
@@ -379,6 +398,10 @@ public class NodeGUI extends JFrame {
 
     public void setProcessingInfo(String status) {
         processingInfoLabel.setText(status);
+    }
+
+    public void setTotalTasks(String total) {
+        totalTasks.setText(total);
     }
 
 

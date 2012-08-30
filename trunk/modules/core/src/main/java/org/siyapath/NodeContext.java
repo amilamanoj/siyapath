@@ -43,6 +43,7 @@ public class NodeContext {
     private int processingTasksNo;
     private BackupHandler backupHandler;
     private Set taskIds;
+    private int totalTasks;
 
 
     public NodeContext(NodeInfo nodeInfo) {
@@ -54,6 +55,8 @@ public class NodeContext {
         this.nodeInfo = nodeInfo;
         nodeResource = new NodeResource(nodeInfo);
         processingTasksNo = 0;
+        totalTasks=0;
+
 
     }
 
@@ -99,12 +102,17 @@ public class NodeContext {
             } else if (this.getProcessingTasksNo() < SiyapathConstants.PARALLEL_TASKS) {
                 getNodeResource().setNodeStatus(NodeStatus.PROCESSING_IDLE);
             }
+            totalTasks++;
             taskIds.remove(taskID);
         }
     }
 
     public Set<Integer> getTaskIds() {
         return taskIds;
+    }
+
+    public int getTotalTasks() {
+        return totalTasks;
     }
 
     public JobProcessor getJobProcessor() {

@@ -15,6 +15,8 @@ import org.siyapath.service.TaskStatus;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -57,125 +59,34 @@ public class DistributedEdgeDetectorGUI extends JFrame {
 //    private javax.swing.JButton resultButton;
 
     // Variables declaration - do not modify
+    private javax.swing.JButton browseButton;
     private javax.swing.JTextField cText;
     private javax.swing.JButton choosePrgButton;
+    private javax.swing.JLabel imageNameLabel;
     private javax.swing.JLabel imgLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JButton processButton;
+    private javax.swing.JLabel programLabel;
     private javax.swing.JTextField rText;
-    private javax.swing.JButton resultButton;
-    private javax.swing.JLabel replicaCountLabel;
     private javax.swing.JTextField replicaCountTextField;
-    // End of variables declaration
 
-//    private void initComponents() {
-//
-//        imgLabel = new MyJLabel();
-//        processButton = new javax.swing.JButton();
-//        resultButton = new javax.swing.JButton();
-//        jLabel1 = new javax.swing.JLabel();
-//        jLabel2 = new javax.swing.JLabel();
-//        rText = new javax.swing.JTextField();
-//        cText = new javax.swing.JTextField();
-//        choosePrgButton = new javax.swing.JButton();
-//
-//        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-//
-//        processButton.setText("Submit");
-//        processButton.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                processButtonActionPerformed(evt);
-//            }
-//        });
-//
-//        resultButton.setText("Browse Image");
-//        resultButton.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                browseButtonActionPerformed(evt);
-//            }
-//        });
-//
-//        jLabel1.setText("Rows:");
-//
-//        jLabel2.setText("Columns:");
-//
-//        rText.setText("4");
-//
-//        cText.setText("6");
-//
-//        choosePrgButton.setText("Choose Program");
-//        choosePrgButton.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                choosePrgButtonActionPerformed(evt);
-//            }
-//        });
-//
-//        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-//        getContentPane().setLayout(layout);
-//        layout.setHorizontalGroup(
-//                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//                        .addGroup(layout.createSequentialGroup()
-//                                .addContainerGap()
-//                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//                                        .addGroup(layout.createSequentialGroup()
-//                                                .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                                                .addContainerGap(18, Short.MAX_VALUE))
-//                                        .addGroup(layout.createSequentialGroup()
-//                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-//                                                        .addGroup(layout.createSequentialGroup()
-//                                                                .addComponent(jLabel1)
-//                                                                .addGap(18, 18, 18)
-//                                                                .addComponent(rText))
-//                                                        .addGroup(layout.createSequentialGroup()
-//                                                                .addComponent(jLabel2)
-//                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-//                                                                .addComponent(cText, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-//                                                .addGap(355, 355, 355)
-//                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//                                                        .addComponent(processButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-//                                                        .addComponent(choosePrgButton, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-//                                                        .addComponent(resultButton, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
-//                                                .addContainerGap())))
-//        );
-//        layout.setVerticalGroup(
-//                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-//                                .addContainerGap()
-//                                .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                                .addGap(11, 11, 11)
-//                                .addComponent(choosePrgButton)
-//                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-//                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-//                                        .addComponent(resultButton)
-//                                        .addComponent(jLabel1)
-//                                        .addComponent(rText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-//                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-//                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-//                                        .addComponent(processButton)
-//                                        .addComponent(jLabel2)
-//                                        .addComponent(cText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-//                                .addContainerGap())
-//        );
-//
-//        pack();
-//    }// </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
-        imgLabel = new MyJLabel();
         processButton = new javax.swing.JButton();
-        resultButton = new javax.swing.JButton();
+        browseButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         rText = new javax.swing.JTextField();
         cText = new javax.swing.JTextField();
         choosePrgButton = new javax.swing.JButton();
-        replicaCountLabel = new javax.swing.JLabel();
         replicaCountTextField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        imgLabel.setBackground(new java.awt.Color(255, 51, 51));
 
         processButton.setText("Submit");
         processButton.addActionListener(new java.awt.event.ActionListener() {
@@ -184,8 +95,8 @@ public class DistributedEdgeDetectorGUI extends JFrame {
             }
         });
 
-        resultButton.setText("Browse Image");
-        resultButton.addActionListener(new java.awt.event.ActionListener() {
+        browseButton.setText("Browse Image");
+        browseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseButtonActionPerformed(evt);
             }
@@ -206,9 +117,9 @@ public class DistributedEdgeDetectorGUI extends JFrame {
             }
         });
 
-        replicaCountLabel.setText("Replica Count:");
+        replicaCountTextField.setText("2");
 
-        replicaCountTextField.setText("1");
+        jLabel3.setText("Replica Count:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -217,48 +128,45 @@ public class DistributedEdgeDetectorGUI extends JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(imgLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                                        .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(jLabel2)
-                                                                        .addComponent(jLabel1))
-                                                                .addGap(30, 30, 30)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addComponent(rText)
-                                                                        .addComponent(cText, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(replicaCountLabel)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(replicaCountTextField, 0, 0, Short.MAX_VALUE)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 407, Short.MAX_VALUE)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(resultButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(choosePrgButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(processButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                                .addComponent(jLabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(rText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(cText, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(replicaCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                                                .addComponent(browseButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(choosePrgButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(processButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(choosePrgButton)
-                                        .addComponent(jLabel1)
-                                        .addComponent(rText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(resultButton)
-                                        .addComponent(jLabel2)
-                                        .addComponent(cText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(processButton)
-                                        .addComponent(replicaCountLabel)
-                                        .addComponent(replicaCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                                .addGap(38, 38, 38)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jLabel1)
+                                                .addComponent(rText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel2)
+                                                .addComponent(cText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel3)
+                                                .addComponent(replicaCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(processButton)
+                                                .addComponent(choosePrgButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(browseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())
         );
 
@@ -401,7 +309,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
 //                }
 //
 //            }
-            JOptionPane.showMessageDialog(DistributedEdgeDetectorGUI.this, "Job completed. Owh yeah \\m/", "Done", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(DistributedEdgeDetectorGUI.this, "Job completed! \\m/", "Done", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

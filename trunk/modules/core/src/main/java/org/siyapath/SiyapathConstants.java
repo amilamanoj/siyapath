@@ -44,7 +44,7 @@ public final class SiyapathConstants {
      */
     public static final int GOSSIP_FREQUENCY_MILLIS = 3000;
 
-    public static final int TASK_DISPATCH_FREQUENCY_MILLIS = 500;
+    public static final int TASK_DISPATCH_FREQUENCY_MILLIS = 100;
 
 
     public static final boolean LOCAL_TEST = false;
