@@ -155,21 +155,20 @@ public class BackupHandler {
     /**
      * Validates results comparing results from replicas
      *
-     * @param taskId
+     * @param taskId ID of the task
      * @return true if all results of replicas are equal, false otherwise
      */
-    public synchronized boolean validateResults(int taskId) {
+    public synchronized void validateResults(int taskId) {
         ProcessingTask pTask = taskMap.get(taskId);
         ArrayList<byte[]> resultList = pTask.getResultList();
         boolean isValid = false;
 
         if (!resultList.isEmpty()) {
             byte[] firstResult = resultList.get(0);
-            validate:
             for (byte[] resultArray : resultList) {
                 isValid = Arrays.equals(firstResult, resultArray);
                 if (!isValid) {
-                    break validate;
+                    break;
                 }
             }
             if (isValid) {
@@ -181,6 +180,5 @@ public class BackupHandler {
                 taskMap.remove(taskId);
             }
         }
-        return isValid;
     }
 }
