@@ -530,6 +530,7 @@ public class UserGUI extends JFrame {
 
     private void addJobButtonActionPerformed(java.awt.event.ActionEvent evt) {
         jobEditor.setVisible(true);
+        addJobButton.setEnabled(false);
     }
 
 //    private void JobStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
