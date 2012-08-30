@@ -129,7 +129,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
             }
         });
 
-        replicaCountTextField.setText("2");
+        replicaCountTextField.setText("1");
 
         jLabel3.setText("Replica Count:");
 
