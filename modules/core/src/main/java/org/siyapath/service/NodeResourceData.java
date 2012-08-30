@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -47,12 +48,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   public NodeData nodeData; // required
   /**
    * 
-   * @see ResourceLevel
+   * @see org.siyapath.service.ResourceLevel
    */
   public ResourceLevel resourceLevel; // required
   /**
    * 
-   * @see NodeStatus
+   * @see org.siyapath.service.NodeStatus
    */
   public NodeStatus nodeStatus; // required
   public long timeStamp; // required
@@ -62,12 +63,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     NODE_DATA((short)1, "nodeData"),
     /**
      * 
-     * @see ResourceLevel
+     * @see org.siyapath.service.ResourceLevel
      */
     RESOURCE_LEVEL((short)2, "resourceLevel"),
     /**
      * 
-     * @see NodeStatus
+     * @see org.siyapath.service.NodeStatus
      */
     NODE_STATUS((short)3, "nodeStatus"),
     TIME_STAMP((short)4, "timeStamp");
@@ -224,7 +225,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see ResourceLevel
+   * @see org.siyapath.service.ResourceLevel
    */
   public ResourceLevel getResourceLevel() {
     return this.resourceLevel;
@@ -232,7 +233,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see ResourceLevel
+   * @see org.siyapath.service.ResourceLevel
    */
   public NodeResourceData setResourceLevel(ResourceLevel resourceLevel) {
     this.resourceLevel = resourceLevel;
@@ -256,7 +257,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see NodeStatus
+   * @see org.siyapath.service.NodeStatus
    */
   public NodeStatus getNodeStatus() {
     return this.nodeStatus;
@@ -264,7 +265,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see NodeStatus
+   * @see org.siyapath.service.NodeStatus
    */
   public NodeResourceData setNodeStatus(NodeStatus nodeStatus) {
     this.nodeStatus = nodeStatus;
@@ -437,7 +438,29 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_nodeData = true && (isSetNodeData());
+    builder.append(present_nodeData);
+    if (present_nodeData)
+      builder.append(nodeData);
+
+    boolean present_resourceLevel = true && (isSetResourceLevel());
+    builder.append(present_resourceLevel);
+    if (present_resourceLevel)
+      builder.append(resourceLevel.getValue());
+
+    boolean present_nodeStatus = true && (isSetNodeStatus());
+    builder.append(present_nodeStatus);
+    if (present_nodeStatus)
+      builder.append(nodeStatus.getValue());
+
+    boolean present_timeStamp = true;
+    builder.append(present_timeStamp);
+    if (present_timeStamp)
+      builder.append(timeStamp);
+
+    return builder.toHashCode();
   }
 
   public int compareTo(NodeResourceData other) {

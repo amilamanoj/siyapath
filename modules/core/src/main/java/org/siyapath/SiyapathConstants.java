@@ -31,6 +31,7 @@ public final class SiyapathConstants {
     public static final int PARALLEL_TASKS=3;
 
     public static final int MAX_TASK_UPDATE_INTERVAL_MILLIS = 30000;
+    public static final int TASK_TRACKER_INTERVAL = 10000;      //milliseconds
 
     /**
      * Gossip frequency in milliseconds

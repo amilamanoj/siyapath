@@ -21,10 +21,10 @@ class ProcessingTask {
     private int taskID;
     private Task task;
 
-    private long timeLastUpdated;
     private NodeInfo backupNode;
 
     private HashMap<Integer, TaskStatus> taskStatusMap;
+    private ArrayList<TaskReplica> taskReplicaList;
     private ArrayList<byte[]> resultList;
 
     private byte[] validatedResult;
@@ -44,8 +44,8 @@ class ProcessingTask {
         this.replicaCount = replicaCount;
         this.task = task;
 
-        this.resultList = new ArrayList<byte[]>();
-        this.taskStatusMap = new HashMap<Integer, TaskStatus>();     // maps processing node of task, to task status
+        this.taskReplicaList = new ArrayList<TaskReplica>(replicaCount);
+        this.resultList = new ArrayList<byte[]>(replicaCount);
         validatedResult = new byte[1];
 
     }
@@ -90,45 +90,26 @@ class ProcessingTask {
         return task;
     }
 
-    /**
-     *
-     * @param result
-     * @return true if result was added to result list
-     */
+    public ArrayList<TaskReplica> getTaskReplicaList() {
+        return taskReplicaList;
+    }
+
+    public boolean addToTaskReplicaList(TaskReplica taskReplica) {
+        return taskReplicaList.add(taskReplica);
+    }
+
+    public TaskReplica setTaskReplica(int index, TaskReplica taskReplica) {
+        return taskReplicaList.set(index, taskReplica);
+    }
+
     public boolean addResult(byte[] result) {
         return this.resultList.add(result);
     }
 
-    /**
-     *
-     * @return ResultList
-     */
     public ArrayList<byte[]> getResultList() {
         return this.resultList;
     }
 
-    /**
-     *
-     * @return taskStatusMap
-     */
-    public Map<Integer, TaskStatus> getTaskStatusMap() {
-        return taskStatusMap;
-    }
-
-    /**
-     * Adds status of task to taskStatusMap, mapping processing node ID to task's status
-     *
-     * @param processingNodeID
-     * @param status
-     */
-    public void addToStatusMap(Integer processingNodeID, TaskStatus status) {
-        taskStatusMap.put(processingNodeID, status);
-    }
-
-    /**
-     *
-     * @return validated result of a task
-     */
     public byte[] getValidatedResult() {
         return validatedResult;
     }
@@ -139,22 +120,6 @@ class ProcessingTask {
      */
     public void setValidatedResult(byte[] validatedResult) {
         this.validatedResult = validatedResult;
-    }
-
-    /**
-     *
-     * @return timeLastUpdated
-     */
-    public long getTimeLastUpdated() {
-        return timeLastUpdated;
-    }
-
-    /**
-     *
-     * @param timeLastUpdated
-     */
-    public void setTimeLastUpdated(long timeLastUpdated) {
-        this.timeLastUpdated = timeLastUpdated;
     }
 
     /**
@@ -190,4 +155,37 @@ class ProcessingTask {
         this.replicaCount = replicaCount;
     }
 
+    class TaskReplica {
+        private NodeInfo processingNode;
+        private TaskStatus taskStatus;
+        private long timeLastUpdated;
+
+        TaskReplica(TaskStatus taskStatus) {
+            this.taskStatus = taskStatus;
+        }
+
+        public NodeInfo getProcessingNode() {
+            return processingNode;
+        }
+
+        public void setProcessingNode(NodeInfo processingNode) {
+            this.processingNode = processingNode;
+        }
+
+        public TaskStatus getTaskStatus() {
+            return taskStatus;
+        }
+
+        public void setTaskStatus(TaskStatus taskStatus) {
+            this.taskStatus = taskStatus;
+        }
+
+        public long getTimeLastUpdated() {
+            return timeLastUpdated;
+        }
+
+        public void setTimeLastUpdated(long timeLastUpdated) {
+            this.timeLastUpdated = timeLastUpdated;
+        }
+    }
 }
