@@ -29,7 +29,7 @@ import java.util.Map;
 public class DistributedEdgeDetectorGUI extends JFrame {
 
     BufferedImage[][] imageSet;
-    String[][] metaDataArr;
+//    String[][] metaDataArr;
     UserHandler handler = new UserHandler();
     int jobID;
     int rows = 4, columns = 6;
@@ -44,7 +44,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
         try {
             source = ImageIO.read(DistributedEdgeDetectorGUI.class.getResource("/demo_car.jpg"));
             imageSet = partitionImage(source, rows, columns);
-            metaDataArr = new String[rows][columns];
+//            metaDataArr = new String[rows][columns];
             imgLabel.repaint();
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,11 +183,11 @@ public class DistributedEdgeDetectorGUI extends JFrame {
                     int top = i * rowHeight;
                     int left = j * colWidth;
                     g.drawImage(imageSet[i][j], left, top, colWidth, rowHeight, null);
-                    String text = metaDataArr[i][j];
-                    if (text != null) {
-                        g.setColor(Color.red);
-                        g.drawString(text, left, top+10);
-                    }
+//                    String text = metaDataArr[i][j];
+//                    if (text != null) {
+//                        g.setColor(Color.red);
+//                        g.drawString(text, left, top+10);
+//                    }
                 }
             }
         }
@@ -232,7 +232,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
         this.rows = Integer.parseInt(rText.getText());
         this.columns = Integer.parseInt(cText.getText());
         imageSet = partitionImage(source, rows, columns);
-        metaDataArr = new String[rows][columns];
+//        metaDataArr = new String[rows][columns];
         imgLabel.repaint();
 
         try {
@@ -286,16 +286,15 @@ public class DistributedEdgeDetectorGUI extends JFrame {
                             byte[] resultData = res.getResults();
                             int i = resultData[0];
                             int j = resultData[1];
-                            byte[] metaData = new byte[4];
-                            metaData[0] = resultData[2];
-                            metaData[1] = resultData[3];
-                            metaData[2] = resultData[4];
-                            metaData[3] = resultData[5];
-                            String metaDataString = new String(metaData);
-                            metaDataArr[i][j] = metaDataString;
-//                            System.out.println(metaDataString);
-                            byte[] imgData = new byte[resultData.length - 6];
-                            System.arraycopy(resultData, 6, imgData, 0, imgData.length);
+//                            byte[] metaData = new byte[4];
+//                            metaData[0] = resultData[2];
+//                            metaData[1] = resultData[3];
+//                            metaData[2] = resultData[4];
+//                            metaData[3] = resultData[5];
+//                            String metaDataString = new String(metaData);
+//                            metaDataArr[i][j] = metaDataString;
+                            byte[] imgData = new byte[resultData.length - 2];
+                            System.arraycopy(resultData, 2, imgData, 0, imgData.length);
                             try {
                                 imageSet[i][j] = ImageIO.read(new ByteArrayInputStream(imgData));
                             } catch (IOException e) {
@@ -351,7 +350,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
                 this.columns = Integer.parseInt(cText.getText());
                 source = ImageIO.read(sFile);
                 imageSet = partitionImage(source, rows, columns);
-                metaDataArr = new String[rows][columns];
+//                metaDataArr = new String[rows][columns];
                 imgLabel.repaint();
 
             } catch (IOException e) {

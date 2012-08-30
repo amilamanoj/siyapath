@@ -109,7 +109,7 @@ public class TaskProcessor extends Thread {
             log.info("Starting the task: " + task.getTaskID());
             taskInstance.setData(task.getTaskData());
             taskInstance.process();
-            taskInstance.setMetaData(String.valueOf(context.getNodeResource().getNodeInfo().getNodeId()));
+//            taskInstance.setMetaData(String.valueOf(context.getNodeResource().getNodeInfo().getNodeId()));
             byte[] finalResult = taskInstance.getResults();
             taskResult.setResults(finalResult);
             log.debug("Task processing is successful. ID: " + task.getTaskID());
