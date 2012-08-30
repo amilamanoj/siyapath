@@ -4,11 +4,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathNode;
+import org.siyapath.client.SubmissionFailedException;
 import org.siyapath.client.TaskData;
 import org.siyapath.client.UserHandler;
 import org.siyapath.utils.CommonUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +51,9 @@ public class TestSiyapathSimulation extends TestCase {
             startBootStrapper();
             startNodes();
             waitForGossip();
-            prepareJob();   // :P
-            submitJobs();   // :P
-            waitForProcessing();  // :P
-
+            prepareJob();
+            submitJobs();
+            waitForProcessing();
             log.info("Total nodes: " + nodeCount);
             Assert.assertEquals("a", "a");
 
@@ -125,23 +126,21 @@ public class TestSiyapathSimulation extends TestCase {
 
     }
 
-    private void submitJobs() {
+    private void submitJobs() throws IOException, SubmissionFailedException {
         userHandler = new UserHandler();
-        //todo
-//        userHandler.submitJob(taskFileList);
+        userHandler.submitJob("SampleJob", userHandler.createJob(taskFileList, 1));
     }
 
 
     private boolean prepareJob() {
-//        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-//        int result = compiler.run(null, null, null, )
         log.info("Preparing to submit sample jobs");
         taskFileList = new HashMap<String, TaskData>();
         File taskFile = new File("target/test-classes/SampleSiyapathTask.class");
-        taskFileList.put("Task1" , new TaskData("Task1", taskFile, "0,100000".getBytes() , "Cores:4-Speed:2267Mhz"));
-        taskFileList.put("Task2" , new TaskData("Task1", taskFile, "100000,200000".getBytes() , "Cores:4-Speed:2267Mhz"));
-        taskFileList.put("Task3" , new TaskData("Task1", taskFile, "200000,300000".getBytes() , "Cores:4-Speed:2267Mhz"));
-        taskFileList.put("Task4" , new TaskData("Task1", taskFile, "300000,400000".getBytes(), "Cores:4-Speed:2267Mhz"));
+        assertTrue("Task file is missing", taskFile.exists());
+        taskFileList.put("Task1", new TaskData("Task1", taskFile, "0,100000".getBytes(), "Medium"));
+        taskFileList.put("Task2" , new TaskData("Task1", taskFile, "100000,200000".getBytes() , "Medium"));
+        taskFileList.put("Task3" , new TaskData("Task1", taskFile, "200000,300000".getBytes() , "Medium"));
+        taskFileList.put("Task4" , new TaskData("Task1", taskFile, "300000,400000".getBytes(), "Medium"));
         return true;
     }
 
