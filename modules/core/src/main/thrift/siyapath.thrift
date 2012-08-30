@@ -99,7 +99,7 @@ service Siyapath {
     //Gossiping known member list
     set<NodeData> memberDiscovery(1:NodeData nodeData, 2:set<NodeData> knownNodes),
 
-    //Retrieving current set of known members. TODO: review the return type 'set'
+    //Retrieving current set of known members.
     set<NodeData> getMembers(),
 
     //ping to see if member is alive

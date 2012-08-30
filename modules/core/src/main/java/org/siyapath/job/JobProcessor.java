@@ -12,13 +12,15 @@ import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
 import org.siyapath.SiyapathConstants;
 import org.siyapath.service.*;
-import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
 import java.util.*;
 import java.util.concurrent.*;
 
-
+/**
+ * This role is played by the immediate node that receives the job from
+ * Siyapath user
+ */
 public final class JobProcessor {
 
     private static final Log log = LogFactory.getLog(JobProcessor.class);
@@ -28,12 +30,12 @@ public final class JobProcessor {
     private ExecutorService generalExecutor;
 
     private NodeContext context;
-    private BlockingQueue<Task> taskQueue;     // or Deque? i.e. double ended queue
+    private BlockingQueue<Task> taskQueue;     
     private Map<Integer, Job> jobMap;               // jobID mapped to Job
     private Map<Integer, ProcessingTask> taskMap;   // taskID mapped to ProcessingTask
 
     /**
-     *
+     * Constructor
      * @param nodeContext
      */
     public JobProcessor(NodeContext nodeContext) {
@@ -55,7 +57,8 @@ public final class JobProcessor {
     }
 
     /**
-     *
+     * Adds new job sent by user to the job queue
+     * 
      * @param job
      */
     public void addNewJob(Job job) {
@@ -64,11 +67,11 @@ public final class JobProcessor {
 
         log.info("Adding new job:" + job.getJobID() + " to the queue");
         jobMap.put(job.getJobID(), job);
-        taskCollectorExecutor.submit(new TaskCollector(taskQueue, taskMap, job, context)); //TODO: handle future (return value)
+        taskCollectorExecutor.submit(new TaskCollector(taskQueue, taskMap, job, context)); 
     }
 
     /**
-     * Gets triggered when a result arrives from a task processor. (any replica)
+     * Gets triggered when a result arrives from a task processor. (from any replica)
      *
      * @param result
      */
@@ -93,15 +96,16 @@ public final class JobProcessor {
         log.info("Task result received for " + resultReceivedCount + " replicas of same task");
         if (resultReceivedCount == taskReplicaCount) {
             try {
-                boolean validated = validateResults(result.getTaskID());  //use
+                validateResults(result.getTaskID());  
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
     /**
+     * Validates results comparing results from replicas
+     * 
      * @param taskId
      * @return true if all results of replicas are equal, false otherwise
      */
@@ -136,6 +140,7 @@ public final class JobProcessor {
     }
 
     /**
+     * Gives the overall status considering statuses of all replicas of the same task
      * For one task ID there may be many replicas with multiple statuses
      *
      * @param taskId
@@ -153,10 +158,10 @@ public final class JobProcessor {
             switch (taskStatus) {
                 case DISPATCHING:
                     overallTaskStatus = TaskStatus.DISPATCHING;
-                    break label;          // if at least one replica is at RECEIVED state, overall state is RECEIVED
+                    break label;        // if at least one replica is at DISPATCHING state, overall state is DISPATCHING
                 case PROCESSING:
                     overallTaskStatus = TaskStatus.PROCESSING;
-                    break label;         // if at least one replica is at PROCESSING state, overall state is PROCESSING
+                    break label;        // if at least one replica is at PROCESSING state, overall state is PROCESSING
                 case DONE:
                     counter++;
                     break;
@@ -165,7 +170,7 @@ public final class JobProcessor {
             log.debug("task replica list size: " + pTask.getTaskReplicaList().size());
         }
 
-        if (counter == pTask.getReplicaCount()) {     //if all statues are DONE
+        if (counter == pTask.getReplicaCount()) {     //if all statues are DONE, overall status is set to DONE
             log.debug("All replicated tasks completed for task-" + taskId);
             overallTaskStatus = TaskStatus.DONE;
         } else {
@@ -175,10 +180,12 @@ public final class JobProcessor {
     }
 
     /**
+     * Gets all task results and task status of the job
+     * 
      * @param jobId
      * @return task status map for the given JobId, with the mapping taskID to task completion status
      */
-    public Map<Integer, TaskResult> getTaskStatusesForJob(final int jobId) {
+    public Map<Integer, TaskResult> getTaskResults(final int jobId) {
 
         Map<Integer, TaskResult> taskStatusMap = null;
         Job requestedJob = jobMap.get(jobId);
@@ -222,6 +229,8 @@ public final class JobProcessor {
     }
 
     /**
+     * Performs clearing up finished job
+     * Removes the job from job map, task list from task map
      *
      * @param jobID
      * @param backup
@@ -250,7 +259,7 @@ public final class JobProcessor {
     }
 
     /**
-     * Invoked when a task processor sends an update to notify liveness
+     * Invoked when a task processor sends an update to notify liveliness
      *
      * @param taskID           ID of the task
      * @param taskReplicaIndex task replica number
@@ -258,15 +267,6 @@ public final class JobProcessor {
     public void taskUpdateReceived(int taskID, int taskReplicaIndex) {
         taskMap.get(taskID).getTaskReplicaList().get(taskReplicaIndex).setTimeLastUpdated(System.currentTimeMillis());
     }
-
-//        public Map<Integer, Task> getJobResult() {
-//        if (jobMap.isEmpty() && taskQueue.isEmpty()) {
-//            if (context.getNodeInfo().getNodeStatus() != NodeStatus.PROCESSING) {
-//                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);  //TODO:If this is a processor node
-//            }
-//        }
-//        return null;
-//    }
 
     /**
      * Adds a map of tasks to taskMap of job processor.
@@ -302,25 +302,4 @@ public final class JobProcessor {
             }
         }
     }
-
-
-//    public void sendResultToUserNode(){
-//
-//        TTransport transport = new TSocket("localhost",task.getSender().getPort());
-//
-//        try {
-//            transport.open();
-//            TProtocol protocol = new TBinaryProtocol(transport);
-//            Siyapath.Client client = new Siyapath.Client(protocol);
-//            log.info("Sending computed result back to User node." + task.getSender());
-//            client.sendTaskResult(task);
-//
-//        } catch (TTransportException e) {
-//            e.printStackTrace();
-//            if(e.getCause() instanceof ConnectException){
-//                log.warn("User is no longer available on port: " + task.getSender());
-//            }
-//        } catch (TException e) {
-//            e.printStackTrace();
-//        }
 }
