@@ -41,7 +41,6 @@ class ProcessingTask {
 
     private NodeInfo backupNode;
 
-    private HashMap<Integer, TaskStatus> taskStatusMap;
     private ArrayList<TaskReplica> taskReplicaList;
     private ArrayList<byte[]> resultList;
 
@@ -64,7 +63,7 @@ class ProcessingTask {
 
         this.taskReplicaList = new ArrayList<TaskReplica>(replicaCount);
         this.resultList = new ArrayList<byte[]>(replicaCount);
-        validatedResult = new byte[1];
+        validatedResult = new byte[10];
 
     }
 

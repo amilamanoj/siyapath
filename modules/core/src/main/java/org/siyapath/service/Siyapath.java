@@ -57,6 +57,8 @@ public class Siyapath {
 
     public Map<Integer,TaskResult> getJobResult(int jobID) throws org.apache.thrift.TException;
 
+    public NodeData getBackupNode(int jobID) throws org.apache.thrift.TException;
+
     public boolean sendTaskResult(Result result) throws org.apache.thrift.TException;
 
     public boolean sendTaskResultToBackup(Result result) throws org.apache.thrift.TException;
@@ -92,6 +94,8 @@ public class Siyapath {
     public void getJobStatus(int jobId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobStatus_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getJobResult(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getJobResult_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void getBackupNode(int jobID, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getBackupNode_call> resultHandler) throws org.apache.thrift.TException;
 
     public void sendTaskResult(Result result, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.sendTaskResult_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -372,6 +376,29 @@ public class Siyapath {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getJobResult failed: unknown result");
+    }
+
+    public NodeData getBackupNode(int jobID) throws org.apache.thrift.TException
+    {
+      send_getBackupNode(jobID);
+      return recv_getBackupNode();
+    }
+
+    public void send_getBackupNode(int jobID) throws org.apache.thrift.TException
+    {
+      getBackupNode_args args = new getBackupNode_args();
+      args.setJobID(jobID);
+      sendBase("getBackupNode", args);
+    }
+
+    public NodeData recv_getBackupNode() throws org.apache.thrift.TException
+    {
+      getBackupNode_result result = new getBackupNode_result();
+      receiveBase(result, "getBackupNode");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getBackupNode failed: unknown result");
     }
 
     public boolean sendTaskResult(Result result) throws org.apache.thrift.TException
@@ -854,6 +881,38 @@ public class Siyapath {
       }
     }
 
+    public void getBackupNode(int jobID, org.apache.thrift.async.AsyncMethodCallback<getBackupNode_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      getBackupNode_call method_call = new getBackupNode_call(jobID, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getBackupNode_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private int jobID;
+      public getBackupNode_call(int jobID, org.apache.thrift.async.AsyncMethodCallback<getBackupNode_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.jobID = jobID;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getBackupNode", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getBackupNode_args args = new getBackupNode_args();
+        args.setJobID(jobID);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public NodeData getResult() throws org.apache.thrift.TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getBackupNode();
+      }
+    }
+
     public void sendTaskResult(Result result, org.apache.thrift.async.AsyncMethodCallback<sendTaskResult_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       sendTaskResult_call method_call = new sendTaskResult_call(result, resultHandler, this, ___protocolFactory, ___transport);
@@ -1041,6 +1100,7 @@ public class Siyapath {
       processMap.put("submitTask", new submitTask());
       processMap.put("getJobStatus", new getJobStatus());
       processMap.put("getJobResult", new getJobResult());
+      processMap.put("getBackupNode", new getBackupNode());
       processMap.put("sendTaskResult", new sendTaskResult());
       processMap.put("sendTaskResultToBackup", new sendTaskResultToBackup());
       processMap.put("notifyTaskLiveness", new notifyTaskLiveness());
@@ -1226,6 +1286,22 @@ public class Siyapath {
       protected getJobResult_result getResult(I iface, getJobResult_args args) throws org.apache.thrift.TException {
         getJobResult_result result = new getJobResult_result();
         result.success = iface.getJobResult(args.jobID);
+        return result;
+      }
+    }
+
+    private static class getBackupNode<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getBackupNode_args> {
+      public getBackupNode() {
+        super("getBackupNode");
+      }
+
+      protected getBackupNode_args getEmptyArgsInstance() {
+        return new getBackupNode_args();
+      }
+
+      protected getBackupNode_result getResult(I iface, getBackupNode_args args) throws org.apache.thrift.TException {
+        getBackupNode_result result = new getBackupNode_result();
+        result.success = iface.getBackupNode(args.jobID);
         return result;
       }
     }
@@ -9402,6 +9478,727 @@ public class Siyapath {
               struct.success.put(_key72, _val73);
             }
           }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getBackupNode_args implements org.apache.thrift.TBase<getBackupNode_args, getBackupNode_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getBackupNode_args");
+
+    private static final org.apache.thrift.protocol.TField JOB_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("jobID", org.apache.thrift.protocol.TType.I32, (short)1);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getBackupNode_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getBackupNode_argsTupleSchemeFactory());
+    }
+
+    public int jobID; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      JOB_ID((short)1, "jobID");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // JOB_ID
+            return JOB_ID;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __JOBID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.JOB_ID, new org.apache.thrift.meta_data.FieldMetaData("jobID", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getBackupNode_args.class, metaDataMap);
+    }
+
+    public getBackupNode_args() {
+    }
+
+    public getBackupNode_args(
+      int jobID)
+    {
+      this();
+      this.jobID = jobID;
+      setJobIDIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getBackupNode_args(getBackupNode_args other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.jobID = other.jobID;
+    }
+
+    public getBackupNode_args deepCopy() {
+      return new getBackupNode_args(this);
+    }
+
+    @Override
+    public void clear() {
+      setJobIDIsSet(false);
+      this.jobID = 0;
+    }
+
+    public int getJobID() {
+      return this.jobID;
+    }
+
+    public getBackupNode_args setJobID(int jobID) {
+      this.jobID = jobID;
+      setJobIDIsSet(true);
+      return this;
+    }
+
+    public void unsetJobID() {
+      __isset_bit_vector.clear(__JOBID_ISSET_ID);
+    }
+
+    /** Returns true if field jobID is set (has been assigned a value) and false otherwise */
+    public boolean isSetJobID() {
+      return __isset_bit_vector.get(__JOBID_ISSET_ID);
+    }
+
+    public void setJobIDIsSet(boolean value) {
+      __isset_bit_vector.set(__JOBID_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case JOB_ID:
+        if (value == null) {
+          unsetJobID();
+        } else {
+          setJobID((Integer)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case JOB_ID:
+        return Integer.valueOf(getJobID());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case JOB_ID:
+        return isSetJobID();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getBackupNode_args)
+        return this.equals((getBackupNode_args)that);
+      return false;
+    }
+
+    public boolean equals(getBackupNode_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_jobID = true;
+      boolean that_present_jobID = true;
+      if (this_present_jobID || that_present_jobID) {
+        if (!(this_present_jobID && that_present_jobID))
+          return false;
+        if (this.jobID != that.jobID)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_jobID = true;
+      builder.append(present_jobID);
+      if (present_jobID)
+        builder.append(jobID);
+
+      return builder.toHashCode();
+    }
+
+    public int compareTo(getBackupNode_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      getBackupNode_args typedOther = (getBackupNode_args)other;
+
+      lastComparison = Boolean.valueOf(isSetJobID()).compareTo(typedOther.isSetJobID());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetJobID()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.jobID, typedOther.jobID);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getBackupNode_args(");
+      boolean first = true;
+
+      sb.append("jobID:");
+      sb.append(this.jobID);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getBackupNode_argsStandardSchemeFactory implements SchemeFactory {
+      public getBackupNode_argsStandardScheme getScheme() {
+        return new getBackupNode_argsStandardScheme();
+      }
+    }
+
+    private static class getBackupNode_argsStandardScheme extends StandardScheme<getBackupNode_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getBackupNode_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // JOB_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+                struct.jobID = iprot.readI32();
+                struct.setJobIDIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getBackupNode_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(JOB_ID_FIELD_DESC);
+        oprot.writeI32(struct.jobID);
+        oprot.writeFieldEnd();
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getBackupNode_argsTupleSchemeFactory implements SchemeFactory {
+      public getBackupNode_argsTupleScheme getScheme() {
+        return new getBackupNode_argsTupleScheme();
+      }
+    }
+
+    private static class getBackupNode_argsTupleScheme extends TupleScheme<getBackupNode_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getBackupNode_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetJobID()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetJobID()) {
+          oprot.writeI32(struct.jobID);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getBackupNode_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.jobID = iprot.readI32();
+          struct.setJobIDIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getBackupNode_result implements org.apache.thrift.TBase<getBackupNode_result, getBackupNode_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getBackupNode_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getBackupNode_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getBackupNode_resultTupleSchemeFactory());
+    }
+
+    public NodeData success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getBackupNode_result.class, metaDataMap);
+    }
+
+    public getBackupNode_result() {
+    }
+
+    public getBackupNode_result(
+      NodeData success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getBackupNode_result(getBackupNode_result other) {
+      if (other.isSetSuccess()) {
+        this.success = new NodeData(other.success);
+      }
+    }
+
+    public getBackupNode_result deepCopy() {
+      return new getBackupNode_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public NodeData getSuccess() {
+      return this.success;
+    }
+
+    public getBackupNode_result setSuccess(NodeData success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((NodeData)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getBackupNode_result)
+        return this.equals((getBackupNode_result)that);
+      return false;
+    }
+
+    public boolean equals(getBackupNode_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      HashCodeBuilder builder = new HashCodeBuilder();
+
+      boolean present_success = true && (isSetSuccess());
+      builder.append(present_success);
+      if (present_success)
+        builder.append(success);
+
+      return builder.toHashCode();
+    }
+
+    public int compareTo(getBackupNode_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      getBackupNode_result typedOther = (getBackupNode_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getBackupNode_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getBackupNode_resultStandardSchemeFactory implements SchemeFactory {
+      public getBackupNode_resultStandardScheme getScheme() {
+        return new getBackupNode_resultStandardScheme();
+      }
+    }
+
+    private static class getBackupNode_resultStandardScheme extends StandardScheme<getBackupNode_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getBackupNode_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.success = new NodeData();
+                struct.success.read(iprot);
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getBackupNode_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getBackupNode_resultTupleSchemeFactory implements SchemeFactory {
+      public getBackupNode_resultTupleScheme getScheme() {
+        return new getBackupNode_resultTupleScheme();
+      }
+    }
+
+    private static class getBackupNode_resultTupleScheme extends TupleScheme<getBackupNode_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getBackupNode_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          struct.success.write(oprot);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getBackupNode_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = new NodeData();
+          struct.success.read(iprot);
           struct.setSuccessIsSet(true);
         }
       }

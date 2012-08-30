@@ -28,12 +28,17 @@ public class JobData {
     private String name;
     private Job job;
     private NodeInfo distributorNode;
+    private NodeInfo backupNode;
+    private int distributorFailureCount;
+    private boolean isPollingFromBackup;
 
     public JobData(int id, String name, Job job, NodeInfo distributorNode) {
         this.id = id;
         this.name = name;
         this.job = job;
         this.distributorNode = distributorNode;
+        distributorFailureCount = 0;
+        isPollingFromBackup = false;
     }
 
     public int getId() {
@@ -50,5 +55,29 @@ public class JobData {
 
     public NodeInfo getDistributorNode() {
         return distributorNode;
+    }
+
+    public NodeInfo getBackupNode() {
+        return backupNode;
+    }
+
+    public void setBackupNode(NodeInfo backupNode) {
+        this.backupNode = backupNode;
+    }
+
+    public int getDistributorFailureCount() {
+        return distributorFailureCount;
+    }
+
+    public void incrementDistributorFailureCount() {
+        this.distributorFailureCount++;
+    }
+
+    public boolean isPollingFromBackup() {
+        return isPollingFromBackup;
+    }
+
+    public void setPollingFromBackup(boolean pollingFromBackup) {
+        isPollingFromBackup = pollingFromBackup;
     }
 }

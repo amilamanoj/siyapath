@@ -56,7 +56,7 @@ public final class SiyapathConstants {
      * Time interval in milliseconds which the backup node uses to check if
      * job processor is alive
      */
-    public static final int BACKUP_STATUS_CHECK_INTERVAL = 20000;
+    public static final int BACKUP_STATUS_CHECK_INTERVAL = 5000;
 
     /**
      * Gossip frequency in milliseconds
@@ -64,6 +64,11 @@ public final class SiyapathConstants {
     public static final int GOSSIP_FREQUENCY_MILLIS = 3000;
 
     public static final int TASK_DISPATCH_FREQUENCY_MILLIS = 100;
+
+    /**
+     * number of failures to connect to job distributor before connecting to backup node
+     */
+    public static final int JOB_DISTRIBUTOR_FAILURE_LIMIT = 3;
 
 
     public static final boolean LOCAL_TEST = false;

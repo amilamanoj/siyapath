@@ -35,6 +35,8 @@ import org.siyapath.service.Siyapath;
 import org.siyapath.service.TaskStatus;
 import org.siyapath.utils.CommonUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,10 +87,14 @@ public class BackupHandler {
                     jobToBackup.getReplicaCount(), jobToBackup.getTasks().get(result.getTaskID()));
         }
         task.addResult(result.getResults());
+        task.incrementResultReceivedCount();
         ProcessingTask.TaskReplica taskReplica = task.new TaskReplica(TaskStatus.DONE);
         taskReplica.setProcessingNode(CommonUtils.deSerialize(result.getProcessingNode()));
         task.addToTaskReplicaList(taskReplica);
         taskMap.put(result.getTaskID(), task);
+        if (task.getResultReceivedCount() >= jobToBackup.getReplicaCount()) {
+            validateResults(result.getTaskID());
+        }
     }
 
     /**
@@ -146,4 +152,35 @@ public class BackupHandler {
         context.setBackup(false);
     }
 
+    /**
+     * Validates results comparing results from replicas
+     *
+     * @param taskId
+     * @return true if all results of replicas are equal, false otherwise
+     */
+    public synchronized boolean validateResults(int taskId) {
+        ProcessingTask pTask = taskMap.get(taskId);
+        ArrayList<byte[]> resultList = pTask.getResultList();
+        boolean isValid = false;
+
+        if (!resultList.isEmpty()) {
+            byte[] firstResult = resultList.get(0);
+            validate:
+            for (byte[] resultArray : resultList) {
+                isValid = Arrays.equals(firstResult, resultArray);
+                if (!isValid) {
+                    break validate;
+                }
+            }
+            if (isValid) {
+                pTask.setValidatedResult(firstResult);
+                taskMap.put(taskId, pTask);
+                log.info("Result validated for Task:" + taskId);
+            } else {
+                log.info("Result validation failed, removing task from task map. Task:" + taskId);
+                taskMap.remove(taskId);
+            }
+        }
+        return isValid;
+    }
 }

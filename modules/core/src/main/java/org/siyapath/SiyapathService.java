@@ -179,6 +179,16 @@ public final class SiyapathService implements Siyapath.Iface {
         return null;
     }
 
+    @Override
+    public NodeData getBackupNode(int jobID) throws TException {
+        NodeInfo backupNode = nodeContext.getJobProcessor().getBackupNodeForJob(jobID);
+        if(backupNode!=null){
+            return CommonUtils.serialize(backupNode);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * @param result
      * @return true if computed result sent successfully, false otherwise

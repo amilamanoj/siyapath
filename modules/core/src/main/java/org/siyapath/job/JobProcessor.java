@@ -33,6 +33,7 @@ public final class JobProcessor {
     private BlockingQueue<Task> taskQueue;     
     private Map<Integer, Job> jobMap;               // jobID mapped to Job
     private Map<Integer, ProcessingTask> taskMap;   // taskID mapped to ProcessingTask
+    private Map<Integer, NodeInfo> backupNodeMap;   // jobID mapped to backup node
 
     /**
      * Constructor
@@ -48,6 +49,7 @@ public final class JobProcessor {
         taskQueue = new LinkedBlockingQueue<Task>(SiyapathConstants.TASK_QUEUE_CAPACITY);
         jobMap = new HashMap<Integer, Job>();
         taskMap = new ConcurrentHashMap<Integer, ProcessingTask>();
+        backupNodeMap = new HashMap<Integer, NodeInfo>();
         taskDispatcherExecutor.submit(new TaskDispatcher(nodeContext, taskQueue, jobMap, taskMap, generalExecutor));
 
         generalExecutor.submit(new TaskTracker(taskQueue, taskMap, generalExecutor));
@@ -94,13 +96,21 @@ public final class JobProcessor {
         int resultReceivedCount = pTask.getResultReceivedCount();
         int taskReplicaCount = pTask.getReplicaCount();
         log.info("Task result received for " + resultReceivedCount + " replicas of same task");
-        if (resultReceivedCount == taskReplicaCount) {
+        if (resultReceivedCount >= taskReplicaCount) {
             try {
                 validateResults(result.getTaskID());  
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void addBackupNode (int jobID, NodeInfo backupNode) {
+        backupNodeMap.put(jobID, backupNode);
+    }
+
+    public NodeInfo getBackupNodeForJob (int jobID) {
+         return backupNodeMap.get(jobID);
     }
 
     /**
@@ -241,20 +251,23 @@ public final class JobProcessor {
             taskMap.remove(taskID);
         }
         jobMap.remove(jobID);
-        TTransport transport = new TSocket(backup.getIp(), backup.getPort());
-        try {
-            log.info("Connecting to backup node to end backup. JobID: " + jobID);
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            Siyapath.Client client = new Siyapath.Client(protocol);
-            client.endBackup();
-        } catch (TTransportException e) {
-            log.warn(e.getMessage());
-            log.warn("Cannot connect to backup node.");
-        } catch (TException e) {
-            log.warn(e.getMessage());
-        } finally {
-            transport.close();
+        backupNodeMap.remove(jobID);
+        if (backup != null) {
+            TTransport transport = new TSocket(backup.getIp(), backup.getPort());
+            try {
+                log.info("Connecting to backup node to end backup. JobID: " + jobID);
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                Siyapath.Client client = new Siyapath.Client(protocol);
+                client.endBackup();
+            } catch (TTransportException e) {
+                log.warn(e.getMessage());
+                log.warn("Cannot connect to backup node.");
+            } catch (TException e) {
+                log.warn(e.getMessage());
+            } finally {
+                transport.close();
+            }
         }
     }
 
