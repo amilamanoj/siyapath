@@ -32,7 +32,9 @@ public final class GossipImpl {
     private static final Log log = LogFactory.getLog(GossipImpl.class);
     private NodeContext nodeContext;
 
-
+    /**
+     * @param nodeContext
+     */
     public GossipImpl(NodeContext nodeContext) {
         this.nodeContext = nodeContext;
     }
