@@ -45,7 +45,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        algo = new File("EdgeDetectorTask.class");
     }
 
 //    private MyJLabel imgLabel;
@@ -309,7 +309,6 @@ public class DistributedEdgeDetectorGUI extends JFrame {
     }
 
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        algo = new File("EdgeDetectorTask.class");
         if (!algo.exists()) {
             JOptionPane.showMessageDialog(DistributedEdgeDetectorGUI.this, "Task Program not found", "Error", JOptionPane.ERROR_MESSAGE);
             return;
