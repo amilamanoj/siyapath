@@ -34,8 +34,10 @@ public class JobEditorGUI extends javax.swing.JDialog {
     private javax.swing.JLabel JobNameLabel;
     private javax.swing.JButton addTaskButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JTextField inputDataText;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jobNameText;
     private javax.swing.JButton okButton;
@@ -66,6 +68,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -81,6 +84,8 @@ public class JobEditorGUI extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         resourceCombo = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        inputDataText = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -92,7 +97,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
         JobNameLabel.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         JobNameLabel.setText("Job Name");
 
-        addTaskButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        addTaskButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         addTaskButton.setText("Add Task");
         addTaskButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,10 +105,10 @@ public class JobEditorGUI extends javax.swing.JDialog {
             }
         });
 
-        tasksLabel.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        tasksLabel.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         tasksLabel.setText("Tasks:");
 
-        cancelButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        cancelButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,7 +116,7 @@ public class JobEditorGUI extends javax.swing.JDialog {
             }
         });
 
-        okButton.setFont(new java.awt.Font("Bodoni MT", 0, 14)); // NOI18N
+        okButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
         okButton.setText("Submit");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,7 +132,11 @@ public class JobEditorGUI extends javax.swing.JDialog {
 
         jLabel3.setText("Required resource level:");
 
-        resourceCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Low", "Medium", "High"}));
+        resourceCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Low", "Medium", "High" }));
+
+        jLabel4.setText("Input Data:");
+
+        inputDataText.setText("1,10000");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,9 +172,15 @@ public class JobEditorGUI extends javax.swing.JDialog {
                                                                 .addComponent(cancelButton)))
                                                 .addContainerGap())
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(resourceCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                .addComponent(jLabel4)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(inputDataText, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                .addComponent(jLabel3)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(resourceCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                 .addContainerGap(166, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -185,7 +200,11 @@ public class JobEditorGUI extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel3)
                                         .addComponent(resourceCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                .addGap(4, 4, 4)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel4)
+                                        .addComponent(inputDataText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(tasksLabel)
                                         .addComponent(addTaskButton))
@@ -227,13 +246,16 @@ public class JobEditorGUI extends javax.swing.JDialog {
         File sFile = fc.getSelectedFile();
         if (sFile != null) {
             String taskName = "Task-" + counter++ + ": " + sFile.getName();
+            String inputData = inputDataText.getText();
             listModel.addElement(taskName);
-            taskList.put(taskName, new TaskData(taskName, sFile, "0,200000".getBytes(), resourceCombo.getSelectedItem().toString()));
+            taskList.put(taskName, new TaskData(taskName, sFile, inputData.getBytes(), resourceCombo.getSelectedItem().toString()));
         }
         if (!listModel.isEmpty()) {
             okButton.setEnabled(true);
         }
     }
+
+
 
 
 }

@@ -104,7 +104,7 @@ public class UserGUI extends JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         taskStatusTable = new javax.swing.JTable(tableModel);
         getStatusButton = new javax.swing.JButton();
-        getResultsButton = new javax.swing.JButton();
+//        getResultsButton = new javax.swing.JButton();
         startPanel = new javax.swing.JPanel();
         jobListLabel = new javax.swing.JLabel();
         jobInfoLabel = new javax.swing.JLabel();
@@ -193,7 +193,7 @@ public class UserGUI extends JFrame {
         jScrollPane1.setViewportView(taskStatusTable);
 
         getStatusButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
-        getStatusButton.setText("Update Status");
+        getStatusButton.setText("Update Results");
         getStatusButton.setIconTextGap(10);
         getStatusButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,14 +201,14 @@ public class UserGUI extends JFrame {
             }
         });
 
-        getResultsButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
-        getResultsButton.setText("Retrieve Results");
-        getResultsButton.setIconTextGap(10);
-        getResultsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                getResultsButtonActionPerformed(evt);
-            }
-        });
+//        getResultsButton.setFont(new java.awt.Font("Bodoni MT", 0, 14));
+//        getResultsButton.setText("Retrieve Results");
+//        getResultsButton.setIconTextGap(10);
+//        getResultsButton.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                getResultsButtonActionPerformed(evt);
+//            }
+//        });
 
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
@@ -222,7 +222,7 @@ public class UserGUI extends JFrame {
                                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(35, 35, 35)
                                                 .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(getResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                                                        .addComponent(getResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(getStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(statusPanelLayout.createSequentialGroup()
                                                 .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +266,7 @@ public class UserGUI extends JFrame {
                                         .addGroup(statusPanelLayout.createSequentialGroup()
                                                 .addComponent(getStatusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(getResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                )
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(42, 42, 42))
         );
@@ -724,6 +724,10 @@ public class UserGUI extends JFrame {
                 model.fireTableDataChanged();
 //            jobStatus = assessJobStatusFromTaskStatuses(taskCompletionDataMap);
             }
+
+            if (handler.assessJobStatusFromTaskStatuses(statusMap)){
+                getStatusButton.setEnabled(false);
+            }
         }
 
         private void updateTableDataVectors(Map<Integer, TaskResult> statusMap) {
@@ -751,7 +755,7 @@ public class UserGUI extends JFrame {
     //    private javax.swing.JButton createEditJobButton;
     private javax.swing.JButton exitButton;
     private javax.swing.JMenuItem exitMenu;
-    private javax.swing.JButton getResultsButton;
+//    private javax.swing.JButton getResultsButton;
     private javax.swing.JButton getStatusButton;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
