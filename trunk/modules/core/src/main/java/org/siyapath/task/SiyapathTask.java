@@ -9,5 +9,8 @@ public interface SiyapathTask {
     
     void setData(byte[] data);
 
+    void setMetaData(String data);
+
     byte[] getResults();
+
 }

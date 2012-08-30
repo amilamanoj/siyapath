@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class EdgeDetectorTask implements SiyapathTask {
 
     private byte xPos, yPos;
-
+    private String nodeID;
     @Override
     public void process() {
         processImage();
@@ -36,6 +36,11 @@ public class EdgeDetectorTask implements SiyapathTask {
     }
 
     @Override
+    public void setMetaData(String data) {
+        nodeID = data;
+    }
+
+    @Override
     public byte[] getResults() {
         BufferedImage resultImage = getEdgesImage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -48,11 +53,14 @@ public class EdgeDetectorTask implements SiyapathTask {
         }
         byte[] imageInByte = baos.toByteArray();
 
-        byte[] outputData = new byte[imageInByte.length + 2];
+        byte[] outputData = new byte[imageInByte.length + 6];
         outputData[0] = xPos;
         outputData[1] = yPos;
-        System.arraycopy(imageInByte, 0, outputData, 2, imageInByte.length);
-
+        byte[] nodeIdInfo = nodeID.getBytes();
+        for (int i=0; i<nodeIdInfo.length; i++){
+            outputData[i+2] = nodeIdInfo[i];
+        }
+        System.arraycopy(imageInByte, 0, outputData, 6, imageInByte.length);
         return outputData;
     }
 
