@@ -180,9 +180,9 @@ public final class SiyapathService implements Siyapath.Iface {
     }
 
     @Override
-    public void notifyTaskLiveness(int taskID) throws TException {
+    public void notifyTaskLiveness(int taskID, int taskReplicaIndex) throws TException {
         log.debug("Received update from task processor: TaskID: " + taskID);
-        nodeContext.getJobProcessor().taskUpdateReceived(taskID);
+        nodeContext.getJobProcessor().taskUpdateReceived(taskID, taskReplicaIndex);
     }
 
     /**

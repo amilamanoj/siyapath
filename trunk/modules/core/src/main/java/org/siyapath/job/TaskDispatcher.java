@@ -17,6 +17,8 @@ import org.siyapath.service.*;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -63,17 +65,32 @@ final class TaskDispatcher implements Runnable {
                     log.info("Dispatching task: " + task.getTaskID() + " JobID: " + task.getJobID());
 
                     NodeInfo targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
-                    while (taskMap.get(task.getTaskID()).getTaskStatusMap().containsKey
-                            (targetTaskProcessor.getNodeId())) {
+//                    while (taskMap.get(task.getTaskID()).getTaskStatusMap().containsKey
+//                            (targetTaskProcessor.getNodeId())) {
+//                        targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
+//                    }
+                    ArrayList<NodeInfo> processors = new ArrayList<NodeInfo>();
+                    for (ProcessingTask.TaskReplica taskReplica : taskMap.get(task.getTaskID())
+                            .getTaskReplicaList()) {
+//                        if(targetTaskProcessor.equals(taskReplica.getProcessingNode())) {
+//
+//                        }
+                        processors.add(taskReplica.getProcessingNode());
+                    }
+
+                    while (processors.contains(targetTaskProcessor)) {
                         targetTaskProcessor = getJobScheduler().selectTaskProcessorNode(task);
                     }
+
                     boolean dispatched = dispatchTask(task, targetTaskProcessor);
 
                     if (!dispatched) {
                         generalExecutor.submit(new TaskReCollector(taskQueue, task));  // add the task back to the queue to be dispatched later
                     } else {
                         ProcessingTask pTask = taskMap.get(task.getTaskID());
-                        pTask.addToStatusMap(targetTaskProcessor.getNodeId(), TaskStatus.DISPATCHING);
+                        ProcessingTask.TaskReplica taskReplica = pTask.getTaskReplicaList().get(task.getTaskReplicaIndex());
+                        taskReplica.setProcessingNode(targetTaskProcessor);
+                        taskReplica.setTaskStatus(TaskStatus.PROCESSING);
                     }
                 }
                 Thread.sleep(SiyapathConstants.TASK_DISPATCH_FREQUENCY_MILLIS);
@@ -109,11 +126,6 @@ final class TaskDispatcher implements Runnable {
             isDispatched = client.submitTask(task);
             log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Task successfully submitted: " + isDispatched);
 
-            if (isDispatched) {
-                ProcessingTask pTask = taskMap.get(task.getTaskID());
-                pTask.addToStatusMap(destinationNode.getNodeId(), TaskStatus.PROCESSING);
-                pTask.setTimeLastUpdated(System.currentTimeMillis());
-            }
         } catch (TTransportException e) {
             e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {

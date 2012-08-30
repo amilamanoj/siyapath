@@ -48,8 +48,7 @@ public final class JobProcessor {
         taskMap = new ConcurrentHashMap<Integer, ProcessingTask>();
         taskDispatcherExecutor.submit(new TaskDispatcher(nodeContext, taskQueue, jobMap, taskMap, generalExecutor));
 
-
-//        new TaskTracker("TaskTracker-" + context.getNodeInfo().toString()).start();
+        generalExecutor.submit(new TaskTracker(taskQueue, taskMap, generalExecutor));
 
         context.getNodeResource().setNodeStatus(NodeStatus.DISTRIBUTING);
 
@@ -78,7 +77,7 @@ public final class JobProcessor {
         ProcessingTask pTask = taskMap.get(result.getTaskID());
 
         pTask.addResult(result.getResults());
-        pTask.addToStatusMap(result.getProcessingNode().getNodeID(), TaskStatus.DONE);
+        pTask.getTaskReplicaList().get(result.getTaskReplicaIndex()).setTaskStatus(TaskStatus.DONE);
         pTask.incrementResultReceivedCount();
         taskMap.put(result.getTaskID(), pTask);
 
@@ -126,7 +125,11 @@ public final class JobProcessor {
                 log.info("Result validated for Task:" + taskId);
             } else {
                 log.info("Result validation failed, adding task back to queue. Task:" + taskId);
-                generalExecutor.submit(new TaskReCollector(taskQueue, pTask.getTask()));  // add the task back to the queue to be dispatched later
+                for (int i = 0; i < pTask.getReplicaCount(); i++) {
+                    pTask.getTaskReplicaList().get(i).setTaskStatus(TaskStatus.DISPATCHING);
+                    generalExecutor.submit(new TaskReCollector(taskQueue,
+                            pTask.getTask().deepCopy().setTaskReplicaIndex(i)));  // add the task back to the queue to be dispatched later
+                }
             }
         }
         return isValid;
@@ -143,10 +146,10 @@ public final class JobProcessor {
         TaskStatus overallTaskStatus = null;
         int counter = 0;
         ProcessingTask pTask = taskMap.get(taskId);
-        Map<Integer, TaskStatus> taskStatusMap = pTask.getTaskStatusMap();
 
         label:
-        for (TaskStatus taskStatus : taskStatusMap.values()) {
+        for (ProcessingTask.TaskReplica taskReplica : pTask.getTaskReplicaList()) {
+            TaskStatus taskStatus = taskReplica.getTaskStatus();
             switch (taskStatus) {
                 case DISPATCHING:
                     overallTaskStatus = TaskStatus.DISPATCHING;
@@ -159,7 +162,7 @@ public final class JobProcessor {
                     break;
             }
             log.debug("Task status: " + taskId + " is: " + taskStatus);
-            log.debug("status map size: " + taskStatusMap.size());
+            log.debug("task replica list size: " + pTask.getTaskReplicaList().size());
         }
 
         if (counter == pTask.getReplicaCount()) {     //if all statues are DONE
@@ -247,49 +250,16 @@ public final class JobProcessor {
     }
 
     /**
+     * Invoked when a task processor sends an update to notify liveness
      *
-     * @param taskID
+     * @param taskID           ID of the task
+     * @param taskReplicaIndex task replica number
      */
-    public void taskUpdateReceived(int taskID) {
-        taskMap.get(taskID).setTimeLastUpdated(System.currentTimeMillis());
+    public void taskUpdateReceived(int taskID, int taskReplicaIndex) {
+        taskMap.get(taskID).getTaskReplicaList().get(taskReplicaIndex).setTimeLastUpdated(System.currentTimeMillis());
     }
 
-//    private class TaskTracker extends Thread {
-//
-//        boolean isRunning = false;
-//
-//        private TaskTracker(String name) {
-//            super(name);
-//        }
-//
-//        @Override
-//        public void run() {
-//            isRunning = true;
-//            while (isRunning) {
-//                for (ProcessingTask pTask : taskMap.values()) {
-//                    long updateInterval = System.currentTimeMillis() - pTask.getTimeLastUpdated();
-//                    if (pTask.getStatus() == TaskStatus.PROCESSING && updateInterval > SiyapathConstants
-//                            .MAX_TASK_UPDATE_INTERVAL_MILLIS) {
-//                        Task task = jobMap.get(pTask.getJobID()).getTasks().get(pTask.getTaskID());
-//                        try {
-//                            taskQueue.put(task);
-//                            log.debug("Task: " + pTask.getTaskID() + " has no response from " +
-//                                    "processor " + pTask.getProcessingNode() + ". Adding back to queue.");
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();    //TODO: handle exception
-//                        }
-//                    }
-//                }
-//                try {
-//                    sleep(10000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
-//    public Map<Integer, Task> getJobResult() {
+//        public Map<Integer, Task> getJobResult() {
 //        if (jobMap.isEmpty() && taskQueue.isEmpty()) {
 //            if (context.getNodeInfo().getNodeStatus() != NodeStatus.PROCESSING) {
 //                context.getNodeInfo().setNodeStatus(NodeStatus.IDLE);  //TODO:If this is a processor node

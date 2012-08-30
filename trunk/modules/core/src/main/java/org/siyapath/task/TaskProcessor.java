@@ -44,7 +44,8 @@ public class TaskProcessor extends Thread {
         notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
         siyapathSecurityManager = new SiyapathSecurityManager("secpass");
         defaultSecurityManager = System.getSecurityManager();
-        taskResult = new Result(task.getJobID(), task.getTaskID(), null, CommonUtils.serialize(context.getNodeInfo()));
+        taskResult = new Result(task.getJobID(), task.getTaskID(), null,
+                CommonUtils.serialize(context.getNodeInfo()),task.getTaskReplicaIndex());
     }
 
     /*public void startProcessing(){
@@ -197,7 +198,7 @@ public class TaskProcessor extends Thread {
             while (isRunning) {
                 sendUpdate();
                 try {
-                    sleep(10000);
+                    sleep(SiyapathConstants.TASK_TRACKER_INTERVAL);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -210,7 +211,7 @@ public class TaskProcessor extends Thread {
                 transport.open();
                 TProtocol protocol = new TBinaryProtocol(transport);
                 Siyapath.Client client = new Siyapath.Client(protocol);
-                client.notifyTaskLiveness(task.getTaskID());
+                client.notifyTaskLiveness(task.getTaskID(), task.getTaskReplicaIndex());
                 log.debug("Sending task update to Distributing node. TaskID: " + task.getTaskID());
             } catch (TTransportException e) {
                 e.printStackTrace();

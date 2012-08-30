@@ -6,6 +6,7 @@
  */
 package org.siyapath.service;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
@@ -34,6 +35,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   private static final org.apache.thrift.protocol.TField TASK_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("taskID", org.apache.thrift.protocol.TType.I32, (short)2);
   private static final org.apache.thrift.protocol.TField RESULTS_FIELD_DESC = new org.apache.thrift.protocol.TField("results", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField PROCESSING_NODE_FIELD_DESC = new org.apache.thrift.protocol.TField("processingNode", org.apache.thrift.protocol.TType.STRUCT, (short)4);
+  private static final org.apache.thrift.protocol.TField TASK_REPLICA_INDEX_FIELD_DESC = new org.apache.thrift.protocol.TField("taskReplicaIndex", org.apache.thrift.protocol.TType.I32, (short)5);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -45,13 +47,15 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   public int taskID; // required
   public ByteBuffer results; // required
   public NodeData processingNode; // required
+  public int taskReplicaIndex; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     JOB_ID((short)1, "jobID"),
     TASK_ID((short)2, "taskID"),
     RESULTS((short)3, "results"),
-    PROCESSING_NODE((short)4, "processingNode");
+    PROCESSING_NODE((short)4, "processingNode"),
+    TASK_REPLICA_INDEX((short)5, "taskReplicaIndex");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -74,6 +78,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
           return RESULTS;
         case 4: // PROCESSING_NODE
           return PROCESSING_NODE;
+        case 5: // TASK_REPLICA_INDEX
+          return TASK_REPLICA_INDEX;
         default:
           return null;
       }
@@ -116,7 +122,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
   // isset id assignments
   private static final int __JOBID_ISSET_ID = 0;
   private static final int __TASKID_ISSET_ID = 1;
-  private BitSet __isset_bit_vector = new BitSet(2);
+  private static final int __TASKREPLICAINDEX_ISSET_ID = 2;
+  private BitSet __isset_bit_vector = new BitSet(3);
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -128,6 +135,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , true)));
     tmpMap.put(_Fields.PROCESSING_NODE, new org.apache.thrift.meta_data.FieldMetaData("processingNode", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeData.class)));
+    tmpMap.put(_Fields.TASK_REPLICA_INDEX, new org.apache.thrift.meta_data.FieldMetaData("taskReplicaIndex", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Result.class, metaDataMap);
   }
@@ -139,7 +148,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     int jobID,
     int taskID,
     ByteBuffer results,
-    NodeData processingNode)
+    NodeData processingNode,
+    int taskReplicaIndex)
   {
     this();
     this.jobID = jobID;
@@ -148,6 +158,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     setTaskIDIsSet(true);
     this.results = results;
     this.processingNode = processingNode;
+    this.taskReplicaIndex = taskReplicaIndex;
+    setTaskReplicaIndexIsSet(true);
   }
 
   /**
@@ -165,6 +177,7 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     if (other.isSetProcessingNode()) {
       this.processingNode = new NodeData(other.processingNode);
     }
+    this.taskReplicaIndex = other.taskReplicaIndex;
   }
 
   public Result deepCopy() {
@@ -179,6 +192,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     this.taskID = 0;
     this.results = null;
     this.processingNode = null;
+    setTaskReplicaIndexIsSet(false);
+    this.taskReplicaIndex = 0;
   }
 
   public int getJobID() {
@@ -285,6 +300,29 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     }
   }
 
+  public int getTaskReplicaIndex() {
+    return this.taskReplicaIndex;
+  }
+
+  public Result setTaskReplicaIndex(int taskReplicaIndex) {
+    this.taskReplicaIndex = taskReplicaIndex;
+    setTaskReplicaIndexIsSet(true);
+    return this;
+  }
+
+  public void unsetTaskReplicaIndex() {
+    __isset_bit_vector.clear(__TASKREPLICAINDEX_ISSET_ID);
+  }
+
+  /** Returns true if field taskReplicaIndex is set (has been assigned a value) and false otherwise */
+  public boolean isSetTaskReplicaIndex() {
+    return __isset_bit_vector.get(__TASKREPLICAINDEX_ISSET_ID);
+  }
+
+  public void setTaskReplicaIndexIsSet(boolean value) {
+    __isset_bit_vector.set(__TASKREPLICAINDEX_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case JOB_ID:
@@ -319,6 +357,14 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       }
       break;
 
+    case TASK_REPLICA_INDEX:
+      if (value == null) {
+        unsetTaskReplicaIndex();
+      } else {
+        setTaskReplicaIndex((Integer)value);
+      }
+      break;
+
     }
   }
 
@@ -335,6 +381,9 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
 
     case PROCESSING_NODE:
       return getProcessingNode();
+
+    case TASK_REPLICA_INDEX:
+      return Integer.valueOf(getTaskReplicaIndex());
 
     }
     throw new IllegalStateException();
@@ -355,6 +404,8 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       return isSetResults();
     case PROCESSING_NODE:
       return isSetProcessingNode();
+    case TASK_REPLICA_INDEX:
+      return isSetTaskReplicaIndex();
     }
     throw new IllegalStateException();
   }
@@ -408,12 +459,48 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         return false;
     }
 
+    boolean this_present_taskReplicaIndex = true;
+    boolean that_present_taskReplicaIndex = true;
+    if (this_present_taskReplicaIndex || that_present_taskReplicaIndex) {
+      if (!(this_present_taskReplicaIndex && that_present_taskReplicaIndex))
+        return false;
+      if (this.taskReplicaIndex != that.taskReplicaIndex)
+        return false;
+    }
+
     return true;
   }
 
   @Override
   public int hashCode() {
-    return 0;
+    HashCodeBuilder builder = new HashCodeBuilder();
+
+    boolean present_jobID = true;
+    builder.append(present_jobID);
+    if (present_jobID)
+      builder.append(jobID);
+
+    boolean present_taskID = true;
+    builder.append(present_taskID);
+    if (present_taskID)
+      builder.append(taskID);
+
+    boolean present_results = true && (isSetResults());
+    builder.append(present_results);
+    if (present_results)
+      builder.append(results);
+
+    boolean present_processingNode = true && (isSetProcessingNode());
+    builder.append(present_processingNode);
+    if (present_processingNode)
+      builder.append(processingNode);
+
+    boolean present_taskReplicaIndex = true;
+    builder.append(present_taskReplicaIndex);
+    if (present_taskReplicaIndex)
+      builder.append(taskReplicaIndex);
+
+    return builder.toHashCode();
   }
 
   public int compareTo(Result other) {
@@ -464,6 +551,16 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetTaskReplicaIndex()).compareTo(typedOther.isSetTaskReplicaIndex());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetTaskReplicaIndex()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taskReplicaIndex, typedOther.taskReplicaIndex);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -506,6 +603,10 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
     } else {
       sb.append(this.processingNode);
     }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("taskReplicaIndex:");
+    sb.append(this.taskReplicaIndex);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -584,6 +685,14 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 5: // TASK_REPLICA_INDEX
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.taskReplicaIndex = iprot.readI32();
+              struct.setTaskReplicaIndexIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -615,6 +724,9 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         struct.processingNode.write(oprot);
         oprot.writeFieldEnd();
       }
+      oprot.writeFieldBegin(TASK_REPLICA_INDEX_FIELD_DESC);
+      oprot.writeI32(struct.taskReplicaIndex);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -645,7 +757,10 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (struct.isSetProcessingNode()) {
         optionals.set(3);
       }
-      oprot.writeBitSet(optionals, 4);
+      if (struct.isSetTaskReplicaIndex()) {
+        optionals.set(4);
+      }
+      oprot.writeBitSet(optionals, 5);
       if (struct.isSetJobID()) {
         oprot.writeI32(struct.jobID);
       }
@@ -658,12 +773,15 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
       if (struct.isSetProcessingNode()) {
         struct.processingNode.write(oprot);
       }
+      if (struct.isSetTaskReplicaIndex()) {
+        oprot.writeI32(struct.taskReplicaIndex);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Result struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(4);
+      BitSet incoming = iprot.readBitSet(5);
       if (incoming.get(0)) {
         struct.jobID = iprot.readI32();
         struct.setJobIDIsSet(true);
@@ -680,6 +798,10 @@ public class Result implements org.apache.thrift.TBase<Result, Result._Fields>, 
         struct.processingNode = new NodeData();
         struct.processingNode.read(iprot);
         struct.setProcessingNodeIsSet(true);
+      }
+      if (incoming.get(4)) {
+        struct.taskReplicaIndex = iprot.readI32();
+        struct.setTaskReplicaIndexIsSet(true);
       }
     }
   }

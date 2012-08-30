@@ -58,7 +58,7 @@ struct Task {
     6: NodeData sender,
     7: NodeData backup,
     8: string requiredResourceLevel,
-    9: i32 taskReplicaCount
+    9: i32 taskReplicaIndex
 }
 
 /**
@@ -76,7 +76,8 @@ struct Result {
     1: i32 jobID,
     2: i32 taskID,
     3: binary results,
-    4: NodeData processingNode
+    4: NodeData processingNode,
+    5: i32 taskReplicaIndex
 }
 
 struct TaskResult {
@@ -129,7 +130,7 @@ service Siyapath {
     bool sendTaskResultToBackup (1:Result result),
 
     //Notify job-distributing node that the task processor is alive
-    void notifyTaskLiveness (1:i32 taskID),
+    void notifyTaskLiveness (1:i32 taskID, 2:i32 taskReplicaIndex),
 
     //User authentication
     string userLogin(1:string username, 2:string password),

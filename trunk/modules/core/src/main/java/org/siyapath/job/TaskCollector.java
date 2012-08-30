@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.siyapath.service.Job;
 import org.siyapath.service.Task;
+import org.siyapath.service.TaskStatus;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -33,12 +34,15 @@ class TaskCollector implements Runnable {
                 if (!taskMap.containsKey(task.getTaskID())) {
                     ProcessingTask processingTask = new ProcessingTask(job.getJobID(), task.getTaskID(), job.getReplicaCount(), task);
 
-                    //task.setTaskReplicaCount(job.getReplicaCount());      //required to set
                     taskMap.put(task.getTaskID(), processingTask);
 
                     int replicaCount = job.getReplicaCount();
                     for (int i = 0; i < replicaCount; i++) {
-                        taskQueue.put(task);
+                        Task taskCopy = task.deepCopy();
+                        taskCopy.setTaskReplicaIndex(i);
+//                        processingTask.setTaskReplica(i, processingTask.new TaskReplica(TaskStatus.DISPATCHING));
+                        processingTask.addToTaskReplicaList(processingTask.new TaskReplica(TaskStatus.DISPATCHING));
+                        taskQueue.put(taskCopy);
                     }
 
                     log.debug("Added " + task.getTaskID() + " to queue.");
