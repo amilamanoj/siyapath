@@ -31,6 +31,6 @@ This will popup the following GUI for Siyapath  Volunteer
 [http://siyapath.org/images/Vol_Dis1.png]
 
 This UI shows following the details related to Volunteer statistics.
- * PeerListener and PeerWorker Status
+ * PeerListener,PeerWorker Status
  * Number of members known to the volunteer
  * Job Processing Status (IDLE/PROCESSING/DISTRIBUTER)
