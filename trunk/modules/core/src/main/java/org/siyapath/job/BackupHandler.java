@@ -7,14 +7,15 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
 import org.siyapath.NodeContext;
 import org.siyapath.NodeInfo;
+import org.siyapath.SiyapathConstants;
 import org.siyapath.service.Job;
 import org.siyapath.service.Result;
 import org.siyapath.service.Siyapath;
+import org.siyapath.service.TaskStatus;
+import org.siyapath.utils.CommonUtils;
 
-import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,9 @@ public class BackupHandler {
     }
 
     /**
-     * @param job          Job
+     * Invoked when a node requests from this node to be its backup
+     *
+     * @param job          Job to backup
      * @param nodeToBackup Node that has to be backed-up
      * @return true if request is accepted, false otherwise
      */
@@ -51,14 +54,27 @@ public class BackupHandler {
         return true;
     }
 
-    public void updateTaskResult(Result result) {                   //changed
-//        ProcessingTask task = new ProcessingTask(result.getJobID(), result.getTaskID(),
-//                TaskStatus.DONE);
-//        task.setResult(result.getResults());
-       // task.setProcessingNode(CommonUtils.deSerialize(result.getProcessingNode()));
-//        taskMap.put(result.getTaskID(), task);
+    /**
+     * Receives result of completed task from job processor and saves it
+     *
+     * @param result Completed task result
+     */
+    public void updateTaskResult(Result result) {
+        ProcessingTask task = taskMap.get(result.getTaskID());
+        if (task == null) {
+            task = new ProcessingTask(result.getJobID(), result.getTaskID(),
+                    jobToBackup.getReplicaCount(), jobToBackup.getTasks().get(result.getTaskID()));
+        }
+        task.addResult(result.getResults());
+        ProcessingTask.TaskReplica taskReplica = task.new TaskReplica(TaskStatus.DONE);
+        taskReplica.setProcessingNode(CommonUtils.deSerialize(result.getProcessingNode()));
+        task.addToTaskReplicaList(taskReplica);
+        taskMap.put(result.getTaskID(), task);
     }
 
+    /**
+     * Thread that polls the job processor to see if it is alive
+     */
     private class StatusThread extends Thread {
         private boolean isRunning = true;
 
@@ -73,8 +89,9 @@ public class BackupHandler {
                     endBackup();
                 }
                 try {
-                    Thread.sleep(20000);
+                    Thread.sleep(SiyapathConstants.BACKUP_STATUS_CHECK_INTERVAL);
                 } catch (InterruptedException e) {
+                    log.warn(e.getMessage());
                 }
             }
         }
@@ -99,6 +116,9 @@ public class BackupHandler {
         }
     }
 
+    /**
+     * Stops being the backup. Invoked when the job is complete.
+     */
     public void endBackup() {
         statusThread.stopThread();
         taskMap = null;
@@ -106,6 +126,5 @@ public class BackupHandler {
         nodeToBackup = null;
         context.setBackup(false);
     }
-
 
 }

@@ -34,6 +34,12 @@ public final class SiyapathConstants {
     public static final int TASK_TRACKER_INTERVAL = 10000;      //milliseconds
 
     /**
+     * Time interval in milliseconds which the backup node uses to check if
+     * job processor is alive
+     */
+    public static final int BACKUP_STATUS_CHECK_INTERVAL = 20000;
+
+    /**
      * Gossip frequency in milliseconds
      */
     public static final int GOSSIP_FREQUENCY_MILLIS = 3000;

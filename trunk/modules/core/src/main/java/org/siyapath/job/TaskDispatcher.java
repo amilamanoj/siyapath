@@ -127,13 +127,13 @@ final class TaskDispatcher implements Runnable {
             log.info("JobID:" + jobId + "-TaskID:" + task.getTaskID() + "-Task successfully submitted: " + isDispatched);
 
         } catch (TTransportException e) {
-            e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {
                 log.warn("Could not connect to " + destinationNode + ",assign task to another.");
+            } else {
+                log.warn(e.getMessage());
             }
-            //TODO: handle exception to pick other node
         } catch (TException e) {
-            e.printStackTrace();
+            log.warn(e.getMessage());
         }
         return isDispatched;
 
