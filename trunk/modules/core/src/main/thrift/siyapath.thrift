@@ -22,7 +22,9 @@ enum ResourceLevel {
 enum TaskStatus {
   DISPATCHING = 1,
   PROCESSING = 2,
-  DONE = 3
+  COMPLETED = 3,
+  ABORTED_SECURITY = 4,
+  ABORTED_ERROR = 5
 }
 
 /**
@@ -75,9 +77,10 @@ struct Job {
 struct Result {
     1: i32 jobID,
     2: i32 taskID,
-    3: binary results,
-    4: NodeData processingNode,
-    5: i32 taskReplicaIndex
+    3: TaskStatus status,
+    4: binary results,
+    5: NodeData processingNode,
+    6: i32 taskReplicaIndex
 }
 
 struct TaskResult {

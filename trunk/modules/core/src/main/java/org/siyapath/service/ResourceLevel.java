@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
-public enum ResourceLevel implements TEnum {
+public enum ResourceLevel implements org.apache.thrift.TEnum {
   LOW(1),
   MEDIUM(2),
   HIGH(3);

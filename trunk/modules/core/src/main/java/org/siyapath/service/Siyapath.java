@@ -35,7 +35,7 @@ public class Siyapath {
    */
   public interface Iface {
 
-    public Map<Integer,NodeResourceData> resourceGossip(Map<Integer, NodeResourceData> knownResourceNodes) throws org.apache.thrift.TException;
+    public Map<Integer,NodeResourceData> resourceGossip(Map<Integer,NodeResourceData> knownResourceNodes) throws org.apache.thrift.TException;
 
     public boolean notifyPresence(NodeData nodeData) throws org.apache.thrift.TException;
 
@@ -73,7 +73,7 @@ public class Siyapath {
 
   public interface AsyncIface {
 
-    public void resourceGossip(Map<Integer, NodeResourceData> knownResourceNodes, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.resourceGossip_call> resultHandler) throws org.apache.thrift.TException;
+    public void resourceGossip(Map<Integer,NodeResourceData> knownResourceNodes, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.resourceGossip_call> resultHandler) throws org.apache.thrift.TException;
 
     public void notifyPresence(NodeData nodeData, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.notifyPresence_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -555,7 +555,7 @@ public class Siyapath {
       }
 
       public Map<Integer,NodeResourceData> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -587,7 +587,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -622,7 +622,7 @@ public class Siyapath {
       }
 
       public Set<NodeData> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -651,7 +651,7 @@ public class Siyapath {
       }
 
       public Set<NodeData> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -680,7 +680,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -715,7 +715,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -744,7 +744,7 @@ public class Siyapath {
       }
 
       public void getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -776,7 +776,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -808,7 +808,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -840,7 +840,7 @@ public class Siyapath {
       }
 
       public Map<Integer,TaskResult> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -872,7 +872,7 @@ public class Siyapath {
       }
 
       public Map<Integer,TaskResult> getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -904,7 +904,7 @@ public class Siyapath {
       }
 
       public NodeData getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -936,7 +936,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -968,7 +968,7 @@ public class Siyapath {
       }
 
       public boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -1003,7 +1003,7 @@ public class Siyapath {
       }
 
       public void getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -1038,7 +1038,7 @@ public class Siyapath {
       }
 
       public String getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -1067,7 +1067,7 @@ public class Siyapath {
       }
 
       public NodeStatus getResult() throws org.apache.thrift.TException {
-        if (getState() != State.RESPONSE_READ) {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
@@ -13434,7 +13434,7 @@ public class Siyapath {
 
     /**
      * 
-     * @see org.siyapath.service.NodeStatus
+     * @see NodeStatus
      */
     public NodeStatus success; // required
 
@@ -13442,7 +13442,7 @@ public class Siyapath {
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       /**
        * 
-       * @see org.siyapath.service.NodeStatus
+       * @see NodeStatus
        */
       SUCCESS((short)0, "success");
 
@@ -13540,7 +13540,7 @@ public class Siyapath {
 
     /**
      * 
-     * @see org.siyapath.service.NodeStatus
+     * @see NodeStatus
      */
     public NodeStatus getSuccess() {
       return this.success;
@@ -13548,7 +13548,7 @@ public class Siyapath {
 
     /**
      * 
-     * @see org.siyapath.service.NodeStatus
+     * @see NodeStatus
      */
     public getNodeStatus_result setSuccess(NodeStatus success) {
       this.success = success;

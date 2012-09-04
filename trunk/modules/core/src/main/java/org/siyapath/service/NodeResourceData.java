@@ -48,12 +48,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
   public NodeData nodeData; // required
   /**
    * 
-   * @see org.siyapath.service.ResourceLevel
+   * @see ResourceLevel
    */
   public ResourceLevel resourceLevel; // required
   /**
    * 
-   * @see org.siyapath.service.NodeStatus
+   * @see NodeStatus
    */
   public NodeStatus nodeStatus; // required
   public long timeStamp; // required
@@ -63,12 +63,12 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
     NODE_DATA((short)1, "nodeData"),
     /**
      * 
-     * @see org.siyapath.service.ResourceLevel
+     * @see ResourceLevel
      */
     RESOURCE_LEVEL((short)2, "resourceLevel"),
     /**
      * 
-     * @see org.siyapath.service.NodeStatus
+     * @see NodeStatus
      */
     NODE_STATUS((short)3, "nodeStatus"),
     TIME_STAMP((short)4, "timeStamp");
@@ -225,7 +225,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see org.siyapath.service.ResourceLevel
+   * @see ResourceLevel
    */
   public ResourceLevel getResourceLevel() {
     return this.resourceLevel;
@@ -233,7 +233,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see org.siyapath.service.ResourceLevel
+   * @see ResourceLevel
    */
   public NodeResourceData setResourceLevel(ResourceLevel resourceLevel) {
     this.resourceLevel = resourceLevel;
@@ -257,7 +257,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see org.siyapath.service.NodeStatus
+   * @see NodeStatus
    */
   public NodeStatus getNodeStatus() {
     return this.nodeStatus;
@@ -265,7 +265,7 @@ public class NodeResourceData implements org.apache.thrift.TBase<NodeResourceDat
 
   /**
    * 
-   * @see org.siyapath.service.NodeStatus
+   * @see NodeStatus
    */
   public NodeResourceData setNodeStatus(NodeStatus nodeStatus) {
     this.nodeStatus = nodeStatus;
