@@ -324,7 +324,7 @@ public class UserHandler {
         boolean statusCondition = true;
         boolean eachTaskStatus;
         for (TaskResult taskResult : taskResultMap.values()) {
-            if (taskResult.getStatus() == TaskStatus.DONE) {
+            if (taskResult.getStatus() == TaskStatus.COMPLETED) {
                 eachTaskStatus = true;
             } else {
                 eachTaskStatus = false;

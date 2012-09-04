@@ -32,6 +32,7 @@ import org.siyapath.SiyapathConstants;
 import org.siyapath.service.Result;
 import org.siyapath.service.Siyapath;
 import org.siyapath.service.Task;
+import org.siyapath.service.TaskStatus;
 import org.siyapath.utils.CommonUtils;
 
 import java.net.ConnectException;
@@ -64,7 +65,7 @@ public class TaskProcessor extends Thread {
         notifier = new LivenessNotifier("LivenessNotifier-" + context.getNodeInfo().toString());
         siyapathSecurityManager = new SiyapathSecurityManager("secpass");
         defaultSecurityManager = System.getSecurityManager();
-        taskResult = new Result(task.getJobID(), task.getTaskID(), null,
+        taskResult = new Result(task.getJobID(), task.getTaskID(), TaskStatus.PROCESSING, null,
                 CommonUtils.serialize(context.getNodeInfo()),task.getTaskReplicaIndex());
     }
 
@@ -84,7 +85,7 @@ public class TaskProcessor extends Thread {
 
             // sand-boxing with a custom security manager that denies most permissions
         System.setSecurityManager(siyapathSecurityManager);
-            siyapathSecurityManager.disable("secpass");
+//            siyapathSecurityManager.disable("secpass");
             taskThread.start();
             try {
                 taskThread.join();
@@ -97,7 +98,8 @@ public class TaskProcessor extends Thread {
             notifier.stopNotifier();
         } catch (Exception e) {
             log.error("Task program instantiation failed. Aborting task: " + task.getTaskID());
-            taskResult.setResults("<aborted>".getBytes());
+            taskResult.setStatus(TaskStatus.ABORTED_ERROR);
+            taskResult.setResults("<aborted_error>".getBytes());
         }
         for (int i = 0; i < 3; i++) {
             if (deliverTaskResult(taskResult)) {
@@ -132,12 +134,16 @@ public class TaskProcessor extends Thread {
             byte[] finalResult = taskInstance.getResults();
             taskResult.setResults(finalResult);
             log.debug("Task processing is successful. ID: " + task.getTaskID());
-
         } catch (SecurityException e) {
             siyapathSecurityManager.disable("secpass");
-            System.setSecurityManager(defaultSecurityManager);
-            log.error("Task Processing aborted due to an attempt of illegal operation");
-            taskResult.setResults("<aborted>".getBytes());
+            log.error("Task Processing aborted due to an attempt of illegal operation: " + e.getMessage());
+            taskResult.setStatus(TaskStatus.ABORTED_SECURITY);
+            taskResult.setResults("<aborted_security_error>".getBytes());
+        } catch (Exception e){
+            siyapathSecurityManager.disable("secpass");
+            log.error("Task Processing aborted due error: " + e.getMessage());
+            taskResult.setStatus(TaskStatus.ABORTED_SECURITY);
+            taskResult.setResults("<aborted_error>".getBytes());
         }
     }
 

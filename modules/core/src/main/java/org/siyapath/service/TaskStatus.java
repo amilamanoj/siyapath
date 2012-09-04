@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
-public enum TaskStatus implements TEnum {
+public enum TaskStatus implements org.apache.thrift.TEnum {
   DISPATCHING(1),
   PROCESSING(2),
-  DONE(3);
+  COMPLETED(3),
+  ABORTED_SECURITY(4),
+  ABORTED_ERROR(5);
 
   private final int value;
 
@@ -40,7 +42,11 @@ public enum TaskStatus implements TEnum {
       case 2:
         return PROCESSING;
       case 3:
-        return DONE;
+        return COMPLETED;
+      case 4:
+        return ABORTED_SECURITY;
+      case 5:
+        return ABORTED_ERROR;
       default:
         return null;
     }

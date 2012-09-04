@@ -82,7 +82,7 @@ public final class JobProcessor {
         ProcessingTask pTask = taskMap.get(result.getTaskID());
 
         pTask.addResult(result.getResults());
-        pTask.getTaskReplicaList().get(result.getTaskReplicaIndex()).setTaskStatus(TaskStatus.DONE);
+        pTask.getTaskReplicaList().get(result.getTaskReplicaIndex()).setTaskStatus(result.getStatus());
         pTask.incrementResultReceivedCount();
         taskMap.put(result.getTaskID(), pTask);
 
@@ -172,7 +172,7 @@ public final class JobProcessor {
                 case PROCESSING:
                     overallTaskStatus = TaskStatus.PROCESSING;
                     break label;        // if at least one replica is at PROCESSING state, overall state is PROCESSING
-                case DONE:
+                case COMPLETED:
                     counter++;
                     break;
             }
@@ -182,7 +182,7 @@ public final class JobProcessor {
 
         if (counter == pTask.getReplicaCount()) {     //if all statues are DONE, overall status is set to DONE
             log.debug("All replicated tasks completed for task-" + taskId);
-            overallTaskStatus = TaskStatus.DONE;
+            overallTaskStatus = TaskStatus.COMPLETED;
         } else {
             log.debug("All replicated tasks not completed for task-" + taskId);
         }
@@ -218,7 +218,7 @@ public final class JobProcessor {
                 TaskResult taskResult = new TaskResult(overallTaskStatus, null);
                 taskResult.setResults(processingTask.getValidatedResult());
                 taskStatusMap.put(taskId, taskResult);
-                if (overallTaskStatus != TaskStatus.DONE) {
+                if (overallTaskStatus != TaskStatus.COMPLETED) {
                     jobComplete = false;
                 }
                 backupNode = processingTask.getBackupNode();

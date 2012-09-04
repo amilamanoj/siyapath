@@ -42,7 +42,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see org.siyapath.service.TaskStatus
+   * @see TaskStatus
    */
   public TaskStatus status; // required
   public ByteBuffer results; // required
@@ -51,7 +51,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     /**
      * 
-     * @see org.siyapath.service.TaskStatus
+     * @see TaskStatus
      */
     STATUS((short)1, "status"),
     RESULTS((short)2, "results");
@@ -161,7 +161,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see org.siyapath.service.TaskStatus
+   * @see TaskStatus
    */
   public TaskStatus getStatus() {
     return this.status;
@@ -169,7 +169,7 @@ public class TaskResult implements org.apache.thrift.TBase<TaskResult, TaskResul
 
   /**
    * 
-   * @see org.siyapath.service.TaskStatus
+   * @see TaskStatus
    */
   public TaskResult setStatus(TaskStatus status) {
     this.status = status;

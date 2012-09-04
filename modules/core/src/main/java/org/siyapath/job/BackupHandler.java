@@ -88,7 +88,7 @@ public class BackupHandler {
         }
         task.addResult(result.getResults());
         task.incrementResultReceivedCount();
-        ProcessingTask.TaskReplica taskReplica = task.new TaskReplica(TaskStatus.DONE);
+        ProcessingTask.TaskReplica taskReplica = task.new TaskReplica(TaskStatus.COMPLETED);
         taskReplica.setProcessingNode(CommonUtils.deSerialize(result.getProcessingNode()));
         task.addToTaskReplicaList(taskReplica);
         taskMap.put(result.getTaskID(), task);
