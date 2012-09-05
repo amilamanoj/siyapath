@@ -23,11 +23,12 @@ public interface SiyapathTask {
 }
 }}}
 
-<one>
 
 Connect to the Siyapath System , then submit the job and related tasks by selecting the java compiled code for the program you have written implementing the org.siyapath.task.Task interface. Submit the data per each task. Described below is an example for a user submitting a task program to find prime numbers for a given data range.
 
-<two>
+http://i46.tinypic.com/2s0y63r.png
+
+http://i48.tinypic.com/ie4dja.png
 
 If you need to verify the results set the number of replication nodes on which you want to run the same task on. You will be provided with a validated result.
 Select a resource level from among Low, Medium and High depending on the severity of the tasks you submit. The job handling node will select a volunteer to process your task according to the resource level availability of the volunteer. Specification is  as follows.
@@ -36,9 +37,10 @@ Select a resource level from among Low, Medium and High depending on the severit
 *MEDIUM (ie- 2GB < RAM free space < 6GB)
 *HIGH (ie- RAM free space  > 6GB)
 
+http://i45.tinypic.com/2j2w0hf.png
 
-<three>
-<four>
-<five>
+http://i50.tinypic.com/2f0btis.png
+
+http://i48.tinypic.com/bf48xi.png
 
 After the whole job is complete, status of all tasks will be marked as done, and the final result will be visible.
