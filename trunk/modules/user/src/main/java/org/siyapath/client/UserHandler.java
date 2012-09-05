@@ -260,7 +260,8 @@ public class UserHandler {
      * @param jobID
      */
     public synchronized Map<Integer, TaskResult> pollStatusFromJobProcessor(int jobID) throws TException {
-        if (jobMap.get(jobID).getDistributorFailureCount() > SiyapathConstants.JOB_DISTRIBUTOR_FAILURE_LIMIT) {
+        if (jobMap.get(jobID).getDistributorFailureCount() > SiyapathConstants.JOB_DISTRIBUTOR_FAILURE_LIMIT
+                && jobMap.get(jobID).getBackupNode() != null) {
             return pollStatusFromBackup(jobID);
         } else {
             NodeInfo jobHandler = jobMap.get(jobID).getDistributorNode();
