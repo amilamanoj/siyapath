@@ -11,9 +11,8 @@ import org.siyapath.service.Job;
 import org.siyapath.service.TaskResult;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -157,7 +156,7 @@ class ClientThread extends Thread {
         log.info("Client: All jobs created by client:" + clientNumber);
 
 
-        long allJobsSubmitStart = System.currentTimeMillis();                //start submit jobs
+        Date allJobsSubmitStart = new Date();             //start submit jobs
 
         for (Job job : jobList) {
             int submittedJobId = -1;
@@ -183,7 +182,7 @@ class ClientThread extends Thread {
             } while (submittedJobId < 0);
 
         }
-        long allJobsSubmitFinish = System.currentTimeMillis();                //submitted jobs
+        Date allJobsSubmitFinish = new Date();                //submitted jobs
 
         log.info("All jobs submitted by client: " + clientNumber);
 
@@ -197,7 +196,7 @@ class ClientThread extends Thread {
             e.printStackTrace();
         }
 
-        long allJobsFinish = System.currentTimeMillis();                //end jobs
+        Date allJobsFinish = new Date();               //end jobs
         log.info("All jobs completed. Client:" + clientNumber);
         endLatch.countDown();
 
@@ -207,17 +206,19 @@ class ClientThread extends Thread {
             String fileName = "Client" + clientNumber + "Results.txt";
             PrintWriter writer = new PrintWriter(fileName);
 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
             for (int id : jobTimeMap.keySet()) {
                 writer.println("Job:" + id + "-Time:" + jobTimeMap.get(id) + "ms");
             }
             writer.println("======================================================");
-            writer.println("All job start submit: " + allJobsSubmitStart);
-            writer.println("All job finish submit: " + allJobsSubmitFinish);
-            writer.println("Duration taken to submit: " + (allJobsSubmitFinish - allJobsSubmitStart) + "ms");
-            writer.println("All job complete: " + allJobsFinish);
+            writer.println("All job start submit: " + sdf.format(allJobsSubmitStart));
+            writer.println("All job finish submit: " + sdf.format(allJobsSubmitFinish));
+            writer.println("Duration taken to submit: " + (allJobsSubmitFinish.getTime() - allJobsSubmitStart.getTime()) + "ms");
+            writer.println("All job complete: " + sdf.format(allJobsFinish));
             writer.println("------------------------------------------------------");
-            writer.println("All job duration since start submit: " + (allJobsFinish - allJobsSubmitStart) + "ms");
-            writer.println("All job duration since finish submit: " + (allJobsFinish - allJobsSubmitFinish) + "ms");
+            writer.println("All job duration since start submit: " + (allJobsFinish.getTime() - allJobsSubmitStart.getTime()) + "ms");
+            writer.println("All job duration since finish submit: " + (allJobsFinish.getTime() - allJobsSubmitFinish.getTime()) + "ms");
             writer.println("======================================================");
 
             writer.flush();
@@ -256,18 +257,23 @@ class StatusPollThread extends Thread {
     @Override
     public void run() {
         Map<Integer, TaskResult> taskCompletionMap = null;
-        do {
+        while (true) {
             try {
+
                 taskCompletionMap = handler.pollStatusFromJobProcessor(job.getJobID());
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } catch (TException e) {
-                log.error("Error while polling TException" + e.getMessage());
+            } catch (TException e) {    //uh.poll status
+                log.error("TException" + e.getMessage());
             }
-        } while (!handler.assessJobStatusFromTaskStatuses(taskCompletionMap));
+            if (handler.assessJobStatusFromTaskStatuses(taskCompletionMap)) {
+                break;
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         long jobFinish = System.currentTimeMillis();
         long jobStart = jobTimeMap.get(job.getJobID());
         jobTimeMap.put(job.getJobID(), jobFinish - jobStart);

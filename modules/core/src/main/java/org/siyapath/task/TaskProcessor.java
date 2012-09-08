@@ -66,7 +66,7 @@ public class TaskProcessor extends Thread {
         siyapathSecurityManager = new SiyapathSecurityManager("secpass");
         defaultSecurityManager = System.getSecurityManager();
         taskResult = new Result(task.getJobID(), task.getTaskID(), TaskStatus.PROCESSING, null,
-                CommonUtils.serialize(context.getNodeInfo()),task.getTaskReplicaIndex());
+                CommonUtils.serialize(context.getNodeInfo()), task.getTaskReplicaIndex());
     }
 
     /*public void startProcessing(){
@@ -84,8 +84,8 @@ public class TaskProcessor extends Thread {
             notifier.start();
 
             // sand-boxing with a custom security manager that denies most permissions
-        System.setSecurityManager(siyapathSecurityManager);
-//            siyapathSecurityManager.disable("secpass");
+            System.setSecurityManager(siyapathSecurityManager);
+            siyapathSecurityManager.disable("secpass");
             taskThread.start();
             try {
                 taskThread.join();
@@ -93,7 +93,7 @@ public class TaskProcessor extends Thread {
                 log.warn("Thread was interrupted while waiting for task thread to complete. " + e.getMessage());
             }
             siyapathSecurityManager.disable("secpass");
-          System.setSecurityManager(defaultSecurityManager);
+            System.setSecurityManager(defaultSecurityManager);
             log.info("Task processing is finished. ID: " + task.getTaskID());
             notifier.stopNotifier();
         } catch (Exception e) {
@@ -133,22 +133,32 @@ public class TaskProcessor extends Thread {
 //            taskInstance.setMetaData(String.valueOf(context.getNodeResource().getNodeInfo().getNodeId()));
             byte[] finalResult = taskInstance.getResults();
             taskResult.setResults(finalResult);
+            taskResult.setStatus(TaskStatus.COMPLETED);
             log.debug("Task processing is successful. ID: " + task.getTaskID());
         } catch (SecurityException e) {
             siyapathSecurityManager.disable("secpass");
             log.error("Task Processing aborted due to an attempt of illegal operation: " + e.getMessage());
             taskResult.setStatus(TaskStatus.ABORTED_SECURITY);
             taskResult.setResults("<aborted_security_error>".getBytes());
-        } catch (Exception e){
+        } catch (ExceptionInInitializerError e) {
             siyapathSecurityManager.disable("secpass");
-            log.error("Task Processing aborted due error: " + e.getMessage());
+            if (e.getCause() instanceof SecurityException) {
+                log.error("Task Processing aborted due to an attempt of illegal operation: " + e.getMessage());
+                taskResult.setStatus(TaskStatus.ABORTED_SECURITY);
+                taskResult.setResults("<aborted_security_error>".getBytes());
+            }
+            log.error("Task Processing aborted due to an error: " + e.getMessage());
+            taskResult.setStatus(TaskStatus.ABORTED_SECURITY);
+            taskResult.setResults("<aborted_error>".getBytes());
+        } catch (Exception e) {
+            siyapathSecurityManager.disable("secpass");
+            log.error("Task Processing aborted due to an error: " + e.getMessage());
             taskResult.setStatus(TaskStatus.ABORTED_SECURITY);
             taskResult.setResults("<aborted_error>".getBytes());
         }
     }
 
     /**
-     *
      * @return Instance of java class implementing SiyapathTask interface, generated through reflection
      * @throws ClassNotFoundException
      * @throws IllegalAccessException
@@ -168,7 +178,6 @@ public class TaskProcessor extends Thread {
     }
 
     /**
-     *
      * @param result
      * @return true if result delivered to job processing node, false otherwise
      */

@@ -109,7 +109,6 @@ public class ClientController {
     }
 
     /**
-     *
      * @param tasksPerJob
      * @param endLatch
      */
@@ -181,15 +180,18 @@ public class ClientController {
 
 
             Map<Integer, TaskResult> taskCompletionMap = null;
-            do {
+            while (true) {
                 try {
 
                     taskCompletionMap = userHandler.pollStatusFromJobProcessor(job.getJobID());
                 } catch (TException e) {    //uh.poll status
                     log.error("TException" + e.getMessage());
                 }
+                if (userHandler.assessJobStatusFromTaskStatuses(taskCompletionMap)) {
+                    break;
+                }
+            }
 
-            } while (!userHandler.assessJobStatusFromTaskStatuses(taskCompletionMap));
 
             log.info("job finished. updating map " + job.getJobID());
             jobFinish = System.currentTimeMillis();

@@ -292,7 +292,7 @@ public class DistributedEdgeDetectorGUI extends JFrame {
                 finished = true;
                 if (resMap != null) {
                     for (TaskResult res : resMap.values()) {
-                        if (res.getStatus() == TaskStatus.DONE) {
+                        if (res.getStatus() == TaskStatus.COMPLETED) {
                             byte[] resultData = res.getResults();
                             int i = resultData[0];
                             int j = resultData[1];
