@@ -70,7 +70,6 @@ public class PerformanceTest {
     }
 
     /**
-     *
      * @param jobs
      * @param tasks
      * @param endLatch
@@ -97,7 +96,6 @@ class ClientThread extends Thread {
     CountDownLatch jobLatch;
 
     /**
-     *
      * @param jobs
      * @param tasks
      * @param endLatch
@@ -115,7 +113,6 @@ class ClientThread extends Thread {
     }
 
     /**
-     *
      * @param tasks
      * @return
      */
@@ -241,7 +238,6 @@ class StatusPollThread extends Thread {
     HashMap<Integer, Long> jobTimeMap;
 
     /**
-     *
      * @param latch
      * @param handler
      * @param job
@@ -264,8 +260,10 @@ class StatusPollThread extends Thread {
             } catch (TException e) {    //uh.poll status
                 log.error("TException" + e.getMessage());
             }
-            if (handler.assessJobStatusFromTaskStatuses(taskCompletionMap)) {
-                break;
+            if (taskCompletionMap != null) {
+                if (handler.assessJobStatusFromTaskStatuses(taskCompletionMap)) {
+                    break;
+                }
             }
             try {
                 Thread.sleep(100);
