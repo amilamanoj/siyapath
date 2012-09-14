@@ -126,7 +126,6 @@ public class ClientController {
         CountDownLatch endLatch;
 
         /**
-         *
          * @param tasksPerJob
          * @param endLatch
          */
