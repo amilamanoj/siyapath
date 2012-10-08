@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary User Manual for Siyapath-User who submits jobs.
 
 = Introduction = 
 User manuals for a Siyapath User who submits a job to the framework.
