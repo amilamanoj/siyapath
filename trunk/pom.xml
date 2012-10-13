@@ -75,6 +75,7 @@
         <module>modules/samples</module>
         <module>modules/integration</module>
         <module>modules/user-ui</module>
+        <module>modules/distribution</module>
     </modules>
 
 </project>
