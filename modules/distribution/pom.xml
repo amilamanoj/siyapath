@@ -11,7 +11,7 @@
 
     <artifactId>siyapath-distribution</artifactId>
     <name>Siyapath - Distribution</name>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <staging.dir>${project.build.directory}/staging</staging.dir>
@@ -33,20 +33,17 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.codehaus.plexus</groupId>-->
-            <!--<artifactId>plexus-utils</artifactId>-->
-            <!--<version>1.5.6</version>-->
+        <!--<groupId>org.codehaus.plexus</groupId>-->
+        <!--<artifactId>plexus-utils</artifactId>-->
+        <!--<version>1.5.6</version>-->
         <!--</dependency>-->
-
-
 
     </dependencies>
 
     <build>
 
         <!--<defaultGoal>package</defaultGoal>-->
-        <finalName>${project.artifactId}</finalName>
-
+        <!--<finalName>${project.artifactId}</finalName>-->
         <plugins>
 
             <plugin>
@@ -71,7 +68,8 @@
                         </goals>
                         <configuration>
                             <stripVersion>true</stripVersion>
-                            <excludeGroupIds>org.codehaus.izpack</excludeGroupIds> <!-- dont want standalone compiler -->
+                            <excludeGroupIds>org.codehaus.izpack</excludeGroupIds>
+                            <!-- dont want standalone compiler -->
                             <outputDirectory>${staging.dir}/lib</outputDirectory>
                         </configuration>
                     </execution>

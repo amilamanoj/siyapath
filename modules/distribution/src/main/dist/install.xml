@@ -22,7 +22,19 @@
         The gui preferences indication.
         Sets the installer window to 640x480. It will not be able to change the size.
     -->
-    <guiprefs width="640" height="480" resizable="no"/>
+    <guiprefs width="640" height="480" resizable="no">
+        <!--<modifier key="useButtonIcons" value="no"/>-->
+        <!--<modifier key="useLabelIcons" value="no"/>-->
+        <!--<modifier key="labelGap" value="2"/>-->
+        <!--<modifier key="layoutAnchor" value="NORTHWEST"/>-->
+        <!--<modifier key="useHeadingPanel" value="yes"/>-->
+        <!--<modifier key="headingImageOnLeft" value="yes"/>-->
+        <!--<modifier key="headingLineCount" value="1"/>-->
+        <!--<modifier key="headingFontSize" value="1.5"/>-->
+        <!--<modifier key="headingBackgroundColor" value="0x00ffffff"/>-->
+        <!--<modifier key="headingPanelCounter" value="text"/>-->
+        <!--<modifier key="headingPanelCounterPos" value="inHeading"/>-->
+    </guiprefs>
 
     <!-- 
         The locale section.
@@ -49,17 +61,19 @@
         We indicate here which panels we want to use. The order will be respected.
     -->
     <panels>
-        <panel classname="org.siyapath.distribution.WelcomePanel"/>
+        <panel classname="HelloPanel"/>
         <panel classname="InfoPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
+        <!--<panel classname="ShortcutPanel"/>-->
+        <panel classname="SummaryPanel"/>
         <!--<panel classname="PacksPanel"/>-->
         <panel classname="InstallPanel"/>
-        <panel classname="FinishPanel"/>
+        <panel classname="SimpleFinishPanel"/>
     </panels>
 
     <!--<jar src="dependency/plexus-utils.jar"/>-->
-    <jar src="../siyapath-distribution.jar"/>
+    <!--<jar src="../siyapath-distribution.jar"/>-->
 
     <!-- 
         The packs section.
@@ -78,13 +92,13 @@
             <!-- The file will be parsed -->
         </pack>
         <!--<pack name="Docs" required="no">-->
-            <!--<description>The documentation</description>-->
-            <!--<file src="doc" targetdir="$INSTALL_PATH"/>-->
-            <!--&lt;!&ndash; Reccursive adding &ndash;&gt;-->
+        <!--<description>The documentation</description>-->
+        <!--<file src="doc" targetdir="$INSTALL_PATH"/>-->
+        <!--&lt;!&ndash; Reccursive adding &ndash;&gt;-->
         <!--</pack>-->
         <!--<pack name="Sources" required="no">-->
-            <!--<description>The sources</description>-->
-            <!--<file src="src" targetdir="$INSTALL_PATH"/>-->
+        <!--<description>The sources</description>-->
+        <!--<file src="src" targetdir="$INSTALL_PATH"/>-->
         <!--</pack>-->
     </packs>
 
