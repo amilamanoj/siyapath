@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+    -->
+    <info>
+        <appname>Siyapath</appname>
+        <appversion>0.1.0</appversion>
+        <authors>
+            <author name="Siyapath" email="contact@siyapath.org"/>
+            <!--<author name="Amila Manoj"/>-->
+            <!--<author name="Malith Dhanushka" />-->
+            <!--<author name="Mohamed Nufail" />-->
+            <!--<author name="Nadeeshani Hewage" />-->
+        </authors>
+        <url>http://siyapath.org/</url>
+    </info>
+
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="no"/>
+
+    <!-- 
+        The locale section.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+        <!--<langpack iso3="sin"/>-->
+    </locale>
+
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="LicencePanel.licence" src="Licence.txt"/>
+        <res id="InfoPanel.info" src="Readme.txt"/>
+        <res id="Installer.image" src="siyapath_setup_side_logo.png"/>
+
+
+    </resources>
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="org.siyapath.distribution.WelcomePanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <!--<panel classname="PacksPanel"/>-->
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <!--<jar src="dependency/plexus-utils.jar"/>-->
+    <jar src="../siyapath-distribution.jar"/>
+
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
+            <file src="Licence.txt" targetdir="$INSTALL_PATH"/>
+            <file src="lib" targetdir="$INSTALL_PATH"/>
+            <file src="SiyapathNode.bat" targetdir="$INSTALL_PATH"/>
+            <file src="sigar-amd64-winnt.dll" targetdir="$INSTALL_PATH"/>
+            <!--<file src="script.bat" targetdir="$INSTALL_PATH"/>-->
+            <!--<parsable targetfile="$INSTALL_PATH/script.bat"/>-->
+            <!-- The file will be parsed -->
+        </pack>
+        <!--<pack name="Docs" required="no">-->
+            <!--<description>The documentation</description>-->
+            <!--<file src="doc" targetdir="$INSTALL_PATH"/>-->
+            <!--&lt;!&ndash; Reccursive adding &ndash;&gt;-->
+        <!--</pack>-->
+        <!--<pack name="Sources" required="no">-->
+            <!--<description>The sources</description>-->
+            <!--<file src="src" targetdir="$INSTALL_PATH"/>-->
+        <!--</pack>-->
+    </packs>
+
+</installation>
