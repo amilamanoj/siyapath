@@ -7,7 +7,7 @@
     <groupId>org.siyapath</groupId>
     <artifactId>siyapath</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0</version>
+    <version>${siyapath.version}</version>
 
     <name>Siyapath</name>
     <description>Siyapath - Scalable Volunteer Computing Framework</description>
@@ -24,20 +24,20 @@
         <url>http://code.google.com/p/siyapath/source/browse/</url>
     </scm>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>dtrotts</id>
-            <name>Repository for maven thrift plugin</name>
-            <url>http://maven.davidtrott.com/repository</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>dtrotts</id>-->
+            <!--<name>Repository for maven thrift plugin</name>-->
+            <!--<url>http://maven.davidtrott.com/repository</url>-->
+            <!--<layout>default</layout>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+            <!--<releases>-->
+                <!--<updatePolicy>never</updatePolicy>-->
+            <!--</releases>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <dependencies>
         <dependency>
@@ -77,5 +77,10 @@
         <module>modules/user-ui</module>
         <module>modules/distribution</module>
     </modules>
+
+    <properties>
+        <siyapath.version>0.2.0</siyapath.version>
+        <junit.version>3.8.2</junit.version>
+    </properties>
 
 </project>
