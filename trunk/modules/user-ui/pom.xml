@@ -5,14 +5,15 @@
     <parent>
         <artifactId>siyapath</artifactId>
         <groupId>org.siyapath</groupId>
-        <version>0.1.0</version>
+        <version>${siyapath.version}</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>user-ui</artifactId>
+    <artifactId>siyapath-user-ui</artifactId>
     <name>Siyapath - User UI</name>
     <description>Siyapath - User Interface</description>
+    <version>${siyapath.version}</version>
 
     <build>
         <plugins>
@@ -31,13 +32,13 @@
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-core</artifactId>
-            <version>0.1.0</version>
+            <version>${siyapath.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-user</artifactId>
-            <version>0.1.0</version>
+            <version>${siyapath.version}</version>
         </dependency>
     </dependencies>
 

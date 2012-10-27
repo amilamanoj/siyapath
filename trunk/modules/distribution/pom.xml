@@ -5,7 +5,8 @@
     <parent>
         <artifactId>siyapath</artifactId>
         <groupId>org.siyapath</groupId>
-        <version>0.1.0</version>
+        <version>${siyapath.version}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,7 +30,17 @@
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-core</artifactId>
-            <version>0.1.0</version>
+            <version>${siyapath.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.siyapath</groupId>
+            <artifactId>siyapath-user</artifactId>
+            <version>${siyapath.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.siyapath</groupId>
+            <artifactId>siyapath-user-ui</artifactId>
+            <version>${siyapath.version}</version>
         </dependency>
 
         <!--<dependency>-->
