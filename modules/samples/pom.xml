@@ -10,7 +10,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>samples</groupId>
     <artifactId>siyapath-samples</artifactId>
     <name>Siyapath - Samples</name>
     <description>Siyapath - Samples</description>

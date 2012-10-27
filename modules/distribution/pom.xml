@@ -42,6 +42,17 @@
             <artifactId>siyapath-user-ui</artifactId>
             <version>${siyapath.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.siyapath</groupId>
+            <artifactId>siyapath-samples</artifactId>
+            <version>${siyapath.version}</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.akathist.maven.plugins.launch4j</groupId>-->
+            <!--<artifactId>launch4j-maven-plugin</artifactId>-->
+            <!--<version>1.5.1</version>-->
+        <!--</dependency>-->
 
         <!--<dependency>-->
         <!--<groupId>org.codehaus.plexus</groupId>-->
@@ -79,8 +90,8 @@
                         </goals>
                         <configuration>
                             <stripVersion>true</stripVersion>
-                            <excludeGroupIds>org.codehaus.izpack</excludeGroupIds>
-                            <!-- dont want standalone compiler -->
+                            <excludeGroupIds>org.codehaus.izpack,com.akathist.maven.plugins.launch4j</excludeGroupIds>
+                             <!--<excludeTransitive>true</excludeTransitive>-->
                             <outputDirectory>${staging.dir}/lib</outputDirectory>
                         </configuration>
                     </execution>
@@ -109,7 +120,57 @@
                 </executions>
             </plugin>
 
-            <!--  see install.xml to see how MyHelloPanel is used -->
+
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <executions>
+                    <!-- GUI exe -->
+                    <execution>
+                        <id>l4j-volunteer-gui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <outfile>${staging.dir}/siyapath-volunteer.exe</outfile>
+                            <dontWrapJar>true</dontWrapJar>
+                            <jar>./lib/siyapath-core.jar</jar>
+                            <vars>
+                                <var>java.library.path=.</var>
+                            </vars>
+                            <errTitle>App Err</errTitle>
+                            <classPath>
+                                <mainClass>org.siyapath.SiyapathNode</mainClass>
+                                <preCp>lib/*</preCp>
+                            </classPath>
+                            <icon>${staging.dir}/siyapath_48x48.ico</icon>
+                            <jre>
+                                <minVersion>1.6.0</minVersion>
+                                <maxVersion>1.7.0</maxVersion>
+                                <initialHeapSize>128</initialHeapSize>
+                                <maxHeapSize>1024</maxHeapSize>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>${siyapath.version}.0</fileVersion>
+                                <txtFileVersion>${siyapath.version}</txtFileVersion>
+                                <fileDescription>Siyapath Volunteer</fileDescription>
+                                <copyright>(C) siyapath team 2012</copyright>
+                                <productVersion>${siyapath.version}.0</productVersion>
+                                <txtProductVersion>${siyapath.version}</txtProductVersion>
+                                <productName>Siyapath - Volunteer Computing</productName>
+                                <internalName>Siyapath</internalName>
+                                <originalFilename>siyapath-volunteer.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+            <!--create the installer-->
             <plugin>
                 <groupId>org.codehaus.izpack</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
