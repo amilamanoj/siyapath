@@ -5,15 +5,15 @@
     <parent>
         <artifactId>siyapath</artifactId>
         <groupId>org.siyapath</groupId>
-        <version>${siyapath.version}</version>
+        <version>0.2.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <!--groupId and version are same as parent-->
     <artifactId>siyapath-core</artifactId>
     <name>Siyapath - Core</name>
     <description>Siyapath - Core</description>
-    <version>${siyapath.version}</version>
 
     <build>
         <plugins>

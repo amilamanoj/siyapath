@@ -7,7 +7,7 @@
     <groupId>org.siyapath</groupId>
     <artifactId>siyapath</artifactId>
     <packaging>pom</packaging>
-    <version>${siyapath.version}</version>
+    <version>0.2.0</version>
 
     <name>Siyapath</name>
     <description>Siyapath - Scalable Volunteer Computing Framework</description>
