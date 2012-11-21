@@ -1,1 +1,1 @@
-java -Djava.library.path=. -cp "*;lib\*" org.siyapath.SiyapathNode
+java -Djava.library.path=./native -cp "*;lib\*" org.siyapath.SiyapathNode

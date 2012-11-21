@@ -85,8 +85,9 @@
             <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
             <file src="Licence.txt" targetdir="$INSTALL_PATH"/>
             <file src="lib" targetdir="$INSTALL_PATH"/>
+            <file src="native" targetdir="$INSTALL_PATH"/>
             <file src="SiyapathNode.bat" targetdir="$INSTALL_PATH"/>
-            <file src="sigar-amd64-winnt.dll" targetdir="$INSTALL_PATH"/>
+            <file src="SiyapathNode.sh" targetdir="$INSTALL_PATH"/>
             <!--<file src="script.bat" targetdir="$INSTALL_PATH"/>-->
             <!--<parsable targetfile="$INSTALL_PATH/script.bat"/>-->
             <!-- The file will be parsed -->
