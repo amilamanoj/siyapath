@@ -5,7 +5,7 @@
     <parent>
         <artifactId>siyapath</artifactId>
         <groupId>org.siyapath</groupId>
-        <version>${siyapath.version}</version>
+        <version>0.2.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -30,22 +30,22 @@
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-core</artifactId>
-            <version>${siyapath.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-user</artifactId>
-            <version>${siyapath.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-user-ui</artifactId>
-            <version>${siyapath.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.siyapath</groupId>
             <artifactId>siyapath-samples</artifactId>
-            <version>${siyapath.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!--<dependency>-->
@@ -120,13 +120,13 @@
                 </executions>
             </plugin>
 
-
+            <!--
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
                 <version>1.5.1</version>
                 <executions>
-                    <!-- GUI exe -->
+                    < !-GUI exe- >
                     <execution>
                         <id>l4j-volunteer-gui</id>
                         <phase>package</phase>
@@ -154,12 +154,12 @@
                                 <maxHeapSize>1024</maxHeapSize>
                             </jre>
                             <versionInfo>
-                                <fileVersion>${siyapath.version}.0</fileVersion>
-                                <txtFileVersion>${siyapath.version}</txtFileVersion>
+                                <fileVersion>${project.version}.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>Siyapath Volunteer</fileDescription>
                                 <copyright>(C) siyapath team 2012</copyright>
-                                <productVersion>${siyapath.version}.0</productVersion>
-                                <txtProductVersion>${siyapath.version}</txtProductVersion>
+                                <productVersion>${project.version}.0</productVersion>
+                                <txtProductVersion>${project.version}</txtProductVersion>
                                 <productName>Siyapath - Volunteer Computing</productName>
                                 <internalName>Siyapath</internalName>
                                 <originalFilename>siyapath-volunteer.exe</originalFilename>
@@ -168,7 +168,8 @@
                     </execution>
                 </executions>
 
-            </plugin>
+            </plugin> 
+            -->        
 
             <!--create the installer-->
             <plugin>
