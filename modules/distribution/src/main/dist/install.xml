@@ -88,6 +88,7 @@
             <file src="native" targetdir="$INSTALL_PATH"/>
             <file src="SiyapathNode.bat" targetdir="$INSTALL_PATH"/>
             <file src="SiyapathNode.sh" targetdir="$INSTALL_PATH"/>
+            <file src="siyapath.properties" targetdir="$INSTALL_PATH"/>
             <!--<file src="script.bat" targetdir="$INSTALL_PATH"/>-->
             <!--<parsable targetfile="$INSTALL_PATH/script.bat"/>-->
             <!-- The file will be parsed -->
