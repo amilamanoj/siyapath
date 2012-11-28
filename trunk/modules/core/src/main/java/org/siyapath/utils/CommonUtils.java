@@ -17,6 +17,31 @@ public final class CommonUtils {
 
     private static Log log = LogFactory.getLog(CommonUtils.class);
 
+    private static String bootsrapperIp="localhost";
+    private static int bootsrapperPort= 9020;
+
+
+static {
+
+    File propertiesFile = new File("siyapath.properties");
+    Properties siyapathProps = new Properties();
+        try {
+            InputStream stream =new FileInputStream(propertiesFile);
+            siyapathProps.load(stream);
+            bootsrapperIp = siyapathProps.getProperty("siyapath.bootsrapper.ip");
+            bootsrapperPort = Integer.parseInt(siyapathProps.getProperty("siyapath.bootsrapper.port"));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("No properties found");
+
+        }  catch (IOException e) {
+             e.printStackTrace();
+        }
+
+
+  }
+
     private CommonUtils() {
     }
 
@@ -82,12 +107,12 @@ public final class CommonUtils {
 
     public static String getBootstrapperIP() {
         if (SiyapathConstants.LOCAL_TEST) return "localhost";
-        return SiyapathConstants.BOOTSRAPPER_IP;
+        return bootsrapperIp;
     }
 
     public static int getBootstrapperPort() {
         if (SiyapathConstants.LOCAL_TEST) return 9020;
-        return SiyapathConstants.BOOTSRAPPER_PORT;
+        return bootsrapperPort;
     }
 
     /**
