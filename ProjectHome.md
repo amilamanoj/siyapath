@@ -1,0 +1,1 @@
+Scalable Volunteer Computing Framework using Gossip Protocols
